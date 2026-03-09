@@ -75,7 +75,7 @@
   .bar-item { display: flex; align-items: center; gap: 10px; }
   .bar-item-label { font-size: 11px; font-weight: 500; color: var(--text); width: 120px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; }
-  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #7aaad8); border-radius: 10px; transition: width 0.5s ease; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width 0.5s ease; }
   .bar-count { font-size: 11px; font-weight: 600; color: var(--text-muted); width: 24px; text-align: right; }
 
   .filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; align-items: center; }
@@ -595,26 +595,26 @@
 
   function renderCharts(data){
     Object.values(charts).forEach(c=>c.destroy());charts={};
-    const gridColor='rgba(220,226,234,0.6)',tickColor='#8494ac',tickFont={family:'Inter',size:9};
+    const gridColor='rgba(228,216,208,0.7)',tickColor='#a07060',tickFont={family:'Inter',size:9};
     const byDate={};
     data.forEach(e=>{const d=e.timestamp?.slice(0,10);if(d)byDate[d]=(byDate[d]||0)+1;});
     const dates=Object.keys(byDate).sort();
     charts.timeline=new Chart(document.getElementById('chart-timeline').getContext('2d'),{
       type:'bar',
-      data:{labels:dates.map(d=>{const dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});}),datasets:[{data:dates.map(d=>byDate[d]),backgroundColor:'rgba(61,111,190,0.35)',borderColor:'rgba(61,111,190,0.8)',borderWidth:1.5,borderRadius:4}]},
+      data:{labels:dates.map(d=>{const dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});}),datasets:[{data:dates.map(d=>byDate[d]),backgroundColor:'rgba(184,92,64,0.5)',borderColor:'rgba(184,92,64,0.85)',borderWidth:1,borderRadius:4}]},
       options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:tickColor,font:tickFont},grid:{color:gridColor}},y:{ticks:{color:tickColor,font:tickFont},grid:{color:gridColor},beginAtZero:true}}}
     });
     const urgeBuckets=Array(10).fill(0);
     data.forEach(e=>{if(e.urge_strength>=1&&e.urge_strength<=10)urgeBuckets[e.urge_strength-1]++;});
     charts.urge=new Chart(document.getElementById('chart-urge').getContext('2d'),{
       type:'bar',
-      data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{data:urgeBuckets,backgroundColor:urgeBuckets.map((_,i)=>i<3?'rgba(46,153,98,0.55)':i<6?'rgba(184,114,10,0.55)':'rgba(184,58,58,0.55)'),borderWidth:0,borderRadius:4}]},
+      data:{labels:['1','2','3','4','5','6','7','8','9','10'],datasets:[{data:urgeBuckets,backgroundColor:'rgba(184,92,64,0.5)',borderColor:'rgba(184,92,64,0.85)',borderWidth:1,borderRadius:4}]},
       options:{plugins:{legend:{display:false}},scales:{x:{ticks:{color:tickColor,font:tickFont},grid:{color:gridColor}},y:{ticks:{color:tickColor,font:tickFont},grid:{color:gridColor},beginAtZero:true}}}
     });
     const con=data.filter(e=>e.awareness==='Conscious').length,sub=data.filter(e=>e.awareness==='Subconscious').length,none=data.length-con-sub;
     charts.awareness=new Chart(document.getElementById('chart-awareness').getContext('2d'),{
       type:'doughnut',
-      data:{labels:['Conscious','Subconscious','Not set'],datasets:[{data:[con,sub,none],backgroundColor:['rgba(61,111,190,0.65)','rgba(102,80,168,0.65)','rgba(220,226,234,0.8)'],borderColor:'#ffffff',borderWidth:3}]},
+      data:{labels:['Conscious','Subconscious','Not set'],datasets:[{data:[con,sub,none],backgroundColor:['rgba(184,92,64,0.75)','rgba(176,68,104,0.6)','rgba(228,216,208,0.8)'],borderColor:'#ffffff',borderWidth:3}]},
       options:{cutout:'65%',plugins:{legend:{position:'bottom',labels:{color:tickColor,font:tickFont,padding:12}}}}
     });
     renderBarList('bar-triggers',data,'trigger');

@@ -68,16 +68,6 @@
   .user-avatar { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); object-fit: cover; }
   .user-info { display: flex; align-items: center; gap: 8px; }
 
-  /* STREAK LINK */
-  .streak-link {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 16px; background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    font-size: 12px; color: var(--text-muted); text-decoration: none;
-    transition: background 0.15s;
-  }
-  .streak-link:hover { background: var(--border); }
-  .streak-link-num { font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--accent); }
 
   .quick-log-bar {
     background: var(--surface); border-bottom: 1px solid var(--border);
@@ -115,7 +105,7 @@
 
   .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .toggle-btn {
-    background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 50px;
     padding: 13px 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
     color: var(--text-secondary); cursor: pointer; text-align: center; transition: all 0.12s; user-select: none;
   }
@@ -132,13 +122,11 @@
   .tag:active { transform: scale(0.96); }
   .tag.other-tag { border-style: dashed; }
 
-  /* solid fills for strong color presence */
-  .tag.sel-blue   { background: var(--accent);  border-color: var(--accent);  color: #fff; font-weight: 600; }
-  .tag.sel-green  { background: var(--green);   border-color: var(--green);   color: #fff; font-weight: 600; }
-  .tag.sel-purple { background: var(--purple);  border-color: var(--purple);  color: #fff; font-weight: 600; }
-  .tag.sel-amber  { background: var(--amber);   border-color: var(--amber);   color: #fff; font-weight: 600; }
-  .tag.sel-teal   { background: var(--teal);    border-color: var(--teal);    color: #fff; font-weight: 600; }
-  .tag.sel-rose   { background: var(--rose);    border-color: var(--rose);    color: #fff; font-weight: 600; }
+  /* single selected color for all tags */
+  .tag.sel-blue, .tag.sel-green, .tag.sel-purple,
+  .tag.sel-amber, .tag.sel-teal, .tag.sel-rose {
+    background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600;
+  }
 
   input[type="text"], input[type="datetime-local"], textarea, select {
     width: 100%; background: var(--bg); border: 1px solid var(--border);
@@ -329,11 +317,6 @@
 </div>
 
 <div id="app-content">
-  <a href="tracker.html" class="streak-link" id="streak-link">
-    <span id="streak-link-text">View your data</span>
-    <span class="streak-link-num" id="streak-link-num"></span>
-  </a>
-
   <div class="quick-log-bar">
     <button class="quick-btn-primary" onclick="openQuickModal()">Quick log — tap to log in seconds</button>
     <div class="quick-log-hint">Saves urge, trigger and outcome without filling out the full form</div>
@@ -660,13 +643,13 @@
   }
   async function saveQuickEntry(){
     if(!window._db){showToast('Not connected yet',true);return;}
-    const entry={timestamp:new Date().toISOString(),entry_type:'quick',awareness:qState.awareness||'',trigger:qState.triggers.join(', '),urge_strength:parseInt(document.getElementById('q-urge-slider').value),outcome:qState.outcome||'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
+    const entry={timestamp:localISOString(),entry_type:'quick',awareness:qState.awareness||'',trigger:qState.triggers.join(', '),urge_strength:parseInt(document.getElementById('q-urge-slider').value),outcome:qState.outcome||'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
     try{await window._addDoc(window._collection(window._db,'events'),entry);closeQuickModal();showToast('Saved',false,true);}
     catch(err){showToast('Could not save: '+err.message,true);}
   }
   async function saveUrgeOnly(level){
     if(!window._db){showToast('Not connected yet',true);return;}
-    const entry={timestamp:new Date().toISOString(),entry_type:'quick',urge_strength:level,awareness:'',trigger:'',outcome:'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
+    const entry={timestamp:localISOString(),entry_type:'quick',urge_strength:level,awareness:'',trigger:'',outcome:'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
     try{await window._addDoc(window._collection(window._db,'events'),entry);showToast('Logged - urge '+level+'/10',false,true);}
     catch(err){showToast('Could not save',true);}
   }
@@ -699,7 +682,11 @@
   function toggleOther(el,group){el.classList.toggle('sel-blue');const input=document.getElementById(group+'-other');if(el.classList.contains('sel-blue')){input.classList.add('visible');input.focus();}else{input.classList.remove('visible');input.value='';}}
   function updateSlider(el){document.getElementById('urge-val').textContent=el.value;const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;}
   function getOtherVal(group){const input=document.getElementById(group+'-other');return(input&&input.classList.contains('visible')&&input.value.trim())?input.value.trim():null;}
-  function getTimestamp(){if(state.type==='backdated'){const v=document.getElementById('event-time').value;return v?new Date(v).toISOString():new Date().toISOString();}return new Date().toISOString();}
+  function localISOString(d=new Date()){
+    const pad=n=>String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  function getTimestamp(){if(state.type==='backdated'){const v=document.getElementById('event-time').value;return v?new Date(v).toISOString():localISOString();}return localISOString();}
   function showToast(msg,isError=false,isSuccess=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isError?' error':'')+(isSuccess?' success':'');void t.offsetWidth;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
   async function submitEntry(){
     if(!window._db){showToast('Not connected yet - try again',true);return;}
