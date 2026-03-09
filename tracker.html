@@ -9,19 +9,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #f4f6fa;
+    --bg: #f7f2ef;
     --surface: #ffffff;
-    --surface2: #eef1f7;
-    --border: #dce2ee;
-    --border-focus: #7a9fd4;
-    --text: #18243a;
-    --text-secondary: #4a5670;
-    --text-muted: #8494ac;
-    --accent: #3d6fbe;
-    --accent-light: rgba(61,111,190,0.10);
-    --green: #2e9962;
-    --green-light: rgba(46,153,98,0.12);
-    --amber: #b8720a;
+    --surface2: #f0e9e4;
+    --border: #e4d8d0;
+    --border-focus: #c07a60;
+    --text: #2c1a12;
+    --text-secondary: #6b4535;
+    --text-muted: #a07060;
+    --accent: #b85c40;
+    --accent-light: rgba(184,92,64,0.10);
+    --green: #4a8c5c;
+    --green-light: rgba(74,140,92,0.12);
+    --amber: #b8820a;
     --red: #b83a3a;
     --red-light: rgba(184,58,58,0.10);
     --shadow-sm: 0 1px 4px rgba(18,36,80,0.07);
@@ -53,7 +53,7 @@
   @media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
 
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 14px 12px; box-shadow: var(--shadow-sm); }
-  .stat-card.streak-card { background: linear-gradient(135deg,#1c2d48 0%,#253d62 100%); border-color: transparent; }
+  .stat-card.streak-card { background: linear-gradient(135deg, #7a2e18 0%, #b85c40 100%); border-color: transparent; }
   .stat-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
   .streak-card .stat-label { color: rgba(255,255,255,0.45); }
   .stat-val { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); line-height: 1; }
@@ -112,10 +112,23 @@
   .edit-handle { width: 36px; height: 4px; background: var(--border); border-radius: 10px; margin: 0 auto 18px; }
   .edit-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); margin-bottom: 4px; }
   .edit-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
-  .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-  @media(max-width:500px) { .edit-grid { grid-template-columns: 1fr; } }
-  .edit-field { display: flex; flex-direction: column; gap: 5px; }
-  .edit-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .edit-section-label { font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin:0 0 8px; }
+  .e-tag-group { display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px; }
+  .e-toggle-group { display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:18px; }
+  .e-tag {
+    background:var(--bg);border:1px solid var(--border);border-radius:50px;
+    padding:7px 13px;font-size:12px;font-weight:500;color:var(--text-secondary);
+    cursor:pointer;transition:all 0.12s;user-select:none;
+  }
+  .e-tag:hover { border-color:var(--accent);color:var(--accent); }
+  .e-tag.sel { background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600; }
+  .e-toggle {
+    background:var(--bg);border:1px solid var(--border);border-radius:8px;
+    padding:11px 8px;font-size:12px;font-weight:600;color:var(--text-secondary);
+    cursor:pointer;text-align:center;transition:all 0.12s;user-select:none;
+  }
+  .e-toggle:hover { border-color:var(--accent);color:var(--accent); }
+  .e-toggle.sel { background:var(--accent);border-color:var(--accent);color:#fff; }
   .edit-input { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%; -webkit-appearance: none; }
   .edit-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-light); }
   .edit-textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
@@ -179,21 +192,156 @@
     <div class="edit-title">Edit entry</div>
     <div class="edit-sub" id="edit-sub">--</div>
     <input type="hidden" id="edit-doc-id">
-    <div class="edit-grid">
-      <div class="edit-field"><div class="edit-label">Timestamp</div><input type="datetime-local" class="edit-input" id="edit-timestamp"></div>
-      <div class="edit-field"><div class="edit-label">Awareness</div><select class="edit-input" id="edit-awareness"><option value="">Not set</option><option>Conscious</option><option>Subconscious</option></select></div>
-      <div class="edit-field"><div class="edit-label">Location</div><input class="edit-input" id="edit-location" placeholder="e.g. Couch"></div>
-      <div class="edit-field"><div class="edit-label">Activity</div><input class="edit-input" id="edit-activity" placeholder="e.g. Studying"></div>
-      <div class="edit-field"><div class="edit-label">Trigger</div><input class="edit-input" id="edit-trigger" placeholder="e.g. Stressed, Bored"></div>
-      <div class="edit-field"><div class="edit-label">Mood</div><input class="edit-input" id="edit-mood" placeholder="e.g. Tense, Calm"></div>
-      <div class="edit-field"><div class="edit-label">Body area</div><input class="edit-input" id="edit-body-area" placeholder="e.g. Face, Forehead"></div>
-      <div class="edit-field"><div class="edit-label">What you picked</div><input class="edit-input" id="edit-physical" placeholder="e.g. Scab, Pimple"></div>
-      <div class="edit-field"><div class="edit-label">Urge (1-10)</div><input type="number" min="1" max="10" class="edit-input" id="edit-urge"></div>
-      <div class="edit-field"><div class="edit-label">Duration</div><select class="edit-input" id="edit-duration"><option value="">Not set</option><option>Under 1 min</option><option>1 - 3 min</option><option>3 - 10 min</option><option>10 - 30 min</option><option>30+ min</option></select></div>
-      <div class="edit-field"><div class="edit-label">Outcome</div><select class="edit-input" id="edit-outcome"><option value="">Not set</option><option>Stopped early</option><option>Completed urge</option><option>Partial stop</option></select></div>
-      <div class="edit-field"><div class="edit-label">Intervention</div><input class="edit-input" id="edit-intervention" placeholder="e.g. Deep breathing"></div>
+
+    <div class="edit-field"><div class="edit-label">Timestamp</div><input type="datetime-local" class="edit-input" id="edit-timestamp"></div>
+
+    <div class="edit-section-label">Awareness</div>
+    <div class="e-toggle-group" id="e-awareness">
+      <div class="e-toggle" onclick="eSetSingle(this,'awareness')">Conscious</div>
+      <div class="e-toggle" onclick="eSetSingle(this,'awareness')">Subconscious</div>
     </div>
-    <div class="edit-field" style="margin-bottom:14px"><div class="edit-label" style="margin-bottom:5px">Notes</div><textarea class="edit-input edit-textarea" id="edit-notes" placeholder="Any extra notes..."></textarea></div>
+
+    <div class="edit-section-label">Location</div>
+    <div class="e-tag-group" id="e-location">
+      <div class="e-tag" onclick="eToggle(this,'location')">Couch</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Desk</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Dining table</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Bed</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Bathroom</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Bathroom mirror</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Kitchen</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Car</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">School / campus</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Library</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Clinical placement</div>
+    </div>
+
+    <div class="edit-section-label">Activity</div>
+    <div class="e-tag-group" id="e-activity">
+      <div class="e-tag" onclick="eToggle(this,'activity')">Studying</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Practice questions</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Watching lecture</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Reading</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">In a lecture</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Phone</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Watching TV</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Talking</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Driving / commuting</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Grooming</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">In bed</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Nothing / zoning out</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Eating</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">On the computer</div>
+    </div>
+
+    <div class="edit-section-label">Trigger</div>
+    <div class="e-tag-group" id="e-trigger">
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Stressed</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Bored</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Anxious</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">In the zone</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Tired</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Felt a texture</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Saw in mirror</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Idle hands</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Frustrated</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Waiting</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Winding down</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Socially anxious</div>
+    </div>
+
+    <div class="edit-section-label">Mood before</div>
+    <div class="e-tag-group" id="e-mood">
+      <div class="e-tag" onclick="eToggle(this,'mood')">Calm</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Tense</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Sad</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Numb</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Irritable</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Overwhelmed</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Restless</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Focused</div>
+    </div>
+
+    <div class="edit-section-label">Body area</div>
+    <div class="e-tag-group" id="e-body-area">
+      <div class="e-tag e-face-tag" onclick="eToggleFace(this)">Face</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Scalp</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Neck</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Upper arms</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Forearms</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Hands / fingers</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Knuckles</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Upper back</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Lower back</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Chest</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Shoulders</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Thighs</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Shins</div>
+      <div class="e-tag" onclick="eToggle(this,'body_area')">Feet / toes</div>
+    </div>
+    <div id="e-face-sub" style="display:none;margin-top:8px;padding:10px;background:var(--rose-light,rgba(176,68,104,0.08));border-radius:8px;border:1px solid rgba(176,68,104,0.2)">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--rose,#b04468);margin-bottom:8px">Specific face area</div>
+      <div class="e-tag-group" id="e-face-sub-tags">
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Forehead</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Cheeks</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Chin</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Nose</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Around mouth</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Lips</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Ears</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Temples</div>
+        <div class="e-tag" onclick="eToggle(this,'body_area')">Jawline</div>
+      </div>
+    </div>
+
+    <div class="edit-section-label">What you picked</div>
+    <div class="e-tag-group" id="e-physical">
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Scab</div>
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Uneven skin</div>
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Pimple</div>
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Dry skin</div>
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Ingrown hair</div>
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Cuticle</div>
+      <div class="e-tag" onclick="eToggle(this,'physical_target')">Nothing specific</div>
+    </div>
+
+    <div class="edit-section-label">Urge strength</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+      <input type="range" min="1" max="10" value="5" id="edit-urge-slider" oninput="document.getElementById('edit-urge-val').textContent=this.value;eUpdateSlider(this)" style="flex:1;height:6px;border-radius:10px;outline:none;cursor:pointer;padding:0;border:none;-webkit-appearance:none;appearance:none;">
+      <span style="font-family:'DM Serif Display',serif;font-size:26px;color:var(--accent);width:30px;text-align:right;line-height:1" id="edit-urge-val">5</span>
+    </div>
+
+    <div class="edit-section-label">Duration</div>
+    <div class="e-tag-group" id="e-duration" style="margin-bottom:18px">
+      <div class="e-tag" onclick="eSetSingle(this,'duration')">Under 1 min</div>
+      <div class="e-tag" onclick="eSetSingle(this,'duration')">1 - 3 min</div>
+      <div class="e-tag" onclick="eSetSingle(this,'duration')">3 - 10 min</div>
+      <div class="e-tag" onclick="eSetSingle(this,'duration')">10 - 30 min</div>
+      <div class="e-tag" onclick="eSetSingle(this,'duration')">30+ min</div>
+    </div>
+
+    <div class="edit-section-label">Outcome</div>
+    <div class="e-tag-group" id="e-outcome" style="margin-bottom:18px">
+      <div class="e-tag" onclick="eSetSingle(this,'outcome')">Stopped early</div>
+      <div class="e-tag" onclick="eSetSingle(this,'outcome')">Completed urge</div>
+      <div class="e-tag" onclick="eSetSingle(this,'outcome')">Partial stop</div>
+    </div>
+
+    <div class="edit-section-label">Intervention</div>
+    <div class="e-tag-group" id="e-intervention" style="margin-bottom:18px">
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Nothing this time</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Barrier (gloves / bandage)</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Fidget tool</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Redirected urge</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Left the area</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Deep breathing</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Mindfulness</div>
+      <div class="e-tag" onclick="eToggle(this,'intervention')">Told someone</div>
+    </div>
+
+    <div class="edit-section-label">Notes</div>
+    <textarea class="edit-input edit-textarea" id="edit-notes" placeholder="Any extra notes..." style="margin-bottom:18px"></textarea>
+
     <button class="edit-save-btn" onclick="saveEdit()">Save changes</button>
     <button class="edit-delete-btn" onclick="deleteEntry()">Delete this entry</button>
     <button class="edit-cancel" onclick="closeEdit()">Cancel</button>
@@ -475,26 +623,111 @@
     renderBarList('bar-interventions',data,'intervention');
   }
 
+  // edit state
+  const eState = { awareness:null, duration:null, outcome:null, multi:{location:[],activity:[],trigger:[],mood:[],body_area:[],physical_target:[],intervention:[]} };
+
+  function eResetAll(){
+    eState.awareness=null; eState.duration=null; eState.outcome=null;
+    Object.keys(eState.multi).forEach(k=>eState.multi[k]=[]);
+    document.querySelectorAll('.e-tag,.e-toggle').forEach(t=>t.classList.remove('sel'));
+    document.getElementById('e-face-sub').style.display='none';
+  }
+
+  function eToggle(el, group){
+    const val=el.textContent.trim(), arr=eState.multi[group], idx=arr.indexOf(val);
+    if(idx>-1){arr.splice(idx,1);el.classList.remove('sel');}
+    else{arr.push(val);el.classList.add('sel');}
+  }
+  function eSetSingle(el, group){
+    el.closest('.e-tag-group,.e-toggle-group').querySelectorAll('.e-tag,.e-toggle').forEach(t=>t.classList.remove('sel'));
+    el.classList.add('sel');
+    if(group==='awareness') eState.awareness=el.textContent.trim();
+    else if(group==='duration') eState.duration=el.textContent.trim();
+    else if(group==='outcome') eState.outcome=el.textContent.trim();
+  }
+  function eToggleFace(el){
+    const isSelected=el.classList.contains('sel');
+    if(isSelected){
+      el.classList.remove('sel');
+      const idx=eState.multi.body_area.indexOf('Face');
+      if(idx>-1)eState.multi.body_area.splice(idx,1);
+      document.getElementById('e-face-sub').style.display='none';
+      document.querySelectorAll('#e-face-sub-tags .e-tag').forEach(t=>{
+        const v=t.textContent.trim(); t.classList.remove('sel');
+        const i=eState.multi.body_area.indexOf(v); if(i>-1)eState.multi.body_area.splice(i,1);
+      });
+    } else {
+      el.classList.add('sel');
+      eState.multi.body_area.push('Face');
+      document.getElementById('e-face-sub').style.display='block';
+    }
+  }
+  function eUpdateSlider(el){
+    const pct=((el.value-1)/9)*100;
+    el.style.background=`linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;
+  }
+  function eSelectTags(groupId, valStr, group, isSingle=false){
+    if(!valStr) return;
+    const vals=valStr.split(', ').map(v=>v.trim()).filter(Boolean);
+    document.querySelectorAll(`#${groupId} .e-tag, #${groupId} .e-toggle`).forEach(t=>{
+      if(vals.includes(t.textContent.trim())){
+        t.classList.add('sel');
+        if(!isSingle) eState.multi[group]=[...new Set([...eState.multi[group], t.textContent.trim()])];
+      }
+    });
+    if(isSingle && vals[0]){
+      if(group==='awareness') eState.awareness=vals[0];
+      else if(group==='duration') eState.duration=vals[0];
+      else if(group==='outcome') eState.outcome=vals[0];
+    }
+  }
+
   function openEdit(id){
     const e=allData.find(x=>x.id===id);
     if(!e)return;
+    eResetAll();
     document.getElementById('edit-doc-id').value=id;
     const dt=new Date(e.timestamp);
     const local=isNaN(dt)?'':new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,16);
     document.getElementById('edit-sub').textContent=isNaN(dt)?e.timestamp:dt.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})+' at '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     document.getElementById('edit-timestamp').value=local;
-    document.getElementById('edit-awareness').value=e.awareness||'';
-    document.getElementById('edit-location').value=e.location||'';
-    document.getElementById('edit-activity').value=e.activity||'';
-    document.getElementById('edit-trigger').value=e.trigger||'';
-    document.getElementById('edit-mood').value=e.mood||'';
-    document.getElementById('edit-body-area').value=e.body_area||'';
-    document.getElementById('edit-physical').value=e.physical_target||'';
-    document.getElementById('edit-urge').value=e.urge_strength||'';
-    document.getElementById('edit-duration').value=e.duration||'';
-    document.getElementById('edit-outcome').value=e.outcome||'';
-    document.getElementById('edit-intervention').value=e.intervention||'';
     document.getElementById('edit-notes').value=e.notes||'';
+    // urge slider
+    const sl=document.getElementById('edit-urge-slider');
+    sl.value=e.urge_strength||5;
+    document.getElementById('edit-urge-val').textContent=sl.value;
+    eUpdateSlider(sl);
+    // tag selections
+    eSelectTags('e-awareness', e.awareness||'', 'awareness', true);
+    eSelectTags('e-location', e.location||'', 'location');
+    eSelectTags('e-activity', e.activity||'', 'activity');
+    eSelectTags('e-trigger', e.trigger||'', 'trigger');
+    eSelectTags('e-mood', e.mood||'', 'mood');
+    eSelectTags('e-duration', e.duration||'', 'duration', true);
+    eSelectTags('e-outcome', e.outcome||'', 'outcome', true);
+    eSelectTags('e-intervention', e.intervention||'', 'intervention');
+    eSelectTags('e-physical', e.physical_target||'', 'physical_target');
+    // body area — handle face sub-panel
+    const areas=(e.body_area||'').split(', ').map(v=>v.trim()).filter(Boolean);
+    const faceAreas=['Forehead','Cheeks','Chin','Nose','Around mouth','Lips','Ears','Temples','Jawline'];
+    areas.forEach(v=>{
+      if(v==='Face'){
+        const faceTag=document.querySelector('#e-body-area .e-face-tag');
+        if(faceTag){faceTag.classList.add('sel'); eState.multi.body_area.push('Face');}
+        document.getElementById('e-face-sub').style.display='block';
+      } else {
+        // check main body area tags
+        document.querySelectorAll('#e-body-area .e-tag:not(.e-face-tag)').forEach(t=>{
+          if(t.textContent.trim()===v){t.classList.add('sel');eState.multi.body_area=[...new Set([...eState.multi.body_area,v])];}
+        });
+        // check face sub-tags
+        if(faceAreas.includes(v)){
+          document.querySelectorAll('#e-face-sub-tags .e-tag').forEach(t=>{
+            if(t.textContent.trim()===v){t.classList.add('sel');eState.multi.body_area=[...new Set([...eState.multi.body_area,v])];}
+          });
+        }
+      }
+    });
     document.getElementById('edit-overlay').classList.add('visible');
   }
 
@@ -505,27 +738,24 @@
     const tsVal=document.getElementById('edit-timestamp').value;
     const updated={
       timestamp: tsVal ? new Date(tsVal).toISOString() : allData.find(x=>x.id===id)?.timestamp||'',
-      awareness: document.getElementById('edit-awareness').value,
-      location: document.getElementById('edit-location').value,
-      activity: document.getElementById('edit-activity').value,
-      trigger: document.getElementById('edit-trigger').value,
-      mood: document.getElementById('edit-mood').value,
-      body_area: document.getElementById('edit-body-area').value,
-      physical_target: document.getElementById('edit-physical').value,
-      urge_strength: parseInt(document.getElementById('edit-urge').value)||0,
-      duration: document.getElementById('edit-duration').value,
-      outcome: document.getElementById('edit-outcome').value,
-      intervention: document.getElementById('edit-intervention').value,
+      awareness: eState.awareness||'',
+      location: eState.multi.location.join(', '),
+      activity: eState.multi.activity.join(', '),
+      trigger: eState.multi.trigger.join(', '),
+      mood: eState.multi.mood.join(', '),
+      body_area: eState.multi.body_area.join(', '),
+      physical_target: eState.multi.physical_target.join(', '),
+      urge_strength: parseInt(document.getElementById('edit-urge-slider').value)||0,
+      duration: eState.duration||'',
+      outcome: eState.outcome||'',
+      intervention: eState.multi.intervention.join(', '),
       notes: document.getElementById('edit-notes').value,
     };
     try{
       await window._updateDoc(id, updated);
-      // update local data
       const idx=allData.findIndex(x=>x.id===id);
       if(idx>-1) allData[idx]={...allData[idx],...updated};
-      closeEdit();
-      applyFilters();
-      showToast('Entry updated','success');
+      closeEdit(); applyFilters(); showToast('Entry updated','success');
     }catch(err){showToast('Could not save: '+err.message,'error');}
   }
 
@@ -552,6 +782,7 @@
   }
 
   document.getElementById('edit-overlay').addEventListener('click',function(e){if(e.target===this)closeEdit();});
+  eUpdateSlider(document.getElementById('edit-urge-slider'));
 
   function exportCSV(){
     if(!filtered.length)return;
