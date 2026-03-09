@@ -102,6 +102,28 @@
   td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; font-size: 12px; color: var(--text); }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--bg); }
+  tr.clickable { cursor: pointer; }
+
+  /* EDIT MODAL */
+  .edit-overlay { display: none; position: fixed; inset: 0; background: rgba(18,30,54,0.5); backdrop-filter: blur(4px); z-index: 300; align-items: flex-end; justify-content: center; }
+  .edit-overlay.visible { display: flex; }
+  .edit-modal { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px 20px 40px; width: 100%; max-width: 600px; box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s cubic-bezier(0.34,1.2,0.64,1); }
+  @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .edit-handle { width: 36px; height: 4px; background: var(--border); border-radius: 10px; margin: 0 auto 18px; }
+  .edit-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); margin-bottom: 4px; }
+  .edit-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
+  .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  @media(max-width:500px) { .edit-grid { grid-template-columns: 1fr; } }
+  .edit-field { display: flex; flex-direction: column; gap: 5px; }
+  .edit-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .edit-input { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%; -webkit-appearance: none; }
+  .edit-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-light); }
+  .edit-textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
+  .edit-save-btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 50px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px; box-shadow: 0 4px 14px rgba(61,111,190,0.3); transition: all 0.15s; }
+  .edit-save-btn:hover { background: #2d5fae; }
+  .edit-delete-btn { width: 100%; background: none; color: var(--red); border: 1px solid rgba(184,58,58,0.3); border-radius: 50px; padding: 11px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: all 0.15s; }
+  .edit-delete-btn:hover { background: var(--red-light); }
+  .edit-cancel { width: 100%; background: none; color: var(--text-muted); border: none; padding: 10px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 4px; }
 
   .urge-chip { display: inline-block; padding: 2px 8px; border-radius: 50px; font-size: 11px; font-weight: 700; }
   .urge-low { background: var(--green-light); color: #1a5e38; }
@@ -148,6 +170,33 @@
       <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       Continue with Google
     </button>
+  </div>
+</div>
+
+<div class="edit-overlay" id="edit-overlay">
+  <div class="edit-modal">
+    <div class="edit-handle"></div>
+    <div class="edit-title">Edit entry</div>
+    <div class="edit-sub" id="edit-sub">--</div>
+    <input type="hidden" id="edit-doc-id">
+    <div class="edit-grid">
+      <div class="edit-field"><div class="edit-label">Timestamp</div><input type="datetime-local" class="edit-input" id="edit-timestamp"></div>
+      <div class="edit-field"><div class="edit-label">Awareness</div><select class="edit-input" id="edit-awareness"><option value="">Not set</option><option>Conscious</option><option>Subconscious</option></select></div>
+      <div class="edit-field"><div class="edit-label">Location</div><input class="edit-input" id="edit-location" placeholder="e.g. Couch"></div>
+      <div class="edit-field"><div class="edit-label">Activity</div><input class="edit-input" id="edit-activity" placeholder="e.g. Studying"></div>
+      <div class="edit-field"><div class="edit-label">Trigger</div><input class="edit-input" id="edit-trigger" placeholder="e.g. Stressed, Bored"></div>
+      <div class="edit-field"><div class="edit-label">Mood</div><input class="edit-input" id="edit-mood" placeholder="e.g. Tense, Calm"></div>
+      <div class="edit-field"><div class="edit-label">Body area</div><input class="edit-input" id="edit-body-area" placeholder="e.g. Face, Forehead"></div>
+      <div class="edit-field"><div class="edit-label">What you picked</div><input class="edit-input" id="edit-physical" placeholder="e.g. Scab, Pimple"></div>
+      <div class="edit-field"><div class="edit-label">Urge (1-10)</div><input type="number" min="1" max="10" class="edit-input" id="edit-urge"></div>
+      <div class="edit-field"><div class="edit-label">Duration</div><select class="edit-input" id="edit-duration"><option value="">Not set</option><option>Under 1 min</option><option>1 - 3 min</option><option>3 - 10 min</option><option>10 - 30 min</option><option>30+ min</option></select></div>
+      <div class="edit-field"><div class="edit-label">Outcome</div><select class="edit-input" id="edit-outcome"><option value="">Not set</option><option>Stopped early</option><option>Completed urge</option><option>Partial stop</option></select></div>
+      <div class="edit-field"><div class="edit-label">Intervention</div><input class="edit-input" id="edit-intervention" placeholder="e.g. Deep breathing"></div>
+    </div>
+    <div class="edit-field" style="margin-bottom:14px"><div class="edit-label" style="margin-bottom:5px">Notes</div><textarea class="edit-input edit-textarea" id="edit-notes" placeholder="Any extra notes..."></textarea></div>
+    <button class="edit-save-btn" onclick="saveEdit()">Save changes</button>
+    <button class="edit-delete-btn" onclick="deleteEntry()">Delete this entry</button>
+    <button class="edit-cancel" onclick="closeEdit()">Cancel</button>
   </div>
 </div>
 
@@ -230,7 +279,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, orderBy, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -254,6 +303,8 @@
     const snap=await getDocs(q);
     return snap.docs.map(d=>({id:d.id,...d.data()}));
   };
+  window._updateDoc = async function(id, data){ await updateDoc(doc(db,'events',id), data); };
+  window._deleteDoc = async function(id){ await deleteDoc(doc(db,'events',id)); };
 
   onAuthStateChanged(auth, user => {
     const loginScreen=document.getElementById('login-screen');
@@ -373,7 +424,8 @@
       const dt=new Date(e.timestamp);
       const ts=isNaN(dt)?e.timestamp:dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'})+' '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
       const u=e.urge_strength,uCls=u<=3?'urge-low':u<=6?'urge-mid':'urge-high';
-      html+=`<tr><td style="white-space:nowrap">${ts}</td><td>${e.awareness?`<span class="awareness-chip">${e.awareness}</span>`:''}</td><td>${e.location||''}</td><td>${e.trigger||''}</td><td>${e.activity||''}</td><td>${e.body_area||''}</td><td>${e.physical_target||''}</td><td>${u?`<span class="urge-chip ${uCls}">${u}</span>`:''}</td><td style="white-space:nowrap">${e.duration||''}</td><td>${e.outcome||''}</td><td>${e.intervention||''}</td><td>${e.mood||''}</td><td style="max-width:160px;white-space:normal">${e.notes||''}</td></tr>`;
+      const safeId=e.id.replace(/'/g,"\\'");
+      html+=`<tr class="clickable" onclick="openEdit('${safeId}')"><td style="white-space:nowrap">${ts}</td><td>${e.awareness?`<span class="awareness-chip">${e.awareness}</span>`:''}</td><td>${e.location||''}</td><td>${e.trigger||''}</td><td>${e.activity||''}</td><td>${e.body_area||''}</td><td>${e.physical_target||''}</td><td>${u?`<span class="urge-chip ${uCls}">${u}</span>`:''}</td><td style="white-space:nowrap">${e.duration||''}</td><td>${e.outcome||''}</td><td>${e.intervention||''}</td><td>${e.mood||''}</td><td style="max-width:160px;white-space:normal">${e.notes||''}</td></tr>`;
     });
     html+='</tbody></table></div>';
     document.getElementById('table-container').innerHTML=html;
@@ -422,6 +474,84 @@
     renderBarList('bar-areas',data,'body_area');
     renderBarList('bar-interventions',data,'intervention');
   }
+
+  function openEdit(id){
+    const e=allData.find(x=>x.id===id);
+    if(!e)return;
+    document.getElementById('edit-doc-id').value=id;
+    const dt=new Date(e.timestamp);
+    const local=isNaN(dt)?'':new Date(dt.getTime()-dt.getTimezoneOffset()*60000).toISOString().slice(0,16);
+    document.getElementById('edit-sub').textContent=isNaN(dt)?e.timestamp:dt.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})+' at '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('edit-timestamp').value=local;
+    document.getElementById('edit-awareness').value=e.awareness||'';
+    document.getElementById('edit-location').value=e.location||'';
+    document.getElementById('edit-activity').value=e.activity||'';
+    document.getElementById('edit-trigger').value=e.trigger||'';
+    document.getElementById('edit-mood').value=e.mood||'';
+    document.getElementById('edit-body-area').value=e.body_area||'';
+    document.getElementById('edit-physical').value=e.physical_target||'';
+    document.getElementById('edit-urge').value=e.urge_strength||'';
+    document.getElementById('edit-duration').value=e.duration||'';
+    document.getElementById('edit-outcome').value=e.outcome||'';
+    document.getElementById('edit-intervention').value=e.intervention||'';
+    document.getElementById('edit-notes').value=e.notes||'';
+    document.getElementById('edit-overlay').classList.add('visible');
+  }
+
+  function closeEdit(){document.getElementById('edit-overlay').classList.remove('visible');}
+
+  async function saveEdit(){
+    const id=document.getElementById('edit-doc-id').value;
+    const tsVal=document.getElementById('edit-timestamp').value;
+    const updated={
+      timestamp: tsVal ? new Date(tsVal).toISOString() : allData.find(x=>x.id===id)?.timestamp||'',
+      awareness: document.getElementById('edit-awareness').value,
+      location: document.getElementById('edit-location').value,
+      activity: document.getElementById('edit-activity').value,
+      trigger: document.getElementById('edit-trigger').value,
+      mood: document.getElementById('edit-mood').value,
+      body_area: document.getElementById('edit-body-area').value,
+      physical_target: document.getElementById('edit-physical').value,
+      urge_strength: parseInt(document.getElementById('edit-urge').value)||0,
+      duration: document.getElementById('edit-duration').value,
+      outcome: document.getElementById('edit-outcome').value,
+      intervention: document.getElementById('edit-intervention').value,
+      notes: document.getElementById('edit-notes').value,
+    };
+    try{
+      await window._updateDoc(id, updated);
+      // update local data
+      const idx=allData.findIndex(x=>x.id===id);
+      if(idx>-1) allData[idx]={...allData[idx],...updated};
+      closeEdit();
+      applyFilters();
+      showToast('Entry updated','success');
+    }catch(err){showToast('Could not save: '+err.message,'error');}
+  }
+
+  async function deleteEntry(){
+    if(!confirm('Delete this entry? This cannot be undone.'))return;
+    const id=document.getElementById('edit-doc-id').value;
+    try{
+      await window._deleteDoc(id);
+      allData=allData.filter(x=>x.id!==id);
+      closeEdit();
+      applyFilters();
+      showToast('Entry deleted','success');
+    }catch(err){showToast('Could not delete: '+err.message,'error');}
+  }
+
+  function showToast(msg,type='success'){
+    let t=document.getElementById('tracker-toast');
+    if(!t){t=document.createElement('div');t.id='tracker-toast';t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);border-radius:50px;padding:11px 22px;font-size:13px;font-weight:600;color:#fff;box-shadow:0 8px 32px rgba(18,36,80,0.13);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);z-index:999;white-space:nowrap;';document.body.appendChild(t);}
+    t.textContent=msg;
+    t.style.background=type==='error'?'#b83a3a':'#2e9962';
+    void t.offsetWidth;
+    t.style.transform='translateX(-50%) translateY(0)';
+    setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3000);
+  }
+
+  document.getElementById('edit-overlay').addEventListener('click',function(e){if(e.target===this)closeEdit();});
 
   function exportCSV(){
     if(!filtered.length)return;

@@ -86,52 +86,52 @@
   /* QUICK LOG */
   .quick-log-bar {
     background: var(--surface); border-bottom: 1px solid var(--border);
-    padding: 11px 20px; display: flex; align-items: center; gap: 8px; overflow-x: auto;
+    padding: 14px 16px;
   }
-  .quick-log-label { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); flex-shrink: 0; }
-  .quick-btn {
-    padding: 7px 14px; border: 1px solid var(--border); border-radius: 50px;
-    background: var(--bg); font-family: 'Inter', sans-serif;
-    font-size: 12px; font-weight: 600; color: var(--text-secondary);
-    cursor: pointer; transition: all 0.14s; white-space: nowrap; flex-shrink: 0;
+  .quick-btn-primary {
+    display: block; width: 100%;
+    background: var(--accent); border: none; border-radius: var(--radius-sm);
+    padding: 14px; font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.01em;
+    cursor: pointer; transition: all 0.14s;
+    box-shadow: 0 2px 8px rgba(61,111,190,0.28);
   }
-  .quick-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
-  .quick-btn:active { transform: scale(0.97); }
-  .quick-btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
-  .quick-btn-primary:hover { background: #2d5fae; border-color: #2d5fae; color: #fff; }
+  .quick-btn-primary:hover { background: #2d5fae; }
+  .quick-btn-primary:active { transform: scale(0.99); }
+  .quick-log-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 7px; }
 
-  main { max-width: 540px; margin: 0 auto; padding: 22px 16px; }
+  main { max-width: 540px; margin: 0 auto; padding: 20px 14px; }
 
   .section-label {
     font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--text-muted); margin: 22px 0 9px 2px;
+    text-transform: uppercase; color: var(--text-muted); margin: 28px 0 10px 2px;
   }
   .section-label:first-child { margin-top: 0; }
 
   .card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow-sm);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
   }
-  .field { margin-bottom: 14px; }
+  .field { margin-bottom: 20px; }
   .field:last-child { margin-bottom: 0; }
   label {
     display: block; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;
   }
 
   .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
   .toggle-btn {
     background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
-    padding: 10px 8px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 13px 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
     color: var(--text-secondary); cursor: pointer; text-align: center; transition: all 0.12s; user-select: none;
   }
   .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
   .toggle-btn.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-  .tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
   .tag {
     background: var(--bg); border: 1px solid var(--border); border-radius: 50px;
-    padding: 6px 12px; font-size: 12px; font-weight: 500; color: var(--text-secondary);
+    padding: 8px 14px; font-size: 13px; font-weight: 500; color: var(--text-secondary);
     cursor: pointer; transition: all 0.12s; user-select: none;
   }
   .tag:hover { border-color: var(--accent); color: var(--accent); }
@@ -347,10 +347,8 @@
   </div>
 
   <div class="quick-log-bar">
-    <div class="quick-log-label">Quick:</div>
-    <button class="quick-btn quick-btn-primary" onclick="openQuickModal()">Log now</button>
-    <button class="quick-btn" onclick="saveUrgeOnly(3)">Mild urge</button>
-    <button class="quick-btn" onclick="saveUrgeOnly(7)">Strong urge</button>
+    <button class="quick-btn-primary" onclick="openQuickModal()">Quick log — tap to log in seconds</button>
+    <div class="quick-log-hint">Saves urge, trigger and outcome without filling out the full form</div>
   </div>
 
   <main>
@@ -380,11 +378,17 @@
       <div class="field">
         <label>Location</label>
         <div class="tag-group" id="location-tags">
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Home</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Bedroom</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Couch</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Desk</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Dining table</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Bed</div>
           <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Work</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom mirror</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Kitchen</div>
           <div class="tag" onclick="toggleTag(this,'location','blue')">Car</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">School / campus</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Library</div>
+          <div class="tag" onclick="toggleTag(this,'location','blue')">Clinical placement</div>
           <div class="tag other-tag" onclick="toggleOther(this,'location')">+ Other</div>
         </div>
         <input type="text" class="other-input" id="location-other" placeholder="Where were you?">
@@ -392,14 +396,20 @@
       <div class="field">
         <label>Activity</label>
         <div class="tag-group" id="activity-tags">
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Studying</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Practice questions</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching lecture</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Reading</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">In a lecture</div>
           <div class="tag" onclick="toggleTag(this,'activity','teal')">Phone</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Working</div>
           <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching TV</div>
           <div class="tag" onclick="toggleTag(this,'activity','teal')">Talking</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Driving</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Driving / commuting</div>
           <div class="tag" onclick="toggleTag(this,'activity','teal')">Grooming</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Nothing</div>
           <div class="tag" onclick="toggleTag(this,'activity','teal')">In bed</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Nothing / zoning out</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">Eating</div>
+          <div class="tag" onclick="toggleTag(this,'activity','teal')">On the computer</div>
           <div class="tag other-tag" onclick="toggleOther(this,'activity')">+ Other</div>
         </div>
         <input type="text" class="other-input" id="activity-other" placeholder="What were you doing?">
@@ -444,23 +454,43 @@
 
     <div class="section-label">Physical target</div>
     <div class="card">
-      <div class="two-col">
-        <div class="field">
-          <label>Body area</label>
-          <div class="tag-group" id="area-tags">
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Face</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Scalp</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Arms</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Hands</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Back</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Chest</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Legs</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Feet</div>
-            <div class="tag other-tag" onclick="toggleOther(this,'area')">+ Other</div>
-          </div>
-          <input type="text" class="other-input" id="area-other" placeholder="Which area?">
+      <div class="field">
+        <label>Body area</label>
+        <div class="tag-group" id="area-tags">
+          <div class="tag" id="face-tag" onclick="toggleFaceTag(this)">Face</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Scalp</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Neck</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Upper arms</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Forearms</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Hands / fingers</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Knuckles</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Upper back</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Lower back</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Chest</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Shoulders</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Thighs</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Shins</div>
+          <div class="tag" onclick="toggleTag(this,'area','rose')">Feet / toes</div>
+          <div class="tag other-tag" onclick="toggleOther(this,'area')">+ Other</div>
         </div>
-        <div class="field">
+        <!-- Face sub-options, shown when Face is selected -->
+        <div id="face-sub" style="display:none;margin-top:10px;padding:12px;background:var(--rose-light);border-radius:var(--radius-sm);border:1px solid rgba(176,68,104,0.2)">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--rose);margin-bottom:8px">Specific area of face</div>
+          <div class="tag-group" id="face-sub-tags">
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Forehead</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Cheeks</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Chin</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Nose</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Around mouth</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Lips</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Ears</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Temples</div>
+            <div class="tag" onclick="toggleTag(this,'area','rose')">Jawline</div>
+          </div>
+        </div>
+        <input type="text" class="other-input" id="area-other" placeholder="Which area?">
+      </div>
+      <div class="field">
           <label>What you picked</label>
           <div class="tag-group" id="physical-tags">
             <div class="tag" onclick="toggleTag(this,'physical','green')">Scab</div>
@@ -474,7 +504,6 @@
           </div>
           <input type="text" class="other-input" id="physical-other" placeholder="What was it?">
         </div>
-      </div>
     </div>
 
     <div class="section-label">Intensity &amp; duration</div>
@@ -660,6 +689,27 @@
 
   function setType(t){state.type=t;document.getElementById('type-realtime').classList.toggle('selected',t==='realtime');document.getElementById('type-backdated').classList.toggle('selected',t==='backdated');document.getElementById('datetime-field').style.display=t==='backdated'?'block':'none';}
   function setAwareness(val){state.awareness=val;document.getElementById('aware-c').classList.toggle('selected',val==='Conscious');document.getElementById('aware-s').classList.toggle('selected',val==='Subconscious');}
+  function toggleFaceTag(el) {
+    const isSelected = el.classList.contains('sel-rose');
+    if (isSelected) {
+      el.classList.remove('sel-rose');
+      const idx = state.selections.area.indexOf('Face');
+      if (idx > -1) state.selections.area.splice(idx, 1);
+      document.getElementById('face-sub').style.display = 'none';
+      // deselect all face sub-tags
+      document.querySelectorAll('#face-sub-tags .tag').forEach(t => {
+        const v = t.textContent.trim();
+        t.classList.remove('sel-rose');
+        const i = state.selections.area.indexOf(v);
+        if (i > -1) state.selections.area.splice(i, 1);
+      });
+    } else {
+      el.classList.add('sel-rose');
+      state.selections.area.push('Face');
+      document.getElementById('face-sub').style.display = 'block';
+    }
+  }
+
   function toggleTag(el,group,color){const val=el.textContent.trim(),arr=state.selections[group],idx=arr.indexOf(val);if(idx>-1){arr.splice(idx,1);el.classList.remove('sel-'+color);}else{arr.push(val);el.classList.add('sel-'+color);}}
   function setSingle(el,group,color){el.closest('.tag-group').querySelectorAll('.tag').forEach(t=>{t.className=t.className.replace(/sel-\w+/g,'').trim();});el.classList.add('sel-'+color);state[group]=el.textContent.trim();}
   function toggleOther(el,group){el.classList.toggle('sel-blue');const input=document.getElementById(group+'-other');if(el.classList.contains('sel-blue')){input.classList.add('visible');input.focus();}else{input.classList.remove('visible');input.value='';}}
@@ -683,6 +733,7 @@
     document.querySelectorAll('.toggle-btn').forEach(t=>t.classList.remove('selected'));
     document.getElementById('type-realtime').classList.add('selected');
     document.getElementById('datetime-field').style.display='none';
+    document.getElementById('face-sub').style.display='none';
     const sl=document.getElementById('urge-slider');sl.value=5;updateSlider(sl);
     document.getElementById('urge-val').textContent='5';
     document.getElementById('notes').value='';
