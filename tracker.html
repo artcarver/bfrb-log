@@ -9,28 +9,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
-    --bg: #fdf8f4;
-    --surface: #fff9f5;
+    --bg: #f5ede6;
+    --surface: #fdf8f4;
     --surface2: #ffffff;
-    --border: #f0e6dc;
-    --border-active: #d4b8a8;
-    --text: #3d2c24;
-    --muted: #b89e94;
-    --muted2: #9a7f76;
-    --accent: #e8a598;
-    --accent2: #f5c5bb;
-    --accent-dim: rgba(232,165,152,0.13);
-    --sage: #a8c4a2;
-    --lavender: #b8aed4;
-    --butter: #f0d98a;
-    --sky: #9dc4d8;
-    --success: #7dbb8a;
-    --warn: #f0c070;
-    --danger: #e87a7a;
-    --shadow: 0 2px 16px rgba(180,130,110,0.07);
-    --shadow-sm: 0 1px 6px rgba(180,130,110,0.06);
-    --radius: 18px;
-    --radius-sm: 12px;
+    --border: #e8d4c8;
+    --border-active: #c49a88;
+    --text: #2a1a12;
+    --muted: #9a7e74;
+    --muted2: #7a5e54;
+    --accent: #d4756a;
+    --accent2: #e8a598;
+    --accent-dim: rgba(212,117,106,0.14);
+    --sage: #6a9e64;
+    --lavender: #7e6eb8;
+    --butter: #c49a1a;
+    --sky: #4a8aaa;
+    --success: #5a9e6a;
+    --warn: #c49a1a;
+    --danger: #c04040;
+    --shadow: 0 2px 20px rgba(140,90,70,0.10);
+    --shadow-sm: 0 1px 8px rgba(140,90,70,0.08);
+    --radius: 16px;
+    --radius-sm: 10px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,8 +39,9 @@
   body {
     background: var(--bg);
     background-image:
-      radial-gradient(circle at 15% 10%, rgba(232,165,152,0.08) 0%, transparent 45%),
-      radial-gradient(circle at 85% 85%, rgba(168,196,162,0.08) 0%, transparent 45%);
+      radial-gradient(circle at 10% 0%, rgba(212,117,106,0.14) 0%, transparent 40%),
+      radial-gradient(circle at 90% 100%, rgba(106,158,100,0.12) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(126,110,184,0.05) 0%, transparent 60%);
     color: var(--text);
     font-family: 'Nunito', sans-serif;
     font-size: 14px;
@@ -254,9 +255,9 @@
     font-size: 11px;
     font-weight: 700;
   }
-  .urge-low { background: rgba(125,187,138,0.15); color: #4a8a57; }
-  .urge-mid { background: rgba(240,192,112,0.18); color: #9a6a10; }
-  .urge-high { background: rgba(232,122,122,0.15); color: #b04040; }
+  .urge-low { background: rgba(90,158,106,0.15); color: #2a6a3a; }
+  .urge-mid { background: rgba(196,154,26,0.15); color: #7a5a00; }
+  .urge-high { background: rgba(192,64,64,0.15); color: #902020; }
 
   .awareness-chip {
     display: inline-block;
