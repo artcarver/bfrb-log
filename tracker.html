@@ -49,7 +49,7 @@
   .page-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); margin-bottom: 4px; }
   .page-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
 
-  .stats-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; margin-bottom: 20px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 20px; }
   @media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
 
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 14px 12px; box-shadow: var(--shadow-sm); }
@@ -354,11 +354,6 @@
   <div class="page-sub">All entries synced across devices</div>
 
   <div class="stats-grid">
-    <div class="stat-card streak-card">
-      <div class="stat-label">Day streak</div>
-      <div class="stat-val" id="stat-streak">--</div>
-      <div class="stat-sub">pick-free days</div>
-    </div>
     <div class="stat-card">
       <div class="stat-label">Total events</div>
       <div class="stat-val" id="stat-total">--</div>
@@ -482,19 +477,9 @@
       let attempts=0;
       while(!window._loadEvents&&attempts<20){await new Promise(r=>setTimeout(r,200));attempts++;}
       allData=await window._loadEvents();
-      computeStreak(allData);
       populateFilters();
       applyFilters();
     }catch(err){document.getElementById('table-container').innerHTML=`<div class="empty">Could not load data: ${err.message}</div>`;}
-  }
-
-  function computeStreak(events){
-    const today=new Date();today.setHours(0,0,0,0);
-    const eventDays=new Set();
-    events.forEach(e=>{if(e.timestamp){const d=new Date(e.timestamp);d.setHours(0,0,0,0);eventDays.add(d.getTime());}});
-    let streak=0,cursor=new Date(today);
-    while(true){if(eventDays.has(cursor.getTime()))break;streak++;cursor.setDate(cursor.getDate()-1);if(streak>365)break;}
-    document.getElementById('stat-streak').textContent=streak;
   }
 
   function populateFilters(){
