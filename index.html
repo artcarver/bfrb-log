@@ -122,6 +122,39 @@
   .tag:active { transform: scale(0.96); }
   .tag.other-tag { border-style: dashed; }
 
+  /* Category expand buttons */
+  .cat-tag {
+    border-radius: var(--radius-sm) !important;
+    padding: 9px 14px !important;
+    font-size: 12px !important;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .cat-tag.cat-open {
+    background: var(--accent) !important; border-color: var(--accent) !important;
+    color: #fff !important;
+  }
+  .cat-tag .cat-arrow { font-size: 9px; opacity: 0.6; transition: transform 0.2s; display: inline-block; }
+  .cat-tag.cat-open .cat-arrow { transform: rotate(90deg); }
+
+  /* Sub-panels (nested tag groups) */
+  .sub-panel {
+    display: none; margin-top: 8px;
+    padding: 12px 12px 10px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface2);
+    animation: fadeIn 0.15s ease;
+  }
+  .sub-panel.open { display: block; }
+  .sub-panel-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Custom saved tags area */
+  .custom-tags-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); display: none; }
+  .custom-tags-section.has-tags { display: block; }
+  .custom-tags-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; letter-spacing: 0.05em; }
+
   /* single selected color for all tags */
   .tag.sel-blue, .tag.sel-green, .tag.sel-purple,
   .tag.sel-amber, .tag.sel-teal, .tag.sel-rose {
@@ -348,39 +381,105 @@
       </div>
       <div class="field">
         <label>Location</label>
-        <div class="tag-group" id="location-tags">
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Couch</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Desk</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Dining table</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Bed</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom mirror</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Kitchen</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Car</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">School / campus</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Library</div>
-          <div class="tag" onclick="toggleTag(this,'location','blue')">Clinical placement</div>
+        <!-- Category buttons -->
+        <div class="tag-group">
+          <div class="tag cat-tag" onclick="toggleCat(this,'loc-home')"><span>Home</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'loc-study')"><span>Study &amp; Work</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'loc-out')"><span>Out &amp; About</span><span class="cat-arrow">▶</span></div>
+        </div>
+        <!-- Home sub-panel -->
+        <div class="sub-panel" id="loc-home">
+          <div class="sub-panel-label">Home</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Couch</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Desk</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Bed</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom mirror</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Kitchen</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Shower</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Dining table</div>
+          </div>
+        </div>
+        <!-- Study & Work sub-panel -->
+        <div class="sub-panel" id="loc-study">
+          <div class="sub-panel-label">Study &amp; Work</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'location','blue')">School / campus</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Library</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Clinical placement</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Office / work</div>
+          </div>
+        </div>
+        <!-- Out & About sub-panel -->
+        <div class="sub-panel" id="loc-out">
+          <div class="sub-panel-label">Out &amp; About</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Car</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Public transport</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Gym</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Outdoors / park</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Shop / store</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Waiting room</div>
+            <div class="tag" onclick="toggleTag(this,'location','blue')">Friend's place</div>
+          </div>
+        </div>
+        <!-- Custom saved locations -->
+        <div class="custom-tags-section" id="location-custom-section">
+          <div class="custom-tags-label">My saved locations</div>
+          <div class="tag-group" id="location-custom-tags"></div>
+        </div>
+        <div class="tag-group" style="margin-top:8px">
           <div class="tag other-tag" onclick="toggleOther(this,'location')">+ Other</div>
         </div>
         <input type="text" class="other-input" id="location-other" placeholder="Where were you?">
       </div>
       <div class="field">
         <label>Activity</label>
-        <div class="tag-group" id="activity-tags">
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Studying</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Practice questions</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching lecture</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Reading</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">In a lecture</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Phone</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching TV</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Talking</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Driving / commuting</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Grooming</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">In bed</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Nothing / zoning out</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">Eating</div>
-          <div class="tag" onclick="toggleTag(this,'activity','teal')">On the computer</div>
+        <div class="tag-group">
+          <div class="tag cat-tag" onclick="toggleCat(this,'act-study')"><span>Studying</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'act-screen')"><span>Screen &amp; Media</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'act-daily')"><span>Daily Life</span><span class="cat-arrow">▶</span></div>
+        </div>
+        <div class="sub-panel" id="act-study">
+          <div class="sub-panel-label">Studying</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Studying</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Practice questions</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Reading</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">In a lecture</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching lecture</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">On the computer</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="act-screen">
+          <div class="sub-panel-label">Screen &amp; Media</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Phone</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching TV</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Gaming</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Scrolling</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="act-daily">
+          <div class="sub-panel-label">Daily Life</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Driving / commuting</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Getting ready</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">In bed</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Talking</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Eating</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Nothing / zoning out</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Exercise</div>
+            <div class="tag" onclick="toggleTag(this,'activity','teal')">Cooking</div>
+          </div>
+        </div>
+        <!-- Custom saved activities -->
+        <div class="custom-tags-section" id="activity-custom-section">
+          <div class="custom-tags-label">My saved activities</div>
+          <div class="tag-group" id="activity-custom-tags"></div>
+        </div>
+        <div class="tag-group" style="margin-top:8px">
           <div class="tag other-tag" onclick="toggleOther(this,'activity')">+ Other</div>
         </div>
         <input type="text" class="other-input" id="activity-other" placeholder="What were you doing?">
@@ -391,35 +490,105 @@
     <div class="card">
       <div class="field">
         <label>Trigger</label>
-        <div class="tag-group" id="trigger-tags">
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Stressed</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Bored</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Anxious</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">In the zone</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Tired</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Felt a texture</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Saw in mirror</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Idle hands</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Frustrated</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Waiting</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Winding down</div>
-          <div class="tag" onclick="toggleTag(this,'trigger','purple')">Socially anxious</div>
+        <div class="tag-group">
+          <div class="tag cat-tag" onclick="toggleCat(this,'trig-emotion')"><span>Emotional</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'trig-physical')"><span>Physical / Sensory</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'trig-situational')"><span>Situational</span><span class="cat-arrow">▶</span></div>
+        </div>
+        <div class="sub-panel" id="trig-emotion">
+          <div class="sub-panel-label">Emotional</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Stressed</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Anxious</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Frustrated</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Bored</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Tired</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Socially anxious</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Overwhelmed</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Sad</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="trig-physical">
+          <div class="sub-panel-label">Physical / Sensory</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Felt a texture</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Saw in mirror</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Idle hands</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Skin felt rough</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Itching</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="trig-situational">
+          <div class="sub-panel-label">Situational</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">In the zone</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Waiting</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Winding down</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Before an exam</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">After a stressful event</div>
+            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Procrastinating</div>
+          </div>
+        </div>
+        <!-- Custom saved triggers -->
+        <div class="custom-tags-section" id="trigger-custom-section">
+          <div class="custom-tags-label">My saved triggers</div>
+          <div class="tag-group" id="trigger-custom-tags"></div>
+        </div>
+        <div class="tag-group" style="margin-top:8px">
           <div class="tag other-tag" onclick="toggleOther(this,'trigger')">+ Other</div>
         </div>
         <input type="text" class="other-input" id="trigger-other" placeholder="Specify trigger...">
       </div>
+      </div>
       <div class="field">
         <label>Mood before</label>
-        <div class="tag-group" id="mood-tags">
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Calm</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Tense</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Sad</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Numb</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Irritable</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Overwhelmed</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Restless</div>
-          <div class="tag" onclick="toggleTag(this,'mood','amber')">Focused</div>
+        <div class="tag-group">
+          <div class="tag cat-tag" onclick="toggleCat(this,'mood-low')"><span>Low / Difficult</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'mood-high')"><span>Activated</span><span class="cat-arrow">▶</span></div>
+          <div class="tag cat-tag" onclick="toggleCat(this,'mood-neutral')"><span>Neutral / Flat</span><span class="cat-arrow">▶</span></div>
         </div>
+        <div class="sub-panel" id="mood-low">
+          <div class="sub-panel-label">Low / Difficult</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Sad</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Lonely</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Guilty</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Embarrassed</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Defeated</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Overwhelmed</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="mood-high">
+          <div class="sub-panel-label">Activated</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Anxious</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Tense</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Irritable</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Restless</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Excited</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Hopeful</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Happy</div>
+          </div>
+        </div>
+        <div class="sub-panel" id="mood-neutral">
+          <div class="sub-panel-label">Neutral / Flat</div>
+          <div class="tag-group">
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Calm</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Numb</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Focused</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Content</div>
+            <div class="tag" onclick="toggleTag(this,'mood','amber')">Dissociated</div>
+          </div>
+        </div>
+        <!-- Custom saved moods -->
+        <div class="custom-tags-section" id="mood-custom-section">
+          <div class="custom-tags-label">My saved moods</div>
+          <div class="tag-group" id="mood-custom-tags"></div>
+        </div>
+        <div class="tag-group" style="margin-top:8px">
+          <div class="tag other-tag" onclick="toggleOther(this,'mood')">+ Other</div>
+        </div>
+        <input type="text" class="other-input" id="mood-other" placeholder="How were you feeling?">
       </div>
     </div>
 
@@ -442,7 +611,6 @@
           <div class="tag" onclick="toggleTag(this,'area','rose')">Thighs</div>
           <div class="tag" onclick="toggleTag(this,'area','rose')">Shins</div>
           <div class="tag" onclick="toggleTag(this,'area','rose')">Feet / toes</div>
-          <div class="tag other-tag" onclick="toggleOther(this,'area')">+ Other</div>
         </div>
         <!-- Face sub-options, shown when Face is selected -->
         <div id="face-sub" style="display:none;margin-top:10px;padding:12px;background:var(--rose-light);border-radius:var(--radius-sm);border:1px solid rgba(176,68,104,0.2)">
@@ -459,6 +627,13 @@
             <div class="tag" onclick="toggleTag(this,'area','rose')">Jawline</div>
           </div>
         </div>
+        <div class="custom-tags-section" id="area-custom-section">
+          <div class="custom-tags-label">My saved areas</div>
+          <div class="tag-group" id="area-custom-tags"></div>
+        </div>
+        <div class="tag-group" style="margin-top:8px">
+          <div class="tag other-tag" onclick="toggleOther(this,'area')">+ Other</div>
+        </div>
         <input type="text" class="other-input" id="area-other" placeholder="Which area?">
       </div>
       <div class="field">
@@ -471,6 +646,12 @@
             <div class="tag" onclick="toggleTag(this,'physical','green')">Ingrown hair</div>
             <div class="tag" onclick="toggleTag(this,'physical','green')">Cuticle</div>
             <div class="tag" onclick="toggleTag(this,'physical','green')">Nothing specific</div>
+          </div>
+          <div class="custom-tags-section" id="physical-custom-section">
+            <div class="custom-tags-label">My saved items</div>
+            <div class="tag-group" id="physical-custom-tags"></div>
+          </div>
+          <div class="tag-group" style="margin-top:8px">
             <div class="tag other-tag" onclick="toggleOther(this,'physical')">+ Other</div>
           </div>
           <input type="text" class="other-input" id="physical-other" placeholder="What was it?">
@@ -519,6 +700,12 @@
           <div class="tag" onclick="toggleTag(this,'intervention','teal')">Deep breathing</div>
           <div class="tag" onclick="toggleTag(this,'intervention','teal')">Mindfulness</div>
           <div class="tag" onclick="toggleTag(this,'intervention','teal')">Told someone</div>
+        </div>
+        <div class="custom-tags-section" id="intervention-custom-section">
+          <div class="custom-tags-label">My saved interventions</div>
+          <div class="tag-group" id="intervention-custom-tags"></div>
+        </div>
+        <div class="tag-group" style="margin-top:8px">
           <div class="tag other-tag" onclick="toggleOther(this,'intervention')">+ Other</div>
         </div>
         <input type="text" class="other-input" id="intervention-other" placeholder="Specify...">
@@ -580,6 +767,8 @@
       navRight.innerHTML = `<div class="user-info">${user.photoURL?`<img class="user-avatar" src="${user.photoURL}" alt="">`:''}<a href="tracker.html" class="nav-link">View data</a><button class="signout-btn" onclick="signOutUser()">Sign out</button></div>`;
       document.getElementById('status-dot').classList.add('connected');
       document.getElementById('status-text').textContent = 'Connected';
+      // Load user's custom tags from Firestore
+      if (window._loadCustomTagsForUser) window._loadCustomTagsForUser(user.uid);
       try {
         const q = query(collection(db,'events'), orderBy('timestamp','desc'));
         const snap = await getDocs(q);
@@ -656,6 +845,103 @@
 
   function setType(t){state.type=t;document.getElementById('type-realtime').classList.toggle('selected',t==='realtime');document.getElementById('type-backdated').classList.toggle('selected',t==='backdated');document.getElementById('datetime-field').style.display=t==='backdated'?'block':'none';}
   function setAwareness(val){state.awareness=val;document.getElementById('aware-c').classList.toggle('selected',val==='Conscious');document.getElementById('aware-s').classList.toggle('selected',val==='Subconscious');}
+
+  // ── Category accordion toggle ───────────────────────────────────────────
+  function toggleCat(el, panelId) {
+    const panel = document.getElementById(panelId);
+    const isOpen = panel.classList.contains('open');
+    panel.classList.toggle('open', !isOpen);
+    el.classList.toggle('cat-open', !isOpen);
+  }
+
+  // ── Custom tag persistence (Firebase-backed, localStorage fallback) ──────
+  const TAG_CONFIG = {
+    location:     { customSection: 'location-custom-section',     customContainer: 'location-custom-tags',     color: 'blue',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+    trigger:      { customSection: 'trigger-custom-section',      customContainer: 'trigger-custom-tags',      color: 'purple', onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+    activity:     { customSection: 'activity-custom-section',     customContainer: 'activity-custom-tags',     color: 'teal',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+    area:         { customSection: 'area-custom-section',         customContainer: 'area-custom-tags',         color: 'rose',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+    physical:     { customSection: 'physical-custom-section',     customContainer: 'physical-custom-tags',     color: 'green',  onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+    intervention: { customSection: 'intervention-custom-section', customContainer: 'intervention-custom-tags', color: 'teal',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+    mood:         { customSection: 'mood-custom-section',         customContainer: 'mood-custom-tags',         color: 'amber',  onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
+  };
+
+  // In-memory store of all custom tags (loaded from Firebase/localStorage)
+  const _customTagStore = {};
+
+  function _getLocalCustomTags(group) {
+    try { return JSON.parse(localStorage.getItem('bfrb_custom_' + group) || '[]'); } catch(e) { return []; }
+  }
+  function _setLocalCustomTags(group, arr) {
+    try { localStorage.setItem('bfrb_custom_' + group, JSON.stringify(arr)); } catch(e) {}
+  }
+
+  function renderCustomTag(group, value) {
+    const cfg = TAG_CONFIG[group]; if (!cfg) return;
+    const container = document.getElementById(cfg.customContainer);
+    const section   = document.getElementById(cfg.customSection);
+    if (!container || !section) return;
+    // Deduplicate
+    if (Array.from(container.querySelectorAll('.tag')).some(t => t.textContent.trim() === value)) return;
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.textContent = value;
+    tag.addEventListener('click', function(){ toggleTag(this, group, cfg.color); });
+    container.appendChild(tag);
+    section.classList.add('has-tags');
+  }
+
+  function loadAllCustomTags(allCustom) {
+    // allCustom: { location: [...], trigger: [...], ... }
+    Object.keys(TAG_CONFIG).forEach(group => {
+      const vals = (allCustom && allCustom[group]) ? allCustom[group] : _getLocalCustomTags(group);
+      _customTagStore[group] = vals;
+      vals.forEach(v => renderCustomTag(group, v));
+    });
+  }
+
+  async function saveCustomTag(group, value) {
+    if (!value) return;
+    if (!_customTagStore[group]) _customTagStore[group] = [];
+    if (_customTagStore[group].includes(value)) return; // already exists
+    _customTagStore[group].push(value);
+    renderCustomTag(group, value);
+    // Persist locally
+    _setLocalCustomTags(group, _customTagStore[group]);
+    // Persist to Firebase if logged in
+    if (window._db && window._currentUser) {
+      try {
+        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js");
+        const ref = doc(window._db, 'users', window._currentUser.uid);
+        await setDoc(ref, { customTags: _customTagStore }, { merge: true });
+      } catch(e) { console.warn('Could not save custom tags to Firebase', e); }
+    }
+  }
+
+  // Called from Firebase auth handler once user is known
+  window._loadCustomTagsForUser = async function(uid) {
+    if (!window._db) { loadAllCustomTags(null); return; }
+    try {
+      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js");
+      const ref = doc(window._db, 'users', uid);
+      const snap = await getDoc(ref);
+      const data = snap.exists() ? snap.data() : {};
+      // Merge Firebase data over localStorage
+      const merged = {};
+      Object.keys(TAG_CONFIG).forEach(g => {
+        const local = _getLocalCustomTags(g);
+        const remote = (data.customTags && data.customTags[g]) || [];
+        merged[g] = [...new Set([...remote, ...local])];
+        _setLocalCustomTags(g, merged[g]);
+      });
+      loadAllCustomTags(merged);
+    } catch(e) {
+      console.warn('Could not load custom tags from Firebase, using localStorage', e);
+      loadAllCustomTags(null);
+    }
+  };
+
+  // Load from localStorage on startup (before Firebase auth resolves)
+  loadAllCustomTags(null);
   function toggleFaceTag(el) {
     const isSelected = el.classList.contains('sel-rose');
     if (isSelected) {
@@ -686,13 +972,18 @@
     const pad=n=>String(n).padStart(2,'0');
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   }
-  function getTimestamp(){if(state.type==='backdated'){const v=document.getElementById('event-time').value;return v?new Date(v).toISOString():localISOString();}return localISOString();}
+  function getTimestamp(){if(state.type==='backdated'){const v=document.getElementById('event-time').value;if(v){return v.length===16?v+':00':v;}return localISOString();}return localISOString();}
   function showToast(msg,isError=false,isSuccess=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isError?' error':'')+(isSuccess?' success':'');void t.offsetWidth;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
   async function submitEntry(){
     if(!window._db){showToast('Not connected yet - try again',true);return;}
     const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Saving...';
-    const extras=['location','trigger','activity','area','physical','intervention'].reduce((acc,g)=>{const other=getOtherVal(g);acc[g]=[...state.selections[g],...(other?[other]:[])];return acc;},{});
-    const entry={timestamp:getTimestamp(),entry_type:state.type,awareness:state.awareness||'',location:extras.location.join(', '),trigger:extras.trigger.join(', '),activity:extras.activity.join(', '),body_area:extras.area.join(', '),physical_target:extras.physical.join(', '),urge_strength:parseInt(document.getElementById('urge-slider').value),duration:state.duration||'',outcome:state.outcome||'',intervention:extras.intervention.join(', '),mood:state.selections.mood.join(', '),notes:document.getElementById('notes').value.trim(),created_at:window._serverTimestamp()};
+    // Persist any "Other" values typed so they become permanent tags
+    const savePromises = ['location','trigger','activity','area','physical','intervention','mood'].map(g=>{
+      const val=getOtherVal(g); return val ? saveCustomTag(g,val) : Promise.resolve();
+    });
+    await Promise.all(savePromises);
+    const extras=['location','trigger','activity','area','physical','intervention','mood'].reduce((acc,g)=>{const other=getOtherVal(g);acc[g]=[...state.selections[g],...(other?[other]:[])];return acc;},{});
+    const entry={timestamp:getTimestamp(),entry_type:state.type,awareness:state.awareness||'',location:extras.location.join(', '),trigger:extras.trigger.join(', '),activity:extras.activity.join(', '),body_area:extras.area.join(', '),physical_target:extras.physical.join(', '),urge_strength:parseInt(document.getElementById('urge-slider').value),duration:state.duration||'',outcome:state.outcome||'',intervention:extras.intervention.join(', '),mood:extras.mood.join(', '),notes:document.getElementById('notes').value.trim(),created_at:window._serverTimestamp()};
     try{await window._addDoc(window._collection(window._db,'events'),entry);showToast('Entry saved',false,true);resetForm();}
     catch(err){showToast('Could not save: '+err.message,true);console.error(err);}
     btn.disabled=false;btn.textContent='Save entry';
@@ -705,6 +996,9 @@
     document.getElementById('type-realtime').classList.add('selected');
     document.getElementById('datetime-field').style.display='none';
     document.getElementById('face-sub').style.display='none';
+    // Close all accordion sub-panels and reset their cat-tag buttons
+    document.querySelectorAll('.sub-panel.open').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.cat-tag.cat-open').forEach(b=>b.classList.remove('cat-open'));
     const sl=document.getElementById('urge-slider');sl.value=5;updateSlider(sl);
     document.getElementById('urge-val').textContent='5';
     document.getElementById('notes').value='';

@@ -24,6 +24,9 @@
     --amber: #b8820a;
     --red: #b83a3a;
     --red-light: rgba(184,58,58,0.10);
+    --purple: #7a5898;
+    --rose: #b04468;
+    --rose-light: rgba(176,68,104,0.10);
     --shadow-sm: 0 1px 4px rgba(18,36,80,0.07);
     --shadow: 0 2px 12px rgba(18,36,80,0.09);
     --shadow-lg: 0 8px 32px rgba(18,36,80,0.13);
@@ -104,6 +107,30 @@
   tr:hover td { background: var(--bg); }
   tr.clickable { cursor: pointer; }
 
+  /* IMPORT MODAL */
+  .import-overlay { display: none; position: fixed; inset: 0; background: rgba(18,30,54,0.5); backdrop-filter: blur(4px); z-index: 300; align-items: flex-end; justify-content: center; }
+  .import-overlay.visible { display: flex; }
+  .import-modal { background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; padding: 20px 20px 40px; width: 100%; max-width: 600px; box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s cubic-bezier(0.34,1.2,0.64,1); }
+  .drop-zone { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.15s; margin-bottom: 16px; }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--accent); background: var(--accent-light); }
+  .drop-zone-icon { font-size: 28px; margin-bottom: 8px; }
+  .drop-zone-text { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+  .drop-zone-sub { font-size: 11px; color: var(--text-muted); }
+  .import-preview { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 16px; display: none; }
+  .import-preview.visible { display: block; }
+  .import-preview-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+  .import-stat { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; }
+  .import-stat-label { color: var(--text-secondary); }
+  .import-stat-val { font-weight: 700; color: var(--text); }
+  .import-warning { font-size: 11px; color: var(--amber); background: rgba(184,130,10,0.08); border: 1px solid rgba(184,130,10,0.2); border-radius: var(--radius-sm); padding: 8px 10px; margin-bottom: 12px; display: none; }
+  .import-warning.visible { display: block; }
+  .import-confirm-btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 50px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; box-shadow: 0 4px 14px rgba(184,92,64,0.32); transition: all 0.15s; }
+  .import-confirm-btn:hover { background: #9e4a30; }
+  .import-confirm-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .import-cancel { width: 100%; background: none; color: var(--text-muted); border: none; padding: 10px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 4px; }
+  .import-progress { font-size: 12px; color: var(--text-muted); text-align: center; padding: 8px 0; display: none; }
+  .import-progress.visible { display: block; }
+
   /* EDIT MODAL */
   .edit-overlay { display: none; position: fixed; inset: 0; background: rgba(18,30,54,0.5); backdrop-filter: blur(4px); z-index: 300; align-items: flex-end; justify-content: center; }
   .edit-overlay.visible { display: flex; }
@@ -132,8 +159,10 @@
   .edit-input { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 11px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%; -webkit-appearance: none; }
   .edit-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-light); }
   .edit-textarea { resize: vertical; min-height: 70px; line-height: 1.5; }
-  .edit-save-btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 50px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px; box-shadow: 0 4px 14px rgba(61,111,190,0.3); transition: all 0.15s; }
-  .edit-save-btn:hover { background: #2d5fae; }
+  .edit-save-btn { width: 100%; background: var(--accent); color: #fff; border: none; border-radius: 50px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 6px; box-shadow: 0 4px 14px rgba(184,92,64,0.32); transition: all 0.15s; }
+  .edit-save-btn:hover { background: #9e4a30; }
+  .edit-field { margin-bottom: 18px; }
+  .edit-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
   .edit-delete-btn { width: 100%; background: none; color: var(--red); border: 1px solid rgba(184,58,58,0.3); border-radius: 50px; padding: 11px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 8px; transition: all 0.15s; }
   .edit-delete-btn:hover { background: var(--red-light); }
   .edit-cancel { width: 100%; background: none; color: var(--text-muted); border: none; padding: 10px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 4px; }
@@ -186,6 +215,39 @@
   </div>
 </div>
 
+<input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleFileSelect(this)">
+
+<div class="import-overlay" id="import-overlay">
+  <div class="import-modal">
+    <div class="edit-handle"></div>
+    <div class="edit-title">Import CSV</div>
+    <div class="edit-sub" id="import-sub">Upload a BFRB Log CSV to add entries to your account.</div>
+
+    <div class="drop-zone" id="drop-zone"
+      onclick="document.getElementById('csv-file-input').click()"
+      ondragover="event.preventDefault();this.classList.add('drag-over')"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="event.preventDefault();this.classList.remove('drag-over');handleFileDrop(event)">
+      <div class="drop-zone-icon">📂</div>
+      <div class="drop-zone-text">Click to choose a CSV file</div>
+      <div class="drop-zone-sub">or drag and drop here</div>
+    </div>
+
+    <div class="import-preview" id="import-preview">
+      <div class="import-preview-title">Preview</div>
+      <div class="import-stat"><span class="import-stat-label">Rows found</span><span class="import-stat-val" id="imp-total">0</span></div>
+      <div class="import-stat"><span class="import-stat-label">Valid entries</span><span class="import-stat-val" id="imp-valid">0</span></div>
+      <div class="import-stat"><span class="import-stat-label">Skipped (no timestamp)</span><span class="import-stat-val" id="imp-skipped">0</span></div>
+      <div class="import-stat"><span class="import-stat-label">Date range</span><span class="import-stat-val" id="imp-range">--</span></div>
+    </div>
+    <div class="import-warning" id="import-warning"></div>
+    <div class="import-progress" id="import-progress">Importing… <span id="imp-prog-count"></span></div>
+
+    <button class="import-confirm-btn" id="import-confirm-btn" onclick="confirmImport()" disabled>Import entries</button>
+    <button class="import-cancel" onclick="closeImportModal()">Cancel</button>
+  </div>
+</div>
+
 <div class="edit-overlay" id="edit-overlay">
   <div class="edit-modal">
     <div class="edit-handle"></div>
@@ -210,10 +272,19 @@
       <div class="e-tag" onclick="eToggle(this,'location')">Bathroom</div>
       <div class="e-tag" onclick="eToggle(this,'location')">Bathroom mirror</div>
       <div class="e-tag" onclick="eToggle(this,'location')">Kitchen</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Shower</div>
       <div class="e-tag" onclick="eToggle(this,'location')">Car</div>
       <div class="e-tag" onclick="eToggle(this,'location')">School / campus</div>
       <div class="e-tag" onclick="eToggle(this,'location')">Library</div>
       <div class="e-tag" onclick="eToggle(this,'location')">Clinical placement</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Office / work</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Gym</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Outdoors / park</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Public transport</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Friend's place</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Waiting room</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Shop / store</div>
+      <div class="e-tag" onclick="eToggle(this,'location')">Cafe</div>
     </div>
 
     <div class="edit-section-label">Activity</div>
@@ -227,11 +298,16 @@
       <div class="e-tag" onclick="eToggle(this,'activity')">Watching TV</div>
       <div class="e-tag" onclick="eToggle(this,'activity')">Talking</div>
       <div class="e-tag" onclick="eToggle(this,'activity')">Driving / commuting</div>
-      <div class="e-tag" onclick="eToggle(this,'activity')">Grooming</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Getting ready</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Getting Ready</div>
       <div class="e-tag" onclick="eToggle(this,'activity')">In bed</div>
       <div class="e-tag" onclick="eToggle(this,'activity')">Nothing / zoning out</div>
       <div class="e-tag" onclick="eToggle(this,'activity')">Eating</div>
       <div class="e-tag" onclick="eToggle(this,'activity')">On the computer</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Gaming</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Scrolling</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Exercise</div>
+      <div class="e-tag" onclick="eToggle(this,'activity')">Cooking</div>
     </div>
 
     <div class="edit-section-label">Trigger</div>
@@ -248,6 +324,13 @@
       <div class="e-tag" onclick="eToggle(this,'trigger')">Waiting</div>
       <div class="e-tag" onclick="eToggle(this,'trigger')">Winding down</div>
       <div class="e-tag" onclick="eToggle(this,'trigger')">Socially anxious</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Overwhelmed</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Sad</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Skin felt rough</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Itching</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Before an exam</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">After a stressful event</div>
+      <div class="e-tag" onclick="eToggle(this,'trigger')">Procrastinating</div>
     </div>
 
     <div class="edit-section-label">Mood before</div>
@@ -260,6 +343,16 @@
       <div class="e-tag" onclick="eToggle(this,'mood')">Overwhelmed</div>
       <div class="e-tag" onclick="eToggle(this,'mood')">Restless</div>
       <div class="e-tag" onclick="eToggle(this,'mood')">Focused</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Anxious</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Happy</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Lonely</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Guilty</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Content</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Dissociated</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Embarrassed</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Hopeful</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Excited</div>
+      <div class="e-tag" onclick="eToggle(this,'mood')">Defeated</div>
     </div>
 
     <div class="edit-section-label">Body area</div>
@@ -407,6 +500,7 @@
       <span class="result-count" id="result-count"></span>
       <div class="btn-row">
         <button class="pill-btn" onclick="loadData()">Refresh</button>
+        <button class="pill-btn" onclick="openImportModal()">Import CSV</button>
         <button class="pill-btn" onclick="exportCSV()">Export CSV</button>
       </div>
     </div>
@@ -422,7 +516,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, orderBy, query, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, orderBy, query, doc, updateDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -448,6 +542,8 @@
   };
   window._updateDoc = async function(id, data){ await updateDoc(doc(db,'events',id), data); };
   window._deleteDoc = async function(id){ await deleteDoc(doc(db,'events',id)); };
+  window._addDoc = async function(data){ return await addDoc(collection(db,'events'), data); };
+  window._db = db;
 
   onAuthStateChanged(auth, user => {
     const loginScreen=document.getElementById('login-screen');
@@ -476,7 +572,18 @@
     try{
       let attempts=0;
       while(!window._loadEvents&&attempts<20){await new Promise(r=>setTimeout(r,200));attempts++;}
-      allData=await window._loadEvents();
+      const raw=await window._loadEvents();
+      // Normalize timestamps: convert any UTC .000Z or +00:00 to local ISO
+      allData=raw.map(e=>{
+        if(e.timestamp&&(e.timestamp.endsWith('Z')||e.timestamp.includes('+'))){
+          const d=new Date(e.timestamp);
+          if(!isNaN(d)){
+            const pad=n=>String(n).padStart(2,'0');
+            e={...e,timestamp:`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`};
+          }
+        }
+        return e;
+      });
       populateFilters();
       applyFilters();
     }catch(err){document.getElementById('table-container').innerHTML=`<div class="empty">Could not load data: ${err.message}</div>`;}
@@ -490,6 +597,9 @@
     });
     const tSel=document.getElementById('filter-trigger');
     const lSel=document.getElementById('filter-location');
+    // Clear existing dynamic options (keep the first "All ..." option)
+    while(tSel.options.length>1) tSel.remove(1);
+    while(lSel.options.length>1) lSel.remove(1);
     [...triggers].sort().forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;tSel.appendChild(o);});
     [...locations].sort().forEach(l=>{const o=document.createElement('option');o.value=l;o.textContent=l;lSel.appendChild(o);});
   }
@@ -549,7 +659,7 @@
     document.getElementById('prev-btn').disabled=currentPage<=1;
     document.getElementById('next-btn').disabled=currentPage>=totalPages;
     if(!total){document.getElementById('table-container').innerHTML='<div class="empty">No events match these filters.</div>';return;}
-    const cols=[{key:'timestamp',label:'Time'},{key:'awareness',label:'Awareness'},{key:'location',label:'Location'},{key:'trigger',label:'Trigger'},{key:'activity',label:'Activity'},{key:'body_area',label:'Area'},{key:'physical_target',label:'Target'},{key:'urge_strength',label:'Urge'},{key:'duration',label:'Duration'},{key:'outcome',label:'Outcome'},{key:'intervention',label:'Intervention'},{key:'mood',label:'Mood'},{key:'notes',label:'Notes'}];
+    const cols=[{key:'timestamp',label:'Time'},{key:'entry_type',label:'Type'},{key:'awareness',label:'Awareness'},{key:'location',label:'Location'},{key:'trigger',label:'Trigger'},{key:'activity',label:'Activity'},{key:'body_area',label:'Area'},{key:'physical_target',label:'Target'},{key:'urge_strength',label:'Urge'},{key:'duration',label:'Duration'},{key:'outcome',label:'Outcome'},{key:'intervention',label:'Intervention'},{key:'mood',label:'Mood'},{key:'notes',label:'Notes'}];
     let html='<div class="table-wrap"><table><thead><tr>';
     cols.forEach(c=>{const cls=sortCol===c.key?(sortDir==='asc'?'sort-asc':'sort-desc'):'';html+=`<th class="${cls}" onclick="setSort('${c.key}')">${c.label}</th>`;});
     html+='</tr></thead><tbody>';
@@ -558,7 +668,8 @@
       const ts=isNaN(dt)?e.timestamp:dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'})+' '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
       const u=e.urge_strength,uCls=u<=3?'urge-low':u<=6?'urge-mid':'urge-high';
       const safeId=e.id.replace(/'/g,"\\'");
-      html+=`<tr class="clickable" onclick="openEdit('${safeId}')"><td style="white-space:nowrap">${ts}</td><td>${e.awareness?`<span class="awareness-chip">${e.awareness}</span>`:''}</td><td>${e.location||''}</td><td>${e.trigger||''}</td><td>${e.activity||''}</td><td>${e.body_area||''}</td><td>${e.physical_target||''}</td><td>${u?`<span class="urge-chip ${uCls}">${u}</span>`:''}</td><td style="white-space:nowrap">${e.duration||''}</td><td>${e.outcome||''}</td><td>${e.intervention||''}</td><td>${e.mood||''}</td><td style="max-width:160px;white-space:normal">${e.notes||''}</td></tr>`;
+      const typeBadge=e.entry_type==='quick'?'<span style="display:inline-block;padding:2px 7px;border-radius:50px;font-size:10px;font-weight:700;background:rgba(122,88,152,0.12);color:#5a3878">quick</span>':e.entry_type==='backdated'?'<span style="display:inline-block;padding:2px 7px;border-radius:50px;font-size:10px;font-weight:700;background:rgba(184,130,10,0.10);color:#7a4800">backdated</span>':'';
+      html+=`<tr class="clickable" onclick="openEdit('${safeId}')"><td style="white-space:nowrap">${ts}</td><td>${typeBadge}</td><td>${e.awareness?`<span class="awareness-chip">${e.awareness}</span>`:''}</td><td>${e.location||''}</td><td>${e.trigger||''}</td><td>${e.activity||''}</td><td>${e.body_area||''}</td><td>${e.physical_target||''}</td><td>${u?`<span class="urge-chip ${uCls}">${u}</span>`:''}</td><td style="white-space:nowrap">${e.duration||''}</td><td>${e.outcome||''}</td><td>${e.intervention||''}</td><td>${e.mood||''}</td><td style="max-width:160px;white-space:normal">${e.notes||''}</td></tr>`;
     });
     html+='</tbody></table></div>';
     document.getElementById('table-container').innerHTML=html;
@@ -616,6 +727,8 @@
     Object.keys(eState.multi).forEach(k=>eState.multi[k]=[]);
     document.querySelectorAll('.e-tag,.e-toggle').forEach(t=>t.classList.remove('sel'));
     document.getElementById('e-face-sub').style.display='none';
+    // Remove any dynamically injected custom tags from previous openEdit calls
+    document.querySelectorAll('.e-tag[data-custom]').forEach(t=>t.remove());
   }
 
   function eToggle(el, group){
@@ -654,10 +767,26 @@
   function eSelectTags(groupId, valStr, group, isSingle=false){
     if(!valStr) return;
     const vals=valStr.split(', ').map(v=>v.trim()).filter(Boolean);
-    document.querySelectorAll(`#${groupId} .e-tag, #${groupId} .e-toggle`).forEach(t=>{
-      if(vals.includes(t.textContent.trim())){
-        t.classList.add('sel');
-        if(!isSingle) eState.multi[group]=[...new Set([...eState.multi[group], t.textContent.trim()])];
+    const container=document.getElementById(groupId);
+    vals.forEach(val=>{
+      // Find existing tag in the group
+      let found=false;
+      container.querySelectorAll(`.e-tag, .e-toggle`).forEach(t=>{
+        if(t.textContent.trim()===val){
+          t.classList.add('sel');
+          found=true;
+          if(!isSingle) eState.multi[group]=[...new Set([...eState.multi[group], val])];
+        }
+      });
+      // If not found, inject a custom tag so the value is still visible and togglable
+      if(!found && !isSingle && group!=='body_area'){
+        const tag=document.createElement('div');
+        tag.className='e-tag sel';
+        tag.dataset.custom='true';
+        tag.textContent=val;
+        tag.onclick=function(){eToggle(this,group);};
+        eState.multi[group]=[...new Set([...eState.multi[group], val])];
+        container.appendChild(tag);
       }
     });
     if(isSingle && vals[0]){
@@ -721,8 +850,14 @@
   async function saveEdit(){
     const id=document.getElementById('edit-doc-id').value;
     const tsVal=document.getElementById('edit-timestamp').value;
+    // Keep local ISO format (not UTC) for consistency with all other entries
+    function toLocalISO(dtLocalStr){
+      if(!dtLocalStr) return '';
+      // datetime-local gives "YYYY-MM-DDTHH:MM" — pad seconds
+      return dtLocalStr.length===16 ? dtLocalStr+':00' : dtLocalStr;
+    }
     const updated={
-      timestamp: tsVal ? new Date(tsVal).toISOString() : allData.find(x=>x.id===id)?.timestamp||'',
+      timestamp: tsVal ? toLocalISO(tsVal) : allData.find(x=>x.id===id)?.timestamp||'',
       awareness: eState.awareness||'',
       location: eState.multi.location.join(', '),
       activity: eState.multi.activity.join(', '),
@@ -769,6 +904,127 @@
   document.getElementById('edit-overlay').addEventListener('click',function(e){if(e.target===this)closeEdit();});
   eUpdateSlider(document.getElementById('edit-urge-slider'));
 
+  // ── CSV Import ─────────────────────────────────────────────────────────
+  let _csvParsed = [];
+  const CSV_HEADERS = ['timestamp','entry_type','awareness','location','trigger','activity','body_area','physical_target','urge_strength','duration','outcome','intervention','mood','notes'];
+
+  function openImportModal(){
+    _csvParsed = [];
+    document.getElementById('import-preview').classList.remove('visible');
+    document.getElementById('import-warning').classList.remove('visible');
+    document.getElementById('import-progress').classList.remove('visible');
+    document.getElementById('import-confirm-btn').disabled = true;
+    document.getElementById('csv-file-input').value = '';
+    document.getElementById('drop-zone').querySelector('.drop-zone-text').textContent = 'Click to choose a CSV file';
+    document.getElementById('import-overlay').classList.add('visible');
+  }
+  function closeImportModal(){ document.getElementById('import-overlay').classList.remove('visible'); }
+
+  function handleFileSelect(input){ if(input.files[0]) loadCSVFile(input.files[0]); }
+  function handleFileDrop(e){ const f=e.dataTransfer.files[0]; if(f&&f.name.endsWith('.csv')) loadCSVFile(f); }
+
+  function loadCSVFile(file){
+    document.getElementById('drop-zone').querySelector('.drop-zone-text').textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = e => parseAndPreviewCSV(e.target.result);
+    reader.readAsText(file);
+  }
+
+  function parseCSVLine(line){
+    const vals=[]; let cur='', inQ=false;
+    for(let i=0;i<line.length;i++){
+      const ch=line[i];
+      if(ch==='"'){ if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ; }
+      else if(ch===','&&!inQ){ vals.push(cur); cur=''; }
+      else cur+=ch;
+    }
+    vals.push(cur);
+    return vals;
+  }
+
+  function parseAndPreviewCSV(text){
+    const lines = text.trim().split(/\r?\n/);
+    if(lines.length < 2){ showImportWarning('File appears empty or has no data rows.'); return; }
+    const headerLine = parseCSVLine(lines[0]).map(h=>h.trim().replace(/^"|"$/g,'').toLowerCase());
+    // Map header names to our field names
+    const colMap = {};
+    CSV_HEADERS.forEach(h => {
+      const idx = headerLine.indexOf(h);
+      if(idx > -1) colMap[h] = idx;
+    });
+    if(colMap['timestamp'] === undefined){ showImportWarning('CSV must have a "timestamp" column.'); return; }
+
+    const valid=[], skipped=[];
+    for(let i=1;i<lines.length;i++){
+      const line=lines[i].trim(); if(!line) continue;
+      const cols=parseCSVLine(line);
+      const get=(h)=>(colMap[h]!==undefined?cols[colMap[h]]||'':'').replace(/^"|"$/g,'').trim();
+      const ts=get('timestamp');
+      if(!ts){ skipped.push(i); continue; }
+      // Normalize timestamp: strip Z suffix if present
+      const normTs = ts.endsWith('Z') ? ts.slice(0,-1).replace('.000','') : ts;
+      valid.push({
+        timestamp: normTs,
+        entry_type: get('entry_type')||'realtime',
+        awareness: get('awareness'),
+        location: get('location'),
+        trigger: get('trigger'),
+        activity: get('activity'),
+        body_area: get('body_area'),
+        physical_target: get('physical_target'),
+        urge_strength: parseInt(get('urge_strength'))||0,
+        duration: get('duration'),
+        outcome: get('outcome'),
+        intervention: get('intervention'),
+        mood: get('mood'),
+        notes: get('notes'),
+      });
+    }
+
+    _csvParsed = valid;
+    // Show preview
+    document.getElementById('imp-total').textContent = lines.length - 1;
+    document.getElementById('imp-valid').textContent = valid.length;
+    document.getElementById('imp-skipped').textContent = skipped.length;
+    if(valid.length){
+      const ts = valid.map(e=>e.timestamp).sort();
+      const fmt=s=>{const d=new Date(s);return isNaN(d)?s:d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});};
+      document.getElementById('imp-range').textContent = fmt(ts[0]) + ' – ' + fmt(ts[ts.length-1]);
+    }
+    document.getElementById('import-preview').classList.add('visible');
+    document.getElementById('import-warning').classList.remove('visible');
+    document.getElementById('import-confirm-btn').disabled = valid.length === 0;
+    if(valid.length === 0) showImportWarning('No valid rows found to import.');
+  }
+
+  function showImportWarning(msg){
+    const el=document.getElementById('import-warning');
+    el.textContent=msg; el.classList.add('visible');
+  }
+
+  async function confirmImport(){
+    if(!_csvParsed.length) return;
+    if(!window._addDoc){ showToast('Not connected to Firebase','error'); return; }
+    const btn=document.getElementById('import-confirm-btn');
+    const prog=document.getElementById('import-progress');
+    btn.disabled=true; prog.classList.add('visible');
+    let done=0, failed=0;
+    for(const entry of _csvParsed){
+      try{
+        await window._addDoc(entry);
+        done++;
+      } catch(e){ failed++; }
+      document.getElementById('imp-prog-count').textContent = `${done} / ${_csvParsed.length}`;
+    }
+    prog.classList.remove('visible');
+    closeImportModal();
+    await loadData();
+    showToast(failed ? `Imported ${done}, ${failed} failed` : `Imported ${done} entr${done===1?'y':'ies'}`, failed?'error':'success');
+  }
+
+  document.getElementById('import-overlay').addEventListener('click',function(e){if(e.target===this)closeImportModal();});
+
+  // ── Export CSV ──────────────────────────────────────────────────────────
   function exportCSV(){
     if(!filtered.length)return;
     const headers=['timestamp','entry_type','awareness','location','trigger','activity','body_area','physical_target','urge_strength','duration','outcome','intervention','mood','notes'];
