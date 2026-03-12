@@ -358,7 +358,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       <div class="card">
 
         <div class="field">
-          <label class="field-label">Body area — select all that apply</label>
+          <label class="field-label">Body area</label>
           <div class="acc-row">
             <div class="acc-btn" onclick="toggleAcc(this,'area-face')">Face <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="acc-btn" onclick="toggleAcc(this,'area-scalp')">Scalp &amp; head <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
@@ -433,23 +433,23 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         </div>
 
         <div class="field">
-          <label class="field-label">What happened after — complete the chain</label>
+          <label class="field-label">What happened after?</label>
           <div class="comp-grid">
             <div class="comp-btn" data-v="released" onclick="setCompletion(this)">
               <span class="comp-lbl">Released / discarded</span>
-              <span class="comp-sub">Put it down</span>
+              
             </div>
             <div class="comp-btn" data-v="examined" onclick="setCompletion(this)">
               <span class="comp-lbl">Examined it</span>
-              <span class="comp-sub">Looked, then discarded</span>
+              
             </div>
             <div class="comp-btn" data-v="oral" onclick="setCompletion(this)">
               <span class="comp-lbl">Oral contact</span>
-              <span class="comp-sub">Touched to lips or bit</span>
+              
             </div>
             <div class="comp-btn" data-v="ingested" onclick="setCompletion(this)">
               <span class="comp-lbl">Ingested / swallowed</span>
-              <span class="comp-sub">Chewed or swallowed</span>
+              
             </div>
           </div>
         </div>
@@ -457,12 +457,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         <div class="field">
           <label class="field-label">Skin impact</label>
           <div class="sev-grid">
-            <div class="sev-btn" data-v="none" onclick="setSev(this)"><span class="sev-lbl">None</span><span class="sev-sub">No mark</span></div>
-            <div class="sev-btn" data-v="minor" onclick="setSev(this)"><span class="sev-lbl">Minor</span><span class="sev-sub">Redness</span></div>
-            <div class="sev-btn" data-v="moderate" onclick="setSev(this)"><span class="sev-lbl">Moderate</span><span class="sev-sub">Broke skin</span></div>
-            <div class="sev-btn" data-v="significant" onclick="setSev(this)"><span class="sev-lbl">Significant</span><span class="sev-sub">Bleeding</span></div>
+            <div class="sev-btn" data-v="none" onclick="setSev(this)"><span class="sev-lbl">None</span></div>
+            <div class="sev-btn" data-v="minor" onclick="setSev(this)"><span class="sev-lbl">Minor</span></div>
+            <div class="sev-btn" data-v="moderate" onclick="setSev(this)"><span class="sev-lbl">Moderate</span></div>
+            <div class="sev-btn" data-v="significant" onclick="setSev(this)"><span class="sev-lbl">Significant</span></div>
           </div>
-          <div class="slider-lbls"><span>No mark</span><span>Redness</span><span>Broke skin</span><span>Bleeding</span></div>
         </div>
 
         <div class="field" style="margin-bottom:0">
@@ -485,7 +484,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       <div class="card">
 
         <div class="field">
-          <label class="field-label">What specifically</label>
+          <label class="field-label">What did you bite?</label>
           <div class="tag-row">
             <div class="tag" onclick="toggleTag(this,'bite_what')">Cuticle skin</div>
             <div class="tag" onclick="toggleTag(this,'bite_what')">Loose / hanging skin around nail</div>
@@ -755,7 +754,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
             <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_positive',this.previousElementSibling)">Save</button></div>
           </div>
           <div class="sub-acc-panel" id="ep-em-oth">
-            <div class="tag-row" data-stc="etrig_other" data-sg="etrig"><div class="tag" onclick="toggleTag(this,'etrig')">Anticipating something</div><div class="tag" onclick="toggleTag(this,'etrig')">Excited</div><div class="tag" onclick="toggleTag(this,'etrig')">Nothing I can name</div></div>
+            <div class="tag-row" data-stc="etrig_other" data-sg="etrig"><div class="tag" onclick="toggleTag(this,'etrig')">Nothing I can name</div><div class="tag" onclick="toggleTag(this,'etrig')">Hard to describe</div><div class="tag" onclick="toggleTag(this,'etrig')">Habit / automatic</div><div class="tag" onclick="toggleTag(this,'etrig')">Mixed / complicated</div></div>
             <div class="add-other-row"><input type="text" class="add-other-input" id="ep-em-oth-in" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_other',this.previousElementSibling)">Save</button></div>
           </div>
         </div>
@@ -1097,7 +1096,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
 
     <!-- TRIGGERS (resist) -->
-    <div class="step-hd"><div class="step-title">What was pulling you toward it?</div></div>
+    <div class="step-hd"><div class="step-title">What set it off?</div></div>
     <div class="card">
       <div class="field" style="margin-bottom:0">
         <div class="acc-row">
@@ -1145,7 +1144,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
             <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_positive',this.previousElementSibling)">Save</button></div>
           </div>
           <div class="sub-acc-panel" id="r-em-oth">
-            <div class="tag-row" data-stc="etrig_other" data-sg="r_etrig"><div class="tag" onclick="toggleTag(this,'r_etrig')">Anticipating something</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Excited</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Nothing I can name</div></div>
+            <div class="tag-row" data-stc="etrig_other" data-sg="r_etrig"><div class="tag" onclick="toggleTag(this,'r_etrig')">Nothing I can name</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Hard to describe</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Habit / automatic</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Mixed / complicated</div></div>
             <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_other',this.previousElementSibling)">Save</button></div>
           </div>
         </div>
@@ -1254,7 +1253,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
           </div>
         </div>
         <div class="field" style="margin-bottom:0">
-          <label class="field-label">How effective?</label>
+          <label class="field-label">How effective was it?</label>
           <div class="eff-row">
             <div class="eff-btn" data-v="1" onclick="setEffR(this)">1</div>
             <div class="eff-btn" data-v="2" onclick="setEffR(this)">2</div>
