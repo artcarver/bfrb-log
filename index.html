@@ -216,6 +216,17 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
 @keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
+/* RECENT FEED */
+.recent-item{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px}
+.recent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.recent-dot.did{background:var(--ac)}
+.recent-dot.resisted{background:var(--sage)}
+.recent-dot.near{background:var(--warm)}
+.recent-item-main{flex:1;min-width:0}
+.recent-item-title{font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.recent-item-sub{font-size:11px;color:var(--mu);margin-top:1px}
+.recent-item-time{font-size:11px;color:var(--mu);flex-shrink:0;white-space:nowrap}
+
 </style>
 </head>
 <body>
@@ -241,6 +252,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   <div class="nav-links">
     <a class="nav-link active" href="index.html">Log</a>
     <a class="nav-link" href="tracker.html">Patterns</a>
+    <a class="nav-link" href="interventions.html">Toolkit</a>
     <a class="nav-link" href="context.html">Context</a>
   </div>
   <div class="nav-right">
@@ -1239,6 +1251,15 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
   </div><!-- /pathway-resist -->
 
+  <!-- RECENT ENTRIES FEED -->
+  <div id="recent-section" style="display:none">
+    <div class="step-hd" style="margin-top:28px;margin-bottom:10px">
+      <div class="step-title">Recent entries</div>
+      <a href="tracker.html" style="font-size:12px;color:var(--mu);text-decoration:none;font-weight:600">View all →</a>
+    </div>
+    <div id="recent-feed"></div>
+  </div>
+
 </main>
 </div><!-- /app -->
 
@@ -1288,7 +1309,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, serverTimestamp, doc, getDoc, setDoc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -1308,7 +1329,17 @@ const provider = new GoogleAuthProvider();
 window._uid = null;
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { toast('Sign-in failed', true); } };
 window.signOut = async () => { await fbSignOut(auth); };
-window._addEntry = async (uid, entry) => addDoc(collection(db,'users',uid,'entries'), {...entry, created_at: serverTimestamp()});
+window._addEntry = async (uid, entry) => {
+  const ref = await addDoc(collection(db,'users',uid,'entries'), {...entry, created_at: serverTimestamp()});
+  loadRecentEntries(uid); // refresh feed
+  return ref;
+};
+
+window._loadRecentEntries = async (uid) => {
+  const q = query(collection(db,'users',uid,'entries'), orderBy('timestamp','desc'), limit(5));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => d.data());
+};
 
 // Custom sub-tag Firebase sync
 window._saveCustomSubTags = async (uid, data) => {
@@ -1340,6 +1371,7 @@ function updateAuthUI(user) {
     if(el) el.textContent = isIn ? 'Signed in as ' + (user.displayName || user.email) : 'Not signed in';
   });
   if (isIn) {
+    loadRecentEntries(user.uid);
     window._loadCustomSubTags(user.uid).then(fbData => {
       const localData = window.loadCustomSubTags();
       const merged = Object.assign({}, localData);
@@ -1356,6 +1388,13 @@ function updateAuthUI(user) {
   }
 }
 onAuthStateChanged(auth, updateAuthUI);
+
+async function loadRecentEntries(uid) {
+  try {
+    const entries = await window._loadRecentEntries(uid);
+    window.renderRecentFeed(entries);
+  } catch(e) { /* silent */ }
+}
 </script>
 
 <!-- LOGIC -->
@@ -1842,6 +1881,32 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (btn && btn.classList.contains('add-other-btn')) btn.click();
   });
 });
+
+// RECENT FEED
+window.renderRecentFeed = (entries) => {
+  if (!entries.length) return;
+  const section = document.getElementById('recent-section');
+  const feed = document.getElementById('recent-feed');
+  if (!section || !feed) return;
+  section.style.display = '';
+  const TYPE_LABEL = {did:'Did it', resisted:'Resisted', near:'Near miss'};
+  const BFRB_LABEL = {picking:'Skin picking', biting:'Nail/skin biting'};
+  feed.innerHTML = entries.map(e => {
+    const type = e.entry_type || 'did';
+    const dateStr = e.timestamp ? new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '';
+    const bfrb = BFRB_LABEL[e.bfrb_type] || e.bfrb_type || '';
+    const loc = e.location ? ` · ${e.location}` : '';
+    const urge = e.urge_before ? ` · Urge ${e.urge_before}/10` : '';
+    return `<div class="recent-item">
+      <div class="recent-dot ${type}"></div>
+      <div class="recent-item-main">
+        <div class="recent-item-title">${TYPE_LABEL[type]||type} — ${bfrb}</div>
+        <div class="recent-item-sub">${loc}${urge}</div>
+      </div>
+      <div class="recent-item-time">${dateStr}</div>
+    </div>`;
+  }).join('');
+};
 </script>
 </body>
 </html>

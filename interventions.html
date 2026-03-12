@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Groundwork — Toolkit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#F4EDE3; --sur:#FAF6F1; --card:#FFFFFF; --bdr:#E2D8CE; --bdr2:#C8BAA8;
+  --tx:#2C1F14; --tx2:#5C4A38; --mu:#9C8878;
+  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10); --acl2:rgba(193,105,79,.18);
+  --sage:#7A8C85; --sagel:rgba(122,140,133,.10); --sagem:rgba(122,140,133,.22);
+  --warm:#D4956A; --warml:rgba(212,149,106,.13);
+  --blue:#6B88A2; --bluel:rgba(107,136,162,.10); --bluem:rgba(107,136,162,.20);
+  --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
+  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08); --s3:0 8px 32px rgba(44,31,20,.12);
+  --tr:all .18s ease;
+}
+[data-theme="dark"] {
+  --bg:#1E1710; --sur:#261D14; --card:#2E231A; --bdr:#3D3028; --bdr2:#5A4538;
+  --tx:#F0E8DF; --tx2:#C8B8A8; --mu:#8C7868;
+  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12); --acl2:rgba(201,120,96,.22);
+  --sage:#8A9E96; --sagel:rgba(138,158,150,.12); --sagem:rgba(138,158,150,.24);
+  --warm:#C4855A; --warml:rgba(196,133,90,.14);
+  --blue:#7898B2; --bluel:rgba(120,152,178,.12); --bluem:rgba(120,152,178,.22);
+  --s1:0 1px 3px rgba(0,0,0,.2); --s2:0 2px 12px rgba(0,0,0,.25); --s3:0 8px 32px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
+
+/* NAV */
+nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s;gap:8px}
+[data-theme="dark"] nav{background:rgba(30,23,16,.96)}
+.nav-brand{font-family:'Lora',serif;font-size:18px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none;flex-shrink:0}
+.nav-brand span{color:var(--ac)}
+.nav-links{display:flex;align-items:center;gap:1px;flex:1;justify-content:center}
+.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 10px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
+.nav-link:hover{background:var(--acl);color:var(--ac)}
+.nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--sur);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
+.theme-btn:hover{border-color:var(--ac);color:var(--ac)}
+@media(max-width:520px){.theme-btn{display:none}}
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
+.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
+.avatar-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;flex-shrink:0;border-radius:50%}
+.user-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;display:block;transition:border-color .18s}
+.avatar-btn:hover .user-avatar{border-color:var(--ac)}
+.profile-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--s3);min-width:160px;overflow:hidden;display:none;z-index:200;animation:fi .15s ease}
+.profile-menu.on{display:block}
+.profile-menu-item{display:flex;align-items:center;gap:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left}
+.profile-menu-item:hover{background:var(--bg);color:var(--tx)}
+.profile-menu-item+.profile-menu-item{border-top:1px solid var(--bdr)}
+.profile-menu-icon{font-size:14px;flex-shrink:0;width:16px;text-align:center}
+
+/* AUTH */
+.auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
+.auth-screen.on{display:flex}
+.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;box-shadow:var(--s3);text-align:center;max-width:320px;width:92%}
+.auth-logo{width:44px;height:44px;background:var(--acl2);border-radius:var(--r);margin:0 auto 22px;display:flex;align-items:center;justify-content:center}
+.auth-logo svg{width:22px;height:22px;fill:var(--ac)}
+.auth-title{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--tx);margin-bottom:8px;letter-spacing:-.02em}
+.auth-sub{font-size:13px;color:var(--mu);margin-bottom:28px;line-height:1.6}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.google-btn:hover{border-color:var(--ac);box-shadow:var(--s2)}
+
+/* LAYOUT */
+#app{display:none}
+#app.on{display:block}
+main{max-width:760px;margin:0 auto;padding:20px 14px}
+
+/* PAGE HEADER */
+.page-hd{margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.page-eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:4px}
+.page-title{font-family:'Lora',serif;font-size:24px;font-weight:400;color:var(--tx);letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--mu);margin-top:3px}
+.add-btn{flex-shrink:0;display:flex;align-items:center;gap:7px;background:var(--ac);border:none;border-radius:var(--pill);padding:10px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;transition:var(--tr);box-shadow:0 2px 12px rgba(193,105,79,.25);margin-top:6px}
+.add-btn:hover{background:var(--ac-h)}
+
+/* STAT STRIP */
+.stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.stat-mini{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:13px 15px;box-shadow:var(--s1)}
+.stat-mini-val{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--ac);line-height:1;margin-bottom:3px}
+.stat-mini-lbl{font-size:11px;color:var(--mu);font-weight:500;line-height:1.3}
+
+/* FILTER TABS */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter-tab{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none}
+.filter-tab:hover{border-color:var(--bdr2)}
+.filter-tab.on{background:var(--acl);border-color:var(--ac);color:var(--ac)}
+.cat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cat-dot.physical{background:var(--warm)}
+.cat-dot.sensory{background:var(--sage)}
+.cat-dot.mindfulness{background:var(--ac)}
+.cat-dot.behavioral{background:var(--blue)}
+.cat-dot.custom{background:var(--mu)}
+
+/* SECTION LABEL */
+.sec-lbl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin:20px 0 10px;padding:0 2px}
+.sec-lbl:first-child{margin-top:0}
+
+/* CARDS GRID */
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.cards-grid{grid-template-columns:1fr}}
+
+/* INTERVENTION CARD */
+.int-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;box-shadow:var(--s1);display:flex;flex-direction:column;gap:9px;transition:border-color .18s,box-shadow .18s}
+.int-card:hover{border-color:var(--bdr2)}
+.int-card.has-data{border-left:3px solid var(--sage)}
+.int-card.top-pick{border-left:3px solid var(--warm)}
+.int-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.int-card-name{font-size:14px;font-weight:600;color:var(--tx);line-height:1.3;flex:1}
+.cat-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:var(--pill);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;flex-shrink:0;white-space:nowrap}
+.cat-badge.physical{background:var(--warml);color:var(--warm)}
+.cat-badge.sensory{background:var(--sagel);color:var(--sage)}
+.cat-badge.mindfulness{background:var(--acl);color:var(--ac)}
+.cat-badge.behavioral{background:var(--bluel);color:var(--blue)}
+.cat-badge.custom{background:rgba(156,136,120,.12);color:var(--mu)}
+.int-card-desc{font-size:12px;color:var(--tx2);line-height:1.65;flex:1}
+
+/* NOTES */
+.int-notes{font-size:12px;color:var(--tx2);font-style:italic;line-height:1.5;background:var(--bg);border-radius:8px;padding:8px 11px;border-left:2px solid var(--bdr2)}
+.int-notes-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
+
+/* EFFECTIVENESS BAR */
+.eff-section{}
+.eff-row{display:flex;align-items:center;gap:10px}
+.eff-bar-wrap{flex:1;height:5px;background:var(--bdr);border-radius:3px;overflow:hidden}
+.eff-bar{height:100%;border-radius:3px;transition:width .5s ease}
+.eff-bar.low{background:var(--warm)}
+.eff-bar.mid{background:linear-gradient(90deg,var(--warm),var(--sage))}
+.eff-bar.high{background:var(--sage)}
+.eff-meta{font-size:11px;color:var(--mu);white-space:nowrap;flex-shrink:0}
+.eff-empty{font-size:11px;color:var(--mu);font-style:italic}
+.eff-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
+
+/* CARD ACTIONS */
+.card-actions{display:flex;gap:6px;flex-wrap:wrap}
+.card-act-btn{font-size:11px;font-weight:600;color:var(--mu);background:none;border:1px solid var(--bdr);border-radius:var(--pill);padding:4px 11px;cursor:pointer;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.card-act-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
+.card-act-btn.del:hover{border-color:#c0392b;color:#c0392b}
+.card-act-btn.notes-added{color:var(--sage);border-color:var(--sagem)}
+
+/* EMPTY STATE */
+.empty-state{grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--mu)}
+.empty-icon{font-size:28px;margin-bottom:10px;opacity:.5}
+.empty-text{font-size:13px;color:var(--mu);line-height:1.6}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:flex-end;justify-content:center;padding:0}
+.modal-overlay.on{display:flex}
+@media(min-width:600px){.modal-overlay{align-items:center;padding:20px}}
+.modal-box{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg) var(--rlg) 0 0;padding:28px 22px 32px;width:100%;max-width:440px;box-shadow:var(--s3);animation:slide-up .2s ease;max-height:92vh;overflow-y:auto}
+@media(min-width:600px){.modal-box{border-radius:var(--rlg);animation:modal-in .2s ease}}
+@keyframes slide-up{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@keyframes modal-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.modal-handle{width:40px;height:4px;background:var(--bdr);border-radius:2px;margin:0 auto 22px}
+@media(min-width:600px){.modal-handle{display:none}}
+.modal-title{font-family:'Lora',serif;font-size:18px;font-weight:400;color:var(--tx);margin-bottom:20px;letter-spacing:-.01em}
+.modal-field{margin-bottom:16px}
+.modal-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:7px;display:block}
+.modal-lbl .opt{font-weight:400;text-transform:none;letter-spacing:0;font-size:11px}
+.modal-input{width:100%;background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;transition:border-color .18s}
+.modal-input:focus{border-color:var(--ac)}
+.modal-textarea{resize:vertical;min-height:72px}
+.modal-cat-row{display:flex;flex-wrap:wrap;gap:6px}
+.modal-cat-tag{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none}
+.modal-cat-tag:hover{border-color:var(--bdr2)}
+.modal-cat-tag.on{border-color:var(--ac);background:var(--acl);color:var(--ac)}
+.modal-actions{display:flex;gap:8px}
+.modal-save-btn{flex:1;background:var(--ac);border:none;border-radius:var(--pill);padding:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:#fff;cursor:pointer;transition:var(--tr)}
+.modal-save-btn:hover{background:var(--ac-h)}
+.modal-cancel-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:12px 18px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr)}
+.modal-cancel-btn:hover{border-color:var(--bdr2)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--tx);color:var(--bg);font-size:13px;font-weight:600;padding:10px 20px;border-radius:var(--pill);opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:400;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:#c0392b}
+.toast.ok{background:var(--sage)}
+
+/* LOADING */
+.loading-msg{padding:40px;text-align:center;color:var(--mu);font-size:13px;grid-column:1/-1}
+
+@keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="index.html">Ground<span>work</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Log</a>
+    <a class="nav-link" href="tracker.html">Patterns</a>
+    <a class="nav-link active" href="interventions.html">Toolkit</a>
+    <a class="nav-link" href="context.html">Context</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">◐</button>
+    <button class="sign-btn" id="sign-btn-nav" onclick="window.signInWithGoogle()">Sign in</button>
+    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none">
+      <img class="user-avatar" id="user-avatar" src="" alt="avatar">
+    </button>
+    <div class="profile-menu" id="profile-menu">
+      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()"><span class="profile-menu-icon">◐</span>Toggle theme</button>
+      <button class="profile-menu-item" onclick="window.signOut();toggleProfileMenu()"><span class="profile-menu-icon">↩</span>Sign out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+    </div>
+    <div class="auth-title">Groundwork</div>
+    <div class="auth-sub">Sign in to access your personal intervention toolkit and track what works for you.</div>
+    <button class="google-btn" onclick="window.signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 6.294C4.672 4.169 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <main>
+
+    <!-- Header -->
+    <div class="page-hd">
+      <div>
+        <div class="page-eyebrow">Pillar 3</div>
+        <div class="page-title">Intervention Toolkit</div>
+        <div class="page-sub">Strategies you've used — ranked by what actually works for you.</div>
+      </div>
+      <button class="add-btn" onclick="openAddModal()">+ Add strategy</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-strip">
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="stat-tried">—</div>
+        <div class="stat-mini-lbl">Strategies tried in entries</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="stat-best">—</div>
+        <div class="stat-mini-lbl">Your highest-rated strategy</div>
+      </div>
+      <div class="stat-mini">
+        <div class="stat-mini-val" id="stat-recent">—</div>
+        <div class="stat-mini-lbl">Times used (last 30 days)</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-row">
+      <div class="filter-tab on" data-cat="all" onclick="setFilter(this,'all')">All</div>
+      <div class="filter-tab" data-cat="physical" onclick="setFilter(this,'physical')"><span class="cat-dot physical"></span>Physical</div>
+      <div class="filter-tab" data-cat="sensory" onclick="setFilter(this,'sensory')"><span class="cat-dot sensory"></span>Sensory</div>
+      <div class="filter-tab" data-cat="mindfulness" onclick="setFilter(this,'mindfulness')"><span class="cat-dot mindfulness"></span>Mindfulness</div>
+      <div class="filter-tab" data-cat="behavioral" onclick="setFilter(this,'behavioral')"><span class="cat-dot behavioral"></span>Behavioral</div>
+      <div class="filter-tab" data-cat="custom" onclick="setFilter(this,'custom')"><span class="cat-dot custom"></span>My additions</div>
+    </div>
+
+    <!-- Cards -->
+    <div class="cards-grid" id="cards-grid">
+      <div class="loading-msg">Loading your toolkit…</div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="int-modal" onclick="handleModalBackdrop(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Add a strategy</div>
+
+    <div class="modal-field" id="m-name-field">
+      <label class="modal-lbl">Name</label>
+      <input class="modal-input" id="m-name" type="text" placeholder="e.g. Walk around the block" maxlength="80">
+    </div>
+
+    <div class="modal-field" id="m-cat-field">
+      <label class="modal-lbl">Category</label>
+      <div class="modal-cat-row">
+        <div class="modal-cat-tag" data-cat="physical" onclick="selCat(this)"><span class="cat-dot physical"></span>Physical</div>
+        <div class="modal-cat-tag" data-cat="sensory" onclick="selCat(this)"><span class="cat-dot sensory"></span>Sensory</div>
+        <div class="modal-cat-tag" data-cat="mindfulness" onclick="selCat(this)"><span class="cat-dot mindfulness"></span>Mindfulness</div>
+        <div class="modal-cat-tag" data-cat="behavioral" onclick="selCat(this)"><span class="cat-dot behavioral"></span>Behavioral</div>
+      </div>
+    </div>
+
+    <div class="modal-field" id="m-desc-field">
+      <label class="modal-lbl">Description <span class="opt">(optional)</span></label>
+      <textarea class="modal-input modal-textarea" id="m-desc" placeholder="How to use this strategy…" maxlength="240"></textarea>
+    </div>
+
+    <div class="modal-field">
+      <label class="modal-lbl">Personal notes <span class="opt">(optional)</span></label>
+      <textarea class="modal-input modal-textarea" id="m-notes" placeholder="What you've noticed about this strategy for you specifically…" maxlength="400"></textarea>
+    </div>
+
+    <div class="modal-actions">
+      <button class="modal-cancel-btn" onclick="closeModal()">Cancel</button>
+      <button class="modal-save-btn" id="modal-save-btn" onclick="saveIntervention()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, doc, getDocs, setDoc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
+  authDomain: "skin-picking-log.firebaseapp.com",
+  projectId: "skin-picking-log",
+  storageBucket: "skin-picking-log.firebasestorage.app",
+  messagingSenderId: "162906566118",
+  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+window._uid = null;
+window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { toast('Sign-in failed', true); } };
+window.signOut = async () => { await fbSignOut(auth); };
+
+window._loadEntries = async (uid) => {
+  const snap = await getDocs(query(collection(db,'users',uid,'entries'), orderBy('timestamp','desc')));
+  return snap.docs.map(d => d.data());
+};
+
+window._loadCustomInterventions = async (uid) => {
+  try {
+    const snap = await getDocs(collection(db,'users',uid,'interventions'));
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) { return []; }
+};
+
+window._saveCustomIntervention = async (uid, data) => {
+  const id = data.id;
+  const payload = { name: data.name, category: data.category||'custom', desc: data.desc||'', notes: data.notes||'', updated_at: new Date().toISOString() };
+  if (id) {
+    await setDoc(doc(db,'users',uid,'interventions',id), payload, { merge: true });
+    return id;
+  } else {
+    const ref = await addDoc(collection(db,'users',uid,'interventions'), { ...payload, created_at: serverTimestamp() });
+    return ref.id;
+  }
+};
+
+window._savePresetNotes = async (uid, notesMap) => {
+  await setDoc(doc(db,'users',uid,'settings','presetNotes'), { notes: notesMap }, { merge: true });
+};
+window._loadPresetNotes = async (uid) => {
+  try {
+    const snap = await getDocs(collection(db,'users',uid,'settings'));
+    const pn = snap.docs.find(d=>d.id==='presetNotes');
+    return pn ? (pn.data().notes || {}) : {};
+  } catch(e) { return {}; }
+};
+
+window._deleteCustomIntervention = async (uid, id) => {
+  await deleteDoc(doc(db,'users',uid,'interventions',id));
+};
+
+onAuthStateChanged(auth, async (user) => {
+  const isIn = !!user;
+  window._uid = isIn ? user.uid : null;
+  document.getElementById('auth-screen').classList.toggle('on', !isIn);
+  document.getElementById('app').classList.toggle('on', isIn);
+  document.getElementById('sign-btn-nav').style.display = isIn ? 'none' : '';
+  document.getElementById('avatar-btn').style.display = isIn ? 'flex' : 'none';
+  if (isIn && user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
+  if (isIn) await loadPage(user.uid);
+});
+</script>
+
+<!-- LOGIC -->
+<script>
+// THEME
+function toggleTheme(){const d=document.documentElement;const n=d.getAttribute('data-theme')==='dark'?'':'dark';d.setAttribute('data-theme',n);localStorage.setItem('theme',n);}
+(()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+
+// PROFILE MENU
+window.toggleProfileMenu=()=>document.getElementById('profile-menu').classList.toggle('on');
+document.addEventListener('click',e=>{const m=document.getElementById('profile-menu');const b=document.getElementById('avatar-btn');if(m&&b&&!b.contains(e.target)&&!m.contains(e.target))m.classList.remove('on');});
+
+// TOAST
+window.toast=(msg,isErr=false,isOk=false)=>{const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isErr?' err':'')+(isOk?' ok':'');void t.offsetWidth;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);};
+
+// ── PREDEFINED INTERVENTIONS ──
+const PRESETS = [
+  {id:'p1',  name:'Fidget toy',             category:'physical',    desc:'Use a fidget cube, spinner, or putty to redirect hand movement.'},
+  {id:'p2',  name:'Squeeze ball',           category:'physical',    desc:'Channel the urge into a squeezing or gripping motion.'},
+  {id:'p3',  name:'Stretch or exercise',    category:'physical',    desc:'A brisk walk, jumping jacks, or a few minutes of movement.'},
+  {id:'p4',  name:'Hair brush substitute',  category:'physical',    desc:'Brush the back of your hand or a textured brush instead of skin.'},
+  {id:'p5',  name:'Cold water on wrists',   category:'sensory',     desc:'Run cold water over wrists or hold an ice cube briefly.'},
+  {id:'p6',  name:'Textured object',        category:'sensory',     desc:'Hold something with an interesting texture to occupy your fingers.'},
+  {id:'p7',  name:'Cuticle oil or lotion',  category:'sensory',     desc:'Apply lotion or oil to hands — creates a barrier and soothes skin.'},
+  {id:'p8',  name:'Bandages or tape',       category:'sensory',     desc:'Cover target areas to gently interrupt the habit loop.'},
+  {id:'p9',  name:'Deep breathing',         category:'mindfulness', desc:'Box breathing (4-4-4-4) or 4-7-8 breath to reduce arousal.'},
+  {id:'p10', name:'Urge surfing',           category:'mindfulness', desc:'Observe the urge like a wave — notice it rise and fall without acting on it.'},
+  {id:'p11', name:'Body scan',              category:'mindfulness', desc:'Systematically notice physical sensations without judgment, feet to head.'},
+  {id:'p12', name:'5-4-3-2-1 grounding',   category:'mindfulness', desc:'Name 5 things you see, 4 hear, 3 can touch, 2 smell, 1 taste.'},
+  {id:'p13', name:'Self-compassion pause',  category:'mindfulness', desc:'Place hand on chest and offer yourself the same kindness you\'d give a friend.'},
+  {id:'p14', name:'Change location',        category:'behavioral',  desc:'Move to a different room or step outside — physical context shift.'},
+  {id:'p15', name:'Delay 5 minutes',        category:'behavioral',  desc:'Set a timer and commit only to waiting, not permanent stopping.'},
+  {id:'p16', name:'Tell someone',           category:'behavioral',  desc:'Text or call a trusted person, or send a note to your therapist.'},
+  {id:'p17', name:'Journal or write',       category:'behavioral',  desc:'Write about what you\'re feeling or what triggered the urge.'},
+];
+
+// ── STATE ──
+let effData = {};        // {name: {count, avgEff, recent}} from entries
+let customInterventions = [];
+let presetNotes = {};    // {presetId: notes}
+let currentFilter = 'all';
+let editingId = null;    // id of custom intervention being edited, or null for new
+let editingPresetId = null; // preset id if editing preset notes
+let selectedCat = null;
+const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
+// ── PAGE LOAD ──
+async function loadPage(uid) {
+  const [entries, custom, pNotes] = await Promise.all([
+    window._loadEntries(uid),
+    window._loadCustomInterventions(uid),
+    window._loadPresetNotes(uid)
+  ]);
+  effData = computeEffectiveness(entries);
+  customInterventions = custom;
+  presetNotes = pNotes;
+  renderStats(entries);
+  renderCards();
+}
+
+function computeEffectiveness(entries) {
+  const agg = {};
+  const cutoff = Date.now() - THIRTY_DAYS;
+  entries.forEach(e => {
+    if (!e.tried_intervention || !e.interventions) return;
+    const names = String(e.interventions).split(',').map(s=>s.trim()).filter(Boolean);
+    const ts = e.timestamp ? new Date(e.timestamp).getTime() : 0;
+    names.forEach(name => {
+      if (!agg[name]) agg[name] = {count:0, totalEff:0, countEff:0, recent:0};
+      agg[name].count++;
+      if (ts > cutoff) agg[name].recent++;
+      if (e.intervention_effectiveness != null) {
+        agg[name].totalEff += Number(e.intervention_effectiveness);
+        agg[name].countEff++;
+      }
+    });
+  });
+  Object.values(agg).forEach(a => {
+    a.avgEff = a.countEff > 0 ? a.totalEff / a.countEff : null;
+  });
+  return agg;
+}
+
+function renderStats(entries) {
+  const tried = Object.keys(effData);
+  document.getElementById('stat-tried').textContent = tried.length || '0';
+  const best = tried
+    .filter(n => effData[n].avgEff != null && effData[n].countEff >= 2)
+    .sort((a,b) => effData[b].avgEff - effData[a].avgEff)[0];
+  document.getElementById('stat-best').textContent = best ? shortName(best) : '—';
+  const recentTotal = Object.values(effData).reduce((s,d)=>s+d.recent,0);
+  document.getElementById('stat-recent').textContent = recentTotal || '0';
+}
+
+function shortName(name) {
+  const words = name.split(' ');
+  if (words.length <= 2 || name.length <= 14) return name;
+  return words.slice(0,2).join(' ');
+}
+
+// ── FILTER ──
+window.setFilter = (el, cat) => {
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  currentFilter = cat;
+  renderCards();
+};
+
+// ── RENDER CARDS ──
+function renderCards() {
+  const grid = document.getElementById('cards-grid');
+
+  const allPresets = PRESETS.map(p => ({
+    ...p, isPreset: true,
+    notes: presetNotes[p.id] || ''
+  }));
+  const allCustom = customInterventions.map(c => ({...c, isPreset: false, category: c.category||'custom'}));
+  const allItems = [...allPresets, ...allCustom];
+
+  let filtered;
+  if (currentFilter === 'all') filtered = allItems;
+  else if (currentFilter === 'custom') filtered = allCustom;
+  else filtered = allItems.filter(i => i.category === currentFilter);
+
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🌱</div><div class="empty-text">No strategies here yet.<br>Add one with the button above.</div></div>`;
+    return;
+  }
+
+  // Sort: tried (by avgEff desc) first, then untried alphabetically
+  const tried = filtered.filter(i => effData[i.name]?.count > 0)
+    .sort((a,b) => {
+      const ae = effData[a.name]?.avgEff ?? -1;
+      const be = effData[b.name]?.avgEff ?? -1;
+      return be - ae;
+    });
+  const untried = filtered.filter(i => !effData[i.name]?.count)
+    .sort((a,b) => a.name.localeCompare(b.name));
+
+  let html = '';
+  if (tried.length && untried.length && currentFilter === 'all') {
+    html += `<div class="sec-lbl" style="grid-column:1/-1">Used in logged entries</div>`;
+    html += tried.map(renderCard).join('');
+    html += `<div class="sec-lbl" style="grid-column:1/-1">Not yet logged</div>`;
+    html += untried.map(renderCard).join('');
+  } else {
+    html = [...tried, ...untried].map(renderCard).join('');
+  }
+  grid.innerHTML = html;
+}
+
+function renderCard(item) {
+  const eff = effData[item.name];
+  const hasData = eff && eff.count > 0;
+  const isTopPick = hasData && eff.avgEff != null && eff.avgEff >= 4;
+
+  let effHtml;
+  if (hasData) {
+    const pct = eff.avgEff != null ? (eff.avgEff / 5) * 100 : 0;
+    const avgStr = eff.avgEff != null ? eff.avgEff.toFixed(1) : '—';
+    const cls = eff.avgEff == null ? '' : eff.avgEff < 2.5 ? 'low' : eff.avgEff < 4 ? 'mid' : 'high';
+    effHtml = `<div class="eff-section">
+      <div class="eff-label">Effectiveness</div>
+      <div class="eff-row">
+        <div class="eff-bar-wrap"><div class="eff-bar ${cls}" style="width:${pct}%"></div></div>
+        <div class="eff-meta">${eff.count}× · ${avgStr}/5</div>
+      </div>
+    </div>`;
+  } else {
+    effHtml = `<div class="eff-empty">Not yet logged in entries</div>`;
+  }
+
+  const notesHtml = item.notes
+    ? `<div class="int-notes"><div class="int-notes-label">Your notes</div>${escHtml(item.notes)}</div>`
+    : '';
+
+  const hasNotes = !!(item.notes);
+  let actions;
+  if (item.isPreset) {
+    actions = `<button class="card-act-btn ${hasNotes ? 'notes-added' : ''}" onclick="openNotesModal('${item.id}','${escAttr(item.name)}')">${hasNotes ? '✓ Notes added' : 'Add notes'}</button>`;
+  } else {
+    actions = `<button class="card-act-btn" onclick="openEditModal('${item.id}')">Edit</button>
+               <button class="card-act-btn del" onclick="deleteCustom('${item.id}')">Delete</button>`;
+  }
+
+  const borderClass = isTopPick ? 'top-pick' : hasData ? 'has-data' : '';
+
+  return `<div class="int-card ${borderClass}">
+    <div class="int-card-top">
+      <div class="int-card-name">${escHtml(item.name)}</div>
+      <div class="cat-badge ${item.category}">${item.category}</div>
+    </div>
+    <div class="int-card-desc">${escHtml(item.desc || '')}</div>
+    ${notesHtml}
+    ${effHtml}
+    <div class="card-actions">${actions}</div>
+  </div>`;
+}
+
+// ── MODALS ──
+window.openAddModal = () => {
+  editingId = null; editingPresetId = null; selectedCat = null;
+  document.getElementById('modal-title').textContent = 'Add a strategy';
+  document.getElementById('m-name').value = '';
+  document.getElementById('m-desc').value = '';
+  document.getElementById('m-notes').value = '';
+  document.querySelectorAll('.modal-cat-tag').forEach(t=>t.classList.remove('on'));
+  showModalFields(true);
+  document.getElementById('int-modal').classList.add('on');
+  setTimeout(()=>document.getElementById('m-name').focus(),120);
+};
+
+window.openEditModal = (id) => {
+  const item = customInterventions.find(i=>i.id===id);
+  if (!item) return;
+  editingId = id; editingPresetId = null; selectedCat = item.category||null;
+  document.getElementById('modal-title').textContent = 'Edit strategy';
+  document.getElementById('m-name').value = item.name||'';
+  document.getElementById('m-desc').value = item.desc||'';
+  document.getElementById('m-notes').value = item.notes||'';
+  document.querySelectorAll('.modal-cat-tag').forEach(t=>t.classList.toggle('on',t.dataset.cat===selectedCat));
+  showModalFields(true);
+  document.getElementById('int-modal').classList.add('on');
+};
+
+window.openNotesModal = (presetId, name) => {
+  editingId = null; editingPresetId = presetId; selectedCat = null;
+  document.getElementById('modal-title').textContent = 'Notes for: ' + name;
+  document.getElementById('m-notes').value = presetNotes[presetId] || '';
+  showModalFields(false);
+  document.getElementById('int-modal').classList.add('on');
+  setTimeout(()=>document.getElementById('m-notes').focus(),120);
+};
+
+function showModalFields(showAll) {
+  ['m-name-field','m-cat-field','m-desc-field'].forEach(id => {
+    document.getElementById(id).style.display = showAll ? '' : 'none';
+  });
+}
+
+window.closeModal = () => document.getElementById('int-modal').classList.remove('on');
+window.handleModalBackdrop = (e) => { if (e.target === document.getElementById('int-modal')) closeModal(); };
+
+window.selCat = (el) => {
+  document.querySelectorAll('.modal-cat-tag').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  selectedCat = el.dataset.cat;
+};
+
+window.saveIntervention = async () => {
+  if (!window._uid) { toast('Not signed in', true); return; }
+  const btn = document.getElementById('modal-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  try {
+    // Preset notes only
+    if (editingPresetId) {
+      const notes = document.getElementById('m-notes').value.trim();
+      presetNotes[editingPresetId] = notes;
+      await window._savePresetNotes(window._uid, presetNotes);
+      renderCards();
+      closeModal();
+      toast('Notes saved', false, true);
+      return;
+    }
+
+    // Custom intervention
+    const name = document.getElementById('m-name').value.trim();
+    if (!name) { toast('Name is required', true); return; }
+    const data = {
+      id: editingId || null,
+      name,
+      category: selectedCat || 'custom',
+      desc: document.getElementById('m-desc').value.trim(),
+      notes: document.getElementById('m-notes').value.trim()
+    };
+    const savedId = await window._saveCustomIntervention(window._uid, data);
+    if (editingId) {
+      const idx = customInterventions.findIndex(i=>i.id===editingId);
+      if (idx > -1) customInterventions[idx] = {...data, id: savedId};
+    } else {
+      customInterventions.push({...data, id: savedId, isPreset: false});
+    }
+    renderCards();
+    closeModal();
+    toast('Saved', false, true);
+  } catch(e) {
+    toast('Error: ' + e.message, true);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save';
+  }
+};
+
+window.deleteCustom = async (id) => {
+  if (!window._uid) return;
+  if (!confirm('Delete this strategy?')) return;
+  try {
+    await window._deleteCustomIntervention(window._uid, id);
+    customInterventions = customInterventions.filter(i=>i.id!==id);
+    renderCards();
+    toast('Deleted');
+  } catch(e) { toast('Error: '+e.message, true); }
+};
+
+// ── HELPERS ──
+function escHtml(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(s=''){return String(s).replace(/'/g,'&#39;');}
+</script>
+</body>
+</html>

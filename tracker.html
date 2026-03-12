@@ -308,6 +308,7 @@ tbody tr:hover td{background:var(--bg)}
   <div class="nav-links">
     <a class="nav-link" href="index.html">Log</a>
     <a class="nav-link active" href="tracker.html">Patterns</a>
+    <a class="nav-link" href="interventions.html">Toolkit</a>
     <a class="nav-link" href="context.html">Context</a>
   </div>
   <div class="nav-right">
@@ -374,6 +375,11 @@ tbody tr:hover td{background:var(--bg)}
       <div class="stat-value" id="stat-streak">—</div>
       <div class="stat-sub" id="stat-streak-sub">consecutive days resisted</div>
     </div>
+  </div>
+
+  <!-- INSIGHTS CARD -->
+  <div class="section" id="insights-section" style="display:none">
+    <div id="insights-card" style="background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;box-shadow:var(--s1);margin-bottom:0"></div>
   </div>
 
   <!-- CALENDAR -->
@@ -456,7 +462,7 @@ tbody tr:hover td{background:var(--bg)}
 
   <!-- INTERVENTIONS -->
   <div class="section" id="int-section">
-    <div class="section-title">Interventions</div>
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between">Interventions <a href="interventions.html" style="font-size:12px;font-weight:600;color:var(--mu);text-decoration:none">Manage toolkit →</a></div>
     <div class="three-col-grid">
       <div class="card">
         <div class="card-title">What you tried</div>
@@ -686,6 +692,72 @@ function getFiltered() {
 }
 
 // ─── MAIN RENDER ───
+// ─── INSIGHTS CARD ───
+function renderInsights(entries) {
+  const section = document.getElementById('insights-section');
+  const card = document.getElementById('insights-card');
+  if (!section || !card) return;
+  const eps = episodes(entries);
+  const resists = entries.filter(e => e.entry_type === 'resisted');
+  if (entries.length < 3) { section.style.display = 'none'; return; }
+  section.style.display = '';
+
+  const insights = [];
+
+  // Resistance rate
+  const total = eps.length + resists.length;
+  if (total > 0) {
+    const pct = Math.round(resists.length / total * 100);
+    if (pct >= 50) insights.push({ icon: '✦', color: 'var(--sage)', text: `You resisted <strong>${pct}%</strong> of urges this period — that's real progress worth noting.` });
+    else if (pct > 0) insights.push({ icon: '→', color: 'var(--warm)', text: `You've logged ${resists.length} resisted urge${resists.length>1?'s':''} this period. Every one counts.` });
+  }
+
+  // Top trigger
+  const trigCounts = {};
+  eps.forEach(e => {
+    (e.emotional_triggers||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(t => { trigCounts[t] = (trigCounts[t]||0)+1; });
+  });
+  const topTrig = Object.entries(trigCounts).sort((a,b)=>b[1]-a[1])[0];
+  if (topTrig && topTrig[1] >= 2) {
+    insights.push({ icon: '◆', color: 'var(--ac)', text: `"<strong>${topTrig[0]}</strong>" appears in ${topTrig[1]} episodes — your most-logged emotional trigger.` });
+  }
+
+  // Peak time
+  const hourCounts = new Array(24).fill(0);
+  eps.forEach(e => { if(e.timestamp) hourCounts[new Date(e.timestamp).getHours()]++; });
+  const peakHour = hourCounts.indexOf(Math.max(...hourCounts));
+  if (Math.max(...hourCounts) >= 2) {
+    const hStr = new Date(2000,0,1,peakHour).toLocaleTimeString('en-US',{hour:'numeric'});
+    insights.push({ icon: '◉', color: 'var(--mu)', text: `Episodes cluster around <strong>${hStr}</strong> — your peak vulnerability window.` });
+  }
+
+  // Best intervention
+  const intAgg = {};
+  entries.filter(e=>e.tried_intervention&&e.interventions&&e.intervention_effectiveness).forEach(e => {
+    (e.interventions||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(n => {
+      if (!intAgg[n]) intAgg[n] = {count:0,total:0};
+      intAgg[n].count++; intAgg[n].total += Number(e.intervention_effectiveness);
+    });
+  });
+  const bestInt = Object.entries(intAgg).filter(([,v])=>v.count>=2).sort((a,b)=>(b[1].total/b[1].count)-(a[1].total/a[1].count))[0];
+  if (bestInt) {
+    const avg = (bestInt[1].total/bestInt[1].count).toFixed(1);
+    insights.push({ icon: '★', color: 'var(--warm)', text: `"<strong>${bestInt[0]}</strong>" is your most effective logged strategy — avg ${avg}/5 over ${bestInt[1].count} uses.` });
+  }
+
+  if (!insights.length) { section.style.display = 'none'; return; }
+
+  card.innerHTML = `
+    <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:12px">Insights</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${insights.slice(0,3).map(i => `
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <div style="width:20px;height:20px;border-radius:50%;background:${i.color};opacity:.18;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:8px;color:${i.color};opacity:1;background:transparent">${i.icon}</div>
+          <div style="font-size:13px;color:var(--tx2);line-height:1.6">${i.text}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
 function renderAll() {
   const entries = getFiltered();
   filteredEntries = entries;
@@ -696,6 +768,7 @@ function renderAll() {
     `${total} entr${total===1?'y':'ies'} in the selected period`;
 
   renderStats(entries);
+  renderInsights(entries);
   renderCalendar(entries);
   renderTimeOfDay(entries);
   renderAwareness(entries);
