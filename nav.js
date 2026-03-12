@@ -30,8 +30,10 @@
     const avatarSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
 
     return `
-      <nav>
-        <a href="index.html" class="nav-brand">Ground<span>work</span></a>
+      <nav class="gw-nav-container">
+        <div class="nav-left">
+          <a href="index.html" class="nav-brand">Ground<span>work</span></a>
+        </div>
         <div class="nav-links">
           <a href="index.html" class="nav-link ${isPage('index.html') ? 'active' : ''}">Log</a>
           <a href="tracker.html" class="nav-link ${isPage('tracker.html') ? 'active' : ''}">Patterns</a>
@@ -62,17 +64,37 @@
     if (menu) menu.classList.toggle('on');
   };
 
-  // 5. INJECT STYLES
+  // 5. INJECT STYLES & LAYOUT FIXES
   function injectNavStyles() {
     if (document.getElementById('gw-nav-styles')) return;
     const style = document.createElement('style');
     style.id = 'gw-nav-styles';
     style.textContent = `
+      /* Perfect Desktop Centering */
+      .gw-nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .nav-left {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      @media (min-width: 700px) {
+        .nav-left, .nav-right { flex: 1 !important; }
+        .nav-links { flex: 0 0 auto !important; }
+      }
+      
+      /* iOS Safari: Prevent auto-zoom on input focus */
       @media (max-width: 768px) {
         input[type="text"], input[type="datetime-local"], input[type="number"], textarea, select {
           font-size: 16px !important;
         }
       }
+      
+      /* Avatar & Menu Styles */
       .user-avatar-placeholder {
         width: 32px;
         height: 32px;
@@ -135,18 +157,24 @@
     document.head.appendChild(style);
   }
 
-  // 6. OBSERVE AUTH STATE ACROSS APP
-  let _internalUid = null;
-  Object.defineProperty(window, '_uid', {
-    get: function() { return _internalUid; },
-    set: function(val) {
-      _internalUid = val;
-      const signBtn = document.getElementById('sign-btn-nav');
-      const avatarBtn = document.getElementById('avatar-btn');
-      if (signBtn) signBtn.style.display = val ? 'none' : 'block';
-      if (avatarBtn) avatarBtn.style.display = val ? 'flex' : 'none';
+  // 6. RESILIENT AUTH UI SYNC
+  function syncAuthUI() {
+    const app = document.getElementById('app');
+    // If the #app div has the 'on' class, Firebase has authenticated the user
+    const isLoggedIn = app && app.classList.contains('on');
+    
+    const signBtn = document.getElementById('sign-btn-nav');
+    const avatarBtn = document.getElementById('avatar-btn');
+    
+    if (signBtn && avatarBtn) {
+      const wantSign = isLoggedIn ? 'none' : 'block';
+      const wantAvatar = isLoggedIn ? 'flex' : 'none';
+      
+      // Update DOM only if changed
+      if (signBtn.style.display !== wantSign) signBtn.style.display = wantSign;
+      if (avatarBtn.style.display !== wantAvatar) avatarBtn.style.display = wantAvatar;
     }
-  });
+  }
 
   // 7. INJECT NAV INTO DOM
   function injectNav() {
@@ -157,11 +185,6 @@
       placeholder.innerHTML = buildNav();
     }
 
-    // Force UI refresh if auth state loaded before DOM
-    if (_internalUid) {
-      window._uid = _internalUid; 
-    }
-
     // Close menu on outside click
     document.addEventListener('click', function (e) {
       const menu = document.getElementById('profile-menu');
@@ -170,6 +193,10 @@
         menu.classList.remove('on');
       }
     });
+
+    // Start UI Sync Loop (Runs every 300ms, completely independent of JS execution order)
+    setInterval(syncAuthUI, 300);
+    syncAuthUI(); // Initial check
   }
 
   if (document.readyState === 'loading') {
