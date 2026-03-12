@@ -4,7 +4,6 @@
 
 (function () {
   // 1. THEME INITIALIZATION
-  // Runs immediately to prevent a white flash on load for dark mode users
   const savedTheme = localStorage.getItem('gw-theme') || localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
@@ -19,7 +18,6 @@
   };
 
   // 2. FIREBASE STUBS
-  // Prevents console errors if the nav loads before firebase.js has initialized auth functions
   if (!window.signInWithGoogle) window.signInWithGoogle = function () {};
   if (!window.signOut) window.signOut = function () {};
 
@@ -27,6 +25,9 @@
   function buildNav() {
     const path = window.location.pathname;
     const isPage = (p) => path.includes(p) || (p === 'index.html' && path.endsWith('/'));
+
+    // SVG User Icon
+    const avatarSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
 
     return `
       <nav>
@@ -40,7 +41,7 @@
         <div class="nav-right">
           <button id="sign-btn-nav" class="sign-btn" onclick="signInWithGoogle()" style="display:none">Sign in</button>
           <button id="avatar-btn" class="avatar-btn" onclick="toggleProfileMenu()" style="display:none">
-            <img class="user-avatar" id="user-avatar" src="" alt="Profile">
+            <div class="user-avatar-placeholder">${avatarSvg}</div>
           </button>
           <div class="profile-menu" id="profile-menu">
             <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
@@ -67,14 +68,27 @@
     const style = document.createElement('style');
     style.id = 'gw-nav-styles';
     style.textContent = `
-      /* iOS Safari: Prevent auto-zoom on input focus */
       @media (max-width: 768px) {
         input[type="text"], input[type="datetime-local"], input[type="number"], textarea, select {
           font-size: 16px !important;
         }
       }
-      
-      /* Profile Menu Styles */
+      .user-avatar-placeholder {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1.5px solid var(--bdr);
+        background: var(--sur);
+        color: var(--mu);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--tr);
+      }
+      .avatar-btn:hover .user-avatar-placeholder {
+        border-color: var(--ac);
+        color: var(--ac);
+      }
       .profile-menu {
         position: absolute;
         top: calc(100% + 8px);
@@ -121,17 +135,34 @@
     document.head.appendChild(style);
   }
 
-  // 6. INJECT NAV INTO DOM
+  // 6. OBSERVE AUTH STATE ACROSS APP
+  let _internalUid = null;
+  Object.defineProperty(window, '_uid', {
+    get: function() { return _internalUid; },
+    set: function(val) {
+      _internalUid = val;
+      const signBtn = document.getElementById('sign-btn-nav');
+      const avatarBtn = document.getElementById('avatar-btn');
+      if (signBtn) signBtn.style.display = val ? 'none' : 'block';
+      if (avatarBtn) avatarBtn.style.display = val ? 'flex' : 'none';
+    }
+  });
+
+  // 7. INJECT NAV INTO DOM
   function injectNav() {
     injectNavStyles();
     const placeholder = document.getElementById('gw-nav');
     
     if (placeholder) {
-      // Use innerHTML instead of outerHTML to retain the container for subsequent re-renders
       placeholder.innerHTML = buildNav();
     }
 
-    // Close profile menu on outside click
+    // Force UI refresh if auth state loaded before DOM
+    if (_internalUid) {
+      window._uid = _internalUid; 
+    }
+
+    // Close menu on outside click
     document.addEventListener('click', function (e) {
       const menu = document.getElementById('profile-menu');
       const btn = document.getElementById('avatar-btn');
@@ -141,7 +172,6 @@
     });
   }
 
-  // Wait for DOM to load before injecting
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectNav);
   } else {
