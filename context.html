@@ -38,9 +38,21 @@ nav{height:52px;display:flex;align-items:center;justify-content:space-between;pa
 .nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 12px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
 .nav-link:hover{background:var(--acl);color:var(--ac)}
 .nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--sur);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
 .theme-btn:hover{border-color:var(--ac);color:var(--ac)}
+@media(max-width:520px){.theme-btn{display:none}}
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
+.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
+.avatar-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;flex-shrink:0;border-radius:50%}
+.user-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;display:block;transition:border-color .18s}
+.avatar-btn:hover .user-avatar{border-color:var(--ac)}
+.profile-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--s3);min-width:160px;overflow:hidden;display:none;z-index:200}
+.profile-menu.on{display:block}
+.profile-menu-item{display:flex;align-items:center;gap:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left}
+.profile-menu-item:hover{background:var(--bg);color:var(--tx)}
+.profile-menu-item+.profile-menu-item{border-top:1px solid var(--bdr)}
+.profile-menu-icon{font-size:14px;flex-shrink:0;width:16px;text-align:center}
 
 /* LAYOUT */
 main{max-width:680px;margin:0 auto;padding:40px 20px}
@@ -245,6 +257,14 @@ p strong{color:var(--tx);font-weight:600}
   </div>
   <div class="nav-right">
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">◐</button>
+    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none" aria-label="Account menu">
+      <img class="user-avatar" id="user-avatar" src="" alt="">
+    </button>
+    <div class="profile-menu" id="profile-menu">
+      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
+        <span class="profile-menu-icon">◐</span> Dark mode
+      </button>
+    </div>
   </div>
 </nav>
 
@@ -870,6 +890,15 @@ function toggleTheme(){
     document.documentElement.setAttribute('data-theme','dark');
   }
 })();
+
+window.toggleProfileMenu = () => {
+  document.getElementById('profile-menu').classList.toggle('on');
+};
+document.addEventListener('click', e => {
+  const menu = document.getElementById('profile-menu');
+  const btn = document.getElementById('avatar-btn');
+  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) menu.classList.remove('on');
+});
 
 // ── PROTOCOL CARDS ──
 function toggleProtocol(card) {

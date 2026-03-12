@@ -38,13 +38,29 @@ nav{height:52px;display:flex;align-items:center;justify-content:space-between;pa
 .nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 12px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
 .nav-link:hover{background:var(--acl);color:var(--ac)}
 .nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative}
+
+/* Theme button — hidden on mobile, shown on desktop */
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--sur);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
 .theme-btn:hover{border-color:var(--ac);color:var(--ac)}
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
+@media(max-width:520px){.theme-btn{display:none}}
+
+/* Sign in button */
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
 .sign-btn:hover{border-color:var(--ac);color:var(--ac)}
-.user-info{display:flex;align-items:center;gap:6px}
-.user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;flex-shrink:0}
+
+/* Avatar button — triggers dropdown */
+.avatar-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;flex-shrink:0;border-radius:50%}
+.user-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;display:block;transition:border-color .18s}
+.avatar-btn:hover .user-avatar{border-color:var(--ac)}
+
+/* Profile dropdown */
+.profile-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--s3);min-width:160px;overflow:hidden;display:none;z-index:200;animation:fi .15s ease}
+.profile-menu.on{display:block}
+.profile-menu-item{display:flex;align-items:center;gap:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left}
+.profile-menu-item:hover{background:var(--bg);color:var(--tx)}
+.profile-menu-item + .profile-menu-item{border-top:1px solid var(--bdr)}
+.profile-menu-icon{font-size:14px;flex-shrink:0;width:16px;text-align:center}
 
 /* AUTH */
 .auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
@@ -229,16 +245,23 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   </div>
   <div class="nav-right">
     <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">◐</button>
-    <div class="user-info" id="user-info" style="display:none">
+    <button class="sign-btn" id="sign-btn-nav" onclick="signInWithGoogle()" style="display:none">Sign in</button>
+    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none" aria-label="Account menu">
       <img class="user-avatar" id="user-avatar" src="" alt="">
-      <button class="sign-btn" onclick="signOut()">Sign out</button>
+    </button>
+    <div class="profile-menu" id="profile-menu">
+      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
+        <span class="profile-menu-icon">◐</span> Dark mode
+      </button>
+      <button class="profile-menu-item" onclick="signOut()">
+        <span class="profile-menu-icon">→</span> Sign out
+      </button>
     </div>
-    <button class="sign-btn" id="sign-btn-nav" onclick="signInWithGoogle()">Sign in</button>
   </div>
 </nav>
 
 <!-- APP -->
-<div id="app">
+<div id="app" style="display:none">
 <main>
 
   <!-- QUICK LOG -->
@@ -833,45 +856,48 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
     </div><!-- /mood card -->
 
-    <!-- STEP 7: NOTES + OPTIONAL INTERVENTION -->
-    <div class="step-hd"><div class="step-title">Notes</div><div class="step-num">7 of 7</div></div>
+    <!-- STEP 7: TRIED SOMETHING -->
+    <div class="step-hd"><div class="step-title">Did you try anything?</div><div class="step-num">7 of 8</div></div>
     <div class="card">
-      <div class="field">
-        <div class="acc-row">
-          <div class="acc-btn" id="ep-tried-link" onclick="toggleEpTried()">I tried something to stop it <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
-        </div>
-        <div id="ep-int-detail" class="hidden">
-          <div class="acc-panel on" style="margin-top:6px">
-            <div class="acc-panel-lbl">What did you try?</div>
+      <div class="acc-row">
+        <div class="acc-btn" id="ep-tried-link" onclick="toggleEpTried()">I tried something to stop it <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+      </div>
+      <div id="ep-int-detail" class="hidden">
+        <div class="acc-panel on" style="margin-top:6px">
+          <div class="acc-panel-lbl">What did you try?</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'interventions')">Competing response — did something with my hands</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Urge surfed — waited and observed without acting</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Left the room or situation</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Moved away from the mirror</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Covered hands (gloves, bandage, sleeves)</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Used a fidget or textured object</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Labeled the urge out loud or mentally</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Called or texted someone</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Used an oral substitute (gum, mint)</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing or grounding</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Applied lotion or treated the skin</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Distracted with a task</div>
+          </div>
+          <div style="margin-top:12px">
+            <div class="acc-panel-lbl">How effective was it?</div>
             <div class="tag-row">
-              <div class="tag" onclick="toggleTag(this,'interventions')">Competing response — did something with my hands</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Urge surfed — waited and observed without acting</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Left the room or situation</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Moved away from the mirror</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Covered hands (gloves, bandage, sleeves)</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Used a fidget or textured object</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Labeled the urge out loud or mentally</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Called or texted someone</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Used an oral substitute (gum, mint)</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing or grounding</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Applied lotion or treated the skin</div>
-              <div class="tag" onclick="toggleTag(this,'interventions')">Distracted with a task</div>
+              <div class="tag warm-sel" data-v="1" onclick="setEff(this)">1</div>
+              <div class="tag warm-sel" data-v="2" onclick="setEff(this)">2</div>
+              <div class="tag warm-sel" data-v="3" onclick="setEff(this)">3</div>
+              <div class="tag warm-sel" data-v="4" onclick="setEff(this)">4</div>
+              <div class="tag warm-sel" data-v="5" onclick="setEff(this)">5</div>
+              <span class="eff-lbl" id="eff-label">Tap to rate</span>
             </div>
-            <div style="margin-top:12px">
-              <div class="acc-panel-lbl">How effective was it?</div>
-              <div class="tag-row">
-                <div class="tag warm-sel" data-v="1" onclick="setEff(this)">1</div>
-                <div class="tag warm-sel" data-v="2" onclick="setEff(this)">2</div>
-                <div class="tag warm-sel" data-v="3" onclick="setEff(this)">3</div>
-                <div class="tag warm-sel" data-v="4" onclick="setEff(this)">4</div>
-                <div class="tag warm-sel" data-v="5" onclick="setEff(this)">5</div>
-                <span class="eff-lbl" id="eff-label">Tap to rate</span>
-              </div>
-              <div class="slider-lbls" style="max-width:228px;margin-top:6px"><span>1 — did not help</span><span>5 — interrupted it</span></div>
-            </div>
+            <div class="slider-lbls" style="max-width:228px;margin-top:6px"><span>1 — did not help</span><span>5 — interrupted it</span></div>
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- STEP 8: NOTES -->
+    <div class="step-hd"><div class="step-title">Notes</div><div class="step-num">8 of 8</div></div>
+    <div class="card">
       <textarea id="ep-notes" placeholder="Anything the form didn't capture..."></textarea>
     </div>
 
@@ -1301,7 +1327,7 @@ function updateAuthUI(user) {
   document.getElementById('auth-screen').classList.toggle('on', !isIn);
   document.getElementById('app').classList.toggle('on', isIn);
   document.getElementById('sign-btn-nav').style.display = isIn ? 'none' : '';
-  document.getElementById('user-info').style.display = isIn ? 'flex' : 'none';
+  document.getElementById('avatar-btn').style.display = isIn ? 'flex' : 'none';
   if (isIn && user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
   ['status-dot','r-status-dot'].forEach(id => {
     const d = document.getElementById(id);
@@ -1312,10 +1338,8 @@ function updateAuthUI(user) {
     if(el) el.textContent = isIn ? 'Signed in as ' + (user.displayName || user.email) : 'Not signed in';
   });
   if (isIn) {
-    // Load Firebase custom tags, merge with localStorage, restore into DOM
     window._loadCustomSubTags(user.uid).then(fbData => {
       const localData = window.loadCustomSubTags();
-      // Merge: Firebase wins on overlap, but union all keys
       const merged = Object.assign({}, localData);
       Object.entries(fbData).forEach(([k, arr]) => {
         if (!merged[k]) merged[k] = [];
@@ -1323,7 +1347,6 @@ function updateAuthUI(user) {
       });
       window.saveCustomSubTags(merged);
       window.restoreCustomSubTags();
-      // Push merged back to Firebase in case local had extras
       if (JSON.stringify(merged) !== JSON.stringify(fbData)) {
         window._saveCustomSubTags(user.uid, merged);
       }
@@ -1343,6 +1366,18 @@ function toggleTheme() {
   localStorage.setItem('theme', next);
 }
 (()=>{ const t=localStorage.getItem('theme'); if(t) document.documentElement.setAttribute('data-theme',t); })();
+
+// PROFILE MENU
+window.toggleProfileMenu = () => {
+  document.getElementById('profile-menu').classList.toggle('on');
+};
+document.addEventListener('click', e => {
+  const menu = document.getElementById('profile-menu');
+  const btn = document.getElementById('avatar-btn');
+  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.remove('on');
+  }
+});
 
 // STATE — episode pathway
 const S = {
