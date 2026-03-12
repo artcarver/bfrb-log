@@ -169,21 +169,37 @@ textarea{resize:vertical;min-height:80px}
       <div id="core-details" class="hidden">
         <div class="divider"></div>
         
-        <div class="field" id="area-field">
-          <label class="field-label">Where / What</label>
-          <div class="grid-auto" id="area-tags-picking" style="display:none">
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Face</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Scalp</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Body</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Arms / Hands</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Legs</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Blemish / Scab</div>
+        <div class="field" id="where-field">
+          <label class="field-label">Where (Area)</label>
+          <div class="grid-auto" id="where-tags-picking" style="display:none">
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Body</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms / Hands</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Legs</div>
           </div>
-          <div class="grid-auto" id="area-tags-biting" style="display:none">
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Cuticles</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Nails</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Hangnail</div>
-            <div class="tag" onclick="toggleMultiTag('core','areas',this)">Finger skin</div>
+          <div class="grid-auto" id="where-tags-biting" style="display:none">
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</div>
+          </div>
+        </div>
+
+        <div class="field" id="what-field">
+          <label class="field-label">What (Target)</label>
+          <div class="grid-auto" id="what-tags-picking" style="display:none">
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Ingrown Hair</div>
+          </div>
+          <div class="grid-auto" id="what-tags-biting" style="display:none">
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
           </div>
         </div>
 
@@ -356,7 +372,7 @@ onAuthStateChanged(auth, user => {
 
 // STATE
 const state = {
-  core: { timing: 'now', bfrb: null, outcome: null, areas: [], awareness: null, duration: null, urge: 5 },
+  core: { timing: 'now', bfrb: null, outcome: null, where: [], what: [], awareness: null, duration: null, urge: 5 },
   ctx: { trigger: null, environment: null, tried_tool: null, tools: [], eff: null }
 };
 
@@ -375,12 +391,16 @@ window.selectBehavior = (val, el) => {
   el.classList.add('on');
   
   state.core.bfrb = val;
-  state.core.areas = [];
+  state.core.where = [];
+  state.core.what = [];
   
-  document.getElementById('area-tags-picking').style.display = val === 'picking' ? 'grid' : 'none';
-  document.getElementById('area-tags-biting').style.display = val === 'biting' ? 'grid' : 'none';
+  document.getElementById('where-tags-picking').style.display = val === 'picking' ? 'grid' : 'none';
+  document.getElementById('where-tags-biting').style.display = val === 'biting' ? 'grid' : 'none';
   
-  document.querySelectorAll('#area-field .tag').forEach(t => t.classList.remove('on'));
+  document.getElementById('what-tags-picking').style.display = val === 'picking' ? 'grid' : 'none';
+  document.getElementById('what-tags-biting').style.display = val === 'biting' ? 'grid' : 'none';
+  
+  document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
 };
 
 window.selectOutcome = (val, el) => {
@@ -394,7 +414,8 @@ window.selectOutcome = (val, el) => {
   document.getElementById('core-details').classList.toggle('hidden', !showDetails);
   
   if (!showDetails) {
-    state.core.areas = [];
+    state.core.where = [];
+    state.core.what = [];
     state.core.awareness = null;
     state.core.duration = null;
     document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
@@ -469,7 +490,8 @@ window.submitCore = async () => {
   };
   
   if (outcomeKey !== 'resisted') {
-    docData.body_areas = state.core.areas.join(', ');
+    docData.body_areas = state.core.where.join(', ');
+    docData.target = state.core.what.join(', ');
     docData.awareness = state.core.awareness || '';
     docData.duration = state.core.duration || '';
   }
@@ -514,7 +536,7 @@ window.submitContext = async () => {
 };
 
 window.resetForm = () => {
-  state.core = { timing: 'now', bfrb: null, outcome: null, areas: [], awareness: null, duration: null, urge: 5 };
+  state.core = { timing: 'now', bfrb: null, outcome: null, where: [], what: [], awareness: null, duration: null, urge: 5 };
   state.ctx = { trigger: null, environment: null, tried_tool: null, tools: [], eff: null };
   window._currentDocId = null;
 
