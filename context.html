@@ -46,7 +46,7 @@ nav{height:52px;display:flex;align-items:center;justify-content:space-between;pa
 #app.on{display:block}
 main{max-width:720px;margin:0 auto;padding:24px 14px}
 
-.header-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx);line-height:1.2}
 .export-btn{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--s1);min-height:44px}
 @media(max-width:480px){.export-btn{width:100%}}
@@ -66,9 +66,10 @@ main{max-width:720px;margin:0 auto;padding:24px 14px}
 
 .scamp-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px}
 .scamp-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px}
-.scamp-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;justify-content:space-between}
-.scamp-label span.badge{background:var(--sur);padding:2px 6px;border-radius:4px;font-size:10px}
-.scamp-save-badge{font-size:11px;color:var(--sage);font-weight:600;opacity:0;transition:opacity .3s ease}
+.scamp-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.scamp-label span.badge{background:var(--sur);padding:2px 6px;border-radius:var(--rsm);font-size:10px}
+.scamp-save-badge{font-size:11px;color:var(--sage);font-weight:600;opacity:0;transition:opacity .3s ease;margin-left:auto;padding-left:8px}
+.scamp-row{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px;display:flex;flex-direction:column}
 textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:80px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
 textarea.scamp-input::placeholder{color:var(--bdr2)}
 

@@ -60,9 +60,10 @@ main{max-width:540px;margin:0 auto;padding:20px 14px}
 .hidden{display:none !important}
 
 /* CARDS & FIELDS */
+.page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx);line-height:1.2;margin-bottom:20px}
 .card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--s1)}
 @media (max-width: 480px) { .card { padding: 16px; } }
-.card-title{font-family:'Lora',serif;font-size:18px;margin-bottom:16px;color:var(--tx)}
+.card-title{font-family:'Lora',serif;font-size:16px;font-weight:500;margin-bottom:20px;color:var(--tx2)}
 .field{margin-bottom:24px}
 .field:last-child{margin-bottom:0}
 .field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
@@ -155,8 +156,8 @@ textarea{resize:vertical;min-height:80px}
       <div class="step-pip" id="pip-2"></div>
       <div class="step-label" id="step-label">Step 1 of 2 — Event</div>
     </div>
+    <div class="page-title">Log Event</div>
     <div class="card">
-      <div class="card-title">Log Event</div>
       
       <div class="field">
         <label class="field-label">When</label>
@@ -295,8 +296,8 @@ textarea{resize:vertical;min-height:80px}
 
 
   <div id="screen-context" class="hidden">
+    <div class="page-title">Context</div>
     <div class="card">
-      <div class="card-title">Context</div>
 
       <div class="field">
         <label class="field-label">Pre-event activity</label>

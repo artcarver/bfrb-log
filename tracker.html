@@ -99,7 +99,7 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 /* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;text-align:center;box-shadow:var(--s1)}
-.stat-val{font-family:'Lora',serif;font-size:28px;color:var(--ac);line-height:1.2}
+.stat-val{font-family:'Lora',serif;font-size:28px;color:var(--tx);line-height:1.2}
 .stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:4px}
 
 /* CHARTS */
@@ -447,6 +447,8 @@ function processData(entries) {
       const isWin = (e.entry_type === 'resisted' || e.entry_type === 'near_miss');
       e.interventions.split(',').forEach(tool => {
         const t = tool.trim();
+        // Skip empty strings, 'nan', 'null', 'undefined' from CSV import artifacts
+        if (!t || t.toLowerCase() === 'nan' || t.toLowerCase() === 'null' || t.toLowerCase() === 'undefined') return;
         if (!tools[t]) tools[t] = { attempts: 0, wins: 0 };
         tools[t].attempts++;
         if (isWin) tools[t].wins++;
@@ -677,8 +679,8 @@ window.handleImport = async (event) => {
           primary_trigger: row[11] || '',
           environment: row[12] || '',
           post_feeling: row[13] || '',
-          interventions: row[14] || '',
-          tried_intervention: !!row[14],
+          interventions: (row[14] && row[14].toLowerCase() !== 'nan') ? row[14] : '',
+          tried_intervention: !!(row[14] && row[14].toLowerCase() !== 'nan'),
           intervention_effectiveness: row[15] ? parseInt(row[15]) : null,
           notes: row[16] || ''
         });
@@ -908,8 +910,8 @@ function renderTools(data) {
   destroyChart('chart-tools');
   const colors = getChartColors();
   const sorted = Object.entries(data)
-    .filter(i => i[1].attempts > 0)
-    .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100)])
+    .filter(i => i[1].attempts > 0 && i[0] && i[0].toLowerCase() !== 'nan')
+    .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100) || 0])
     .sort((a,b) => b[1] - a[1])
     .slice(0, 5);
 
