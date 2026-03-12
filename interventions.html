@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Access evidence-based BFRB intervention tools and timers.">
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Groundwork">
-    <link rel="apple-touch-icon" href="icon-192.png">
-<title>Groundwork - Tools</title>
+<meta name="description" content="Access evidence-based BFRB intervention tools and timers.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F4EDE3" id="theme-color-meta">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Groundwork">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Groundwork — Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
@@ -33,14 +34,12 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
 
-/* AUTH & APP */
+/* AUTH */
 .auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
 .auth-screen.on{display:flex}
 .auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;text-align:center;max-width:320px;width:92%}
-.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-size:16px;font-weight:600;color:var(--tx);cursor:pointer;margin-top:20px}
-
-#app{display:none}
-#app.on{display:block}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-size:16px;font-weight:600;color:var(--tx);cursor:pointer;margin-top:20px;touch-action:manipulation}
+#app{display:none} #app.on{display:block}
 main{max-width:560px;margin:0 auto;padding:24px 14px}
 
 /* HEADERS */
@@ -49,73 +48,151 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 .sec-title{font-family:'Lora',serif;font-size:22px;color:var(--tx);line-height:1.2}
 .sec-note{font-size:12px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em}
 
-/* HOT STATE BUTTONS - EMERGENCY LEVERS */
-.hot-grid{display:grid;grid-template-columns:1fr;gap:16px}
+/* HOT BUTTONS */
+.hot-grid{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:500px){.hot-grid{grid-template-columns:1fr 1fr}}
-.hot-btn {   background: var(--card);   border: 2px solid var(--bdr);   border-radius: var(--r);   padding: 24px 16px;   text-align: center;   cursor: pointer;   transition: var(--tr);   display: flex;   flex-direction: column;   align-items: center;   justify-content: center;   gap: 14px;   box-shadow: var(--s1);   position: relative;   overflow: hidden; }
-.hot-btn:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:var(--s2)}
+.hot-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--r);padding:20px 16px;text-align:left;cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:16px;box-shadow:var(--s1);width:100%;touch-action:manipulation}
+.hot-btn:hover{border-color:var(--ac);transform:translateY(-1px);box-shadow:var(--s2)}
 .hot-btn:active{transform:translateY(0);box-shadow:var(--s1);border-color:var(--ac)}
 .hot-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hot-icon.ac{background:var(--acl);color:var(--ac)}
 .hot-icon.sage{background:var(--sagel);color:var(--sage)}
 .hot-icon.warm{background:var(--warml);color:var(--warm)}
 .hot-icon.mu{background:var(--sur);border:1px solid var(--bdr);color:var(--tx2)}
-.hot-icon svg {   width: 24px;   height: 24px;   display: block;   stroke: currentColor;   fill: none;   stroke-width: 2.5;   stroke-linecap: round;   stroke-linejoin: round; }
-.hot-title{font-family:'Lora',serif;font-size:17px;font-weight:600;color:var(--tx);margin-bottom:4px}
-.hot-sub{font-size:13px;color:var(--tx2);line-height:1.4}
+.hot-icon svg{width:22px;height:22px;display:block;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.hot-body{flex:1;min-width:0}
+.hot-title{font-family:'Lora',serif;font-size:16px;font-weight:500;color:var(--tx);margin-bottom:3px}
+.hot-sub{font-size:12px;color:var(--mu);line-height:1.4}
+.hot-dur{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--bdr2);margin-top:4px}
 
-/* COLD STATE CARDS */
-.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.card-title{font-family:'Lora',serif;font-size:16px;font-weight:500;color:var(--tx);margin-bottom:16px}
+/* COLD CARDS */
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:12px}
+.card-title{font-family:'Lora',serif;font-size:16px;font-weight:500;color:var(--tx);margin-bottom:14px}
 
-/* TAGS FOR PREFS */
-.grid-auto{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:10px}
-.tag{display:flex;align-items:center;justify-content:center;min-height:48px;padding:8px 12px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);font-size:14px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;text-align:center;line-height:1.2;box-shadow:var(--s1)}
+/* PREF TAGS */
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.tag{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 12px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;text-align:center;line-height:1.3;box-shadow:var(--s1);touch-action:manipulation}
 .tag:hover{border-color:var(--bdr2);color:var(--tx)}
 .tag.on{background:var(--sagel);border-color:var(--sage);color:var(--sage);font-weight:600;box-shadow:none}
 
-/* ACTIVE CHECKLIST */
+/* STIMULUS CONTROL */
 .check-list{display:flex;flex-direction:column;gap:10px}
-.check-item{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);cursor:pointer;user-select:none;transition:var(--tr);box-shadow:var(--s1);touch-action:manipulation}
-.check-box{width:24px;height:24px;border:2px solid var(--mu);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--tr);background:var(--card)}
+.check-item{display:flex;align-items:center;gap:14px;padding:14px 16px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);cursor:pointer;user-select:none;transition:var(--tr);box-shadow:var(--s1);touch-action:manipulation}
+.check-box{width:22px;height:22px;border:2px solid var(--mu);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--tr);background:var(--card)}
 .check-item.checked{background:var(--sagem);border-color:var(--sage);box-shadow:none}
 .check-item.checked .check-box{background:var(--sage);border-color:var(--sage)}
-.check-tick{display:none;width:14px;height:14px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.check-tick{display:none;width:12px;height:12px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .check-item.checked .check-tick{display:block}
-.check-text{font-size:15px;color:var(--tx);line-height:1.4;transition:var(--tr)}
-.check-item.checked .check-text{font-weight:600;color:var(--tx)}
+.check-body{flex:1}
+.check-text{font-size:14px;color:var(--tx);line-height:1.4}
+.check-when{font-size:11px;color:var(--mu);margin-top:2px}
+.check-item.checked .check-text{font-weight:600}
 
-/* FULLSCREEN TIMER OVERLAY */
-.timer-overlay{position:fixed;inset:0;background:var(--bg);z-index:900;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;display:flex;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
+/* =====================================================
+   TIMER OVERLAY — full-screen guided experience
+   ===================================================== */
+.timer-overlay{position:fixed;inset:0;background:var(--bg);z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;pointer-events:none;overflow:hidden}
 .timer-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
-.timer-close{position:absolute;top:24px;right:24px;background:none;border:none;font-size:36px;color:var(--mu);cursor:pointer;line-height:1;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center}
-.timer-inst{font-family:'Lora',serif;font-size:26px;color:var(--tx);line-height:1.4;margin-bottom:40px;max-width:400px}
-.timer-readout{font-family:'DM Sans',sans-serif;font-size:clamp(52px,18vw,80px);font-weight:300;color:var(--ac);line-height:1;margin-bottom:40px;font-variant-numeric:tabular-nums}
-@media(max-width:400px){.timer-inst{font-size:22px}}
+.timer-close{position:absolute;top:max(24px,env(safe-area-inset-top,24px));right:20px;background:none;border:none;color:var(--mu);cursor:pointer;line-height:1;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:var(--tr)}
+.timer-close:hover{background:var(--sur);color:var(--tx)}
+.timer-close svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* Phase label above the readout */
+.timer-phase{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:12px;min-height:16px;transition:color .4s}
+
+/* Primary instruction — Lora, calm */
+.timer-inst{font-family:'Lora',serif;font-size:clamp(18px,4.5vw,24px);color:var(--tx);line-height:1.5;margin-bottom:28px;max-width:380px;min-height:80px;transition:opacity .4s ease}
+
+/* Countdown */
+.timer-readout{font-family:'DM Sans',sans-serif;font-size:clamp(52px,18vw,80px);font-weight:300;line-height:1;margin-bottom:32px;font-variant-numeric:tabular-nums;transition:color .5s ease}
+.timer-readout.ac{color:var(--ac)}
 .timer-readout.sage{color:var(--sage)}
 .timer-readout.warm{color:var(--warm)}
 .timer-readout.mu{color:var(--tx2)}
 
-.timer-actions{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
-.timer-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--pill);padding:16px 20px;font-size:15px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);min-height:56px;width:100%}
+/* Progress arc */
+.timer-arc-wrap{position:relative;width:140px;height:140px;margin:0 auto 28px;flex-shrink:0}
+.timer-arc-svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer-arc-bg{fill:none;stroke:var(--bdr);stroke-width:4}
+.timer-arc-fill{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .9s linear,stroke .5s ease}
+.timer-arc-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+
+/* Specific visualisers */
+/* Breath ring — expands/contracts */
+.breath-ring{width:120px;height:120px;border-radius:50%;border:3px solid currentColor;display:flex;align-items:center;justify-content:center;transition:transform 1s cubic-bezier(.4,0,.2,1),color .5s,border-color .5s;flex-shrink:0}
+.breath-ring-inner{width:60px;height:60px;border-radius:50%;background:currentColor;opacity:.15;transition:transform 1s cubic-bezier(.4,0,.2,1)}
+.breath-label{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:12px;min-height:20px;transition:color .5s}
+
+/* Urge wave tracker */
+.urge-track-wrap{width:100%;max-width:320px;margin:0 auto 24px}
+.urge-track-label{font-size:12px;color:var(--mu);margin-bottom:10px;font-weight:500}
+.urge-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--bdr);outline:none;cursor:pointer}
+.urge-slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--sage);border:3px solid var(--card);box-shadow:0 2px 8px rgba(122,140,133,.3);cursor:pointer}
+.urge-slider::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--sage);border:3px solid var(--card);cursor:pointer}
+.urge-readout{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-top:6px}
+.urge-wave-canvas{width:100%;max-width:320px;height:60px;margin:0 auto 4px;display:block;opacity:.6}
+
+/* Redirect cycle counter */
+.redirect-counter{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px}
+.redirect-beat{font-family:'Lora',serif;font-size:32px;color:var(--tx);min-height:42px;transition:opacity .2s,transform .2s}
+.redirect-beat.flash{opacity:.3;transform:scale(.92)}
+.redirect-taps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:280px}
+.redirect-dot{width:12px;height:12px;border-radius:50%;background:var(--bdr);transition:background .2s,transform .2s}
+.redirect-dot.done{background:var(--ac);transform:scale(1.2)}
+.redirect-tap-btn{background:var(--acl);border:2px solid var(--ac);color:var(--ac);border-radius:var(--pill);padding:12px 28px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);margin-bottom:8px;touch-action:manipulation}
+.redirect-tap-btn:active{background:var(--ac);color:#fff;transform:scale(.96)}
+
+/* Defusion steps */
+.defusion-step{font-family:'Lora',serif;font-size:clamp(18px,4.5vw,22px);color:var(--tx);line-height:1.5;max-width:340px;opacity:0;transition:opacity .6s ease;position:absolute;left:50%;transform:translateX(-50%);width:90%;top:0}
+.defusion-step.active{opacity:1}
+.defusion-wrap{position:relative;height:80px;margin-bottom:24px;width:100%;max-width:360px}
+
+/* Tactile focus prompts */
+.tactile-prompt{font-family:'Lora',serif;font-size:20px;color:var(--tx);opacity:0;transition:opacity .8s ease;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px}
+.tactile-prompt.active{opacity:1}
+.tactile-wrap{position:relative;height:72px;width:100%;max-width:340px;margin-bottom:24px}
+
+/* Motor hold indicator */
+.hold-ring{width:100px;height:100px;border-radius:50%;border:4px solid var(--bdr);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;transition:border-color .5s}
+.hold-ring.tensed{border-color:var(--ac);box-shadow:0 0 0 8px var(--acl)}
+.hold-ring-inner{width:52px;height:52px;border-radius:50%;background:var(--acl);transition:transform .3s,background .5s}
+.hold-ring.tensed .hold-ring-inner{transform:scale(1.15);background:rgba(193,105,79,.25)}
+.hold-phase{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;transition:color .3s}
+.hold-phase.tensed{color:var(--ac)}
+
+/* BOTTOM ACTION BUTTONS */
+.timer-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;margin-top:4px}
+.timer-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--pill);padding:15px 20px;font-size:15px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);min-height:52px;width:100%;font-family:'DM Sans',sans-serif;touch-action:manipulation}
 .timer-btn:hover{border-color:var(--ac);color:var(--ac)}
+.timer-btn:active{transform:scale(.97)}
 .timer-btn.done{background:var(--sage);border-color:var(--sage);color:#fff}
-.timer-btn-ghost{background:transparent;border:1.5px solid var(--bdr);border-radius:var(--pill);padding:14px 20px;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);width:100%}
-.timer-btn-ghost:hover{border-color:var(--tx);color:var(--tx)}
+.timer-btn.done:hover{background:var(--sage);border-color:var(--sage)}
+.timer-btn-ghost{background:transparent;border:1.5px solid var(--bdr);border-radius:var(--pill);padding:12px 20px;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);width:100%;font-family:'DM Sans',sans-serif;touch-action:manipulation}
+.timer-btn-ghost:hover{border-color:var(--bdr2);color:var(--tx2)}
+
+/* Recommended substitutes post-intervention */
+.sub-recommend{width:100%;max-width:320px;margin-bottom:20px;text-align:left}
+.sub-recommend-label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.sub-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sub-chip{background:var(--sagel);border:1px solid var(--sage);border-radius:var(--pill);padding:5px 14px;font-size:13px;color:var(--sage);font-weight:600}
+.sub-chip.preferred{background:var(--sagem);border-color:var(--sage)}
+
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:11px 22px;font-size:13px;font-weight:600;color:#fff;transition:all .3s ease;z-index:999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 
-    <script>
-      // Keep theme-color meta in sync with colour scheme
-      (function() {
-        const stored = localStorage.getItem('gw-theme');
-        if (stored === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          const m = document.getElementById('theme-color-meta');
-          if (m) m.setAttribute('content', '#1E1710');
-        }
-      })();
-    </script>
-  </head>
+<script>
+(function() {
+  const stored = localStorage.getItem('gw-theme');
+  if (stored === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    const m = document.getElementById('theme-color-meta');
+    if (m) m.setAttribute('content', '#1E1710');
+  }
+})();
+</script>
+</head>
 <body>
 
 <div class="auth-screen on" id="auth-screen">
@@ -139,21 +216,23 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
   <div class="hot-grid">
     <button class="hot-btn" onclick="openTimer('motor')">
       <div class="hot-icon ac">
-        <svg><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <svg><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
-      <div>
-        <div class="hot-title">Motor Block (CR)</div>
-        <div class="hot-sub">Clench fists or press lips together. Competing response, 90 sec.</div>
+      <div class="hot-body">
+        <div class="hot-title">Motor Block</div>
+        <div class="hot-sub">Competing response — hold position to interrupt the motor chain</div>
+        <div class="hot-dur">90 seconds</div>
       </div>
     </button>
 
     <button class="hot-btn" onclick="openTimer('decouple')">
       <div class="hot-icon ac">
-        <svg><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v3.5"/></svg>
+        <svg><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0"/></svg>
       </div>
-      <div>
+      <div class="hot-body">
         <div class="hot-title">Decoupling Redirect</div>
-        <div class="hot-sub">Initiate the movement, redirect before contact. Repeat. 60 sec.</div>
+        <div class="hot-sub">Initiate the movement, redirect before contact — repeat each cycle</div>
+        <div class="hot-dur">60 seconds · tap each redirect</div>
       </div>
     </button>
 
@@ -161,9 +240,10 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       <div class="hot-icon sage">
         <svg><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
-      <div>
+      <div class="hot-body">
         <div class="hot-title">Urge Surf</div>
-        <div class="hot-sub">Observe the urge without acting. It will peak and subside. 5 min.</div>
+        <div class="hot-sub">Stay with the sensation and track it — it will peak and pass</div>
+        <div class="hot-dur">5 minutes · track the wave</div>
       </div>
     </button>
 
@@ -171,9 +251,10 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       <div class="hot-icon mu">
         <svg><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
       </div>
-      <div>
+      <div class="hot-body">
         <div class="hot-title">Cognitive Defusion</div>
-        <div class="hot-sub">The urge is neurological, not a directive. It will pass without action. 30 sec.</div>
+        <div class="hot-sub">Step outside the urge — observe it without fusing with it</div>
+        <div class="hot-dur">30 seconds · stepped reframes</div>
       </div>
     </button>
 
@@ -181,9 +262,10 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       <div class="hot-icon sage">
         <svg><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
       </div>
-      <div>
+      <div class="hot-body">
         <div class="hot-title">Tactile Substitute</div>
-        <div class="hot-sub">Grip a textured object firmly. Redirect sensory focus. 60 sec.</div>
+        <div class="hot-sub">Redirect sensory focus to a physical object with guided attention</div>
+        <div class="hot-dur">60 seconds · prompted</div>
       </div>
     </button>
 
@@ -191,89 +273,185 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       <div class="hot-icon warm">
         <svg><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>
       </div>
-      <div>
+      <div class="hot-body">
         <div class="hot-title">Grounding Reset</div>
-        <div class="hot-sub">Vagal nerve regulation via breath. 2 min.</div>
+        <div class="hot-sub">Vagal regulation via 4-7-8 breath — paced with visual guide</div>
+        <div class="hot-dur">2 minutes · guided breathing</div>
       </div>
     </button>
   </div>
 
   <div class="sec-hd">
     <div class="sec-title">Sensory Substitutes</div>
-    <div class="sec-note">Match to current drive</div>
+    <div class="sec-note">Mark what you have</div>
   </div>
 
   <div class="card">
-    <div class="card-title">Target: Destruction & Peeling</div>
+    <div class="card-title">Destruction &amp; Peeling</div>
     <div class="grid-auto">
-      <div class="tag" onclick="togglePref(this)">Washi tape roll</div>
-      <div class="tag" onclick="togglePref(this)">Picking stone</div>
-      <div class="tag" onclick="togglePref(this)">Dried liquid glue</div>
-      <div class="tag" onclick="togglePref(this)">Seeds in shell</div>
-      <div class="tag" onclick="togglePref(this)">Velcro strips</div>
+      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Washi tape roll</div>
+      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Picking stone</div>
+      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Dried liquid glue</div>
+      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Seeds in shell</div>
+      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Velcro strips</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Target: Deep Pressure & Sensation</div>
+    <div class="card-title">Deep Pressure &amp; Sensation</div>
     <div class="grid-auto">
-      <div class="tag" onclick="togglePref(this)">Spiky massage ring</div>
-      <div class="tag" onclick="togglePref(this)">Chewable silicone</div>
-      <div class="tag" onclick="togglePref(this)">Tension band</div>
-      <div class="tag" onclick="togglePref(this)">Strong mints</div>
-      <div class="tag" onclick="togglePref(this)">Rough textured cloth</div>
+      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Spiky massage ring</div>
+      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Chewable silicone</div>
+      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Tension band</div>
+      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Strong mints</div>
+      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Rough textured cloth</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Target: Smoothing & Evenness</div>
+    <div class="card-title">Smoothing &amp; Evenness</div>
     <div class="grid-auto">
-      <div class="tag" onclick="togglePref(this)">Smooth worry stone</div>
-      <div class="tag" onclick="togglePref(this)">Silicone cuticle edge</div>
-      <div class="tag" onclick="togglePref(this)">Textured ring</div>
-      <div class="tag" onclick="togglePref(this)">Tactile putty</div>
-      <div class="tag" onclick="togglePref(this)">Emery board</div>
+      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Smooth worry stone</div>
+      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Silicone cuticle edge</div>
+      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Textured ring</div>
+      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Tactile putty</div>
+      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Emery board</div>
     </div>
   </div>
 
   <div class="sec-hd">
     <div class="sec-title">Stimulus Control</div>
-    <div class="sec-note">Environmental barriers</div>
+    <div class="sec-note">Current session barriers</div>
   </div>
+  <div style="font-size:12px;color:var(--mu);margin-bottom:12px;margin-top:-8px">Resets daily. Check off what's active right now.</div>
 
-  <div class="check-list">
-    <div class="check-item" onclick="toggleCheck(this)">
+  <div class="check-list" id="check-list">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="mirrors">
       <div class="check-box"><svg class="check-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
-      <div class="check-text">Mirrors covered or bathroom light turned off.</div>
+      <div class="check-body">
+        <div class="check-text">Mirrors covered or bathroom light off.</div>
+        <div class="check-when" id="when-mirrors"></div>
+      </div>
     </div>
-    <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="light">
       <div class="check-box"><svg class="check-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
-      <div class="check-text">Overhead desk light off, using warm side lamp only.</div>
+      <div class="check-body">
+        <div class="check-text">Overhead desk light off, warm lamp only.</div>
+        <div class="check-when" id="when-light"></div>
+      </div>
     </div>
-    <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="bandage">
       <div class="check-box"><svg class="check-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
-      <div class="check-text">Bandages applied to target fingers or high-risk areas.</div>
+      <div class="check-body">
+        <div class="check-text">Bandages on target fingers or high-risk areas.</div>
+        <div class="check-when" id="when-bandage"></div>
+      </div>
     </div>
-    <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="tools">
       <div class="check-box"><svg class="check-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
-      <div class="check-text">Tweezers and extractor tools removed from area.</div>
+      <div class="check-body">
+        <div class="check-text">Tweezers and extractor tools removed.</div>
+        <div class="check-when" id="when-tools"></div>
+      </div>
     </div>
-    <div class="check-item" onclick="toggleCheck(this)">
+    <div class="check-item" onclick="toggleCheck(this)" data-key="sleeves">
       <div class="check-box"><svg class="check-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg></div>
-      <div class="check-text">Wearing long sleeves/pants to block tactile scanning.</div>
+      <div class="check-body">
+        <div class="check-text">Wearing long sleeves to block tactile scanning.</div>
+        <div class="check-when" id="when-sleeves"></div>
+      </div>
     </div>
   </div>
 
 </main>
 </div>
 
+<div class="toast" id="toast"></div>
+
+<!-- ===================================================
+     TIMER OVERLAY — unique UI per intervention
+     =================================================== -->
 <div class="timer-overlay" id="timer-overlay">
-  <button class="timer-close" onclick="closeTimer()">&times;</button>
-  <div class="timer-inst" id="timer-inst">Instruction</div>
-  <div class="timer-readout" id="timer-readout">0:00</div>
-  
+  <button class="timer-close" onclick="closeTimer()">
+    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+
+  <div class="timer-phase" id="timer-phase"></div>
+  <div class="timer-inst" id="timer-inst"></div>
+
+  <!-- MOTOR BLOCK: hold ring indicator -->
+  <div id="vis-motor" style="display:none;flex-direction:column;align-items:center">
+    <div class="hold-phase" id="hold-phase">Get ready</div>
+    <div class="hold-ring" id="hold-ring">
+      <div class="hold-ring-inner"></div>
+    </div>
+    <div style="font-size:13px;color:var(--mu);margin-bottom:4px" id="hold-stage-note">Clench both fists now</div>
+  </div>
+
+  <!-- DECOUPLE: cycle counter + tap button -->
+  <div id="vis-decouple" style="display:none;flex-direction:column;align-items:center;width:100%;max-width:320px">
+    <div class="redirect-counter">
+      <div class="redirect-beat" id="redirect-beat">Initiate</div>
+      <div class="redirect-taps" id="redirect-taps"></div>
+    </div>
+    <button class="redirect-tap-btn" id="redirect-tap" onclick="markRedirect()">Tap — Redirected</button>
+  </div>
+
+  <!-- SURF: live urge slider + wave -->
+  <div id="vis-surf" style="display:none;flex-direction:column;align-items:center;width:100%;max-width:320px">
+    <canvas class="urge-wave-canvas" id="urge-wave" width="320" height="60"></canvas>
+    <div class="urge-track-wrap">
+      <div class="urge-track-label">Urge intensity right now</div>
+      <input type="range" class="urge-slider" id="urge-live" min="0" max="10" value="7" oninput="updateWave(this.value)">
+      <div class="urge-readout"><span>Low</span><span id="urge-live-val">7</span><span>High</span></div>
+    </div>
+  </div>
+
+  <!-- DEFUSION: stepped text phrases -->
+  <div id="vis-defusion" style="display:none;flex-direction:column;align-items:center;width:100%">
+    <div class="defusion-wrap" id="defusion-wrap">
+      <div class="defusion-step" id="def-0">The urge is a neurological signal.</div>
+      <div class="defusion-step" id="def-1">Not a command.</div>
+      <div class="defusion-step" id="def-2">You can notice it without acting on it.</div>
+      <div class="defusion-step" id="def-3">It will pass on its own.</div>
+      <div class="defusion-step" id="def-4">You are observing it. That is enough.</div>
+    </div>
+  </div>
+
+  <!-- TACTILE: rotating focus prompts -->
+  <div id="vis-tactile" style="display:none;flex-direction:column;align-items:center;width:100%">
+    <div class="tactile-wrap" id="tactile-wrap">
+      <div class="tactile-prompt" id="tac-0">Hold the object in your dominant hand.</div>
+      <div class="tactile-prompt" id="tac-1">Notice the texture. Is it smooth or rough?</div>
+      <div class="tactile-prompt" id="tac-2">Notice the temperature against your skin.</div>
+      <div class="tactile-prompt" id="tac-3">Feel the weight. Shift it between fingers.</div>
+      <div class="tactile-prompt" id="tac-4">Focus only on what you can feel right now.</div>
+      <div class="tactile-prompt" id="tac-5">Press harder. Notice the pressure change.</div>
+      <div class="tactile-prompt" id="tac-6">Stay with the sensation. Keep your grip.</div>
+    </div>
+  </div>
+
+  <!-- GROUND: animated breath ring -->
+  <div id="vis-ground" style="display:none;flex-direction:column;align-items:center">
+    <div class="breath-ring" id="breath-ring" style="color:var(--warm)">
+      <div class="breath-ring-inner"></div>
+    </div>
+    <div class="breath-label" id="breath-label" style="color:var(--warm)">Inhale</div>
+    <div style="font-size:13px;color:var(--mu);margin-top:6px" id="breath-count-label">Breath 1</div>
+  </div>
+
+  <!-- RECOMMENDED SUBSTITUTES (shown post-completion) -->
+  <div id="sub-recommend-wrap" style="display:none">
+    <div class="sub-recommend">
+      <div class="sub-recommend-label">Suggested next — based on your preferences</div>
+      <div class="sub-chips" id="sub-chips"></div>
+    </div>
+  </div>
+
+  <div class="timer-readout" id="timer-readout"></div>
+
   <div class="timer-actions">
-    <button class="timer-btn" id="timer-action" onclick="togglePause()">Pause Timer</button>
+    <button class="timer-btn" id="timer-action">Pause</button>
     <button class="timer-btn-ghost" id="timer-fail" onclick="logFail()">Intervention didn't hold — log episode</button>
   </div>
 </div>
@@ -296,7 +474,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-
 window._uid = null;
 
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
@@ -306,136 +483,566 @@ onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;
   document.getElementById('auth-screen').classList.toggle('on', !user);
   document.getElementById('app').classList.toggle('on', !!user);
-  if (user) loadPrefs();
+  if (user) { loadPrefs(); loadChecks(); }
 });
 
-window.togglePref = (el) => { el.classList.toggle('on'); savePrefs(); };
-window.toggleCheck = (el) => { el.classList.toggle('checked'); savePrefs(); };
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
 
+// ===================== PREFS =====================
 let _savePrefTimer = null;
+window.togglePref = (el) => { el.classList.toggle('on'); savePrefs(); };
+
 function savePrefs() {
   if (!window._uid) return;
   clearTimeout(_savePrefTimer);
   _savePrefTimer = setTimeout(async () => {
     const onTags = Array.from(document.querySelectorAll('.tag.on')).map(el => el.textContent.trim());
-    const checks = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('checked'));
-    try {
-      await setDoc(doc(db, 'users', window._uid, 'prefs', 'tools'), { tags: onTags, checks });
-    } catch(e) {
-      console.error('Failed to save prefs:', e);
-    }
+    try { await setDoc(doc(db, 'users', window._uid, 'prefs', 'tools'), { tags: onTags }, { merge: true }); }
+    catch(e) { console.error('Failed to save prefs:', e); }
   }, 800);
 }
 
 async function loadPrefs() {
   try {
     const snap = await getDoc(doc(db, 'users', window._uid, 'prefs', 'tools'));
-    const data = snap.exists() ? snap.data() : { tags: [], checks: [] };
+    const data = snap.exists() ? snap.data() : { tags: [] };
     document.querySelectorAll('.tag').forEach(el => {
       if ((data.tags || []).includes(el.textContent.trim())) el.classList.add('on');
     });
-    document.querySelectorAll('.check-item').forEach((el, i) => {
-      if ((data.checks || [])[i]) el.classList.add('checked');
-    });
-  } catch(e) {
-    console.error('Failed to load prefs:', e);
-  }
+  } catch(e) { console.error('Failed to load prefs:', e); }
 }
 
+// ===================== STIMULUS CONTROL — daily reset =====================
+const SC_KEYS = ['mirrors','light','bandage','tools','sleeves'];
+
+async function loadChecks() {
+  const today = new Date().toISOString().slice(0,10);
+  try {
+    const snap = await getDoc(doc(db, 'users', window._uid, 'prefs', 'stimulus'));
+    const data = snap.exists() ? snap.data() : {};
+    SC_KEYS.forEach(key => {
+      const item = document.querySelector(`[data-key="${key}"]`);
+      const whenEl = document.getElementById('when-' + key);
+      if (!item) return;
+      const record = data[key];
+      if (record && record.date === today) {
+        item.classList.add('checked');
+        if (whenEl) whenEl.textContent = 'Set today';
+      } else if (record && record.date) {
+        // Previous day — show when and leave unchecked (daily reset)
+        if (whenEl) {
+          const diff = Math.round((Date.now() - new Date(record.date)) / 86400000);
+          whenEl.textContent = diff === 1 ? 'Was set yesterday' : diff > 1 ? `Was set ${diff} days ago` : '';
+        }
+      }
+    });
+  } catch(e) { console.error(e); }
+}
+
+window.toggleCheck = async (el) => {
+  const key = el.dataset.key;
+  el.classList.toggle('checked');
+  const isChecked = el.classList.contains('checked');
+  const whenEl = document.getElementById('when-' + key);
+  const today = new Date().toISOString().slice(0,10);
+  if (whenEl) whenEl.textContent = isChecked ? 'Set today' : '';
+  if (!window._uid) return;
+  const update = {};
+  update[key] = isChecked ? { date: today } : null;
+  try { await setDoc(doc(db, 'users', window._uid, 'prefs', 'stimulus'), update, { merge: true }); }
+  catch(e) { console.error(e); }
+};
+
+// ===================== TIMER ENGINE =====================
 let timerInterval = null;
 let currentSeconds = 0;
+let totalSeconds = 0;
+let currentMode = null;
+let isPaused = false;
 
-const modes = {
-  motor: { sec: 90, class: 'ac', text: 'Clench both fists or press lips firmly together. Hold the competing response.' },
-  decouple: { sec: 60, class: 'ac', text: 'Begin the movement toward the target area. Redirect forcefully before contact. Repeat.' },
-  surf: { sec: 300, class: 'sage', text: 'Locate the urge as a physical sensation. Observe it without acting. It will peak and pass.' },
-  unhook: { sec: 30, class: 'mu', text: 'The urge is a neurological signal, not a directive. You do not have to act on it.' },
-  shock: { sec: 60, class: 'sage', text: 'Grip a textured object — stress ball, rubber band, rough fabric. Keep focus on the sensation.' },
-  ground: { sec: 120, class: 'warm', text: 'Feet flat on the floor. Inhale 4 counts, hold 7, exhale 8.' }
-};
+// Intervention beat/cycle tracking
+let redirectCount = 0;
+let breathPhase = 'inhale'; // inhale | hold | exhale
+let breathCount = 0;
+let breathTimer = null;
+let defusionIdx = 0;
+let defusionTimer = null;
+let tactileIdx = 0;
+let tactileTimer = null;
+let waveHistory = [];
+
+const BREATH_TIMES = { inhale: 4000, hold: 7000, exhale: 8000 };
+const ARC_R = 52;
+const ARC_CIRC = 2 * Math.PI * ARC_R;
+
+function getCSSVar(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+function hideAllVis() {
+  ['motor','decouple','surf','defusion','tactile','ground'].forEach(id => {
+    const el = document.getElementById('vis-' + id);
+    if (el) el.style.display = 'none';
+  });
+  document.getElementById('sub-recommend-wrap').style.display = 'none';
+}
+
+function showVis(id) {
+  const el = document.getElementById('vis-' + id);
+  if (el) el.style.display = 'flex';
+}
+
+function updateArc(secondsLeft, total) {
+  // No arc in this redesign — using bespoke per-mode visualisers
+  const pct = secondsLeft / total;
+  const readout = document.getElementById('timer-readout');
+  const m = Math.floor(secondsLeft / 60);
+  const s = String(secondsLeft % 60).padStart(2,'0');
+  readout.textContent = secondsLeft > 0 ? `${m}:${s}` : '';
+}
 
 window.openTimer = (type) => {
-  const cfg = modes[type];
-  document.getElementById('timer-inst').textContent = cfg.text;
+  currentMode = type;
+  isPaused = false;
+  redirectCount = 0;
+  waveHistory = [];
+  clearAllSubTimers();
+  hideAllVis();
+
+  const configs = {
+    motor:   { sec: 90, class: 'ac',   phase: 'Competing Response', inst: 'Clench both fists firmly, or press your lips together. Hold the position — do not let go.' },
+    decouple:{ sec: 60, class: 'ac',   phase: 'Decoupling Redirect', inst: 'Begin the movement toward your target area. Stop before contact. Return. Repeat.' },
+    surf:    { sec: 300, class: 'sage', phase: 'Urge Surfing', inst: 'Stay with the urge. Track its intensity below. You are observing it — not acting on it.' },
+    unhook:  { sec: 30,  class: 'mu',  phase: 'Cognitive Defusion', inst: '' },
+    shock:   { sec: 60,  class: 'sage', phase: 'Tactile Substitute', inst: 'Pick up your object now. Focus entirely on the sensation.' },
+    ground:  { sec: 120, class: 'warm', phase: 'Grounding Reset', inst: 'Follow the breath guide. Let everything else wait.' },
+  };
+
+  const cfg = configs[type];
+  currentSeconds = cfg.sec;
+  totalSeconds = cfg.sec;
+
+  document.getElementById('timer-phase').textContent = cfg.phase;
+  document.getElementById('timer-inst').textContent = cfg.inst;
   document.getElementById('timer-readout').className = 'timer-readout ' + cfg.class;
-  
+  document.getElementById('timer-inst').style.opacity = '1';
+
+  // Show fail button
+  const failBtn = document.getElementById('timer-fail');
+  failBtn.style.display = '';
+
+  // Action button
   const btn = document.getElementById('timer-action');
   btn.className = 'timer-btn';
-  btn.textContent = 'Pause Timer';
+  btn.textContent = 'Pause';
+  btn.disabled = false;
   btn.onclick = window.togglePause;
 
-  document.getElementById('timer-fail').style.display = 'block';
-  
-  currentSeconds = cfg.sec;
-  updateReadout();
-  
+  // Mode-specific setup
+  if (type === 'motor') {
+    showVis('motor');
+    startMotorStages();
+  } else if (type === 'decouple') {
+    showVis('decouple');
+    buildRedirectDots(8);
+    startDecoupleBeat();
+  } else if (type === 'surf') {
+    showVis('surf');
+    document.getElementById('urge-live').value = 7;
+    document.getElementById('urge-live-val').textContent = 7;
+    drawWave();
+  } else if (type === 'unhook') {
+    showVis('defusion');
+    startDefusion();
+  } else if (type === 'shock') {
+    showVis('tactile');
+    startTactile();
+  } else if (type === 'ground') {
+    showVis('ground');
+    startBreathCycle();
+    document.getElementById('timer-readout').textContent = '';
+  }
+
+  if (type !== 'ground') updateArc(currentSeconds, totalSeconds);
   document.getElementById('timer-overlay').classList.add('on');
   document.body.style.overflow = 'hidden';
-  startInterval();
+  startCountdown();
 };
 
-function startInterval() {
+function startCountdown() {
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
+    if (isPaused) return;
     currentSeconds--;
-    updateReadout();
+    if (currentMode !== 'ground') updateArc(currentSeconds, totalSeconds);
     if (currentSeconds <= 0) finishTimer();
   }, 1000);
 }
 
 window.togglePause = () => {
+  isPaused = !isPaused;
   const btn = document.getElementById('timer-action');
-  if (timerInterval) {
-    clearInterval(timerInterval);
-    timerInterval = null;
-    btn.textContent = 'Resume Timer';
+  btn.textContent = isPaused ? 'Resume' : 'Pause';
+  if (isPaused) {
+    clearAllSubTimers();
+    // Breath: pause visual too
+    if (currentMode === 'ground') pauseBreath();
   } else {
-    startInterval();
-    btn.textContent = 'Pause Timer';
+    resumeSubTimers();
   }
 };
 
+function clearAllSubTimers() {
+  clearTimeout(breathTimer);
+  clearTimeout(defusionTimer);
+  clearTimeout(tactileTimer);
+}
+
+function resumeSubTimers() {
+  if (currentMode === 'ground') resumeBreath();
+  if (currentMode === 'unhook') continueDefusion();
+  if (currentMode === 'shock') continueTactile();
+  if (currentMode === 'decouple') resumeDecoupleBeat();
+}
+
+// ---- MOTOR BLOCK: staged encouragement ----
+function startMotorStages() {
+  const ring = document.getElementById('hold-ring');
+  const phase = document.getElementById('hold-phase');
+  const note = document.getElementById('hold-stage-note');
+
+  // Immediate tension state
+  setTimeout(() => {
+    ring.classList.add('tensed');
+    phase.classList.add('tensed');
+    phase.textContent = 'Holding';
+    note.textContent = 'Keep the tension — do not release.';
+  }, 500);
+
+  setTimeout(() => {
+    if (!isPaused) note.textContent = 'Halfway. Maintain your grip.';
+  }, 45000);
+
+  setTimeout(() => {
+    if (!isPaused) {
+      note.textContent = 'Final stretch — hold through this.';
+      phase.textContent = 'Almost there';
+    }
+  }, 70000);
+
+  setTimeout(() => {
+    if (!isPaused) {
+      ring.classList.remove('tensed');
+      phase.classList.remove('tensed');
+      phase.textContent = 'Releasing';
+      note.textContent = 'Slowly release. Notice the change.';
+    }
+  }, 85000);
+}
+
+// ---- DECOUPLE: paced approach/redirect beat ----
+let decoupleBeatTimer = null;
+let decoupleBeatPhase = 'approach';
+
+function buildRedirectDots(n) {
+  const container = document.getElementById('redirect-taps');
+  container.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    d.className = 'redirect-dot';
+    d.id = 'rdot-' + i;
+    container.appendChild(d);
+  }
+}
+
+function startDecoupleBeat() {
+  decoupleBeatPhase = 'approach';
+  runDecoupleBeat();
+}
+
+function runDecoupleBeat() {
+  if (isPaused || currentMode !== 'decouple') return;
+  const beat = document.getElementById('redirect-beat');
+  if (decoupleBeatPhase === 'approach') {
+    beat.textContent = 'Initiate';
+    beat.classList.remove('flash');
+    decoupleBeatPhase = 'redirect';
+    decoupleBeatTimer = setTimeout(runDecoupleBeat, 6000);
+  } else {
+    beat.classList.add('flash');
+    beat.textContent = 'Redirect';
+    decoupleBeatPhase = 'approach';
+    decoupleBeatTimer = setTimeout(() => {
+      beat.classList.remove('flash');
+      runDecoupleBeat();
+    }, 6000);
+  }
+}
+
+function resumeDecoupleBeat() { runDecoupleBeat(); }
+
+window.markRedirect = () => {
+  if (redirectCount >= 8) return;
+  const dot = document.getElementById('rdot-' + redirectCount);
+  if (dot) { dot.classList.add('done'); }
+  redirectCount++;
+  // Reset beat to approach after tap
+  const beat = document.getElementById('redirect-beat');
+  beat.classList.remove('flash');
+  beat.textContent = 'Initiate';
+  decoupleBeatPhase = 'redirect';
+  clearTimeout(decoupleBeatTimer);
+  decoupleBeatTimer = setTimeout(runDecoupleBeat, 5000);
+};
+
+// ---- URGE SURF: live wave canvas ----
+window.updateWave = (val) => {
+  document.getElementById('urge-live-val').textContent = val;
+  waveHistory.push(parseInt(val));
+  if (waveHistory.length > 80) waveHistory.shift();
+  drawWave();
+};
+
+function drawWave() {
+  const canvas = document.getElementById('urge-wave');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  if (waveHistory.length < 2) return;
+  const sage = getCSSVar('--sage');
+  ctx.beginPath();
+  ctx.strokeStyle = sage;
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  const step = W / (waveHistory.length - 1);
+  waveHistory.forEach((v, i) => {
+    const x = i * step;
+    const y = H - (v / 10) * (H - 8) - 4;
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  // Fill under
+  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+  ctx.fillStyle = getCSSVar('--sagel');
+  ctx.fill();
+}
+
+// Surf phase labels
+let surfPhaseTimer = null;
+function startSurfPhases() {
+  // ~1min: rising; ~2-3min: peak; ~4min: subsiding
+  const phaseEl = document.getElementById('timer-phase');
+  surfPhaseTimer = setTimeout(() => { phaseEl.textContent = 'Rising — stay with it'; }, 30000);
+  setTimeout(() => { if (!isPaused) phaseEl.textContent = 'Near the peak — hold on'; }, 120000);
+  setTimeout(() => { if (!isPaused) phaseEl.textContent = 'Past peak — beginning to subside'; }, 180000);
+  setTimeout(() => { if (!isPaused) phaseEl.textContent = 'Subsiding — you stayed with it'; }, 240000);
+}
+
+// ---- COGNITIVE DEFUSION: stepped phrases ----
+let defStepIdx = 0;
+const DEF_STEPS = 5;
+const DEF_INTERVAL = 6000; // 30s / 5 steps
+
+function startDefusion() {
+  defStepIdx = 0;
+  showDefStep(0);
+  continueDefusion();
+}
+
+function showDefStep(i) {
+  document.querySelectorAll('.defusion-step').forEach((el, idx) => {
+    el.classList.toggle('active', idx === i);
+  });
+}
+
+function continueDefusion() {
+  defusionTimer = setTimeout(() => {
+    if (isPaused || currentMode !== 'unhook') return;
+    defStepIdx = (defStepIdx + 1) % DEF_STEPS;
+    showDefStep(defStepIdx);
+    continueDefusion();
+  }, DEF_INTERVAL);
+}
+
+// ---- TACTILE: rotating attention prompts ----
+let tacStepIdx = 0;
+const TAC_STEPS = 7;
+const TAC_INTERVAL = 9000;
+
+function startTactile() {
+  tacStepIdx = 0;
+  showTacPrompt(0);
+  continueTactile();
+}
+
+function showTacPrompt(i) {
+  document.querySelectorAll('.tactile-prompt').forEach((el, idx) => {
+    el.classList.toggle('active', idx === i);
+  });
+}
+
+function continueTactile() {
+  tactileTimer = setTimeout(() => {
+    if (isPaused || currentMode !== 'shock') return;
+    tacStepIdx = (tacStepIdx + 1) % TAC_STEPS;
+    showTacPrompt(tacStepIdx);
+    continueTactile();
+  }, TAC_INTERVAL);
+}
+
+// ---- GROUNDING: 4-7-8 animated breath ----
+const BREATH_SEQ = [
+  { phase: 'inhale', label: 'Inhale', dur: 4000, scale: 1.5 },
+  { phase: 'hold',   label: 'Hold',   dur: 7000, scale: 1.5 },
+  { phase: 'exhale', label: 'Exhale', dur: 8000, scale: 1.0 },
+];
+let breathSeqIdx = 0;
+let breathRunning = false;
+
+function startBreathCycle() {
+  breathCount = 0;
+  breathSeqIdx = 0;
+  breathRunning = true;
+  runBreathStep();
+}
+
+function runBreathStep() {
+  if (!breathRunning || isPaused) return;
+  const step = BREATH_SEQ[breathSeqIdx];
+  const ring = document.getElementById('breath-ring');
+  const label = document.getElementById('breath-label');
+  const countLabel = document.getElementById('breath-count-label');
+
+  label.textContent = step.label;
+  ring.style.transform = `scale(${step.scale})`;
+
+  if (breathSeqIdx === 0) {
+    breathCount++;
+    countLabel.textContent = `Breath ${breathCount}`;
+  }
+
+  breathTimer = setTimeout(() => {
+    if (!breathRunning || isPaused) return;
+    breathSeqIdx = (breathSeqIdx + 1) % 3;
+    runBreathStep();
+  }, step.dur);
+}
+
+function pauseBreath() {
+  breathRunning = false;
+  clearTimeout(breathTimer);
+  const ring = document.getElementById('breath-ring');
+  ring.style.transition = 'none';
+}
+
+function resumeBreath() {
+  breathRunning = true;
+  const ring = document.getElementById('breath-ring');
+  ring.style.transition = '';
+  runBreathStep();
+}
+
+// ---- FINISH ----
 function finishTimer() {
   clearInterval(timerInterval);
   timerInterval = null;
-  
+  clearAllSubTimers();
+  breathRunning = false;
+
   const btn = document.getElementById('timer-action');
   const readout = document.getElementById('timer-readout');
-  
-  // Brief acknowledgment moment before showing log option
-  readout.textContent = 'Done';
-  btn.className = 'timer-btn';
-  btn.textContent = '...';
+
+  readout.textContent = '';
+  document.getElementById('timer-phase').textContent = 'Complete';
   btn.disabled = true;
-  
+  btn.textContent = '...';
+  btn.className = 'timer-btn';
+
+  // Show recommended substitutes if there are tagged preferences
+  const preferred = Array.from(document.querySelectorAll('.tag.on')).map(el => ({
+    text: el.textContent.trim(),
+    drive: el.dataset.drive
+  }));
+  const allSubs = Array.from(document.querySelectorAll('.tag')).map(el => ({
+    text: el.textContent.trim(),
+    drive: el.dataset.drive,
+    preferred: el.classList.contains('on')
+  }));
+
+  // Choose substitutes relevant to the intervention type
+  const driveMap = {
+    motor: ['pressure','destruct'],
+    decouple: ['pressure'],
+    surf: ['smooth','pressure'],
+    unhook: ['smooth'],
+    shock: null, // already a tactile substitute — skip
+    ground: ['smooth']
+  };
+  const relevantDrives = driveMap[currentMode];
+  let subs = [];
+  if (relevantDrives && allSubs.length > 0) {
+    subs = allSubs
+      .filter(s => relevantDrives.includes(s.drive))
+      .sort((a, b) => (b.preferred ? 1 : 0) - (a.preferred ? 1 : 0))
+      .slice(0, 3);
+  }
+
+  if (subs.length > 0 && currentMode !== 'shock') {
+    const chipsEl = document.getElementById('sub-chips');
+    chipsEl.innerHTML = subs.map(s =>
+      `<div class="sub-chip ${s.preferred ? 'preferred' : ''}">${s.text}</div>`
+    ).join('');
+    document.getElementById('sub-recommend-wrap').style.display = 'block';
+  }
+
   setTimeout(() => {
+    document.getElementById('timer-inst').style.opacity = '0';
     btn.className = 'timer-btn done';
     btn.textContent = 'Intervention held — log it';
     btn.onclick = window.logSuccess;
     btn.disabled = false;
     document.getElementById('timer-fail').style.display = 'none';
-  }, 1200);
-}
 
-function updateReadout() {
-  const m = Math.floor(currentSeconds / 60);
-  const s = String(currentSeconds % 60).padStart(2, '0');
-  document.getElementById('timer-readout').textContent = `${m}:${s}`;
+    // Show urge wave summary for surf
+    if (currentMode === 'surf' && waveHistory.length > 1) {
+      const peak = Math.max(...waveHistory);
+      const last = waveHistory[waveHistory.length - 1];
+      document.getElementById('timer-phase').textContent = `Peak: ${peak}/10 → Now: ${last}/10`;
+    }
+  }, 1200);
 }
 
 window.closeTimer = () => {
   clearInterval(timerInterval);
+  clearAllSubTimers();
+  breathRunning = false;
   document.getElementById('timer-overlay').classList.remove('on');
   document.body.style.overflow = '';
+  // Reset breath ring
+  const ring = document.getElementById('breath-ring');
+  if (ring) { ring.style.transform = ''; ring.style.transition = ''; }
+  // Reset motor ring
+  const holdRing = document.getElementById('hold-ring');
+  if (holdRing) holdRing.classList.remove('tensed');
+  document.getElementById('hold-phase').classList.remove('tensed');
 };
 
-window.logSuccess = () => {
-  window.location.href = 'index.html?from=intervention&outcome=held';
+window.logSuccess = () => { window.location.href = 'index.html?from=intervention&outcome=held'; };
+window.logFail    = () => { window.location.href = 'index.html?from=intervention&outcome=failed'; };
+
+// Start surf phase labels when surf opens
+const origOpenTimer = window.openTimer;
+window.openTimer = (type) => {
+  origOpenTimer(type);
+  if (type === 'surf') startSurfPhases();
 };
 
-window.logFail = () => {
-  window.location.href = 'index.html?from=intervention&outcome=failed';
-};
 </script>
 <script src="nav.js"></script>
 </body>
