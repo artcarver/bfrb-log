@@ -3,984 +3,458 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Groundwork — Context</title>
+<title>Groundwork - Context</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:#F4EDE3; --sur:#FAF6F1; --card:#FFFFFF; --bdr:#E2D8CE; --bdr2:#C8BAA8;
   --tx:#2C1F14; --tx2:#5C4A38; --mu:#9C8878;
-  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10); --acl2:rgba(193,105,79,.18);
-  --sage:#7A8C85; --sagel:rgba(122,140,133,.10); --sagem:rgba(122,140,133,.22);
+  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10);
+  --sage:#7A8C85; --sagel:rgba(122,140,133,.10);
   --warm:#D4956A; --warml:rgba(212,149,106,.13);
   --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
-  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08); --s3:0 8px 32px rgba(44,31,20,.12);
-  --tr:all .18s ease;
+  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08);
+  --tr:all .15s ease;
 }
 [data-theme="dark"] {
   --bg:#1E1710; --sur:#261D14; --card:#2E231A; --bdr:#3D3028; --bdr2:#5A4538;
   --tx:#F0E8DF; --tx2:#C8B8A8; --mu:#8C7868;
-  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12); --acl2:rgba(201,120,96,.22);
-  --sage:#8A9E96; --sagel:rgba(138,158,150,.12); --sagem:rgba(138,158,150,.24);
+  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12);
+  --sage:#8A9E96; --sagel:rgba(138,158,150,.12);
   --warm:#C4855A; --warml:rgba(196,133,90,.14);
-  --s1:0 1px 3px rgba(0,0,0,.2); --s2:0 2px 12px rgba(0,0,0,.25); --s3:0 8px 32px rgba(0,0,0,.35);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.75;min-height:100vh;padding-bottom:100px;transition:background .3s,color .3s}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:60px;transition:background .3s,color .3s}
 
-/* NAV */
-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s;gap:8px}
+/* NAV & AUTH */
+nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
 [data-theme="dark"] nav{background:rgba(30,23,16,.96)}
-.nav-brand{font-family:'Lora',serif;font-size:18px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none;flex-shrink:0}
+.nav-brand{font-family:'Lora',serif;font-size:18px;color:var(--tx);text-decoration:none}
 .nav-brand span{color:var(--ac)}
-.nav-links{display:flex;align-items:center;gap:1px;flex:1;justify-content:center}
-.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 12px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
-.nav-link:hover{background:var(--acl);color:var(--ac)}
-.nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative}
-.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--sur);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
-.theme-btn:hover{border-color:var(--ac);color:var(--ac)}
-@media(max-width:520px){.theme-btn{display:none}}
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
-.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
-.avatar-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;flex-shrink:0;border-radius:50%}
-.user-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;display:block;transition:border-color .18s}
-.avatar-btn:hover .user-avatar{border-color:var(--ac)}
-.profile-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--s3);min-width:160px;overflow:hidden;display:none;z-index:200}
-.profile-menu.on{display:block}
-.profile-menu-item{display:flex;align-items:center;gap:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left}
-.profile-menu-item:hover{background:var(--bg);color:var(--tx)}
-.profile-menu-item+.profile-menu-item{border-top:1px solid var(--bdr)}
-.profile-menu-icon{font-size:14px;flex-shrink:0;width:16px;text-align:center}
+.auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
+.auth-screen.on{display:flex}
+.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;text-align:center;max-width:320px;width:92%}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;margin-top:20px}
 
-/* LAYOUT */
-main{max-width:680px;margin:0 auto;padding:40px 20px}
+#app{display:none}
+#app.on{display:block}
+main{max-width:720px;margin:0 auto;padding:24px 14px}
 
-/* HERO */
-.ctx-hero{margin-bottom:48px}
-.ctx-eyebrow{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
-.ctx-hero-title{font-family:'Lora',serif;font-size:32px;font-weight:400;color:var(--tx);line-height:1.25;letter-spacing:-.02em;margin-bottom:16px}
-.ctx-hero-sub{font-size:15px;color:var(--tx2);line-height:1.8;max-width:560px}
+/* HEADER */
+.header-row{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx);line-height:1.2}
+.page-sub{font-size:13px;color:var(--mu);margin-top:4px}
+.export-btn{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:6px;box-shadow:var(--s1)}
+.export-btn:hover{border-color:var(--ac);color:var(--ac)}
 
-/* TABLE OF CONTENTS */
-.toc{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px 24px;margin-bottom:52px;box-shadow:var(--s1)}
-.toc-title{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
-.toc-list{list-style:none;display:flex;flex-direction:column;gap:4px}
-.toc-list li{display:flex;align-items:baseline;gap:10px}
-.toc-num{font-size:11px;font-weight:600;color:var(--mu);min-width:18px}
-.toc-link{font-size:14px;font-weight:500;color:var(--tx2);text-decoration:none;transition:color .15s}
-.toc-link:hover{color:var(--ac)}
-.toc-sub{font-size:12px;color:var(--mu);margin-left:28px;padding:2px 0}
+/* CARDS */
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-bottom:20px;box-shadow:var(--s1)}
+@media(max-width:480px){.card{padding:16px}}
+.card-header{margin-bottom:16px}
+.card-title{font-family:'Lora',serif;font-size:18px;color:var(--tx)}
+.card-desc{font-size:13px;color:var(--mu);margin-top:4px}
 
-/* PART DIVIDERS */
-.part{margin-bottom:60px}
-.part-marker{display:flex;align-items:center;gap:14px;margin-bottom:28px}
-.part-num{width:32px;height:32px;border-radius:50%;background:var(--acl2);display:flex;align-items:center;justify-content:center;font-family:'Lora',serif;font-size:15px;font-weight:400;color:var(--ac);flex-shrink:0}
-.part-label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}
-.part-title{font-family:'Lora',serif;font-size:26px;font-weight:400;color:var(--tx);letter-spacing:-.02em;margin-bottom:20px;line-height:1.3}
+/* SCAMP GRID */
+.scamp-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px}
+.scamp-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px}
+.scamp-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;justify-content:space-between}
+.scamp-label span.badge{background:var(--sur);padding:2px 6px;border-radius:4px;font-size:10px}
+textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:60px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);line-height:1.5;outline:none;padding:0}
+textarea.scamp-input::placeholder{color:var(--bdr2)}
 
-/* SECTION HEADERS */
-.sec-title{font-family:'Lora',serif;font-size:19px;font-weight:400;color:var(--tx);letter-spacing:-.01em;margin:36px 0 14px;line-height:1.35}
-.sec-title:first-of-type{margin-top:0}
+/* CHECKLIST (Rules) */
+.rule-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.rule-item{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 16px;transition:var(--tr)}
+.rule-item.done{opacity:0.6;background:transparent;border-color:transparent}
+.rule-checkbox{width:18px;height:18px;border:1.5px solid var(--mu);border-radius:4px;cursor:pointer;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.rule-item.done .rule-checkbox{background:var(--sage);border-color:var(--sage)}
+.rule-tick{display:none;width:10px;height:10px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rule-item.done .rule-tick{display:block}
+.rule-text{flex:1;font-size:14px;color:var(--tx);outline:none}
+.rule-item.done .rule-text{text-decoration:line-through;color:var(--mu)}
+.rule-del{background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:16px;line-height:1;padding:0 4px;transition:var(--tr)}
+.rule-del:hover{color:var(--ac)}
+.add-rule-form{display:flex;gap:8px}
+.add-rule-input{flex:1;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;transition:var(--tr)}
+.add-rule-input:focus{border-color:var(--ac)}
+.add-rule-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:0 16px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr)}
+.add-rule-btn:hover{border-color:var(--tx2);color:var(--tx)}
 
-/* PROSE */
-p{color:var(--tx2);margin-bottom:16px;line-height:1.8}
-p:last-child{margin-bottom:0}
-p strong{color:var(--tx);font-weight:600}
+/* WEEKLY REFLECTION */
+.reflection-form textarea{width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;resize:vertical;min-height:100px;margin-bottom:16px;transition:var(--tr)}
+.reflection-form textarea:focus{border-color:var(--ac)}
+.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.btn-primary{background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;transition:var(--tr)}
+.btn-primary:hover{background:var(--ac-h)}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
 
-/* CALLOUT BOXES */
-.callout{border-radius:var(--rsm);padding:18px 20px;margin:24px 0}
-.callout p{margin-bottom:10px}
-.callout p:last-child{margin-bottom:0}
-.callout-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
-.callout.sage{background:var(--sagel);border:1px solid var(--sagem)}
-.callout.sage .callout-title{color:var(--sage)}
-.callout.sage p{color:var(--tx2)}
-.callout.warm{background:var(--warml);border:1px solid rgba(212,149,106,.3)}
-.callout.warm .callout-title{color:var(--warm)}
-.callout.warm p{color:var(--tx2)}
-.callout.ac{background:var(--acl);border:1px solid rgba(193,105,79,.2)}
-.callout.ac .callout-title{color:var(--ac)}
-.callout.ac p{color:var(--tx2)}
+/* PAST REFLECTIONS */
+.past-reflections{margin-top:32px}
+.ref-item{border-left:2px solid var(--bdr);padding-left:16px;margin-bottom:24px;position:relative}
+.ref-item::before{content:'';position:absolute;left:-5px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--bdr2)}
+.ref-date{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.ref-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;margin-bottom:8px;font-size:13px;color:var(--tx2);line-height:1.6}
+.ref-block strong{color:var(--tx);display:block;margin-bottom:4px;font-size:12px}
 
-/* THERAPY BOX */
-.therapy-box{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--r);padding:20px 22px;margin:24px 0}
-.therapy-box-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.therapy-box-title::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--sage);flex-shrink:0}
-.therapy-box ul{list-style:none;display:flex;flex-direction:column;gap:8px}
-.therapy-box li{font-size:14px;color:var(--tx2);padding-left:16px;position:relative;line-height:1.65}
-.therapy-box li::before{content:'–';position:absolute;left:0;color:var(--mu)}
-
-/* APPROACH BLOCKS */
-.approach{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--s1)}
-.approach-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
-.approach-name{font-family:'Lora',serif;font-size:20px;font-weight:400;color:var(--tx);letter-spacing:-.01em;line-height:1.2}
-.approach-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 11px;border-radius:var(--pill);white-space:nowrap;flex-shrink:0;margin-top:4px}
-.approach-tag.hrt{background:var(--acl2);color:var(--ac)}
-.approach-tag.sc{background:var(--warml);color:var(--warm)}
-.approach-tag.act{background:var(--sagel);color:var(--sage)}
-.approach-tag.ar{background:rgba(122,88,152,.10);color:#7A5898}
-.approach-sub{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin:18px 0 8px}
-.approach-sub:first-of-type{margin-top:0}
-.approach p{margin-bottom:12px}
-.approach p:last-child{margin-bottom:0}
-.approach-divider{height:1px;background:var(--bdr);margin:18px 0}
-
-/* BEHAVIOR CYCLE */
-.cycle{display:flex;flex-direction:column;gap:0;margin:20px 0}
-.cycle-step{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--bdr)}
-.cycle-step:last-child{border-bottom:none;padding-bottom:0}
-.cycle-step:first-child{padding-top:0}
-.cycle-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;margin-top:2px}
-.cycle-dot.d1{background:rgba(122,140,133,.6)}
-.cycle-dot.d2{background:rgba(212,149,106,.75)}
-.cycle-dot.d3{background:var(--ac)}
-.cycle-dot.d4{background:rgba(193,105,79,.5)}
-.cycle-dot.d5{background:rgba(122,140,133,.4)}
-.cycle-dot.d6{background:rgba(193,105,79,.35)}
-.cycle-content{}
-.cycle-name{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
-.cycle-desc{font-size:13px;color:var(--tx2);line-height:1.6}
-
-/* HORIZONTAL RULE */
-.part-rule{height:1px;background:var(--bdr);margin:0 0 52px}
-
-/* FOOTNOTE */
-.footnote{font-size:12px;color:var(--mu);margin-top:52px;padding-top:24px;border-top:1px solid var(--bdr);line-height:1.7}
-
-/* TOOLKIT (Part 4) */
-.toolkit-intro{font-size:14px;color:var(--tx2);line-height:1.8;margin-bottom:28px}
-.protocol-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);margin-bottom:12px;box-shadow:var(--s1);overflow:hidden}
-.protocol-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;cursor:pointer;user-select:none;gap:12px;transition:background .15s}
-.protocol-header:hover{background:var(--bg)}
-.protocol-header-left{display:flex;align-items:center;gap:14px;min-width:0}
-.protocol-icon{width:36px;height:36px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
-.protocol-icon.ac{background:var(--acl2)}
-.protocol-icon.sage{background:var(--sagem)}
-.protocol-icon.warm{background:var(--warml)}
-.protocol-name{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em}
-.protocol-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-top:2px}
-.protocol-chevron{width:20px;height:20px;border-radius:50%;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .2s,background .15s;color:var(--mu)}
-.protocol-chevron svg{width:8px;height:8px;stroke:currentColor;fill:none;stroke-width:2.5;transition:transform .2s}
-.protocol-card.open .protocol-chevron svg{transform:rotate(180deg)}
-.protocol-card.open .protocol-header{background:var(--bg)}
-.protocol-body{display:none;padding:0 20px 22px;border-top:1px solid var(--bdr)}
-.protocol-card.open .protocol-body{display:block}
-
-/* WHICH BEHAVIOR TABS */
-.bfrb-tabs{display:flex;gap:6px;margin:16px 0 20px;border-bottom:1px solid var(--bdr);padding-bottom:0}
-.bfrb-tab{font-size:12px;font-weight:600;color:var(--mu);padding:7px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;white-space:nowrap}
-.bfrb-tab.active{color:var(--ac);border-bottom-color:var(--ac)}
-.bfrb-panel{display:none}
-.bfrb-panel.active{display:block}
-
-/* STEP LIST */
-.step-list{display:flex;flex-direction:column;gap:0;margin-bottom:20px}
-.step-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--bdr);align-items:flex-start}
-.step-item:last-child{border-bottom:none;padding-bottom:0}
-.step-item:first-child{padding-top:0}
-.step-n{width:26px;height:26px;border-radius:50%;background:var(--acl2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ac);flex-shrink:0;margin-top:1px}
-.step-n.sage{background:var(--sagem);color:var(--sage)}
-.step-n.warm{background:var(--warml);color:var(--warm)}
-.step-body{}
-.step-title-sm{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:3px}
-.step-desc{font-size:13px;color:var(--tx2);line-height:1.65}
-
-/* TIMER */
-.timer-block{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;text-align:center;margin:16px 0}
-.timer-display{font-family:'Lora',serif;font-size:52px;font-weight:400;color:var(--tx);line-height:1;letter-spacing:-.02em;margin-bottom:4px}
-.timer-label{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:16px}
-.timer-bar-track{height:6px;background:var(--bdr);border-radius:10px;overflow:hidden;margin-bottom:20px;max-width:280px;margin-left:auto;margin-right:auto}
-.timer-bar-fill{height:100%;border-radius:10px;transition:width .5s linear;width:100%}
-.timer-bar-fill.ac{background:var(--ac)}
-.timer-bar-fill.sage{background:var(--sage)}
-.timer-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.timer-btn{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;padding:9px 22px;border-radius:var(--pill);border:none;cursor:pointer;transition:var(--tr)}
-.timer-btn.primary{background:var(--ac);color:#fff}
-.timer-btn.primary:hover{background:var(--ac-h)}
-.timer-btn.primary.sage-bg{background:var(--sage)}
-.timer-btn.primary.sage-bg:hover{background:#6a7e77}
-.timer-btn.ghost{background:var(--card);border:1px solid var(--bdr);color:var(--tx2)}
-.timer-btn.ghost:hover{border-color:var(--bdr2);color:var(--tx)}
-.timer-presets{display:flex;gap:6px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
-.timer-preset{font-size:11px;font-weight:600;padding:5px 12px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--card);color:var(--mu);cursor:pointer;transition:var(--tr)}
-.timer-preset:hover,.timer-preset.on{border-color:var(--ac);color:var(--ac)}
-.timer-status{font-size:13px;color:var(--mu);min-height:20px;margin-top:10px}
-.timer-status.done{color:var(--sage);font-weight:600}
-
-/* URGE SCALE */
-.urge-scale{display:flex;gap:4px;margin:16px 0;justify-content:center;flex-wrap:wrap}
-.urge-dot-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--bdr);background:var(--card);font-size:12px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);font-family:'DM Sans',sans-serif;flex-shrink:0}
-.urge-dot-btn:hover,.urge-dot-btn.on{border-color:var(--ac);background:var(--acl);color:var(--ac)}
-.urge-input-label{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);text-align:center;margin-bottom:8px}
-.urge-feedback{font-size:13px;color:var(--tx2);text-align:center;min-height:18px;margin-top:6px;font-style:italic}
-
-/* PATTERNS GUIDE (Part 5) */
-.pguide-intro{font-size:14px;color:var(--tx2);line-height:1.8;margin-bottom:28px}
-.pguide-section{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:22px;margin-bottom:12px;box-shadow:var(--s1)}
-.pguide-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.pguide-icon{width:34px;height:34px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.pguide-name{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em}
-.pguide-body p{font-size:13px;color:var(--tx2);line-height:1.75;margin-bottom:12px}
-.pguide-body p:last-child{margin-bottom:0}
-.pguide-body strong{color:var(--tx);font-weight:600}
-.signal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
-@media(max-width:500px){.signal-grid{grid-template-columns:1fr}}
-.signal-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 14px}
-.signal-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
-.signal-label.look-for{color:var(--sage)}
-.signal-label.watch-out{color:var(--ac)}
-.signal-items{list-style:none;display:flex;flex-direction:column;gap:5px}
-.signal-items li{font-size:12px;color:var(--tx2);padding-left:14px;position:relative;line-height:1.5}
-.signal-items li::before{position:absolute;left:0}
-.signal-items.look li::before{content:'✓';color:var(--sage)}
-.signal-items.watch li::before{content:'→';color:var(--ac)}
-
-@media(max-width:600px){
-  main{padding:28px 16px}
-  .ctx-hero-title{font-size:26px}
-  .part-title{font-size:22px}
-  .approach-header{flex-direction:column;gap:8px}
-  .timer-display{font-size:40px}
-}
+/* TOAST */
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:13px;font-weight:600;color:#fff;transition:all .3s ease;z-index:999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
 </head>
 <body>
 
+<div class="auth-screen on" id="auth-screen">
+  <div class="auth-card">
+    <div style="font-family:'Lora',serif;font-size:24px;margin-bottom:8px">Groundwork</div>
+    <div style="font-size:14px;color:var(--mu)">Sign in to access context.</div>
+    <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
+  </div>
+</div>
+
 <div id="gw-nav"></div>
 
+<div id="app">
 <main>
-
-  <!-- HERO -->
-  <div class="ctx-hero">
-    <div class="ctx-eyebrow">Reference</div>
-    <h1 class="ctx-hero-title">Understanding what you're working with</h1>
-    <p class="ctx-hero-sub">A clinical reference written for someone who wants to understand the mechanics of their own behavior — not a self-help page, not a workbook. The goal is to give you enough of the underlying model that the log and the patterns it generates are actually meaningful to you.</p>
+  
+  <div class="header-row">
+    <div>
+      <div class="page-title">Clinical Context</div>
+      <div class="page-sub">Therapy preparation and baseline profiles.</div>
+    </div>
+    <button class="export-btn" onclick="generateReport()" id="btn-export">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      Generate Report
+    </button>
   </div>
 
-  <!-- TABLE OF CONTENTS -->
-  <div class="toc">
-    <div class="toc-title">Contents</div>
-    <ul class="toc-list">
-      <li>
-        <span class="toc-num">1</span>
-        <a class="toc-link" href="#part1">Understanding BFRBs</a>
-      </li>
-      <li class="toc-sub">What they are neurologically, why willpower fails, why the behavioral model works</li>
-      <li>
-        <span class="toc-num">2</span>
-        <a class="toc-link" href="#part2">Your two behaviors, specifically</a>
-      </li>
-      <li class="toc-sub">Skin picking — the full behavioral cycle, the oral component, mirror and lighting as triggers</li>
-      <li class="toc-sub">Nail and cuticle biting — sensory driver, self-soothing function, why they co-occur</li>
-      <li>
-        <span class="toc-num">3</span>
-        <a class="toc-link" href="#part3">The treatment approaches and why they work</a>
-      </li>
-      <li class="toc-sub">HRT, stimulus control, urge surfing, affect regulation — what each is and how it applies to you</li>
-      <li>
-        <span class="toc-num">4</span>
-        <a class="toc-link" href="#part4">In the moment</a>
-      </li>
-      <li class="toc-sub">Step-by-step protocols you can use right now — competing response, urge surfing, grounding</li>
-      <li>
-        <span class="toc-num">5</span>
-        <a class="toc-link" href="#part5">Reading your patterns</a>
-      </li>
-      <li class="toc-sub">How to interpret each section of the Patterns page in clinical terms</li>
-    </ul>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">SCAMP Baseline Profile</div>
+      <div class="card-desc">Define your top, persistent drivers. Auto-saves when you click away.</div>
+    </div>
+    
+    <div class="scamp-grid">
+      <div class="scamp-block">
+        <div class="scamp-label">Sensory <span class="badge">Tactile/Visual</span></div>
+        <textarea class="scamp-input" id="scamp-s" placeholder="e.g., Seeking irregular textures, visually scanning for unevenness..." onblur="saveBaseline('sensory', this.value)"></textarea>
+      </div>
+      <div class="scamp-block">
+        <div class="scamp-label">Cognitive <span class="badge">Thoughts/Beliefs</span></div>
+        <textarea class="scamp-input" id="scamp-c" placeholder="e.g., 'If I get this one it will heal faster', perfectionism..." onblur="saveBaseline('cognitive', this.value)"></textarea>
+      </div>
+      <div class="scamp-block">
+        <div class="scamp-label">Affective <span class="badge">Emotions/States</span></div>
+        <textarea class="scamp-input" id="scamp-a" placeholder="e.g., Executive fatigue, anxiety spikes, under-stimulation..." onblur="saveBaseline('affective', this.value)"></textarea>
+      </div>
+      <div class="scamp-block">
+        <div class="scamp-label">Motor <span class="badge">Postures/Chains</span></div>
+        <textarea class="scamp-input" id="scamp-m" placeholder="e.g., Resting chin on left hand, unconsciously scanning while driving..." onblur="saveBaseline('motor', this.value)"></textarea>
+      </div>
+      <div class="scamp-block" style="grid-column: 1 / -1;">
+        <div class="scamp-label">Place <span class="badge">Environment</span></div>
+        <textarea class="scamp-input" id="scamp-p" placeholder="e.g., Bathroom mirror at night, sitting at desk studying..." onblur="saveBaseline('place', this.value)"></textarea>
+      </div>
+    </div>
   </div>
 
-  <!-- PART 1 -->
-  <div class="part" id="part1">
-    <div class="part-marker">
-      <div class="part-num">1</div>
-      <div class="part-label">Foundation</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Stimulus Control Rules</div>
+      <div class="card-desc">Active environmental barriers. Check off to indicate rule is currently implemented.</div>
     </div>
-    <h2 class="part-title">Understanding BFRBs</h2>
-
-    <h3 class="sec-title">What they actually are</h3>
-    <p>Body-focused repetitive behaviors are a group of disorders characterized by repetitive, self-directed behaviors that result in physical damage to the body. The two most studied are excoriation disorder (skin picking) and trichotillomania (hair pulling), with onychophagia (nail biting) and related behaviors sitting adjacent. The DSM-5 classifies excoriation disorder and trichotillomania under <strong>Obsessive-Compulsive and Related Disorders</strong> — not impulse control disorders, not habit disorders, and not a subset of anxiety disorders, though they share features with all three.</p>
-    <p>Neurologically, BFRBs are thought to involve dysregulation of the <strong>cortico-striato-thalamo-cortical (CSTC) loops</strong> — the same circuits implicated in OCD. The dorsal striatum, which handles habitual behavior and procedural learning, and the nucleus accumbens, which handles reward and relief, are both involved. What this means practically: the behavior is not operating primarily through the prefrontal cortex. It is subcortical and largely automated, which is why it frequently runs without conscious initiation and why it is resistant to top-down, thought-based control strategies.</p>
-
-    <div class="callout sage">
-      <div class="callout-title">The awareness variable</div>
-      <p>Research consistently finds that a large proportion of BFRB episodes are initiated without conscious awareness. The person "comes to" mid-episode having not decided to begin. This is why awareness training is the first component of habit reversal — not a preliminary step, but a primary intervention. The log you are keeping is doing this work every time you open it.</p>
+    <div class="rule-list" id="rule-list">
+      </div>
+    <div class="add-rule-form">
+      <input type="text" class="add-rule-input" id="new-rule" placeholder="e.g., Tweezers stored in car trunk..." onkeypress="if(event.key==='Enter') addRule()">
+      <button class="add-rule-btn" onclick="addRule()">Add</button>
     </div>
-
-    <h3 class="sec-title">Why these are not habits in the ordinary sense</h3>
-    <p>A habit, in the behavioral sense, is a stimulus-response association that has been reinforced to the point of automaticity. You walk into your kitchen and you check your phone. The cue triggers the response without deliberate choice. BFRBs share this structure — they are also triggered by cues and run automatically — but they have an additional layer: they are <strong>affectively reinforced</strong> in two distinct ways simultaneously.</p>
-    <p>The first is <strong>negative reinforcement</strong>: the behavior reduces an aversive state. Tension, anxiety, boredom, and sensory discomfort are all resolved, even briefly, by picking or biting. This is the relief you feel. The second is <strong>positive reinforcement</strong>: the behavior provides direct sensory stimulation. The tactile and sometimes oral engagement is intrinsically rewarding, particularly in low-arousal states like studying or watching TV.</p>
-    <p>This dual reinforcement pathway — relief from something aversive AND provision of something rewarding — is what makes BFRBs categorically more resistant to change than simple habits. Breaking a habit requires extinguishing a stimulus-response association. Breaking a BFRB requires extinguishing a behavior that is simultaneously doing two useful things for your nervous system.</p>
-
-    <h3 class="sec-title">Why willpower doesn't work</h3>
-    <p>The impulse to pick or bite is not a thought that can be reasoned with. It is a subcortically-generated drive state that reaches conscious awareness only partially and often only after the behavior has begun. Instructing your prefrontal cortex to suppress a limbic-striatal drive is not a direct competition — it is more like trying to override your heart rate by deciding to have a lower one. You can influence it indirectly, with the right strategies, but you cannot simply decide your way out of it.</p>
-    <p>There is also an ironic rebound effect (Wegner, 1994): deliberate thought suppression — actively trying not to pick — increases preoccupation with the behavior. The harder you try not to think about it, the more cognitively present it becomes. This is why white-knuckling is not only ineffective but can paradoxically worsen frequency. The goal of treatment is not suppression. It is <strong>behavioral redirection at the level of the physical response</strong>, not the thought about the response.</p>
-
-    <h3 class="sec-title">Why the behavioral model is what the evidence supports</h3>
-    <p>The key trials supporting behavioral treatment of BFRBs — particularly habit reversal training and its modern extensions — have consistently outperformed insight-oriented approaches, pharmacological approaches (with some exceptions for specific presentations), and waitlist controls. The 2006 randomised trial by Woods and colleagues established HRT's superiority for trichotillomania; subsequent work has extended this to excoriation disorder. ACT-enhanced HRT has shown additive benefit in more recent studies.</p>
-    <p>The reason insight-based therapy has limited standalone efficacy here is structural: understanding <em>why</em> you pick does not alter the sensory-motor chain that produces the behavior. Insight is valuable — it increases motivation and helps with the emotional antecedents — but the behavior change itself requires intervening at the behavioral level. You are not going to think your way out of this. You are going to <strong>act differently</strong> at specific, well-defined moments, until new patterns become more automatic than the old ones.</p>
   </div>
 
-  <div class="part-rule"></div>
-
-  <!-- PART 2 -->
-  <div class="part" id="part2">
-    <div class="part-marker">
-      <div class="part-num">2</div>
-      <div class="part-label">Your behaviors</div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Weekly Therapy Prep</div>
+      <div class="card-desc">Log narrative context to discuss in your next session.</div>
     </div>
-    <h2 class="part-title">Your two behaviors, specifically</h2>
-
-    <h3 class="sec-title">Skin picking — excoriation disorder</h3>
-
-    <p>Excoriation disorder has a clearer behavioral structure than many people realize. The episode is not a single event — it is a chain with several links, each of which represents a potential intervention point.</p>
-
-    <div class="cycle">
-      <div class="cycle-step">
-        <div class="cycle-dot d1">1</div>
-        <div class="cycle-content">
-          <div class="cycle-name">The finding phase</div>
-          <div class="cycle-desc">Touching, scanning, or visually inspecting skin. Often begins subconsciously — you notice a texture under your fingers, catch your reflection, pass under a light. This is the cue phase, and it is where stimulus control (Part 3) intervenes.</div>
-        </div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-dot d2">2</div>
-        <div class="cycle-content">
-          <div class="cycle-name">Arousal spike</div>
-          <div class="cycle-desc">Detection of an imperfection — a scab, raised texture, pimple — triggers a specific affective state that is not quite anxiety and not quite excitement. It is a compelling urgency. This is the window in which awareness training and competing response are most effective, if you catch it.</div>
-        </div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-dot d3">3</div>
-        <div class="cycle-content">
-          <div class="cycle-name">The picking episode</div>
-          <div class="cycle-desc">The behavior itself. Often described as absorbing, trance-like, disconnected from normal time perception. Executive function is essentially offline. This is the hardest point in the chain to intervene — competing response needs to be deployed before this stage begins.</div>
-        </div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-dot d4">4</div>
-        <div class="cycle-content">
-          <div class="cycle-name">Examination and oral component</div>
-          <div class="cycle-desc">Examining what has been extracted, then mouthing or ingesting it. This is not a separate behavior or a separate problem — it is the terminal phase of the same sensory loop. The tactile-to-oral arc completes a circuit of sensory engagement that began with the finding phase.</div>
-        </div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-dot d5">5</div>
-        <div class="cycle-content">
-          <div class="cycle-name">Momentary relief</div>
-          <div class="cycle-desc">The arousal spike resolves. The tension is gone. This is the negative reinforcement that maintains the behavior. It feels like it worked — because in the immediate term, it did. The problem is what it trains your nervous system to do next time.</div>
-        </div>
-      </div>
-      <div class="cycle-step">
-        <div class="cycle-dot d6">6</div>
-        <div class="cycle-content">
-          <div class="cycle-name">Shame or re-arousal</div>
-          <div class="cycle-desc">Noticing the damage, feeling shame, sometimes re-engaging with the same site. The shame state is itself an aversive emotional state that can trigger the behavior again, creating the loop.</div>
-        </div>
-      </div>
+    
+    <div class="reflection-form">
+      <label class="field-label">What worked well this week?</label>
+      <textarea id="ref-worked" placeholder="Did a specific tool help? Did you notice a new trigger early?"></textarea>
+      
+      <label class="field-label">Where did the friction fail?</label>
+      <textarea id="ref-failed" placeholder="What bypassed your barriers? Where did you feel stuck?"></textarea>
+      
+      <button class="btn-primary" id="btn-save-ref" onclick="saveReflection()">Save Reflection</button>
     </div>
 
-    <h3 class="sec-title">The oral component</h3>
-    <p>This part of the behavior is frequently reported and rarely discussed in clinical literature with enough directness. The mouthing or ingestion of skin and scab material is not a separate compulsion, not pica, and not an independent problem. It is the terminal arc of the same sensory behavior chain. The entire episode — from finding the texture to the oral component — constitutes one integrated sensory-seeking loop. Treating it as a separate issue misframes it; it needs to be addressed as part of the same chain, not in isolation.</p>
-    <p>The function of this phase is likely to complete the sensory circuit: tactile detection, manual engagement, and oral engagement together constitute a richer and more self-contained sensory experience than any one of them alone. This is also why the behavior is so difficult to interrupt mid-episode — by the time the oral phase begins, the entire reinforcement arc has played out, and the competing response needs to have been deployed several steps earlier.</p>
-
-    <h3 class="sec-title">What function the behavior is serving</h3>
-    <p>BFRBs are not one-function behaviors. The same behavior can serve different functions at different times and in different contexts. The three main functional categories are <strong>relief</strong> (negative reinforcement — reducing anxiety, tension, or distress), <strong>stimulation</strong> (positive reinforcement — filling a sensory gap during under-stimulating tasks like studying), and <strong>regulation</strong> (managing an undifferentiated dysregulated state). Most people with significant BFRB histories have all three at work, in varying proportions depending on context.</p>
-    <p>This matters clinically because the function partly determines the most effective intervention point. Relief-driven picking responds well to affect regulation strategies applied to the antecedent emotional state. Stimulation-driven picking — the kind that happens automatically while reading, in lectures, watching TV — responds better to stimulus control and competing response at the behavioral level. Your trigger log is gradually mapping this for you. Looking at whether your entries cluster around emotional triggers or sensory/contextual ones tells you something about your function profile.</p>
-
-    <h3 class="sec-title">Mirrors and lighting as discriminative stimuli</h3>
-    <p>A discriminative stimulus is an environmental cue that has been associated with the availability of reinforcement and that reliably sets the occasion for the behavior. Mirrors are perhaps the most powerful discriminative stimulus for skin picking: they enable the visual scanning phase, make imperfections detectable, and create a context in which picking has historically been reinforced many times over. Specific lighting conditions — bright overhead light, direct side light — do the same by making skin texture more visible.</p>
-    <p>Modifying mirror access and lighting is therefore not avoidance behavior in the unhealthy sense — it is <strong>stimulus control</strong>, a specific evidence-based technique that reduces the rate of behavior initiation by altering the environment rather than fighting the urge. The distinction matters: avoidance would be refusing to look in mirrors because it provokes anxiety. Stimulus control is deliberately changing what the mirror shows (frosted adhesive, diffuse lighting) to reduce the cue without the avoidance of the underlying situation.</p>
-
-    <div class="callout warm">
-      <div class="callout-title">Why certain settings are higher-risk</div>
-      <p>Studying, watching lectures, waiting — these contexts share two features: low physical demand and sustained attention requirements. Your hands are unoccupied while your mind is engaged. This is the profile most associated with stimulation-driven picking and biting, and it's why the location and activity fields in the log are particularly informative. If "Desk + Studying + On the computer" appears repeatedly, that is a stimulus control opportunity, not a personal failing.</p>
-    </div>
-
-    <h3 class="sec-title">Nail, cuticle, and skin biting</h3>
-    <p>Biting behaviors differ from picking in a structurally important way: the primary sensory driver is <strong>oral and tactile</strong> rather than visual. Where picking typically begins with detection of something specific — a texture, a visible imperfection — biting is less dependent on finding a target and more likely to be a continuous, ambient behavior. You don't need to find something wrong with your nail before you begin biting; the motivation is the oral engagement itself.</p>
-    <p>The gnawing and chewing aspect of cuticle and skin biting belongs to a category of oral self-soothing behaviors that has a long evolutionary basis. Rhythmic oral stimulation — sucking, gnawing, chewing — activates parasympathetic tone and has a genuine calming physiological effect. This is why it is so effective as a self-regulatory behavior and why it is so resistant to willpower-based suppression: you are effectively fighting a soothing response with a cognitive instruction to stop soothing yourself.</p>
-    <p>Biting behaviors co-occur with picking at rates well above chance because both are drawing on the same underlying reinforcement pathway: sensory engagement and affective regulation through self-directed physical behavior. They respond to overlapping but not identical interventions. The competing response for biting has to be physically incompatible with oral engagement — not just hand-occupation, but specifically a closed-mouth position combined with hands actively holding or gripping something. Gum can serve as an oral substitute during the transition period while competing response habits are forming, though it is a bridging strategy rather than a solution.</p>
-  </div>
-
-  <div class="part-rule"></div>
-
-  <!-- PART 3 -->
-  <div class="part" id="part3">
-    <div class="part-marker">
-      <div class="part-num">3</div>
-      <div class="part-label">Treatment</div>
-    </div>
-    <h2 class="part-title">The treatment approaches and why they work</h2>
-
-    <p style="margin-bottom:32px">Each section below covers what the approach is, how it applies specifically to your behaviors, and practical suggestions framed as starting points for discussion with your therapist — not instructions to follow independently.</p>
-
-    <!-- HRT -->
-    <div class="approach">
-      <div class="approach-header">
-        <div class="approach-name">Habit Reversal Training</div>
-        <div class="approach-tag hrt">HRT</div>
+    <div class="past-reflections" id="past-reflections">
       </div>
-
-      <div class="approach-sub">What it is</div>
-      <p>HRT is the most robustly evidence-based behavioral treatment for BFRBs. In its original formulation (Azrin & Nunn, 1973), it has three primary components: <strong>awareness training</strong>, in which the person learns to detect the behavior and its antecedents in real time rather than retrospectively; <strong>competing response training</strong>, in which a physically incompatible motor response is substituted for the behavior and maintained until the urge subsides; and <strong>social support</strong>, in which an enlisted person provides gentle, non-critical prompts when the behavior is observed. More recent protocols have adapted and extended these three components within broader cognitive-behavioral frameworks.</p>
-
-      <div class="approach-sub">Why awareness training must come first</div>
-      <p>You cannot deploy a competing response against a behavior you haven't noticed beginning. Because so many BFRB episodes initiate below the threshold of conscious awareness, the first task is simply to notice — to catch the moment between cue and behavior, or at minimum to recognize the behavior within the first few seconds of onset rather than minutes in. Awareness training uses precisely the kind of data that your log generates: patterns across entries begin to reveal the specific contexts, body states, and emotional conditions that reliably precede an episode. Over time, this information generates what the HRT literature calls a "behavioral description" — a detailed map of your personal BFRB cycle that makes the precursors recognizable before the behavior is fully underway.</p>
-
-      <div class="approach-sub">What a competing response actually is</div>
-      <p>A competing response is a specific physical action that is <strong>motorically incompatible</strong> with the BFRB — meaning both cannot occur simultaneously — and that can be maintained for approximately one to three minutes without drawing social attention. For picking, this typically means pressing the fingertips together, curling the hands into loose fists, or pressing the palms flat against the thighs. For biting, it means sealing the lips and actively gripping an object with both hands. The critical distinction is between a competing response and a distraction. "Thinking about something else," redirecting attention, or leaving the room are coping behaviors but not competing responses. The competing response is physical and specific and positioned at the exact level of the behavioral chain where the BFRB operates.</p>
-
-      <div class="approach-divider"></div>
-      <div class="therapy-box">
-        <div class="therapy-box-title">Things to discuss with your therapist</div>
-        <ul>
-          <li>Identifying your two or three highest-frequency antecedent situations from the log data — these are the priority contexts for awareness training</li>
-          <li>Developing a competing response for each behavior that is specific to your most common positions (desk, couch, bed) and durable enough to hold for 60–90 seconds</li>
-          <li>Whether social support is feasible for you, and with whom — the evidence for this component is real, and it's worth discussing even if it feels awkward</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- STIMULUS CONTROL -->
-    <div class="approach">
-      <div class="approach-header">
-        <div class="approach-name">Stimulus Control</div>
-        <div class="approach-tag sc">Environmental</div>
-      </div>
-
-      <div class="approach-sub">What it is</div>
-      <p>Stimulus control involves systematically modifying the environment to reduce the frequency of cue exposure and to increase the response cost of the behavior — that is, to make the behavior harder to initiate without the person having to consciously resist it at the moment of the urge. This is based on the same behavioral principle that makes discriminative stimuli powerful in the first place: if the environment has historically reliably preceded reinforcement, it will reliably trigger the behavior. Change the environment, change the trigger rate.</p>
-
-      <div class="approach-sub">For skin picking specifically</div>
-      <p>The most impactful stimulus control modifications for picking center on mirror management and lighting. Replacing a clear bathroom mirror with a frosted or dimmed one, removing magnifying mirrors, and switching to warm or diffuse ambient lighting rather than direct overhead or side-lit lighting all reduce the visual detectability of skin imperfections — the cue that initiates the finding phase. During study sessions, keeping a fidget device on the desk creates a competing sensory input for idle hands before the urge to touch skin develops. For high-risk body sites, barrier coverage — bandages, arm sleeves, clothing choices — increases response cost without requiring any active effort at the moment of the urge.</p>
-
-      <div class="approach-sub">For biting specifically</div>
-      <p>Barrier strategies (bandages on cuticles, bitter-tasting nail preparations) are the most direct stimulus control application for biting. They interrupt the tactile-oral cue by introducing an aversive sensory element before the behavior can complete. Oral substitutes — sugarless gum, chewy snacks during high-risk periods — provide an alternative source of oral stimulation that partially satisfies the same sensory function. These are not solutions; they are bridging strategies. They reduce the behavioral rate during the period when competing response habits are being established, buying time for the new behavioral patterns to consolidate.</p>
-
-      <div class="approach-sub">Why this is a bridge, not a cure</div>
-      <p>Stimulus control does not address the urge itself. If you remove the mirror and the urge doesn't arise, you haven't learned anything about how to manage the urge — you've simply not encountered it. This is why stimulus control is always used in combination with HRT, not as a standalone. The goal is to use it as a scaffolding structure: reducing frequency and opportunity while HRT builds the competing response patterns that will eventually work even when the trigger is present and unavoidable.</p>
-
-      <div class="approach-divider"></div>
-      <div class="therapy-box">
-        <div class="therapy-box-title">Things to discuss with your therapist</div>
-        <ul>
-          <li>Which specific environments from your log data account for the highest proportion of episodes — these are the priority targets for environmental modification</li>
-          <li>Mirror and lighting modifications that are realistic for your living situation and that you would actually maintain</li>
-          <li>A "desk setup" for study sessions specifically: what would your workspace look like if it were designed to reduce both picking and biting during low-arousal sustained attention tasks</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- URGE SURFING / ACT -->
-    <div class="approach">
-      <div class="approach-header">
-        <div class="approach-name">Urge Surfing and ACT-Aligned Exposure</div>
-        <div class="approach-tag act">ACT / Exposure</div>
-      </div>
-
-      <div class="approach-sub">What it is</div>
-      <p>Urge surfing is a technique drawn from the substance use literature, adapted for BFRBs within the broader framework of Acceptance and Commitment Therapy. The core principle is that urges are time-limited — they follow a roughly bell-shaped curve, typically peaking within five to twenty minutes if not acted upon and then receding without the behavior occurring. The technique involves <strong>observing the urge rather than fighting it</strong>: noticing its quality, intensity, physical location, and fluctuation, without either suppressing it or acting on it. This is not distraction — it is deliberate, non-judgmental contact with the aversive state, held long enough for the person to experience the urge's natural attenuation.</p>
-
-      <div class="approach-sub">Why the urge feels like it will escalate indefinitely</div>
-      <p>The subjective experience of an unresisted urge feels like escalation without a ceiling. This is almost universally reported by people with BFRBs, and it is almost universally incorrect — but it is impossible to know this experientially until you have allowed an urge to peak and fall without acting on it. Every previous time you have acted on an urge, you terminated the experience at the peak or before it. You have never seen what happens after the peak, because you have always ended the experiment early. Urge surfing provides that experience. The first few times are genuinely uncomfortable. The subsequent ones demonstrate the curve, and the curve changes the subjective relationship with the urge entirely.</p>
-
-      <div class="approach-sub">What your log data tells you over time</div>
-      <p>The urge strength entries you log are, in aggregate, a distributional map of your urge landscape. After several weeks of logging, you will have a sample large enough to see where your urges actually cluster — most people find that the distribution peaks in the four-to-seven range and that nines and tens are far rarer than they feel in the moment. This is useful not as reassurance but as calibration: knowing that a seven is close to your personal ceiling changes the experience of a seven. It stops feeling like the beginning of something unbounded and starts being recognizable as approximately what you can expect.</p>
-
-      <div class="approach-divider"></div>
-      <div class="therapy-box">
-        <div class="therapy-box-title">Things to discuss with your therapist</div>
-        <ul>
-          <li>Whether to introduce formal urge surfing exercises before the competing response is well-established, or after — there is some debate about sequencing, and your therapist's judgment on your readiness matters here</li>
-          <li>What "observing the urge without acting on it" actually looks like physically and cognitively for your specific presentations — this is different for picking versus biting</li>
-          <li>Using the urge strength data from the log to map your personal distribution, and what you notice when you look at the actual numbers versus what urges feel like in the moment</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- AFFECT REGULATION -->
-    <div class="approach">
-      <div class="approach-header">
-        <div class="approach-name">Affect Regulation</div>
-        <div class="approach-tag ar">Emotional</div>
-      </div>
-
-      <div class="approach-sub">What it is</div>
-      <p>Affect regulation refers to a set of strategies aimed at managing emotional states directly, rather than managing the BFRB behavior that those emotional states trigger. The underlying premise is that for emotionally-driven BFRBs, the antecedent emotional state is a necessary condition for the episode — address the antecedent and you reduce the frequency of the behavior without ever having to deploy a competing response. The relevant emotional regulation strategies come primarily from Dialectical Behavior Therapy (DBT): distress tolerance, emotion regulation, and interpersonal effectiveness skills. Mindfulness-based approaches and straightforward pacing strategies (sleep, exercise, workload management) also belong in this category.</p>
-
-      <div class="approach-sub">When this matters more than the other approaches</div>
-      <p>The relative importance of affect regulation versus behavioral strategies is determined by the profile of your triggers. If your log consistently shows emotional triggers — stressed, anxious, overwhelmed, frustrated — dominating your entries, particularly as antecedents rather than contextual backdrop, then the emotional state is a primary variable, not a secondary one. In that case, HRT without affect regulation is treating the symptom while leaving the most reliable cause unaddressed. Conversely, if your triggers are predominantly sensory and contextual — felt a texture, saw in mirror, idle hands, in a lecture — then stimulus control and competing response are doing the heavier lifting, and affect regulation is supplementary.</p>
-
-      <div class="approach-sub">The overlap with your specific situation</div>
-      <p>Most people with medically demanding schedules have a mixed trigger profile: genuine sensory triggers that would exist regardless of emotional state, plus a clear amplification effect from stress, sleep deprivation, and cognitive overload. The stress-driven sessions tend to be longer and more severe (higher urge strength, longer duration, worse outcome) even when the initiating cue is sensory. This is the overlap zone where affect regulation becomes coequal with HRT — not as an alternative but as an upstream intervention that changes the intensity of the urge even when the sensory trigger still fires.</p>
-
-      <div class="approach-divider"></div>
-      <div class="therapy-box">
-        <div class="therapy-box-title">Things to discuss with your therapist</div>
-        <ul>
-          <li>Looking at your trigger log alongside your urge strength and duration data to see whether emotionally-coded entries correspond to more severe episodes — this would suggest affect regulation deserves dedicated attention in your treatment plan</li>
-          <li>Which specific emotional states are most reliably antecedent for you, and whether any DBT skills apply more directly to those states than others</li>
-          <li>Lifestyle-level affect regulation: sleep, exercise, and cognitive load management during high-exam periods, and whether these show up in your data as factors that predict episode frequency or severity</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="callout ac" style="margin-top:36px">
-      <div class="callout-title">How the log connects to all of this</div>
-      <p>The log is doing three things simultaneously that support each of the approaches above. It is building awareness by creating a structured retrospective record that, over time, trains prospective recognition. It is generating the behavioral description that HRT requires to identify your personal antecedent chain. And it is producing the distributional data on urge strength, triggers, and context that makes your own pattern legible to you — not as an abstraction, but as something you can actually see and use.</p>
-      <p>None of these approaches work in isolation from your therapist — they are frameworks for structuring the work, not protocols you can self-administer. The log is a data-gathering and awareness-building tool. The sessions are where the data becomes a treatment plan.</p>
-    </div>
-
-  </div>
-
-  <div class="part-rule"></div>
-
-  <!-- PART 4: IN THE MOMENT -->
-  <div class="part" id="part4">
-    <div class="part-marker">
-      <div class="part-num">4</div>
-      <div class="part-label">Toolkit</div>
-    </div>
-    <h2 class="part-title">In the moment</h2>
-
-    <p class="toolkit-intro">Three step-by-step protocols for during or immediately after an urge. These are specific, timed, physical interventions drawn from the treatment approaches in Part 3. Use them alongside your therapist's guidance, not instead of it.</p>
-
-    <!-- COMPETING RESPONSE -->
-    <div class="protocol-card" id="pc-cr">
-      <div class="protocol-header" onclick="toggleProtocol(document.getElementById('pc-cr'))">
-        <div class="protocol-header-left">
-          <div class="protocol-icon ac">🤲</div>
-          <div>
-            <div class="protocol-name">Competing Response</div>
-            <div class="protocol-tag">HRT · 60–120 sec</div>
-          </div>
-        </div>
-        <div class="protocol-chevron"><svg viewBox="0 0 10 6"><polyline points="1,1 5,5 9,1"/></svg></div>
-      </div>
-      <div class="protocol-body">
-        <p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:14px">A competing response is a physical action that is <strong>motorically incompatible</strong> with picking or biting — meaning both cannot happen at the same time. Hold it for at least 60 seconds, until the urge noticeably fades. Select your behavior:</p>
-        <div class="bfrb-tabs">
-          <div class="bfrb-tab active" data-b="picking" onclick="switchTab(this.closest('.protocol-body'), 'picking')">Skin picking</div>
-          <div class="bfrb-tab" data-b="biting" onclick="switchTab(this.closest('.protocol-body'), 'biting')">Nail / skin biting</div>
-        </div>
-        <div class="bfrb-panel active" data-b="picking">
-          <div class="step-list">
-            <div class="step-item"><div class="step-n">1</div><div class="step-body"><div class="step-title-sm">Notice and name</div><div class="step-desc">Say to yourself: <em>"I'm having the urge to pick."</em> Don't stop it yet — just acknowledge it. This is the awareness component working.</div></div></div>
-            <div class="step-item"><div class="step-n">2</div><div class="step-body"><div class="step-title-sm">Curl both hands into loose fists</div><div class="step-desc">Press fingertips into your palms — not tight, just contact. Both hands. Fingertips are no longer available for scanning or picking. This is the competing response.</div></div></div>
-            <div class="step-item"><div class="step-n">3</div><div class="step-body"><div class="step-title-sm">Anchor your hands</div><div class="step-desc">Rest fists on your thighs, a desk, or press them together. Let the position do the work — you don't need active effort to maintain it.</div></div></div>
-            <div class="step-item"><div class="step-n">4</div><div class="step-body"><div class="step-title-sm">Hold for the timer</div><div class="step-desc">Research suggests 60–90 seconds is typically enough for the urge to drop. Start the timer. Notice the urge as it peaks and begins to fall — you're learning what happens after the peak.</div></div></div>
-            <div class="step-item"><div class="step-n">5</div><div class="step-body"><div class="step-title-sm">Log it</div><div class="step-desc">Whether you held it or not — log it as a resistance or near miss. The data matters even when the response didn't hold perfectly.</div></div></div>
-          </div>
-        </div>
-        <div class="bfrb-panel" data-b="biting">
-          <div class="step-list">
-            <div class="step-item"><div class="step-n">1</div><div class="step-body"><div class="step-title-sm">Notice and name</div><div class="step-desc">Say to yourself: <em>"I'm having the urge to bite."</em> Notice where you feel it — fingers, jaw, mouth. Name it without acting on it.</div></div></div>
-            <div class="step-item"><div class="step-n">2</div><div class="step-body"><div class="step-title-sm">Seal your lips and press teeth together gently</div><div class="step-desc">Closed-mouth position makes oral engagement physically impossible. Not clenching — a neutral closed position. Lips together, teeth lightly touching.</div></div></div>
-            <div class="step-item"><div class="step-n">3</div><div class="step-body"><div class="step-title-sm">Grip something with both hands</div><div class="step-desc">Hold a pen, press palms flat on a surface, or grip the hem of your clothing. Hands occupied + mouth closed = competing response in place.</div></div></div>
-            <div class="step-item"><div class="step-n">4</div><div class="step-body"><div class="step-title-sm">Hold for the timer</div><div class="step-desc">60–90 seconds minimum. If oral drive is very strong, sugarless gum can bridge — the goal is to get through the peak, not eliminate all oral sensation.</div></div></div>
-            <div class="step-item"><div class="step-n">5</div><div class="step-body"><div class="step-title-sm">Log it</div><div class="step-desc">Log it as a resistance. Every timed resistance is behavioral data that accumulates over weeks.</div></div></div>
-          </div>
-        </div>
-        <div class="timer-block">
-          <div class="timer-display" id="timer-display-cr">1:30</div>
-          <div class="timer-label">Competing Response Hold</div>
-          <div class="timer-presets">
-            <div class="timer-preset" data-tid="cr" data-sec="60" onclick="setTimerDuration('cr',60,'ac')">1 min</div>
-            <div class="timer-preset on" data-tid="cr" data-sec="90" onclick="setTimerDuration('cr',90,'ac')">1:30</div>
-            <div class="timer-preset" data-tid="cr" data-sec="120" onclick="setTimerDuration('cr',120,'ac')">2 min</div>
-          </div>
-          <div class="timer-bar-track"><div class="timer-bar-fill ac" id="timer-bar-cr" style="width:100%"></div></div>
-          <div class="timer-controls">
-            <button class="timer-btn primary" id="timer-start-cr" data-color="ac" onclick="startTimer('cr','ac')">Start</button>
-            <button class="timer-btn ghost" onclick="resetTimer('cr','ac')">Reset</button>
-          </div>
-          <div class="timer-status" id="timer-status-cr"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- URGE SURFING -->
-    <div class="protocol-card" id="pc-surf">
-      <div class="protocol-header" onclick="toggleProtocol(document.getElementById('pc-surf'))">
-        <div class="protocol-header-left">
-          <div class="protocol-icon sage">🌊</div>
-          <div>
-            <div class="protocol-name">Urge Surfing</div>
-            <div class="protocol-tag">ACT · 3–10 min</div>
-          </div>
-        </div>
-        <div class="protocol-chevron"><svg viewBox="0 0 10 6"><polyline points="1,1 5,5 9,1"/></svg></div>
-      </div>
-      <div class="protocol-body">
-        <p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:20px">Urge surfing is <strong>not distraction</strong>. It is deliberate, non-judgmental observation of the urge long enough to discover that it follows a curve — it peaks, then falls. Every successful surf teaches your nervous system what no description can: what happens after the peak.</p>
-        <div class="step-list">
-          <div class="step-item"><div class="step-n sage">1</div><div class="step-body"><div class="step-title-sm">Rate the urge right now</div><div class="step-desc">Mark where the urge is on the scale below before starting. You'll check it again when the timer ends.</div></div></div>
-        </div>
-        <div id="urge-before-panel">
-          <div class="urge-input-label">Urge level — before surfing</div>
-          <div class="urge-scale">
-            <button class="urge-dot-btn" data-v="1" onclick="selectUrge(this,'urge-before-panel')">1</button>
-            <button class="urge-dot-btn" data-v="2" onclick="selectUrge(this,'urge-before-panel')">2</button>
-            <button class="urge-dot-btn" data-v="3" onclick="selectUrge(this,'urge-before-panel')">3</button>
-            <button class="urge-dot-btn" data-v="4" onclick="selectUrge(this,'urge-before-panel')">4</button>
-            <button class="urge-dot-btn" data-v="5" onclick="selectUrge(this,'urge-before-panel')">5</button>
-            <button class="urge-dot-btn" data-v="6" onclick="selectUrge(this,'urge-before-panel')">6</button>
-            <button class="urge-dot-btn" data-v="7" onclick="selectUrge(this,'urge-before-panel')">7</button>
-            <button class="urge-dot-btn" data-v="8" onclick="selectUrge(this,'urge-before-panel')">8</button>
-            <button class="urge-dot-btn" data-v="9" onclick="selectUrge(this,'urge-before-panel')">9</button>
-            <button class="urge-dot-btn" data-v="10" onclick="selectUrge(this,'urge-before-panel')">10</button>
-          </div>
-          <div class="urge-feedback"></div>
-        </div>
-        <div class="step-list" style="margin-top:20px">
-          <div class="step-item"><div class="step-n sage">2</div><div class="step-body"><div class="step-title-sm">Find where you feel it physically</div><div class="step-desc">Hands? Jaw? Chest? A pulling toward the behavior? Locate it. You are the observer — the urge is what you're observing.</div></div></div>
-          <div class="step-item"><div class="step-n sage">3</div><div class="step-body"><div class="step-title-sm">Describe it without judgment</div><div class="step-desc">Sharp or dull? Constant or pulsing? Does it move? "There is a tightening in my hands" — not "I need to pick." Observation, not identification.</div></div></div>
-          <div class="step-item"><div class="step-n sage">4</div><div class="step-body"><div class="step-title-sm">Stay with it — start the timer</div><div class="step-desc">Don't act on it, don't suppress it, don't distract from it. Watch it. Notice whether it intensifies, plateaus, or begins to fall. Most urges peak within 5 minutes.</div></div></div>
-          <div class="step-item"><div class="step-n sage">5</div><div class="step-body"><div class="step-title-sm">Rate the urge again when the timer ends</div><div class="step-desc">Compare it to your starting score. The number being lower is the data your nervous system needs to learn the curve. Log this as a resistance.</div></div></div>
-        </div>
-        <div class="timer-block">
-          <div class="timer-display" id="timer-display-surf">5:00</div>
-          <div class="timer-label">Urge Surf</div>
-          <div class="timer-presets">
-            <div class="timer-preset" data-tid="surf" data-sec="180" onclick="setTimerDuration('surf',180,'sage')">3 min</div>
-            <div class="timer-preset on" data-tid="surf" data-sec="300" onclick="setTimerDuration('surf',300,'sage')">5 min</div>
-            <div class="timer-preset" data-tid="surf" data-sec="600" onclick="setTimerDuration('surf',600,'sage')">10 min</div>
-          </div>
-          <div class="timer-bar-track"><div class="timer-bar-fill sage" id="timer-bar-surf" style="width:100%"></div></div>
-          <div class="timer-controls">
-            <button class="timer-btn primary sage-bg" id="timer-start-surf" data-color="sage" onclick="startTimer('surf','sage')">Start</button>
-            <button class="timer-btn ghost" onclick="resetTimer('surf','sage')">Reset</button>
-          </div>
-          <div class="timer-status" id="timer-status-surf"></div>
-        </div>
-        <div id="urge-after-panel" style="margin-top:4px">
-          <div class="urge-input-label">Urge level — after surfing</div>
-          <div class="urge-scale">
-            <button class="urge-dot-btn" data-v="1" onclick="selectUrge(this,'urge-after-panel')">1</button>
-            <button class="urge-dot-btn" data-v="2" onclick="selectUrge(this,'urge-after-panel')">2</button>
-            <button class="urge-dot-btn" data-v="3" onclick="selectUrge(this,'urge-after-panel')">3</button>
-            <button class="urge-dot-btn" data-v="4" onclick="selectUrge(this,'urge-after-panel')">4</button>
-            <button class="urge-dot-btn" data-v="5" onclick="selectUrge(this,'urge-after-panel')">5</button>
-            <button class="urge-dot-btn" data-v="6" onclick="selectUrge(this,'urge-after-panel')">6</button>
-            <button class="urge-dot-btn" data-v="7" onclick="selectUrge(this,'urge-after-panel')">7</button>
-            <button class="urge-dot-btn" data-v="8" onclick="selectUrge(this,'urge-after-panel')">8</button>
-            <button class="urge-dot-btn" data-v="9" onclick="selectUrge(this,'urge-after-panel')">9</button>
-            <button class="urge-dot-btn" data-v="10" onclick="selectUrge(this,'urge-after-panel')">10</button>
-          </div>
-          <div class="urge-feedback"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GROUNDING -->
-    <div class="protocol-card" id="pc-ground">
-      <div class="protocol-header" onclick="toggleProtocol(document.getElementById('pc-ground'))">
-        <div class="protocol-header-left">
-          <div class="protocol-icon warm">⚓</div>
-          <div>
-            <div class="protocol-name">Grounding Reset</div>
-            <div class="protocol-tag">Distress tolerance · 1–2 min</div>
-          </div>
-        </div>
-        <div class="protocol-chevron"><svg viewBox="0 0 10 6"><polyline points="1,1 5,5 9,1"/></svg></div>
-      </div>
-      <div class="protocol-body">
-        <p style="font-size:13px;color:var(--tx2);line-height:1.7;margin-bottom:20px">For moments when emotional state is high — anxious, overwhelmed, dissociated — and the urge is primarily affect-driven. This is a rapid nervous system intervention, not a replacement for the competing response. Use it to reduce arousal enough that you can then deploy CR or urge surfing.</p>
-        <div class="step-list">
-          <div class="step-item"><div class="step-n warm">1</div><div class="step-body"><div class="step-title-sm">Feet flat, hands still</div><div class="step-desc">Feel the floor under your feet. Press them down deliberately. Put hands flat on your thighs or a surface. You are establishing physical contact with something stable and external.</div></div></div>
-          <div class="step-item"><div class="step-n warm">2</div><div class="step-body"><div class="step-title-sm">4-7-8 breath</div><div class="step-desc">Inhale 4 counts, hold 7, exhale slowly for 8. The extended exhale activates parasympathetic tone and will physiologically reduce arousal within 2–3 cycles. This is a direct vagal intervention.</div></div></div>
-          <div class="step-item"><div class="step-n warm">3</div><div class="step-body"><div class="step-title-sm">Name 5 things you can see right now</div><div class="step-desc">Look around and deliberately identify five distinct objects. Say them quietly. This is an orienting response — it pulls cognitive resources into the present environment and away from the urge state.</div></div></div>
-          <div class="step-item"><div class="step-n warm">4</div><div class="step-body"><div class="step-title-sm">Name what you're feeling — one word</div><div class="step-desc">Anxious. Frustrated. Overwhelmed. Flat. Bored. Affect labeling measurably reduces amygdala activation. Say it to yourself. Not wallowing — a neurological intervention.</div></div></div>
-          <div class="step-item"><div class="step-n warm">5</div><div class="step-body"><div class="step-title-sm">Decide your next action</div><div class="step-desc">Arousal is lower now. Deploy competing response, urge surf, leave the environment, or log it. Grounding has bought you a moment of choice. Use it.</div></div></div>
-        </div>
-        <div class="timer-block">
-          <div class="timer-display" id="timer-display-ground">1:00</div>
-          <div class="timer-label">Grounding Reset</div>
-          <div class="timer-presets">
-            <div class="timer-preset on" data-tid="ground" data-sec="60" onclick="setTimerDuration('ground',60,'warm')">1 min</div>
-            <div class="timer-preset" data-tid="ground" data-sec="120" onclick="setTimerDuration('ground',120,'warm')">2 min</div>
-          </div>
-          <div class="timer-bar-track"><div class="timer-bar-fill" id="timer-bar-ground" style="width:100%;background:var(--warm)"></div></div>
-          <div class="timer-controls">
-            <button class="timer-btn ghost" style="background:var(--warml);border-color:rgba(212,149,106,.4);color:var(--warm);font-weight:600" id="timer-start-ground" data-color="warm" onclick="startTimer('ground','warm')">Start</button>
-            <button class="timer-btn ghost" onclick="resetTimer('ground','warm')">Reset</button>
-          </div>
-          <div class="timer-status" id="timer-status-ground"></div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /part4 -->
-
-  <div class="part-rule"></div>
-
-  <!-- PART 5: READING YOUR PATTERNS -->
-  <div class="part" id="part5">
-    <div class="part-marker">
-      <div class="part-num">5</div>
-      <div class="part-label">Data literacy</div>
-    </div>
-    <h2 class="part-title">Reading your patterns</h2>
-
-    <p class="pguide-intro">The Patterns page is only useful if you know how to interpret it. This section explains what each section measures, what meaningful signals look like, and what to bring to your therapist. The goal is to arrive at sessions with observations, not impressions.</p>
-
-    <div class="pguide-section">
-      <div class="pguide-header"><div class="pguide-icon">📅</div><div class="pguide-name">Daily frequency calendar</div></div>
-      <div class="pguide-body">
-        <p>The calendar maps episodes by day — darker cells mean more episodes. Sage-green cells are resistance-only days, where you logged urges with no episodes. <strong>Look at pattern, not individual days.</strong> Do episodes cluster around certain days of the week? Around exam blocks or clinical rotations? Is the number of sage cells increasing over time?</p>
-        <p>The calendar is a temporal map. It cannot tell you why — only when and how often. The why comes from the antecedent data. A run of green cells is a resist streak: note what was different about that period and bring it to your next session.</p>
-        <div class="signal-grid">
-          <div class="signal-card">
-            <div class="signal-label look-for">Meaningful signals</div>
-            <ul class="signal-items look">
-              <li>Clustering around predictable events identifies your highest-risk schedules</li>
-              <li>A resist streak — note what was different and whether it's replicable</li>
-              <li>Gradually lighter shading across weeks suggests frequency is decreasing</li>
-            </ul>
-          </div>
-          <div class="signal-card">
-            <div class="signal-label watch-out">Bring to therapy</div>
-            <ul class="signal-items watch">
-              <li>Any clusters the calendar reveals — these are priority targets for stimulus control planning</li>
-              <li>Whether resistance days share features (sleep, workload, location) you could intentionally replicate</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pguide-section">
-      <div class="pguide-header"><div class="pguide-icon">👁</div><div class="pguide-name">Awareness split</div></div>
-      <div class="pguide-body">
-        <p>The proportion of episodes where you noticed while it was happening versus only noticing after it was over. This is one of the most clinically significant numbers in the log. <strong>As awareness training takes hold, the conscious proportion should increase over time.</strong></p>
-        <p>A high automatic percentage early in treatment is expected — it reflects the nature of the behavior, not a personal failure. It also makes awareness training the most urgent first step. The weekly awareness trend chart is the clearest signal that HRT is working at the awareness level, independent of whether episode frequency has yet changed.</p>
-        <div class="signal-grid">
-          <div class="signal-card">
-            <div class="signal-label look-for">Meaningful signals</div>
-            <ul class="signal-items look">
-              <li>Conscious % rising week over week is the primary awareness training outcome measure</li>
-              <li>If conscious % is already high, awareness work is done — focus shifts to competing response</li>
-            </ul>
-          </div>
-          <div class="signal-card">
-            <div class="signal-label watch-out">Bring to therapy</div>
-            <ul class="signal-items watch">
-              <li>If automatic % is very high and stable, ask for focused session work on the pre-episode state</li>
-              <li>Differences in awareness between picking and biting profiles, if filterable</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pguide-section">
-      <div class="pguide-header"><div class="pguide-icon">⚡</div><div class="pguide-name">Emotional and sensory triggers</div></div>
-      <div class="pguide-body">
-        <p>The trigger bar charts rank your most frequently logged antecedents. These are the raw material for the behavioral description that HRT requires. <strong>The ratio of emotional to sensory triggers tells you something important about your function profile.</strong></p>
-        <p>Emotional triggers dominating — stressed, anxious, overwhelmed — means the BFRB is primarily functioning as affect regulation. Sensory and contextual triggers dominating — felt a texture, saw in mirror, studying, idle hands — means the profile is more stimulation-driven, and stimulus control plus competing response does the heavier lifting. Most people have both, with one dominant profile that shifts by period.</p>
-        <div class="signal-grid">
-          <div class="signal-card">
-            <div class="signal-label look-for">Meaningful signals</div>
-            <ul class="signal-items look">
-              <li>A clear top-3 in either category gives your therapist specific targets for the behavioral description</li>
-              <li>A sensory trigger appearing repeatedly is a stimulus control modification candidate</li>
-              <li>An emotional trigger appearing repeatedly is an affect regulation or DBT skill candidate</li>
-            </ul>
-          </div>
-          <div class="signal-card">
-            <div class="signal-label watch-out">Bring to therapy</div>
-            <ul class="signal-items watch">
-              <li>Your actual top-3 emotional and sensory triggers — these should anchor the behavioral description</li>
-              <li>Whether the trigger profile differs for picking versus biting (filter the entry log to check)</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pguide-section">
-      <div class="pguide-header"><div class="pguide-icon">🌡</div><div class="pguide-name">Mood before/after and urge arc</div></div>
-      <div class="pguide-body">
-        <p>The mood chart ranks words logged before and after episodes. The urge arc shows average urge strength before versus after — the difference between those numbers is a direct measure of the <strong>relief function</strong> of the behavior.</p>
-        <p>A consistent large drop (urge before much higher than after) confirms strong negative reinforcement. This will not change because you understand it. It changes as competing response and urge surfing provide alternative pathways to the same relief. The mood after column often shows shame, guilt, and regret — important not as motivational leverage, but as part of the full reinforcement picture your therapist is mapping.</p>
-        <div class="signal-grid">
-          <div class="signal-card">
-            <div class="signal-label look-for">Meaningful signals</div>
-            <ul class="signal-items look">
-              <li>Large urge before → after drop confirms strong negative reinforcement — bring this number to therapy</li>
-              <li>Similar before/after urge suggests more stimulation-driven than relief-driven profile</li>
-              <li>"Relieved" or "calm" in mood after confirms the relief pathway is active</li>
-            </ul>
-          </div>
-          <div class="signal-card">
-            <div class="signal-label watch-out">Bring to therapy</div>
-            <ul class="signal-items watch">
-              <li>The specific mood-before words — these are the states interventions need to address upstream</li>
-              <li>Shame or guilt appearing consistently in mood after — worth addressing directly, not as motivation but as a maintaining factor</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pguide-section">
-      <div class="pguide-header"><div class="pguide-icon">🛠</div><div class="pguide-name">Interventions and effectiveness</div></div>
-      <div class="pguide-body">
-        <p>Which strategies you tried and how effective they were. <strong>This is your personal evidence base</strong> — built from your own data across your own specific contexts. More useful than generic recommendations.</p>
-        <p>Look for convergence over time: do certain strategies reliably score higher? Do some cluster with specific contexts — competing response working better during study sessions, grounding working better during emotional episodes? Low-rated interventions are not failures; they're evidence that those strategies aren't the right fit for your profile, which is exactly what your therapist needs to know. The effectiveness trend over weeks shows whether skill consolidation is happening independently of which specific strategies are working.</p>
-        <div class="signal-grid">
-          <div class="signal-card">
-            <div class="signal-label look-for">Meaningful signals</div>
-            <ul class="signal-items look">
-              <li>One or two consistently high-scoring interventions — these are your primary tools, lean into them</li>
-              <li>Effectiveness trend rising week over week confirms skill consolidation</li>
-            </ul>
-          </div>
-          <div class="signal-card">
-            <div class="signal-label watch-out">Bring to therapy</div>
-            <ul class="signal-items watch">
-              <li>Your highest and lowest-rated interventions — these should directly inform session focus</li>
-              <li>If nothing has been rated yet, ask which interventions to start logging and rating first</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /part5 -->
-
-  <!-- FOOTNOTE -->
-  <div class="footnote">
-    <strong>Key sources:</strong> Azrin NH, Nunn RG (1973). Habit reversal: A method of eliminating nervous habits and tics. <em>Behaviour Research and Therapy.</em> · Woods DW et al. (2006). The Trichotillomania Impact Project. <em>Behaviour Research and Therapy.</em> · Flessner CA et al. (2007). Styles of pulling in trichotillomania: Exploring differences in symptom severity, phenomenology, and functional impact. <em>Behaviour Research and Therapy.</em> · Twohig MP, Woods DW (2004). A preliminary investigation of Acceptance and Commitment Therapy and Habit Reversal as a treatment for trichotillomania. <em>Behavior Therapy.</em> · Wegner DM (1994). Ironic processes of mental control. <em>Psychological Review.</em>
   </div>
 
 </main>
+</div>
 
-<script>
-// Theme and profile menu handled by nav.js
+<div class="toast" id="toast"></div>
 
-// ── PROTOCOL CARDS ──
-function toggleProtocol(card) {
-  card.classList.toggle('open');
-}
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, query, orderBy, deleteDoc, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── BFRB TABS ──
-function switchTab(card, behavior) {
-  card.querySelectorAll('.bfrb-tab').forEach(t => t.classList.toggle('active', t.dataset.b === behavior));
-  card.querySelectorAll('.bfrb-panel').forEach(p => p.classList.toggle('active', p.dataset.b === behavior));
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
+  authDomain: "skin-picking-log.firebaseapp.com",
+  projectId: "skin-picking-log",
+  storageBucket: "skin-picking-log.firebasestorage.app",
+  messagingSenderId: "162906566118",
+  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
+};
 
-// ── TIMER ──
-const timers = {};
-function initTimer(id, totalSeconds, colorClass) {
-  timers[id] = { total: totalSeconds, remaining: totalSeconds, interval: null, running: false };
-  renderTimer(id, colorClass);
-}
-function renderTimer(id, colorClass) {
-  const t = timers[id];
-  if (!t) return;
-  const el = document.getElementById('timer-display-' + id);
-  const bar = document.getElementById('timer-bar-' + id);
-  const status = document.getElementById('timer-status-' + id);
-  if (el) el.textContent = formatTime(t.remaining);
-  if (bar) bar.style.width = (t.remaining / t.total * 100) + '%';
-  if (status) {
-    if (t.remaining <= 0) {
-      status.textContent = 'Done — urge should be fading now.';
-      status.className = 'timer-status done';
-    } else if (t.running) {
-      status.textContent = 'Hold the competing response…';
-      status.className = 'timer-status';
-    } else if (t.remaining < t.total) {
-      status.textContent = 'Paused — tap Resume to continue.';
-      status.className = 'timer-status';
-    } else {
-      status.textContent = '';
-      status.className = 'timer-status';
-    }
-  }
-}
-function formatTime(s) {
-  const m = Math.floor(s / 60);
-  const sec = s % 60;
-  return m + ':' + String(sec).padStart(2, '0');
-}
-function startTimer(id, colorClass) {
-  const t = timers[id];
-  if (!t || t.running) return;
-  if (t.remaining <= 0) resetTimer(id, colorClass);
-  t.running = true;
-  updateTimerBtn(id, true);
-  t.interval = setInterval(() => {
-    t.remaining--;
-    renderTimer(id, colorClass);
-    if (t.remaining <= 0) {
-      clearInterval(t.interval);
-      t.running = false;
-      updateTimerBtn(id, false);
-    }
-  }, 1000);
-}
-function pauseTimer(id, colorClass) {
-  const t = timers[id];
-  if (!t || !t.running) return;
-  clearInterval(t.interval);
-  t.running = false;
-  updateTimerBtn(id, false);
-  renderTimer(id, colorClass);
-}
-function resetTimer(id, colorClass) {
-  const t = timers[id];
-  if (!t) return;
-  clearInterval(t.interval);
-  t.running = false;
-  t.remaining = t.total;
-  updateTimerBtn(id, false);
-  renderTimer(id, colorClass);
-}
-function setTimerDuration(id, seconds, colorClass) {
-  const t = timers[id];
-  if (!t) return;
-  clearInterval(t.interval);
-  t.running = false;
-  t.total = seconds;
-  t.remaining = seconds;
-  document.querySelectorAll(`[data-tid="${id}"]`).forEach(b => b.classList.toggle('on', parseInt(b.dataset.sec) === seconds));
-  updateTimerBtn(id, false);
-  renderTimer(id, colorClass);
-}
-function updateTimerBtn(id, running) {
-  const btn = document.getElementById('timer-start-' + id);
-  if (!btn) return;
-  if (running) {
-    btn.textContent = 'Pause';
-    btn.onclick = () => pauseTimer(id, btn.dataset.color);
-  } else {
-    btn.textContent = timers[id]?.remaining < timers[id]?.total && timers[id]?.remaining > 0 ? 'Resume' : 'Start';
-    btn.onclick = () => startTimer(id, btn.dataset.color);
-  }
-}
-document.addEventListener('DOMContentLoaded', () => {
-  initTimer('cr', 90, 'ac');
-  initTimer('surf', 300, 'sage');
-  initTimer('ground', 60, 'warm');
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+window._uid = null;
+let currentRules = [];
+
+window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
+window.signOut = async () => { await fbSignOut(auth); };
+
+onAuthStateChanged(auth, user => {
+  window._uid = user ? user.uid : null;
+  document.getElementById('auth-screen').classList.toggle('on', !user);
+  document.getElementById('app').classList.toggle('on', !!user);
+  if (user) loadContextData();
 });
 
-// ── URGE TRACKER ──
-function selectUrge(btnEl, panelId) {
-  const panel = document.getElementById(panelId);
-  panel.querySelectorAll('.urge-dot-btn').forEach(b => b.classList.remove('on'));
-  btnEl.classList.add('on');
-  const v = parseInt(btnEl.dataset.v);
-  const fb = panel.querySelector('.urge-feedback');
-  if (fb) {
-    const msgs = ['', 'Very low — notice if it changes.', 'Still low — stay with it.', 'Mild. Urge surfing window is open.', 'Moderate. This is the work zone.', 'Moderate-high. Hold the competing response.', 'High. You can ride this — it will peak.', 'High. This is close to the ceiling.', 'Very high. Stay in contact with it.', 'Near peak — it will fall from here.', 'Peak. The urge cannot climb forever.'];
-    fb.textContent = msgs[v] || '';
-  }
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  void t.offsetWidth; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+// ── DATA LOADING ──
+async function loadContextData() {
+  // Load Baseline
+  const baselineSnap = await getDoc(doc(db, 'users', window._uid, 'context', 'baseline'));
+  if (baselineSnap.exists()) {
+    const data = baselineSnap.data();
+    document.getElementById('scamp-s').value = data.sensory || '';
+    document.getElementById('scamp-c').value = data.cognitive || '';
+    document.getElementById('scamp-a').value = data.affective || '';
+    document.getElementById('scamp-m').value = data.motor || '';
+    document.getElementById('scamp-p').value = data.place || '';
+  }
+
+  // Load Rules
+  const rulesSnap = await getDocs(collection(db, 'users', window._uid, 'rules'));
+  currentRules = [];
+  rulesSnap.forEach(d => currentRules.push({ id: d.id, ...d.data() }));
+  currentRules.sort((a,b) => b.created_at - a.created_at);
+  renderRules();
+
+  // Load Reflections
+  loadReflections();
+}
+
+// ── SCAMP BASELINE ──
+window.saveBaseline = async (field, value) => {
+  if (!window._uid) return;
+  const ref = doc(db, 'users', window._uid, 'context', 'baseline');
+  try {
+    await setDoc(ref, { [field]: value.trim() }, { merge: true });
+    showToast('Saved profile');
+  } catch(e) { console.error("Error saving baseline:", e); }
+};
+
+// ── HOUSE RULES ──
+function renderRules() {
+  const list = document.getElementById('rule-list');
+  if (currentRules.length === 0) {
+    list.innerHTML = `<div style="font-size:13px;color:var(--mu);padding:8px 0">No rules established yet.</div>`;
+    return;
+  }
+  list.innerHTML = currentRules.map(r => `
+    <div class="rule-item ${r.active ? 'done' : ''}">
+      <div class="rule-checkbox" onclick="toggleRule('${r.id}', ${!r.active})">
+        <svg class="rule-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg>
+      </div>
+      <div class="rule-text" contenteditable="true" onblur="updateRuleText('${r.id}', this.innerText)">${r.text}</div>
+      <button class="rule-del" onclick="deleteRule('${r.id}')">&times;</button>
+    </div>
+  `).join('');
+}
+
+window.addRule = async () => {
+  const input = document.getElementById('new-rule');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  input.disabled = true;
+  try {
+    const docRef = await addDoc(collection(db, 'users', window._uid, 'rules'), {
+      text: text, active: false, created_at: Date.now()
+    });
+    currentRules.unshift({ id: docRef.id, text, active: false, created_at: Date.now() });
+    input.value = '';
+    renderRules();
+  } catch(e) { console.error(e); }
+  input.disabled = false;
+  input.focus();
+};
+
+window.toggleRule = async (id, isActive) => {
+  const rule = currentRules.find(r => r.id === id);
+  if (rule) rule.active = isActive;
+  renderRules(); // optimistic update
+  await updateDoc(doc(db, 'users', window._uid, 'rules', id), { active: isActive });
+};
+
+window.updateRuleText = async (id, newText) => {
+  const text = newText.trim();
+  if (!text) return;
+  const rule = currentRules.find(r => r.id === id);
+  if (rule && rule.text !== text) {
+    rule.text = text;
+    await updateDoc(doc(db, 'users', window._uid, 'rules', id), { text: text });
+  }
+};
+
+window.deleteRule = async (id) => {
+  currentRules = currentRules.filter(r => r.id !== id);
+  renderRules();
+  await deleteDoc(doc(db, 'users', window._uid, 'rules', id));
+};
+
+// ── REFLECTIONS ──
+async function loadReflections() {
+  const list = document.getElementById('past-reflections');
+  const q = query(collection(db, 'users', window._uid, 'reflections'), orderBy('created_at', 'desc'));
+  const snap = await getDocs(q);
+  
+  if (snap.empty) {
+    list.innerHTML = `<div style="font-size:13px;color:var(--mu)">No past reflections found.</div>`;
+    return;
+  }
+  
+  let html = '';
+  snap.forEach(doc => {
+    const d = doc.data();
+    const dateStr = d.created_at ? new Date(d.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : 'Date unknown';
+    html += `
+      <div class="ref-item">
+        <div class="ref-date">${dateStr}</div>
+        ${d.worked ? `<div class="ref-block"><strong>What worked:</strong>${d.worked}</div>` : ''}
+        ${d.failed ? `<div class="ref-block"><strong>Friction failed:</strong>${d.failed}</div>` : ''}
+      </div>
+    `;
+  });
+  list.innerHTML = html;
+}
+
+window.saveReflection = async () => {
+  const worked = document.getElementById('ref-worked').value.trim();
+  const failed = document.getElementById('ref-failed').value.trim();
+  if (!worked && !failed) return;
+
+  const btn = document.getElementById('btn-save-ref');
+  btn.disabled = true; btn.textContent = 'Saving...';
+
+  try {
+    await addDoc(collection(db, 'users', window._uid, 'reflections'), {
+      worked, failed, created_at: Date.now()
+    });
+    document.getElementById('ref-worked').value = '';
+    document.getElementById('ref-failed').value = '';
+    showToast('Reflection saved');
+    loadReflections();
+  } catch(e) {
+    console.error(e);
+    showToast('Error saving reflection');
+  }
+  btn.disabled = false; btn.textContent = 'Save Reflection';
+};
+
+// ── EXPORT REPORT ──
+window.generateReport = async () => {
+  const btn = document.getElementById('btn-export');
+  btn.innerHTML = 'Compiling...';
+  
+  try {
+    // 1. Get Logs (Last 30 Days Summary)
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const logsQ = query(collection(db, 'users', window._uid, 'entries'), where('created_at', '>=', thirtyDaysAgo));
+    const logsSnap = await getDocs(logsQ);
+    let logsTotal = 0, logsDid = 0, logsNear = 0, logsResist = 0;
+    logsSnap.forEach(d => {
+      logsTotal++;
+      const t = d.data().entry_type;
+      if (t === 'did') logsDid++;
+      if (t === 'near_miss') logsNear++;
+      if (t === 'resisted') logsResist++;
+    });
+
+    // 2. Build Text Block
+    const s = document.getElementById('scamp-s').value || 'Not defined';
+    const c = document.getElementById('scamp-c').value || 'Not defined';
+    const a = document.getElementById('scamp-a').value || 'Not defined';
+    const m = document.getElementById('scamp-m').value || 'Not defined';
+    const p = document.getElementById('scamp-p').value || 'Not defined';
+
+    const activeRules = currentRules.filter(r => r.active).map(r => `[X] ${r.text}`);
+    const inactiveRules = currentRules.filter(r => !r.active).map(r => `[ ] ${r.text}`);
+    const rulesText = [...activeRules, ...inactiveRules].join('\n') || 'None established.';
+
+    let report = `CLINICAL CONTEXT REPORT
+Generated: ${new Date().toLocaleDateString('en-US')}
+
+--- 30-DAY BEHAVIORAL SUMMARY ---
+Total Logged Events: ${logsTotal}
+Episodes (Did It): ${logsDid}
+Intercepts: ${logsResist} Resisted, ${logsNear} Near Miss
+
+--- SCAMP BASELINE PROFILE ---
+SENSORY: ${s}
+COGNITIVE: ${c}
+AFFECTIVE: ${a}
+MOTOR: ${m}
+PLACE/ENV: ${p}
+
+--- STIMULUS CONTROL BARRIERS ---
+${rulesText}
+
+--- RECENT REFLECTIONS ---
+`;
+    
+    // Add 2 most recent reflections
+    const refQ = query(collection(db, 'users', window._uid, 'reflections'), orderBy('created_at', 'desc'));
+    const refSnap = await getDocs(refQ);
+    let count = 0;
+    refSnap.forEach(doc => {
+      if (count >= 2) return;
+      const d = doc.data();
+      const dt = new Date(d.created_at).toLocaleDateString('en-US');
+      report += `\n[${dt}]\nWhat worked: ${d.worked || 'N/A'}\nWhere friction failed: ${d.failed || 'N/A'}\n`;
+      count++;
+    });
+    if (count === 0) report += "No recent reflections logged.\n";
+
+    // 3. Copy to Clipboard
+    await navigator.clipboard.writeText(report);
+    showToast('Report copied to clipboard!');
+  } catch (e) {
+    console.error(e);
+    showToast('Failed to generate report');
+  }
+  
+  btn.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    Generate Report
+  `;
+};
 </script>
 <script src="nav.js"></script>
 </body>
