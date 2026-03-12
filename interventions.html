@@ -27,6 +27,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
 
+/* NAV */
 nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
 [data-theme="dark"] nav{background:rgba(30,23,16,.96)}
 .nav-brand{font-family:'Lora',serif;font-size:18px;color:var(--tx);text-decoration:none}
@@ -36,6 +37,7 @@ nav{height:52px;display:flex;align-items:center;justify-content:space-between;pa
 .nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
 .nav-right{display:flex;align-items:center;gap:6px;position:relative}
 
+/* AUTH */
 .auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
 .auth-screen.on{display:flex}
 .auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;text-align:center;max-width:320px;width:92%}
@@ -43,54 +45,66 @@ nav{height:52px;display:flex;align-items:center;justify-content:space-between;pa
 
 #app{display:none}
 #app.on{display:block}
-main{max-width:540px;margin:0 auto;padding:24px 14px}
+main{max-width:560px;margin:0 auto;padding:24px 14px}
 
+/* HEADERS */
 .sec-hd{margin:32px 0 16px;display:flex;align-items:baseline;justify-content:space-between}
 .sec-hd:first-child{margin-top:0}
 .sec-title{font-family:'Lora',serif;font-size:20px;color:var(--tx);line-height:1.2}
 .sec-note{font-size:12px;color:var(--mu)}
 
+/* HOT STATE BUTTONS */
 .hot-grid{display:grid;grid-template-columns:1fr;gap:12px}
-.hot-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--r);padding:24px;text-align:left;cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:16px;box-shadow:var(--s1)}
-@media(max-width:400px){.hot-btn{padding:16px;gap:12px}}
+@media(min-width:500px){.hot-grid{grid-template-columns:1fr 1fr}}
+.hot-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--r);padding:20px;text-align:left;cursor:pointer;transition:var(--tr);display:flex;flex-direction:column;gap:12px;box-shadow:var(--s1)}
 .hot-btn:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:var(--s2)}
-.hot-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hot-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hot-icon.ac{background:var(--acl);color:var(--ac)}
 .hot-icon.sage{background:var(--sagel);color:var(--sage)}
 .hot-icon.warm{background:var(--warml);color:var(--warm)}
-.hot-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.hot-text-block{flex:1}
-.hot-title{font-family:'Lora',serif;font-size:18px;font-weight:500;color:var(--tx);margin-bottom:4px}
-.hot-sub{font-size:14px;color:var(--mu);line-height:1.4}
+.hot-icon.mu{background:var(--sur);border:1px solid var(--bdr);color:var(--mu)}
+.hot-icon svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.hot-title{font-family:'Lora',serif;font-size:16px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.hot-sub{font-size:13px;color:var(--tx2);line-height:1.4}
 
+/* COLD STATE CARDS */
 .card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.card-title{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:16px;text-transform:uppercase;letter-spacing:.05em}
+.card-title{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:16px;text-transform:uppercase;letter-spacing:.05em}
 
+/* TAGS FOR PREFS */
 .grid-auto{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:8px}
-.tag{display:flex;align-items:center;justify-content:center;min-height:48px;padding:8px 12px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);font-size:14px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;text-align:center;line-height:1.2}
+.tag{display:flex;align-items:center;justify-content:center;min-height:48px;padding:8px 12px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;text-align:center;line-height:1.2}
 .tag:hover{border-color:var(--bdr2)}
 .tag.on{background:var(--sagel);border-color:var(--sage);color:var(--sage);font-weight:600;transform:scale(0.98)}
 
+/* CHECKLIST */
 .check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--bdr);cursor:pointer;user-select:none;min-height:48px}
 .check-item:last-child{border-bottom:none;padding-bottom:0}
 .check-box{width:22px;height:22px;border:1.5px solid var(--mu);border-radius:4px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
 .check-item.checked .check-box{background:var(--sage);border-color:var(--sage)}
 .check-tick{display:none;width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .check-item.checked .check-tick{display:block}
-.check-text{font-size:15px;color:var(--tx);line-height:1.5}
+.check-text{font-size:14px;color:var(--tx);line-height:1.5}
 .check-item.checked .check-text{color:var(--mu);text-decoration:line-through}
 
+/* FULLSCREEN TIMER OVERLAY */
 .timer-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:900;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
 .timer-overlay.on{display:flex}
 .timer-close{position:absolute;top:24px;right:24px;background:none;border:none;font-size:36px;color:var(--mu);cursor:pointer;line-height:1;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center}
-.timer-inst{font-family:'Lora',serif;font-size:28px;color:var(--tx);line-height:1.3;margin-bottom:40px;max-width:400px}
+.timer-inst{font-family:'Lora',serif;font-size:26px;color:var(--tx);line-height:1.4;margin-bottom:40px;max-width:400px}
 .timer-readout{font-family:'DM Sans',sans-serif;font-size:80px;font-weight:300;color:var(--ac);line-height:1;margin-bottom:40px;font-variant-numeric:tabular-nums}
-@media(max-width:400px){.timer-readout{font-size:60px} .timer-inst{font-size:24px}}
+@media(max-width:400px){.timer-readout{font-size:60px} .timer-inst{font-size:22px}}
 .timer-readout.sage{color:var(--sage)}
 .timer-readout.warm{color:var(--warm)}
-.timer-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--pill);padding:16px 40px;font-size:16px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);min-height:56px}
+.timer-readout.mu{color:var(--tx2)}
+
+.timer-actions{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px}
+.timer-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--pill);padding:16px 20px;font-size:15px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);min-height:56px;width:100%}
 .timer-btn:hover{border-color:var(--ac);color:var(--ac)}
 .timer-btn.done{background:var(--sage);border-color:var(--sage);color:#fff}
+.timer-btn-ghost{background:transparent;border:1.5px solid var(--bdr2);border-radius:var(--pill);padding:14px 20px;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);width:100%}
+.timer-btn-ghost:hover{border-color:var(--tx);color:var(--tx)}
+
 </style>
 </head>
 <body>
@@ -116,57 +130,80 @@ main{max-width:540px;margin:0 auto;padding:24px 14px}
   <div class="hot-grid">
     <button class="hot-btn" onclick="openTimer('motor')">
       <div class="hot-icon ac"><svg><circle cx="5" cy="12" r="3"/><circle cx="19" cy="12" r="3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
-      <div class="hot-text-block">
-        <div class="hot-title">Motor Block</div>
+      <div>
+        <div class="hot-title">Motor Block (CR)</div>
         <div class="hot-sub">Hands occupied or mouth closed. 90 sec.</div>
+      </div>
+    </button>
+
+    <button class="hot-btn" onclick="openTimer('decouple')">
+      <div class="hot-icon ac"><svg><path d="M22 12A10 10 0 1 1 12 2v0"/><polyline points="22 8 22 12 18 12"/></svg></div>
+      <div>
+        <div class="hot-title">Decoupling Redirect</div>
+        <div class="hot-sub">Mimic the motion, then forcefully redirect. 60 sec.</div>
       </div>
     </button>
 
     <button class="hot-btn" onclick="openTimer('surf')">
       <div class="hot-icon sage"><svg><path d="M2 12 C 7 2, 17 22, 22 12"/></svg></div>
-      <div class="hot-text-block">
+      <div>
         <div class="hot-title">Urge Surf</div>
-        <div class="hot-sub">Watch the feeling peak and fall. 5 min.</div>
+        <div class="hot-sub">Watch the feeling peak and fall without acting. 5 min.</div>
       </div>
     </button>
 
-    <button class="hot-btn" onclick="openTimer('ground')">
+    <button class="hot-btn" onclick="openTimer('unhook')">
+      <div class="hot-icon mu"><svg><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div>
+        <div class="hot-title">Cognitive Unhook</div>
+        <div class="hot-sub">Break the permission-giving trance. 30 sec.</div>
+      </div>
+    </button>
+
+    <button class="hot-btn" onclick="openTimer('ground')" style="grid-column: 1 / -1;">
       <div class="hot-icon warm"><svg><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      <div class="hot-text-block">
+      <div>
         <div class="hot-title">Grounding Reset</div>
-        <div class="hot-sub">Vagal nerve regulation. 2 min.</div>
+        <div class="hot-sub">Vagal nerve regulation via breath. 2 min.</div>
       </div>
     </button>
   </div>
 
   <div class="sec-hd">
-    <div class="sec-title">Physical Substitutes</div>
-    <div class="sec-note">Highlight what you have available.</div>
+    <div class="sec-title">Sensory Substitution</div>
+    <div class="sec-note">Match the tool to the specific sensory drive.</div>
   </div>
 
   <div class="card">
-    <div class="card-title">My hands need to move</div>
-    <div class="grid-auto" id="hands-opts">
-      <div class="tag" onclick="togglePref(this)">Textured ring</div>
-      <div class="tag" onclick="togglePref(this)">Massage ball</div>
-      <div class="tag" onclick="togglePref(this)">Silicone edge</div>
-      <div class="tag" onclick="togglePref(this)">Tactile putty</div>
-      <div class="tag" onclick="togglePref(this)">Worry stone</div>
-      <div class="tag" onclick="togglePref(this)">Peelable tape</div>
-      <div class="tag" onclick="togglePref(this)">Tension band</div>
+    <div class="card-title">Target: Destruction & Peeling</div>
+    <div class="grid-auto">
+      <div class="tag" onclick="togglePref(this)">Washi tape roll</div>
+      <div class="tag" onclick="togglePref(this)">Picking stone</div>
+      <div class="tag" onclick="togglePref(this)">Dried liquid glue</div>
+      <div class="tag" onclick="togglePref(this)">Seeds in shell</div>
+      <div class="tag" onclick="togglePref(this)">Velcro strips</div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">My mouth needs to chew</div>
-    <div class="grid-auto" id="mouth-opts">
-      <div class="tag" onclick="togglePref(this)">Sugarless gum</div>
-      <div class="tag" onclick="togglePref(this)">Chew jewelry</div>
-      <div class="tag" onclick="togglePref(this)">Crunchy veg</div>
-      <div class="tag" onclick="togglePref(this)">Seeds in shell</div>
-      <div class="tag" onclick="togglePref(this)">Ice chips</div>
-      <div class="tag" onclick="togglePref(this)">Strong mint</div>
-      <div class="tag" onclick="togglePref(this)">Toothpick</div>
+    <div class="card-title">Target: Deep Pressure & Pain</div>
+    <div class="grid-auto">
+      <div class="tag" onclick="togglePref(this)">Spiky massage ring</div>
+      <div class="tag" onclick="togglePref(this)">Chewable silicone</div>
+      <div class="tag" onclick="togglePref(this)">Gripping ice</div>
+      <div class="tag" onclick="togglePref(this)">Tension band</div>
+      <div class="tag" onclick="togglePref(this)">Strong mints</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Target: Smoothing & Evenness</div>
+    <div class="grid-auto">
+      <div class="tag" onclick="togglePref(this)">Smooth worry stone</div>
+      <div class="tag" onclick="togglePref(this)">Silicone cuticle edge</div>
+      <div class="tag" onclick="togglePref(this)">Textured ring</div>
+      <div class="tag" onclick="togglePref(this)">Tactile putty</div>
+      <div class="tag" onclick="togglePref(this)">Emery board</div>
     </div>
   </div>
 
@@ -205,7 +242,11 @@ main{max-width:540px;margin:0 auto;padding:24px 14px}
   <button class="timer-close" onclick="closeTimer()">&times;</button>
   <div class="timer-inst" id="timer-inst">Instruction</div>
   <div class="timer-readout" id="timer-readout">0:00</div>
-  <button class="timer-btn" id="timer-action" onclick="logOutcome()">Log This Intervention</button>
+  
+  <div class="timer-actions">
+    <button class="timer-btn" id="timer-action" onclick="togglePause()">Pause Timer</button>
+    <button class="timer-btn-ghost" id="timer-fail" onclick="logFail()">Friction Failed: Log Episode</button>
+  </div>
 </div>
 
 <script type="module">
@@ -262,8 +303,10 @@ let timerInterval = null;
 let currentSeconds = 0;
 
 const modes = {
-  motor: { sec: 90, class: 'ac', text: 'Clench fists or seal lips. Anchor and hold.' },
-  surf: { sec: 300, class: 'sage', text: 'Locate the physical urge. Watch it without acting.' },
+  motor: { sec: 90, class: 'ac', text: 'Clench fists or seal lips. Anchor them and hold.' },
+  decouple: { sec: 60, class: 'ac', text: 'Mimic the motion. Accelerate away forcefully before contact. Repeat.' },
+  surf: { sec: 300, class: 'sage', text: 'Locate the physical urge. Watch it rise and fall without acting.' },
+  unhook: { sec: 30, class: 'mu', text: 'The urge is a neurological misfire, not a command. Step away.' },
   ground: { sec: 120, class: 'warm', text: 'Feet flat. Inhale 4, hold 7, exhale 8.' }
 };
 
@@ -276,6 +319,8 @@ window.openTimer = (type) => {
   btn.className = 'timer-btn';
   btn.textContent = 'Pause Timer';
   btn.onclick = window.togglePause;
+
+  document.getElementById('timer-fail').style.display = 'block';
   
   currentSeconds = cfg.sec;
   updateReadout();
@@ -309,10 +354,13 @@ window.togglePause = () => {
 function finishTimer() {
   clearInterval(timerInterval);
   timerInterval = null;
+  
   const btn = document.getElementById('timer-action');
   btn.className = 'timer-btn done';
-  btn.textContent = 'Log This Intervention';
-  btn.onclick = () => window.location.href = 'index.html';
+  btn.textContent = 'Intervention Successful: Log It';
+  btn.onclick = window.logSuccess;
+
+  document.getElementById('timer-fail').style.display = 'none';
 }
 
 function updateReadout() {
@@ -325,6 +373,14 @@ window.closeTimer = () => {
   clearInterval(timerInterval);
   document.getElementById('timer-overlay').classList.remove('on');
   document.body.style.overflow = '';
+};
+
+window.logSuccess = () => {
+  window.location.href = 'index.html';
+};
+
+window.logFail = () => {
+  window.location.href = 'index.html';
 };
 </script>
 <script src="nav.js"></script>
