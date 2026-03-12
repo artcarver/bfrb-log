@@ -71,9 +71,10 @@ main{max-width:560px;margin:0 auto;padding:18px 14px}
 .qbtn:hover{background:rgba(255,255,255,.28)}
 
 /* STEP HEADERS */
-.step-hd{margin:22px 0 8px}
+.step-hd{margin:22px 0 8px;display:flex;align-items:baseline;justify-content:space-between}
 .step-hd:first-of-type{margin-top:0}
 .step-title{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em}
+.step-num{font-size:11px;color:var(--mu);flex-shrink:0;padding-left:8px}
 .step-sub{font-size:12px;color:var(--mu);margin-top:2px}
 
 /* CARDS */
@@ -238,6 +239,20 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 /* INTERVENTION TIMING NOTE */
 .int-note{font-size:12px;color:var(--mu);margin-bottom:12px;font-style:italic}
 
+/* EPISODE NOTE */
+.episode-note{background:var(--warml);border:1px solid rgba(212,149,106,.32);border-radius:var(--rsm);padding:13px 16px;font-size:12px;color:var(--tx2);line-height:1.65;font-weight:500;margin-top:10px}
+
+/* CLEAR LINK */
+.clear-link{background:none;border:none;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;padding:4px 0;transition:color .18s;display:block;margin:8px auto 0;width:fit-content;letter-spacing:.01em}
+.clear-link:hover{color:var(--tx2)}
+
+/* TRIED LINK (episode opt-in) */
+.tried-link{background:none;border:none;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;padding:0;transition:color .18s;display:flex;align-items:center;gap:5px;margin-bottom:14px}
+.tried-link:hover{color:var(--ac)}
+.tried-link.on{color:var(--ac)}
+.tried-link svg{width:10px;height:10px;flex-shrink:0;transition:transform .2s;stroke:currentColor;fill:none}
+.tried-link.on svg{transform:rotate(90deg)}
+
 @keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
@@ -292,9 +307,9 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
   </div>
 
-  <!-- STEP 1: BEHAVIOR -->
+  <!-- STEP 1: BEHAVIOR + ENTRY TYPE (merged) -->
   <div class="step-hd">
-    <div class="step-title">Which behavior?</div>
+    <div class="step-title">Log entry</div>
   </div>
   <div class="card">
     <div class="choice-grid-2">
@@ -307,28 +322,20 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         <span class="choice-sub">Cuticles, nail edges, surrounding skin</span>
       </div>
     </div>
-  </div>
-
-  <!-- STEP 2: WHAT HAPPENED — shown after behavior chosen -->
-  <div id="step2-block" class="hidden">
-    <div class="step-hd">
-      <div class="step-title">What happened?</div>
-    </div>
-    <div class="card">
+    <div id="entry-type-choices" class="hidden">
+      <div class="divider" style="margin:14px 0 12px"></div>
       <div class="choice-grid-3">
         <div class="choice-btn" id="et-did" onclick="setEntry('did')">
           <span class="choice-name">Did it</span>
-          <span class="choice-sub">Engaged in the behavior</span>
         </div>
         <div class="choice-btn" id="et-resisted" onclick="setEntry('resisted')">
           <span class="choice-name">Resisted</span>
-          <span class="choice-sub">Had the urge, didn't engage</span>
         </div>
         <div class="choice-btn" id="et-near" onclick="setEntry('near')">
           <span class="choice-name">Near miss</span>
-          <span class="choice-sub">Started, then stopped</span>
         </div>
       </div>
+      <p id="near-miss-note" class="hidden" style="margin-top:8px;font-size:11px;color:var(--mu);line-height:1.5">Near miss logs the same detail as a full episode.</p>
     </div>
   </div>
 
@@ -337,8 +344,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
        ═══════════════════════════════════════════ -->
   <div id="pathway-episode" class="hidden">
 
-    <!-- STEP 3: WHEN -->
-    <div class="step-hd"><div class="step-title">When?</div></div>
+    <div class="episode-note">Every detail you log here — context, triggers, how you felt — is the pattern data. It adds up.</div>
+
+    <!-- STEP 1: WHEN -->
+    <div class="step-hd"><div class="step-title">When?</div><div class="step-num">1 of 7</div></div>
     <div class="card">
       <div class="two-btn">
         <div class="flat-btn on" id="tim-now" onclick="setTiming('now')">Right now</div>
@@ -354,7 +363,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
     <!-- PICKING DETAIL -->
     <div id="picking-detail">
-      <div class="step-hd"><div class="step-title">The picking</div></div>
+      <div class="step-hd"><div class="step-title">The picking</div><div class="step-num">2 of 7</div></div>
       <div class="card">
 
         <div class="field">
@@ -432,6 +441,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
           </div>
         </div>
 
+        <div class="divider"></div>
+
         <div class="field">
           <label class="field-label">What happened after?</label>
           <div class="comp-grid">
@@ -480,7 +491,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
     <!-- BITING DETAIL -->
     <div id="biting-detail" class="hidden">
-      <div class="step-hd"><div class="step-title">The biting</div></div>
+      <div class="step-hd"><div class="step-title">The biting</div><div class="step-num">2 of 7</div></div>
       <div class="card">
 
         <div class="field">
@@ -540,8 +551,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       </div>
     </div><!-- /biting-detail -->
 
-    <!-- STEP 5: AWARENESS -->
-    <div class="step-hd"><div class="step-title">Awareness</div></div>
+    <!-- STEP 3: AWARENESS -->
+    <div class="step-hd"><div class="step-title">Awareness</div><div class="step-num">3 of 7</div></div>
     <div class="card">
       <div class="aw-grid">
         <div class="aw-btn" id="aw-conscious" onclick="setAwareness('conscious')">I noticed while it was happening</div>
@@ -549,10 +560,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       </div>
     </div>
 
-    <!-- STEP 6: LOCATION -->
-    <div class="step-hd"><div class="step-title">Location</div></div>
+    <!-- STEP 4: CONTEXT (location + activity merged) -->
+    <div class="step-hd"><div class="step-title">Context</div><div class="step-num">4 of 7</div></div>
     <div class="card">
-      <div class="field" style="margin-bottom:0">
+      <div class="field">
+        <label class="field-label">Location</label>
         <div class="acc-row">
           <div class="acc-btn" onclick="toggleAcc(this,'loc-home')">At home <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="acc-btn" onclick="toggleAcc(this,'loc-study')">Studying <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
@@ -621,12 +633,9 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         </div>
         <input type="text" class="other-input" id="ep-location-other" placeholder="Where were you?">
       </div>
-    </div>
 
-    <!-- STEP 7: ACTIVITY -->
-    <div class="step-hd"><div class="step-title">Activity</div></div>
-    <div class="card">
       <div class="field" style="margin-bottom:0">
+        <label class="field-label">Activity</label>
         <div class="acc-row">
           <div class="acc-btn" onclick="toggleAcc(this,'act-study')">Studying / academic <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="acc-btn" onclick="toggleAcc(this,'act-clinical')">Clinical <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
@@ -705,12 +714,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       </div>
     </div>
 
-    <!-- STEP 8: TRIGGERS -->
-    <div class="step-hd"><div class="step-title">What set it off?</div></div>
+    <!-- STEP 5: TRIGGERS -->
+    <div class="step-hd"><div class="step-title">What set it off?</div><div class="step-num">5 of 7</div></div>
     <div class="card">
       <div class="field" style="margin-bottom:0">
-        <div class="acc-row">
-          <div class="acc-btn" onclick="toggleAcc(this,'trig-emotional')">Emotional <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="acc-btn" onclick="toggleAcc(this,'trig-sensory')">Sensory <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
         </div>
 
@@ -781,8 +788,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       </div>
     </div>
 
-    <!-- STEP 9: MOOD + URGE -->
-    <div class="step-hd"><div class="step-title">How were you feeling?</div></div>
+    <!-- STEP 6: MOOD + URGE -->
+    <div class="step-hd"><div class="step-title">How were you feeling?</div><div class="step-num">6 of 7</div></div>
     <div class="card">
 
       <!-- BEFORE emotions -->
@@ -893,15 +900,13 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
     </div><!-- /mood card -->
 
-    <!-- STEP 10: INTERVENTIONS (episode) -->
-    <div class="step-hd"><div class="step-title">Did you try anything?</div></div>
+    <!-- STEP 7: NOTES + OPTIONAL INTERVENTION -->
+    <div class="step-hd"><div class="step-title">Notes</div><div class="step-num">7 of 7</div></div>
     <div class="card">
-      <div class="field">
-        <div class="two-btn">
-          <div class="flat-btn" id="ep-tried-yes" onclick="setTried('ep',true)">Yes</div>
-          <div class="flat-btn" id="ep-tried-no" onclick="setTried('ep',false)">Not this time</div>
-        </div>
-      </div>
+      <button class="tried-link" id="ep-tried-link" onclick="toggleEpTried()">
+        <svg viewBox="0 0 10 10" stroke-width="2"><polyline points="3,1 7,5 3,9"/></svg>
+        I tried something to stop it
+      </button>
       <div id="ep-int-detail" class="hidden">
         <div class="field">
           <label class="field-label">What did you try?</label>
@@ -920,7 +925,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
             <div class="tag" onclick="toggleTag(this,'interventions')">Distracted with a task</div>
           </div>
         </div>
-        <div class="field" style="margin-bottom:0">
+        <div class="field">
           <label class="field-label">How effective was it?</label>
           <div class="eff-row">
             <div class="eff-btn" data-v="1" onclick="setEff(this)">1</div>
@@ -932,17 +937,13 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
           </div>
           <div class="slider-lbls" style="max-width:228px"><span>1 — did not help</span><span>5 — interrupted it</span></div>
         </div>
+        <div class="divider" style="margin-bottom:16px"></div>
       </div>
-    </div>
-
-    <!-- STEP 11: NOTES -->
-    <div class="step-hd"><div class="step-title">Notes</div></div>
-    <div class="card">
       <textarea id="ep-notes" placeholder="Anything the form didn't capture..."></textarea>
     </div>
 
     <button class="submit-btn" id="ep-sub-btn" onclick="submitEpisode()">Save entry</button>
-    <button class="reset-btn" onclick="resetForm()">Clear form</button>
+    <button class="clear-link" onclick="resetForm()">Clear form</button>
     <div class="status-row">
       <div class="status-dot" id="status-dot"></div>
       <span id="status-text">Not signed in</span>
@@ -959,7 +960,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     <div class="resist-note">Logging what was happening when you had the urge — and what you did instead — is the most useful data your therapist will see.</div>
 
     <!-- WHEN -->
-    <div class="step-hd"><div class="step-title">When?</div></div>
+    <div class="step-hd"><div class="step-title">When?</div><div class="step-num">1 of 5</div></div>
     <div class="card">
       <div class="two-btn">
         <div class="flat-btn on" id="r-tim-now" onclick="setTimingR('now')">Right now</div>
@@ -971,10 +972,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       </div>
     </div>
 
-    <!-- LOCATION -->
-    <div class="step-hd"><div class="step-title">Location</div></div>
+    <!-- CONTEXT (location + activity merged) -->
+    <div class="step-hd"><div class="step-title">Context</div><div class="step-num">2 of 5</div></div>
     <div class="card">
-      <div class="field" style="margin-bottom:0">
+      <div class="field">
+        <label class="field-label">Location</label>
         <div class="acc-row">
           <div class="acc-btn" onclick="toggleAcc(this,'r-loc-home')">At home <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="acc-btn" onclick="toggleAcc(this,'r-loc-study')">Studying <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
@@ -1028,12 +1030,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         </div>
         <input type="text" class="other-input" id="r-location-other" placeholder="Where were you?">
       </div>
-    </div>
-
-    <!-- ACTIVITY -->
-    <div class="step-hd"><div class="step-title">Activity</div></div>
-    <div class="card">
       <div class="field" style="margin-bottom:0">
+        <label class="field-label">Activity</label>
         <div class="acc-row">
           <div class="acc-btn" onclick="toggleAcc(this,'r-act-study')">Studying / academic <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="acc-btn" onclick="toggleAcc(this,'r-act-clinical')">Clinical <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
@@ -1095,7 +1093,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
 
     <!-- TRIGGERS (resist) -->
-    <div class="step-hd"><div class="step-title">What set it off?</div></div>
+    <div class="step-hd"><div class="step-title">What set it off?</div><div class="step-num">3 of 5</div></div>
     <div class="card">
       <div class="field" style="margin-bottom:0">
         <div class="acc-row">
@@ -1171,7 +1169,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
 
     <!-- MOOD BEFORE (resist only) -->
-    <div class="step-hd"><div class="step-title">How were you feeling?</div></div>
+    <div class="step-hd"><div class="step-title">How were you feeling?</div><div class="step-num">4 of 5</div></div>
     <div class="card">
       <div class="field">
         <span class="mood-section-lbl">In the moment of the urge</span>
@@ -1224,7 +1222,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
 
     <!-- INTERVENTIONS (resist) -->
-    <div class="step-hd"><div class="step-title">What did you do instead?</div></div>
+    <div class="step-hd"><div class="step-title">What did you do instead?</div><div class="step-num">5 of 5</div></div>
     <div class="card">
       <div class="field">
         <div class="two-btn">
@@ -1272,7 +1270,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
 
     <button class="submit-btn" id="r-sub-btn" onclick="submitResist()">Save entry</button>
-    <button class="reset-btn" onclick="resetForm()">Clear form</button>
+    <button class="clear-link" onclick="resetForm()">Clear form</button>
     <div class="status-row">
       <div class="status-dot" id="r-status-dot"></div>
       <span id="r-status-text">Not signed in</span>
@@ -1438,7 +1436,7 @@ window.setBfrb = type => {
   S.bfrb = type;
   document.getElementById('bfrb-picking').classList.toggle('on', type==='picking');
   document.getElementById('bfrb-biting').classList.toggle('on', type==='biting');
-  document.getElementById('step2-block').classList.remove('hidden');
+  document.getElementById('entry-type-choices').classList.remove('hidden');
   // Reset entry selection when behavior changes
   if (S.entry) {
     S.entry = null;
@@ -1453,6 +1451,12 @@ window.setEntry = type => {
   S.entry = type;
   ['et-did','et-resisted','et-near'].forEach(id => document.getElementById(id).classList.remove('on'));
   document.getElementById('et-'+type).classList.add('on');
+
+  // Hide quick log card once a pathway is chosen
+  document.querySelector('.quick-card').style.display = 'none';
+
+  // Show near-miss note if applicable
+  document.getElementById('near-miss-note').classList.toggle('hidden', type !== 'near');
 
   const isEpisode = type === 'did' || type === 'near';
   document.getElementById('pathway-episode').classList.toggle('hidden', !isEpisode);
@@ -1652,14 +1656,25 @@ window.updSlider = (el, valId, prop) => {
   }
 };
 
-// TRIED INTERVENTION
+// TRIED INTERVENTION — episode (opt-in toggle link)
+window.toggleEpTried = () => {
+  const link = document.getElementById('ep-tried-link');
+  const detail = document.getElementById('ep-int-detail');
+  const open = !detail.classList.contains('hidden') ? false : true;
+  S.tried = open || null;
+  link.classList.toggle('on', open);
+  detail.classList.toggle('hidden', !open);
+  if (!open) {
+    // Clear intervention state when collapsed
+    S.tried = null; S.interventions = []; S.eff = null;
+    detail.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
+    detail.querySelectorAll('.eff-btn').forEach(b=>b.classList.remove('on'));
+    document.getElementById('eff-label').textContent = 'Tap to rate';
+  }
+};
+// TRIED INTERVENTION — resist (yes/no buttons)
 window.setTried = (pathway, tried) => {
-  if(pathway==='ep') {
-    S.tried = tried;
-    document.getElementById('ep-tried-yes').classList.toggle('on', tried===true);
-    document.getElementById('ep-tried-no').classList.toggle('on', tried===false);
-    document.getElementById('ep-int-detail').classList.toggle('hidden', !tried);
-  } else {
+  if(pathway==='r') {
     R.tried = tried;
     document.getElementById('r-tried-yes').classList.toggle('on', tried===true);
     document.getElementById('r-tried-no').classList.toggle('on', tried===false);
@@ -1790,7 +1805,8 @@ window.resetForm = () => {
   document.querySelectorAll('.acc-panel,.sub-acc-panel').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.other-input').forEach(i=>{i.classList.remove('on');i.value='';});
   document.querySelectorAll('textarea').forEach(t=>t.value='');
-  document.getElementById('step2-block').classList.add('hidden');
+  document.getElementById('entry-type-choices').classList.add('hidden');
+  document.getElementById('near-miss-note').classList.add('hidden');
   document.getElementById('pathway-episode').classList.add('hidden');
   document.getElementById('pathway-resist').classList.add('hidden');
   document.getElementById('ep-int-detail').classList.add('hidden');
@@ -1801,7 +1817,12 @@ window.resetForm = () => {
   document.getElementById('biting-detail').classList.add('hidden');
   document.getElementById('eff-label').textContent='Tap to rate';
   document.getElementById('r-eff-label').textContent='Tap to rate';
+  // Reset tried link
+  const triedLink = document.getElementById('ep-tried-link');
+  if(triedLink) triedLink.classList.remove('on');
   ['ep-sub-btn','r-sub-btn'].forEach(id=>{const b=document.getElementById(id);if(b){b.disabled=false;b.textContent='Save entry';}});
+  // Restore quick log card
+  document.querySelector('.quick-card').style.display = '';
   const ub=document.getElementById('urge-before'); ub.value=5; updSlider(ub,'ub-val','urge_before');
   const ua=document.getElementById('urge-after'); ua.value=3; updSlider(ua,'ua-val','urge_after');
   const ru=document.getElementById('r-urge'); ru.value=5; updSlider(ru,'r-urge-val','r_urge');

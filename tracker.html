@@ -33,21 +33,21 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
 
 /* NAV */
-nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s}
+nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s;gap:8px}
 [data-theme="dark"] nav{background:rgba(30,23,16,.96)}
-.nav-brand{font-family:'Lora',serif;font-size:19px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none}
+.nav-brand{font-family:'Lora',serif;font-size:18px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none;flex-shrink:0}
 .nav-brand span{color:var(--ac)}
-.nav-links{display:flex;align-items:center;gap:2px}
-.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 13px;border-radius:var(--pill);transition:var(--tr)}
+.nav-links{display:flex;align-items:center;gap:1px;flex:1;justify-content:center}
+.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:5px 11px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
 .nav-link:hover{background:var(--acl);color:var(--ac)}
 .nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:8px}
-.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.theme-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
 .theme-btn:hover{border-color:var(--ac);color:var(--ac)}
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 14px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:5px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
 .sign-btn:hover{border-color:var(--ac);color:var(--ac)}
-.user-info{display:flex;align-items:center;gap:8px}
-.user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
+.user-info{display:flex;align-items:center;gap:6px}
+.user-avatar{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;flex-shrink:0}
 
 /* AUTH */
 .auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
@@ -81,8 +81,9 @@ main{max-width:920px;margin:0 auto;padding:28px 16px}
 .import-btn:hover{background:var(--acl)!important;border-color:var(--ac-h)!important;color:var(--ac-h)!important}
 
 /* STAT CARDS */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
-@media(max-width:680px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:800px){.stat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;box-shadow:var(--s1)}
 .stat-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
 .stat-value{font-family:'Lora',serif;font-size:32px;font-weight:400;color:var(--ac);line-height:1}
@@ -353,6 +354,11 @@ tbody tr:hover td{background:var(--bg)}
       <div class="stat-value" id="stat-auto">—</div>
       <div class="stat-sub">didn't notice until after</div>
     </div>
+    <div class="stat-card">
+      <div class="stat-label">Resist streak</div>
+      <div class="stat-value" id="stat-streak">—</div>
+      <div class="stat-sub" id="stat-streak-sub">consecutive days resisted</div>
+    </div>
   </div>
 
   <!-- CALENDAR -->
@@ -469,6 +475,11 @@ tbody tr:hover td{background:var(--bg)}
         <option value="resisted">Resisted</option>
         <option value="near">Near miss</option>
       </select>
+      <select class="fsel" id="filter-awareness" onchange="applyFilters()">
+        <option value="">All awareness</option>
+        <option value="conscious">Conscious</option>
+        <option value="automatic">Automatic</option>
+      </select>
       <button class="fclear" onclick="clearFilters()">Clear</button>
       <span class="rc-count" id="rc-count"></span>
     </div>
@@ -559,8 +570,8 @@ onAuthStateChanged(auth, user => {
 <!-- RENDER LOGIC -->
 <script>
 // ─── THEME ───
-function toggleTheme(){const d=document.documentElement;const n=d.getAttribute('data-theme')==='dark'?'':'dark';d.setAttribute('data-theme',n);localStorage.setItem('theme',n);if(window.todChart)rebuildCharts();}
-(()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
+function toggleTheme(){const d=document.documentElement;const n=d.getAttribute('data-theme')==='dark'?'':'dark';d.setAttribute('data-theme',n);localStorage.setItem('gw-theme',n);if(window.todChart)rebuildCharts();}
+(()=>{const t=localStorage.getItem('gw-theme')||localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
 
 // ─── STATE ───
 let currentDays = 7;
@@ -647,7 +658,6 @@ function isoDate(ts) {
 function renderStats(entries) {
   const eps = episodes(entries);
   const resisted = entries.filter(e => e.entry_type === 'resisted');
-  const total_with_urge = entries.filter(e => e.entry_type === 'did' || e.entry_type === 'near');
   const resistRate = pct(resisted.length, entries.length);
   const epCount = eps.length;
   const pickCount = eps.filter(e=>e.bfrb_type==='picking').length;
@@ -656,14 +666,33 @@ function renderStats(entries) {
   const autoEps = eps.filter(e=>e.awareness==='automatic');
   const autoPct = eps.length ? Math.round(autoEps.length/eps.length*100)+'%' : '—';
 
+  // Resist streak — longest run of calendar days with only resisted/near entries (no episodes)
+  // Using ALL entries (not range-filtered) so streak is always accurate
+  const allEntries = window.ALL_ENTRIES || [];
+  const episodeDays = new Set(allEntries.filter(e=>e.entry_type==='did'||e.entry_type==='near').map(e=>isoDate(e.timestamp)));
+  const loggedDays = [...new Set(allEntries.map(e=>isoDate(e.timestamp)))].sort();
+  let streak = 0, best = 0, cur = 0;
+  loggedDays.forEach(d => {
+    if (!episodeDays.has(d)) { cur++; best = Math.max(best, cur); }
+    else cur = 0;
+  });
+  // Current streak (from most recent logged day backwards)
+  for (let i = loggedDays.length - 1; i >= 0; i--) {
+    if (!episodeDays.has(loggedDays[i])) streak++;
+    else break;
+  }
+
   document.getElementById('stat-resist').textContent = resistRate;
   document.getElementById('stat-resist-sub').textContent = `${resisted.length} of ${entries.length} total logs`;
   document.getElementById('stat-episodes').textContent = epCount;
   document.getElementById('stat-ep-sub').textContent =
-    epCount===0 ? 'no episodes' :
-    `${pickCount} picking · ${biteCount} biting`;
+    epCount===0 ? 'no episodes' : `${pickCount} picking · ${biteCount} biting`;
   document.getElementById('stat-urge').textContent = urgeVals.length ? avg(urgeVals).toFixed(1) : '—';
   document.getElementById('stat-auto').textContent = autoPct;
+  document.getElementById('stat-streak').textContent = streak > 0 ? streak : best > 0 ? best : '—';
+  document.getElementById('stat-streak-sub').textContent = streak > 0
+    ? `days in a row (active)`
+    : best > 0 ? `best logged streak` : 'no resist-only days yet';
 }
 
 // ─── CALENDAR ───
@@ -1092,9 +1121,11 @@ let tableFilteredEntries = [];
 function applyFilters() {
   const bfrb = document.getElementById('filter-bfrb').value;
   const type = document.getElementById('filter-type').value;
+  const awareness = document.getElementById('filter-awareness').value;
   tableFilteredEntries = filteredEntries.filter(e =>
     (!bfrb || e.bfrb_type === bfrb) &&
-    (!type || e.entry_type === type)
+    (!type || e.entry_type === type) &&
+    (!awareness || e.awareness === awareness)
   );
   renderTableRows(tableFilteredEntries);
 }
@@ -1103,6 +1134,7 @@ window.applyFilters = applyFilters;
 function clearFilters() {
   document.getElementById('filter-bfrb').value = '';
   document.getElementById('filter-type').value = '';
+  document.getElementById('filter-awareness').value = '';
   applyFilters();
 }
 window.clearFilters = clearFilters;
