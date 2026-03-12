@@ -216,17 +216,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
 @keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
-/* RECENT FEED */
-.recent-item{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:12px}
-.recent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.recent-dot.did{background:var(--ac)}
-.recent-dot.resisted{background:var(--sage)}
-.recent-dot.near{background:var(--warm)}
-.recent-item-main{flex:1;min-width:0}
-.recent-item-title{font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.recent-item-sub{font-size:11px;color:var(--mu);margin-top:1px}
-.recent-item-time{font-size:11px;color:var(--mu);flex-shrink:0;white-space:nowrap}
-
 </style>
 </head>
 <body>
@@ -247,30 +236,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 </div>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-brand" href="index.html">Ground<span>work</span></a>
-  <div class="nav-links">
-    <a class="nav-link active" href="index.html">Log</a>
-    <a class="nav-link" href="tracker.html">Patterns</a>
-    <a class="nav-link" href="interventions.html">Toolkit</a>
-    <a class="nav-link" href="context.html">Context</a>
-  </div>
-  <div class="nav-right">
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">◐</button>
-    <button class="sign-btn" id="sign-btn-nav" onclick="signInWithGoogle()">Sign in</button>
-    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none" aria-label="Account menu">
-      <img class="user-avatar" id="user-avatar" src="" alt="">
-    </button>
-    <div class="profile-menu" id="profile-menu">
-      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
-        <span class="profile-menu-icon">◐</span> Dark mode
-      </button>
-      <button class="profile-menu-item" onclick="signOut()">
-        <span class="profile-menu-icon">→</span> Sign out
-      </button>
-    </div>
-  </div>
-</nav>
+<div id="gw-nav"></div>
 
 <!-- APP -->
 <div id="app">
@@ -879,19 +845,26 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       <div id="ep-int-detail" class="hidden">
         <div class="acc-panel on" style="margin-top:6px">
           <div class="acc-panel-lbl">What did you try?</div>
+          <div class="field-label" style="margin-top:8px;margin-bottom:4px">Body</div>
           <div class="tag-row">
-            <div class="tag" onclick="toggleTag(this,'interventions')">Competing response — did something with my hands</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Urge surfed — waited and observed without acting</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Competing response</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Fidget or textured object</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Covered hands</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Oral substitute (gum, mint)</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Applied lotion</div>
+          </div>
+          <div class="field-label" style="margin-top:10px;margin-bottom:4px">Mind</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'interventions')">Urge surfed</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Labeled the urge</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing or grounding</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Distracted with a task</div>
+          </div>
+          <div class="field-label" style="margin-top:10px;margin-bottom:4px">Environment</div>
+          <div class="tag-row">
             <div class="tag" onclick="toggleTag(this,'interventions')">Left the room or situation</div>
             <div class="tag" onclick="toggleTag(this,'interventions')">Moved away from the mirror</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Covered hands (gloves, bandage, sleeves)</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Used a fidget or textured object</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Labeled the urge out loud or mentally</div>
             <div class="tag" onclick="toggleTag(this,'interventions')">Called or texted someone</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Used an oral substitute (gum, mint)</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing or grounding</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Applied lotion or treated the skin</div>
-            <div class="tag" onclick="toggleTag(this,'interventions')">Distracted with a task</div>
           </div>
           <div style="margin-top:12px">
             <div class="acc-panel-lbl">How effective was it?</div>
@@ -1206,19 +1179,26 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
       <div id="r-int-detail" class="hidden">
         <div class="field">
           <label class="field-label">What did you try?</label>
+          <div class="field-label" style="font-size:10px;color:var(--mu);margin-bottom:4px;margin-top:4px;letter-spacing:.03em">Body</div>
+          <div class="tag-row" style="margin-bottom:8px">
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Competing response</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Fidget or textured object</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Covered hands</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Oral substitute (gum, mint)</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Applied lotion</div>
+          </div>
+          <div class="field-label" style="font-size:10px;color:var(--mu);margin-bottom:4px;letter-spacing:.03em">Mind</div>
+          <div class="tag-row" style="margin-bottom:8px">
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Urge surfed</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Labeled the urge</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Deep breathing or grounding</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Distracted with a task</div>
+          </div>
+          <div class="field-label" style="font-size:10px;color:var(--mu);margin-bottom:4px;letter-spacing:.03em">Environment</div>
           <div class="tag-row">
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Competing response — did something with my hands</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Urge surfed — waited and observed without acting</div>
             <div class="tag" onclick="toggleTag(this,'r_interventions')">Left the room or situation</div>
             <div class="tag" onclick="toggleTag(this,'r_interventions')">Moved away from the mirror</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Covered hands (gloves, bandage, sleeves)</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Used a fidget or textured object</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Labeled the urge out loud or mentally</div>
             <div class="tag" onclick="toggleTag(this,'r_interventions')">Called or texted someone</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Used an oral substitute (gum, mint)</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Deep breathing or grounding</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Applied lotion or treated the skin</div>
-            <div class="tag" onclick="toggleTag(this,'r_interventions')">Distracted with a task</div>
           </div>
         </div>
         <div class="field" style="margin-bottom:0">
@@ -1250,15 +1230,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </div>
 
   </div><!-- /pathway-resist -->
-
-  <!-- RECENT ENTRIES FEED -->
-  <div id="recent-section" style="display:none">
-    <div class="step-hd" style="margin-top:28px;margin-bottom:10px">
-      <div class="step-title">Recent entries</div>
-      <a href="tracker.html" style="font-size:12px;color:var(--mu);text-decoration:none;font-weight:600">View all →</a>
-    </div>
-    <div id="recent-feed"></div>
-  </div>
 
 </main>
 </div><!-- /app -->
@@ -1306,10 +1277,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 <div class="toast" id="toast"></div>
 
 <!-- FIREBASE -->
+<script src="nav.js"></script>
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, serverTimestamp, doc, getDoc, setDoc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -1329,17 +1301,7 @@ const provider = new GoogleAuthProvider();
 window._uid = null;
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { toast('Sign-in failed', true); } };
 window.signOut = async () => { await fbSignOut(auth); };
-window._addEntry = async (uid, entry) => {
-  const ref = await addDoc(collection(db,'users',uid,'entries'), {...entry, created_at: serverTimestamp()});
-  loadRecentEntries(uid); // refresh feed
-  return ref;
-};
-
-window._loadRecentEntries = async (uid) => {
-  const q = query(collection(db,'users',uid,'entries'), orderBy('timestamp','desc'), limit(5));
-  const snap = await getDocs(q);
-  return snap.docs.map(d => d.data());
-};
+window._addEntry = async (uid, entry) => addDoc(collection(db,'users',uid,'entries'), {...entry, created_at: serverTimestamp()});
 
 // Custom sub-tag Firebase sync
 window._saveCustomSubTags = async (uid, data) => {
@@ -1371,7 +1333,6 @@ function updateAuthUI(user) {
     if(el) el.textContent = isIn ? 'Signed in as ' + (user.displayName || user.email) : 'Not signed in';
   });
   if (isIn) {
-    loadRecentEntries(user.uid);
     window._loadCustomSubTags(user.uid).then(fbData => {
       const localData = window.loadCustomSubTags();
       const merged = Object.assign({}, localData);
@@ -1388,37 +1349,12 @@ function updateAuthUI(user) {
   }
 }
 onAuthStateChanged(auth, updateAuthUI);
-
-async function loadRecentEntries(uid) {
-  try {
-    const entries = await window._loadRecentEntries(uid);
-    window.renderRecentFeed(entries);
-  } catch(e) { /* silent */ }
-}
 </script>
 
 <!-- LOGIC -->
 <script>
 // THEME
-function toggleTheme() {
-  const d = document.documentElement;
-  const next = d.getAttribute('data-theme') === 'dark' ? '' : 'dark';
-  d.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-}
-(()=>{ const t=localStorage.getItem('theme'); if(t) document.documentElement.setAttribute('data-theme',t); })();
-
-// PROFILE MENU
-window.toggleProfileMenu = () => {
-  document.getElementById('profile-menu').classList.toggle('on');
-};
-document.addEventListener('click', e => {
-  const menu = document.getElementById('profile-menu');
-  const btn = document.getElementById('avatar-btn');
-  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
-    menu.classList.remove('on');
-  }
-});
+// Theme and profile menu are handled by nav.js
 
 // STATE — episode pathway
 const S = {
@@ -1881,32 +1817,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     if (btn && btn.classList.contains('add-other-btn')) btn.click();
   });
 });
-
-// RECENT FEED
-window.renderRecentFeed = (entries) => {
-  if (!entries.length) return;
-  const section = document.getElementById('recent-section');
-  const feed = document.getElementById('recent-feed');
-  if (!section || !feed) return;
-  section.style.display = '';
-  const TYPE_LABEL = {did:'Did it', resisted:'Resisted', near:'Near miss'};
-  const BFRB_LABEL = {picking:'Skin picking', biting:'Nail/skin biting'};
-  feed.innerHTML = entries.map(e => {
-    const type = e.entry_type || 'did';
-    const dateStr = e.timestamp ? new Date(e.timestamp).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}) : '';
-    const bfrb = BFRB_LABEL[e.bfrb_type] || e.bfrb_type || '';
-    const loc = e.location ? ` · ${e.location}` : '';
-    const urge = e.urge_before ? ` · Urge ${e.urge_before}/10` : '';
-    return `<div class="recent-item">
-      <div class="recent-dot ${type}"></div>
-      <div class="recent-item-main">
-        <div class="recent-item-title">${TYPE_LABEL[type]||type} — ${bfrb}</div>
-        <div class="recent-item-sub">${loc}${urge}</div>
-      </div>
-      <div class="recent-item-time">${dateStr}</div>
-    </div>`;
-  }).join('');
-};
 </script>
 </body>
 </html>

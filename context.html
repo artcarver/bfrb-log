@@ -244,71 +244,13 @@ p strong{color:var(--tx);font-weight:600}
   .approach-header{flex-direction:column;gap:8px}
   .timer-display{font-size:40px}
 }
-
-/* DYNAMIC PATTERNS SECTION */
-.dyn-section{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px 22px;margin-bottom:32px;box-shadow:var(--s1)}
-.dyn-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.dyn-section-title{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em}
-.dyn-section-link{font-size:12px;font-weight:600;color:var(--mu);text-decoration:none;transition:color .15s}
-.dyn-section-link:hover{color:var(--ac)}
-.dyn-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:500px){.dyn-grid{grid-template-columns:1fr}}
-.dyn-item{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:13px 14px}
-.dyn-item-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.dyn-item-label .ico{font-size:12px}
-.dyn-pills{display:flex;flex-wrap:wrap;gap:5px}
-.dyn-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:var(--pill);background:var(--acl);border:1px solid rgba(193,105,79,.2);font-size:12px;font-weight:500;color:var(--tx2)}
-.dyn-pill .cnt{font-size:10px;color:var(--mu);font-weight:600}
-.dyn-empty{font-size:12px;color:var(--mu);font-style:italic}
-.dyn-signin{text-align:center;padding:20px 16px;color:var(--mu)}
-.dyn-signin-text{font-size:13px;margin-bottom:12px;line-height:1.6}
-.dyn-signin-btn{display:inline-flex;align-items:center;gap:8px;background:var(--ac);border:none;border-radius:var(--pill);padding:10px 20px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;transition:background .18s}
-.dyn-signin-btn:hover{background:var(--ac-h)}
-/* SIGN BTN (used in nav on this page) */
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:all .18s;box-shadow:0 1px 3px rgba(44,31,20,.06);white-space:nowrap}
-.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
 </style>
 </head>
 <body>
 
-<nav>
-  <a class="nav-brand" href="index.html">Ground<span>work</span></a>
-  <div class="nav-links">
-    <a class="nav-link" href="index.html">Log</a>
-    <a class="nav-link" href="tracker.html">Patterns</a>
-    <a class="nav-link active" href="context.html">Context</a>
-  </div>
-  <div class="nav-right">
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">◐</button>
-    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none" aria-label="Account menu">
-      <img class="user-avatar" id="user-avatar" src="" alt="">
-    </button>
-    <div class="profile-menu" id="profile-menu">
-      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
-        <span class="profile-menu-icon">◐</span> Dark mode
-      </button>
-    </div>
-  </div>
-</nav>
+<div id="gw-nav"></div>
 
 <main>
-
-  <!-- DYNAMIC PATTERNS (loaded from Firebase if signed in) -->
-  <div class="dyn-section" id="dyn-patterns">
-    <div class="dyn-section-hd">
-      <div class="dyn-section-title">Your context patterns</div>
-      <a class="dyn-section-link" href="tracker.html">Full patterns →</a>
-    </div>
-    <div id="dyn-patterns-body">
-      <div class="dyn-signin">
-        <div class="dyn-signin-text">Sign in to see your personalized context patterns —<br>where, when, and what you tend to be doing around episodes.</div>
-        <button class="dyn-signin-btn" onclick="window.signInWithGoogle && window.signInWithGoogle()">
-          <svg width="16" height="16" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.706c-.18-.54-.282-1.117-.282-1.706s.102-1.166.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 6.294C4.672 4.169 6.656 3.58 9 3.58z"/></svg>
-          Sign in with Google
-        </button>
-      </div>
-    </div>
-  </div>
 
   <!-- HERO -->
   <div class="ctx-hero">
@@ -918,27 +860,7 @@ p strong{color:var(--tx);font-weight:600}
 </main>
 
 <script>
-function toggleTheme(){
-  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  document.documentElement.setAttribute('data-theme',isDark?'':'dark');
-  localStorage.setItem('gw-theme',isDark?'':'dark');
-}
-(function(){
-  const saved=localStorage.getItem('gw-theme')||localStorage.getItem('theme');
-  const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-  if(saved==='dark'||(!saved&&prefersDark)){
-    document.documentElement.setAttribute('data-theme','dark');
-  }
-})();
-
-window.toggleProfileMenu = () => {
-  document.getElementById('profile-menu').classList.toggle('on');
-};
-document.addEventListener('click', e => {
-  const menu = document.getElementById('profile-menu');
-  const btn = document.getElementById('avatar-btn');
-  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) menu.classList.remove('on');
-});
+// Theme and profile menu handled by nav.js
 
 // ── PROTOCOL CARDS ──
 function toggleProtocol(card) {
@@ -1060,120 +982,6 @@ function selectUrge(btnEl, panelId) {
   }
 }
 </script>
-
-<!-- FIREBASE (optional sign-in for personalized patterns) -->
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-  authDomain: "skin-picking-log.firebaseapp.com",
-  projectId: "skin-picking-log",
-  storageBucket: "skin-picking-log.firebasestorage.app",
-  messagingSenderId: "162906566118",
-  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-
-window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); } };
-window.signOut = async () => { await fbSignOut(auth); };
-
-async function loadContextPatterns(uid) {
-  try {
-    const snap = await getDocs(query(collection(db,'users',uid,'entries'), orderBy('timestamp','desc'), limit(200)));
-    const entries = snap.docs.map(d => d.data());
-    renderContextPatterns(entries);
-  } catch(e) {
-    document.getElementById('dyn-patterns-body').innerHTML = '<div class="dyn-empty" style="padding:12px 0">Could not load your data.</div>';
-  }
-}
-
-function renderContextPatterns(entries) {
-  const eps = entries.filter(e => e.entry_type === 'did' || e.entry_type === 'near');
-  const body = document.getElementById('dyn-patterns-body');
-
-  function topItems(field, n=4) {
-    const counts = {};
-    eps.forEach(e => {
-      if (!e[field]) return;
-      String(e[field]).split(',').map(s=>s.trim()).filter(Boolean).forEach(v => { counts[v] = (counts[v]||0)+1; });
-    });
-    return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,n);
-  }
-
-  function topSingle(field, n=4) {
-    const counts = {};
-    eps.forEach(e => { if(e[field]) counts[e[field]] = (counts[e[field]]||0)+1; });
-    return Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,n);
-  }
-
-  // Time of day
-  const hourCounts = new Array(24).fill(0);
-  eps.forEach(e => { if(e.timestamp) hourCounts[new Date(e.timestamp).getHours()]++; });
-  const peakHour = hourCounts.indexOf(Math.max(...hourCounts));
-  const timeStr = eps.length > 0 ? new Date(2000,0,1,peakHour).toLocaleTimeString('en-US',{hour:'numeric'}) : null;
-
-  const locations = topSingle('location');
-  const activities = topItems('activity');
-  const moods = topItems('mood_before');
-  const triggers = topItems('emotional_triggers');
-
-  if (eps.length === 0) {
-    body.innerHTML = '<div class="dyn-empty" style="padding:8px 0">Log a few episodes to see your context patterns here.</div>';
-    return;
-  }
-
-  function pillsHtml(items, color='var(--acl)') {
-    if (!items.length) return '<div class="dyn-empty">Not yet logged</div>';
-    return '<div class="dyn-pills">' + items.map(([v,c]) =>
-      `<div class="dyn-pill">${v} <span class="cnt">${c}×</span></div>`
-    ).join('') + '</div>';
-  }
-
-  body.innerHTML = `
-    <div class="dyn-grid">
-      <div class="dyn-item">
-        <div class="dyn-item-label"><span class="ico">🕐</span> When — peak time</div>
-        ${timeStr ? `<div style="font-family:'Lora',serif;font-size:20px;color:var(--tx);margin-bottom:4px">${timeStr}</div><div style="font-size:11px;color:var(--mu)">most episodes occur around this hour</div>` : '<div class="dyn-empty">Not enough data</div>'}
-      </div>
-      <div class="dyn-item">
-        <div class="dyn-item-label"><span class="ico">📍</span> Where</div>
-        ${pillsHtml(locations)}
-      </div>
-      <div class="dyn-item">
-        <div class="dyn-item-label"><span class="ico">🎧</span> While doing</div>
-        ${pillsHtml(activities)}
-      </div>
-      <div class="dyn-item">
-        <div class="dyn-item-label"><span class="ico">😔</span> Mood before</div>
-        ${pillsHtml(moods)}
-      </div>
-    </div>
-    ${triggers.length ? `<div style="margin-top:12px"><div class="dyn-item-label"><span class="ico">⚡</span> Top emotional triggers</div><div class="dyn-pills">${triggers.map(([v,c])=>`<div class="dyn-pill">${v} <span class="cnt">${c}×</span></div>`).join('')}</div></div>` : ''}
-    <div style="margin-top:14px;font-size:12px;color:var(--mu)">Based on ${eps.length} logged episode${eps.length!==1?'s':''}. <a href="tracker.html" style="color:var(--ac);text-decoration:none;font-weight:600">See full analysis →</a></div>
-  `;
-}
-
-onAuthStateChanged(auth, user => {
-  const signBtn = document.getElementById('sign-btn-nav');
-  const avatarBtn = document.getElementById('avatar-btn');
-  if (signBtn) signBtn.style.display = user ? 'none' : '';
-  if (avatarBtn) avatarBtn.style.display = user ? 'flex' : 'none';
-  if (user && user.photoURL) {
-    const av = document.getElementById('user-avatar');
-    if (av) av.src = user.photoURL;
-  }
-  if (user) {
-    loadContextPatterns(user.uid);
-  }
-});
-</script>
-
+<script src="nav.js"></script>
 </body>
 </html>

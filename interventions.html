@@ -268,26 +268,7 @@ main{max-width:560px;margin:0 auto;padding:18px 14px}
 </div>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-brand" href="index.html">Ground<span>work</span></a>
-  <div class="nav-links">
-    <a class="nav-link" href="index.html">Log</a>
-    <a class="nav-link" href="tracker.html">Patterns</a>
-    <a class="nav-link active" href="interventions.html">Tools</a>
-    <a class="nav-link" href="context.html">Context</a>
-  </div>
-  <div class="nav-right">
-    <button class="theme-btn" onclick="toggleTheme()">&#9680;</button>
-    <button class="sign-btn" id="sign-btn-nav" onclick="signInWithGoogle()">Sign in</button>
-    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none" aria-label="Account menu">
-      <img class="user-avatar" id="user-avatar" src="" alt="">
-    </button>
-    <div class="profile-menu" id="profile-menu">
-      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()"><span class="profile-menu-icon">&#9680;</span> Dark mode</button>
-      <button class="profile-menu-item" onclick="signOut()"><span class="profile-menu-icon">&rarr;</span> Sign out</button>
-    </div>
-  </div>
-</nav>
+<div id="gw-nav"></div>
 
 <!-- APP -->
 <div id="app">
@@ -760,13 +741,7 @@ main{max-width:560px;margin:0 auto;padding:18px 14px}
 <div class="toast" id="toast"></div>
 
 <script>
-// ── THEME ──
-function toggleTheme(){const d=document.documentElement,isDark=d.getAttribute('data-theme')==='dark';d.setAttribute('data-theme',isDark?'':'dark');localStorage.setItem('gw-theme',isDark?'':'dark');}
-(function(){const s=localStorage.getItem('gw-theme')||localStorage.getItem('theme'),p=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.setAttribute('data-theme','dark');})();
-
-// ── PROFILE MENU ──
-window.toggleProfileMenu=()=>document.getElementById('profile-menu').classList.toggle('on');
-document.addEventListener('click',e=>{const m=document.getElementById('profile-menu'),b=document.getElementById('avatar-btn');if(m&&b&&!b.contains(e.target)&&!m.contains(e.target))m.classList.remove('on');});
+// Theme and profile menu handled by nav.js
 
 // ── CARD TOGGLE ──
 function toggleCard(id){document.getElementById(id).classList.toggle('open');}
@@ -917,6 +892,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 // manages the auth screen + #app visibility, and calls window.renderAll(entries).
 window.renderAll=entries=>renderEffectiveness(entries);
 </script>
+<script src="nav.js"></script>
 <script type="module" src="firebase.js"></script>
 </body>
 </html>
