@@ -1,13 +1,10 @@
 /**
- * nav.js — Groundwork shared navigation
- * Renders the nav bar on every page and manages theme + profile menu.
- * Each page just needs: <div id="gw-nav"></div> where <nav> used to be,
- * and <script src="nav.js"></script> before closing </body>.
- * The active link is detected automatically from window.location.pathname.
+ * nav.js - Groundwork shared navigation
  */
 
 (function () {
-  // ── THEME (runs immediately, before render, to avoid flash) ──
+  // 1. THEME INITIALIZATION
+  // Runs immediately to prevent a white flash on load for dark mode users
   const savedTheme = localStorage.getItem('gw-theme') || localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
@@ -18,121 +15,133 @@
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
     localStorage.setItem('gw-theme', isDark ? '' : 'dark');
-    // keep legacy key in sync for firebase.js which reads it
     localStorage.setItem('theme', isDark ? '' : 'dark');
   };
 
-  // ── FIREBASE STUBS (for pages without firebase.js, e.g. context.html) ──
-  // firebase.js will override these when it loads.
-  if (!window.signInWithGoogle) {
-    window.signInWithGoogle = function () {
-      window.location.href = 'index.html';
-    };
-  }
-  if (!window.signOut) {
-    window.signOut = function () {};
-  }
+  // 2. FIREBASE STUBS
+  // Prevents console errors if the nav loads before firebase.js has initialized auth functions
+  if (!window.signInWithGoogle) window.signInWithGoogle = function () {};
+  if (!window.signOut) window.signOut = function () {};
 
-  // ── NAV LINKS ──
-  const NAV_LINKS = [
-    { href: 'index.html',         label: 'Log'         },
-    { href: 'tracker.html',       label: 'Patterns'    },
-    { href: 'interventions.html', label: 'Tools'       },
-    { href: 'context.html',       label: 'Context'     },
-  ];
-
-  function activePage() {
-    const path = window.location.pathname;
-    const file = path.split('/').pop() || 'index.html';
-    return file || 'index.html';
-  }
-
+  // 3. BUILD NAV HTML
   function buildNav() {
-    const current = activePage();
-    const linksHtml = NAV_LINKS.map(({ href, label }) => {
-      const isActive = href === current || (current === '' && href === 'index.html');
-      return `<a class="nav-link${isActive ? ' active' : ''}" href="${href}">${label}</a>`;
-    }).join('');
+    const path = window.location.pathname;
+    const isPage = (p) => path.includes(p) || (p === 'index.html' && path.endsWith('/'));
 
-    return `<nav>
-  <a class="nav-brand" href="index.html">Ground<span>work</span></a>
-  <div class="nav-links">
-    ${linksHtml}
-  </div>
-  <div class="nav-right">
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">&#9680;</button>
-    <button class="sign-btn" id="sign-btn-nav" onclick="signInWithGoogle()">Sign in</button>
-    <button class="avatar-btn" id="avatar-btn" onclick="toggleProfileMenu()" style="display:none" aria-label="Account menu">
-      <img class="user-avatar" id="user-avatar" src="" alt="">
-    </button>
-    <div class="profile-menu" id="profile-menu">
-      <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
-        <span class="profile-menu-icon">&#9680;</span> Dark mode
-      </button>
-      <button class="profile-menu-item" onclick="signOut()">
-        <span class="profile-menu-icon">&rarr;</span> Sign out
-      </button>
-    </div>
-  </div>
-</nav>`;
+    return `
+      <nav>
+        <a href="index.html" class="nav-brand">Ground<span>work</span></a>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link ${isPage('index.html') ? 'active' : ''}">Log</a>
+          <a href="tracker.html" class="nav-link ${isPage('tracker.html') ? 'active' : ''}">Patterns</a>
+          <a href="interventions.html" class="nav-link ${isPage('interventions.html') ? 'active' : ''}">Tools</a>
+          <a href="context.html" class="nav-link ${isPage('context.html') ? 'active' : ''}">Context</a>
+        </div>
+        <div class="nav-right">
+          <button id="sign-btn-nav" class="sign-btn" onclick="signInWithGoogle()" style="display:none">Sign in</button>
+          <button id="avatar-btn" class="avatar-btn" onclick="toggleProfileMenu()" style="display:none">
+            <img class="user-avatar" id="user-avatar" src="" alt="Profile">
+          </button>
+          <div class="profile-menu" id="profile-menu">
+            <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
+              <span class="profile-menu-icon">&#9680;</span> Toggle Theme
+            </button>
+            <button class="profile-menu-item" onclick="signOut()">
+              <span class="profile-menu-icon">&rarr;</span> Sign out
+            </button>
+          </div>
+        </div>
+      </nav>
+    `;
   }
 
-  // ── PROFILE MENU ──
+  // 4. PROFILE MENU TOGGLE
   window.toggleProfileMenu = function () {
     const menu = document.getElementById('profile-menu');
     if (menu) menu.classList.toggle('on');
   };
 
-  // ── INJECT RESPONSIVE NAV STYLES ──
-  // These supplement each page's existing nav CSS to handle the 4-link nav on mobile.
+  // 5. INJECT STYLES
   function injectNavStyles() {
     if (document.getElementById('gw-nav-styles')) return;
     const style = document.createElement('style');
     style.id = 'gw-nav-styles';
     style.textContent = `
-      @media (max-width: 520px) {
-        .nav-link { font-size: 12px; padding: 5px 7px; }
-      }
-      @media (max-width: 400px) {
-        .nav-link { font-size: 11px; padding: 5px 5px; }
-        .nav-brand { font-size: 16px; }
-      }
-      /* iOS Safari: prevent auto-zoom on input focus (triggers when font-size < 16px) */
+      /* iOS Safari: Prevent auto-zoom on input focus */
       @media (max-width: 768px) {
-        input[type="text"],
-        input[type="datetime-local"],
-        input[type="number"],
-        textarea,
-        select {
+        input[type="text"], input[type="datetime-local"], input[type="number"], textarea, select {
           font-size: 16px !important;
         }
+      }
+      
+      /* Profile Menu Styles */
+      .profile-menu {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background: var(--card);
+        border: 1px solid var(--bdr);
+        border-radius: var(--rsm);
+        box-shadow: var(--s2);
+        min-width: 160px;
+        display: none;
+        z-index: 200;
+        overflow: hidden;
+      }
+      .profile-menu.on { display: block; }
+      .profile-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--tx2);
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        transition: var(--tr);
+      }
+      .profile-menu-item:hover {
+        background: var(--bg);
+        color: var(--tx);
+      }
+      .profile-menu-item + .profile-menu-item {
+        border-top: 1px solid var(--bdr);
+      }
+      .profile-menu-icon {
+        font-size: 14px;
+        width: 16px;
+        text-align: center;
       }
     `;
     document.head.appendChild(style);
   }
 
-  // ── INJECT NAV ──
+  // 6. INJECT NAV INTO DOM
   function injectNav() {
     injectNavStyles();
     const placeholder = document.getElementById('gw-nav');
+    
     if (placeholder) {
-      placeholder.outerHTML = buildNav();
-    } else {
-      // Fallback: replace existing <nav> if placeholder not present
-      const existing = document.querySelector('nav');
-      if (existing) existing.outerHTML = buildNav();
+      // Use innerHTML instead of outerHTML to retain the container for subsequent re-renders
+      placeholder.innerHTML = buildNav();
     }
 
     // Close profile menu on outside click
     document.addEventListener('click', function (e) {
       const menu = document.getElementById('profile-menu');
-      const btn  = document.getElementById('avatar-btn');
+      const btn = document.getElementById('avatar-btn');
       if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
         menu.classList.remove('on');
       }
     });
   }
 
+  // Wait for DOM to load before injecting
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectNav);
   } else {
