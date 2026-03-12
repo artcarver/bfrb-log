@@ -42,21 +42,40 @@ nav{height:52px;display:flex;align-items:center;justify-content:space-between;pa
 #app.on{display:block}
 main{max-width:800px;margin:0 auto;padding:24px 14px}
 
-.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx)}
-.time-filter{padding:6px 12px;border-radius:var(--pill);border:1px solid var(--bdr);background:var(--sur);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer}
+.controls{display:flex;gap:8px;align-items:center}
+.select-btn, .action-btn{padding:8px 14px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;outline:none;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.action-btn:hover{border-color:var(--ac);color:var(--ac)}
 
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;text-align:center;box-shadow:var(--s1)}
 .stat-val{font-family:'Lora',serif;font-size:28px;color:var(--ac);line-height:1.2}
 .stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:4px}
 
-.chart-grid{display:grid;grid-template-columns:1fr;gap:20px}
+.chart-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:32px}
 @media(min-width:600px){.chart-grid{grid-template-columns:1fr 1fr}}
 
 .chart-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1)}
 .chart-title{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:16px;text-align:center}
 .chart-wrapper{position:relative;height:220px;width:100%}
+
+/* RAW LOG FEED */
+.feed-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.feed-title{font-family:'Lora',serif;font-size:20px;color:var(--tx)}
+.feed-toggle{background:none;border:none;color:var(--mu);font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr)}
+.feed-toggle:hover{color:var(--tx)}
+
+.log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px;margin-bottom:10px;box-shadow:var(--s1)}
+.log-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.log-date{font-size:12px;font-weight:600;color:var(--tx2)}
+.log-badge{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:4px;background:var(--sur);color:var(--mu)}
+.log-badge.resisted{background:var(--sagel);color:var(--sage)}
+.log-badge.near_miss{background:var(--warml);color:var(--warm)}
+.log-badge.did{background:var(--acl);color:var(--ac)}
+.log-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mu);margin-bottom:8px}
+.log-meta span{background:var(--sur);padding:2px 8px;border-radius:var(--pill);border:1px solid var(--bdr)}
+.log-notes{font-size:13px;color:var(--tx);background:var(--bg);padding:10px;border-radius:var(--rsm);border:1px solid var(--bdr);margin-top:8px;line-height:1.5}
 
 .empty-state{text-align:center;padding:40px 20px;color:var(--mu);font-size:14px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);margin-top:20px}
 </style>
@@ -77,11 +96,14 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 <main>
   <div class="header-row">
     <div class="page-title">Clinical Patterns</div>
-    <select class="time-filter" id="time-filter" onchange="loadData()">
-      <option value="7">Last 7 Days</option>
-      <option value="30" selected>Last 30 Days</option>
-      <option value="all">All Time</option>
-    </select>
+    <div class="controls">
+      <select class="select-btn" id="time-filter" onchange="loadData()">
+        <option value="7">Last 7 Days</option>
+        <option value="30" selected>Last 30 Days</option>
+        <option value="all">All Time</option>
+      </select>
+      <button class="action-btn" onclick="exportCSV()">Export CSV</button>
+    </div>
   </div>
 
   <div id="loading" style="text-align:center;color:var(--mu);padding:40px">Analyzing logs...</div>
@@ -120,6 +142,13 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
         <div class="chart-wrapper"><canvas id="chart-tools"></canvas></div>
       </div>
     </div>
+
+    <div class="feed-header">
+      <div class="feed-title">Raw Log Feed</div>
+      <button class="feed-toggle" id="feed-toggle" onclick="toggleFeed()">View All</button>
+    </div>
+    <div id="log-feed"></div>
+
   </div>
 
   <div id="empty-state" class="empty-state" style="display:none">
@@ -149,7 +178,9 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 window._uid = null;
+window._currentEntries = [];
 let chartInstances = {};
+let feedExpanded = false;
 
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
 window.signOut = async () => { await fbSignOut(auth); };
@@ -161,7 +192,6 @@ onAuthStateChanged(auth, user => {
   if (user) loadData();
 });
 
-// Set global chart defaults based on theme
 Chart.defaults.color = '#9C8878';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 
@@ -187,6 +217,8 @@ window.loadData = async () => {
     const entries = [];
     snap.forEach(doc => entries.push(doc.data()));
     
+    window._currentEntries = entries;
+
     if (entries.length === 0) {
       document.getElementById('loading').style.display = 'none';
       document.getElementById('empty-state').style.display = 'block';
@@ -194,6 +226,11 @@ window.loadData = async () => {
     }
 
     processData(entries);
+    feedExpanded = false;
+    document.getElementById('feed-toggle').textContent = entries.length > 5 ? 'View All' : '';
+    document.getElementById('feed-toggle').style.display = entries.length > 5 ? 'block' : 'none';
+    renderFeed();
+
   } catch (e) {
     console.error("Error fetching logs:", e);
     document.getElementById('loading').textContent = "Error loading data. Check console.";
@@ -211,14 +248,10 @@ function processData(entries) {
   let tools = {};
 
   entries.forEach(e => {
-    // Top line stats
     if (e.entry_type === 'resisted' || e.entry_type === 'near_miss') resisted++;
     if (e.urge_before) totalUrge += e.urge_before;
-
-    // Outcomes
     if (e.entry_type) outcomes[e.entry_type]++;
 
-    // Time of Day (Morning 6-12, Afternoon 12-17, Evening 17-22, Night 22-6)
     if (e.created_at) {
       const date = e.created_at.toDate ? e.created_at.toDate() : new Date(e.created_at);
       const hour = date.getHours();
@@ -228,12 +261,10 @@ function processData(entries) {
       else times.night++;
     }
 
-    // Triggers
     if (e.primary_trigger) {
       triggers[e.primary_trigger] = (triggers[e.primary_trigger] || 0) + 1;
     }
 
-    // Tools & Effectiveness
     if (e.tried_intervention && e.interventions) {
       const isWin = (e.entry_type === 'resisted' || e.entry_type === 'near_miss');
       e.interventions.split(',').forEach(tool => {
@@ -245,12 +276,10 @@ function processData(entries) {
     }
   });
 
-  // Update UI Stats
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-resist').textContent = Math.round((resisted / total) * 100) + '%';
   document.getElementById('stat-urge').textContent = (totalUrge / total).toFixed(1);
 
-  // Render Charts
   renderOutcomes(outcomes);
   renderTimeOfDay(times);
   renderTriggers(triggers);
@@ -260,17 +289,116 @@ function processData(entries) {
   document.getElementById('dashboard').style.display = 'block';
 }
 
+function escapeHtml(unsafe) {
+  return (unsafe || '').toString().replace(/[&<"']/g, function(m) {
+    switch (m) {
+      case '&': return '&amp;';
+      case '<': return '&lt;';
+      case '"': return '&quot;';
+      default: return '&#039;';
+    }
+  });
+}
+
+function renderFeed() {
+  const container = document.getElementById('log-feed');
+  const toShow = feedExpanded ? window._currentEntries : window._currentEntries.slice(0, 5);
+  
+  const labels = { resisted: 'Resisted', near_miss: 'Near Miss', did: 'Did it' };
+
+  container.innerHTML = toShow.map(e => {
+    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    const dateStr = d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    const outClass = e.entry_type || 'did';
+    const outLabel = labels[e.entry_type] || e.entry_type;
+    
+    let metaHTML = `<span>Urge: ${e.urge_before}/10</span>`;
+    if (e.bfrb_type) metaHTML += `<span>${e.bfrb_type}</span>`;
+    if (e.duration) metaHTML += `<span>${e.duration}</span>`;
+    if (e.primary_trigger) metaHTML += `<span>Trig: ${e.primary_trigger.split('/')[0]}</span>`;
+    if (e.tried_intervention && e.interventions) metaHTML += `<span>Tool: ${e.interventions}</span>`;
+
+    let notesHTML = e.notes ? `<div class="log-notes">${escapeHtml(e.notes)}</div>` : '';
+
+    return `
+      <div class="log-card">
+        <div class="log-top">
+          <div class="log-date">${dateStr}</div>
+          <div class="log-badge ${outClass}">${outLabel}</div>
+        </div>
+        <div class="log-meta">${metaHTML}</div>
+        ${notesHTML}
+      </div>
+    `;
+  }).join('');
+}
+
+window.toggleFeed = () => {
+  feedExpanded = !feedExpanded;
+  document.getElementById('feed-toggle').textContent = feedExpanded ? 'Show Less' : 'View All';
+  renderFeed();
+};
+
+window.exportCSV = () => {
+  const entries = window._currentEntries;
+  if (!entries || entries.length === 0) {
+    alert("No data to export in the current timeframe.");
+    return;
+  }
+
+  const headers = [
+    "Date", "Time", "Behavior", "Outcome", "Urge_Level", 
+    "Area", "Target", "Awareness", "Duration", "Post_Ritual", 
+    "Pre_Action", "Trigger", "Environment", "Post_Feeling", 
+    "Interventions_Tried", "Effectiveness", "Notes"
+  ];
+
+  let csvContent = headers.join(",") + "\n";
+
+  entries.forEach(e => {
+    let d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    let dateStr = d.toLocaleDateString('en-US');
+    let timeStr = d.toLocaleTimeString('en-US');
+
+    const row = [
+      dateStr,
+      timeStr,
+      e.bfrb_type || '',
+      e.entry_type || '',
+      e.urge_before || '',
+      e.body_areas || '',
+      e.target || '',
+      e.awareness || '',
+      e.duration || '',
+      e.post_ritual || '',
+      e.pre_action || '',
+      e.primary_trigger || '',
+      e.environment || '',
+      e.post_feeling || '',
+      e.interventions || '',
+      e.intervention_effectiveness || '',
+      e.notes ? e.notes.replace(/"/g, '""').replace(/\n/g, ' ') : '' // sanitize notes for CSV
+    ];
+
+    csvContent += row.map(v => `"${v}"`).join(",") + "\n";
+  });
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `BFRB_Log_Export_${new Date().toLocaleDateString('en-US').replace(/\//g,'-')}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+// CHART LOGIC
 function destroyChart(id) {
   if (chartInstances[id]) chartInstances[id].destroy();
 }
 
-const colors = {
-  ac: '#C1694F',
-  sage: '#7A8C85',
-  warm: '#D4956A',
-  mu: '#9C8878',
-  bdr: '#E2D8CE'
-};
+const colors = { ac: '#C1694F', sage: '#7A8C85', warm: '#D4956A', mu: '#9C8878' };
 
 function renderOutcomes(data) {
   destroyChart('chart-outcomes');
@@ -285,11 +413,7 @@ function renderOutcomes(data) {
         borderWidth: 0
       }]
     },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom' } },
-      cutout: '70%'
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } }, cutout: '70%' }
   });
 }
 
@@ -308,12 +432,8 @@ function renderTimeOfDay(data) {
       }]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
-        x: { grid: { display: false } }
-      }
+      responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }
     }
   });
 }
@@ -325,7 +445,7 @@ function renderTriggers(data) {
   chartInstances['chart-triggers'] = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: sorted.map(i => i[0].split('/')[0].trim()), // Shorten label
+      labels: sorted.map(i => i[0].split('/')[0].trim()),
       datasets: [{
         data: sorted.map(i => i[1]),
         backgroundColor: colors.warm,
@@ -333,20 +453,14 @@ function renderTriggers(data) {
       }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
-        y: { grid: { display: false } }
-      }
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false } } }
     }
   });
 }
 
 function renderTools(data) {
   destroyChart('chart-tools');
-  // Calculate win rate percentage
   const sorted = Object.entries(data)
     .filter(i => i[1].attempts > 0)
     .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100)])
@@ -366,16 +480,9 @@ function renderTools(data) {
       }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true, maintainAspectRatio: false,
-      plugins: { 
-        legend: { display: false },
-        tooltip: { callbacks: { label: (ctx) => ctx.raw + '% success' } }
-      },
-      scales: {
-        x: { max: 100, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-        y: { grid: { display: false } }
-      }
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ctx.raw + '% success' } } },
+      scales: { x: { max: 100, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false } } }
     }
   });
 }
