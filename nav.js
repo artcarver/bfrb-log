@@ -22,6 +22,17 @@
     localStorage.setItem('theme', isDark ? '' : 'dark');
   };
 
+  // ── FIREBASE STUBS (for pages without firebase.js, e.g. context.html) ──
+  // firebase.js will override these when it loads.
+  if (!window.signInWithGoogle) {
+    window.signInWithGoogle = function () {
+      window.location.href = 'index.html';
+    };
+  }
+  if (!window.signOut) {
+    window.signOut = function () {};
+  }
+
   // ── NAV LINKS ──
   const NAV_LINKS = [
     { href: 'index.html',         label: 'Log'         },
@@ -72,8 +83,37 @@
     if (menu) menu.classList.toggle('on');
   };
 
+  // ── INJECT RESPONSIVE NAV STYLES ──
+  // These supplement each page's existing nav CSS to handle the 4-link nav on mobile.
+  function injectNavStyles() {
+    if (document.getElementById('gw-nav-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'gw-nav-styles';
+    style.textContent = `
+      @media (max-width: 520px) {
+        .nav-link { font-size: 12px; padding: 5px 7px; }
+      }
+      @media (max-width: 400px) {
+        .nav-link { font-size: 11px; padding: 5px 5px; }
+        .nav-brand { font-size: 16px; }
+      }
+      /* iOS Safari: prevent auto-zoom on input focus (triggers when font-size < 16px) */
+      @media (max-width: 768px) {
+        input[type="text"],
+        input[type="datetime-local"],
+        input[type="number"],
+        textarea,
+        select {
+          font-size: 16px !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   // ── INJECT NAV ──
   function injectNav() {
+    injectNavStyles();
     const placeholder = document.getElementById('gw-nav');
     if (placeholder) {
       placeholder.outerHTML = buildNav();
