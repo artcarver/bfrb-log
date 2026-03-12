@@ -874,6 +874,70 @@ document.addEventListener('DOMContentLoaded',()=>{
 window.renderAll=entries=>renderEffectiveness(entries);
 </script>
 <script src="nav.js"></script>
-<script type="module" src="firebase.js"></script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
+  authDomain: "skin-picking-log.firebaseapp.com",
+  projectId: "skin-picking-log",
+  storageBucket: "skin-picking-log.firebasestorage.app",
+  messagingSenderId: "162906566118",
+  appId: "1:162906566118:web:a89abbd383fc847ba97a27",
+  measurementId: "G-JR8BBWVVZT"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+
+window._uid = null;
+
+window.signInWithGoogle = async () => { 
+  try { await signInWithPopup(auth, provider); } 
+  catch(e) { if(window.toast) window.toast('Sign-in failed', true); } 
+};
+
+window.signOut = async () => { await fbSignOut(auth); };
+
+async function fetchEntries(uid) {
+  try {
+    const snap = await getDocs(collection(db, 'users', uid, 'entries'));
+    const entries = [];
+    snap.forEach(doc => entries.push(doc.data()));
+    // Pass to the renderEffectiveness function mapped in your existing script
+    if (window.renderAll) window.renderAll(entries);
+  } catch (e) {
+    console.error('Failed to load logs:', e);
+  }
+}
+
+function updateAuthUI(user) {
+  const isIn = !!user;
+  window._uid = isIn ? user.uid : null;
+  
+  const authScreen = document.getElementById('auth-screen');
+  const appScreen = document.getElementById('app');
+  if(authScreen) authScreen.classList.toggle('on', !isIn);
+  if(appScreen) appScreen.classList.toggle('on', isIn);
+  
+  const signBtn = document.getElementById('sign-btn-nav');
+  const avatarBtn = document.getElementById('avatar-btn');
+  const avatarImg = document.getElementById('user-avatar');
+  
+  if(signBtn) signBtn.style.display = isIn ? 'none' : '';
+  if(avatarBtn) avatarBtn.style.display = isIn ? 'flex' : 'none';
+  if(isIn && user.photoURL && avatarImg) avatarImg.src = user.photoURL;
+
+  if (isIn) {
+    fetchEntries(user.uid);
+  }
+}
+
+onAuthStateChanged(auth, updateAuthUI);
+</script>
 </body>
 </html>
