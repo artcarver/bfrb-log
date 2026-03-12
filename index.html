@@ -27,24 +27,24 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:100px;transition:background .3s,color .3s}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
 
 /* NAV */
-nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s}
+nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s;gap:8px}
 [data-theme="dark"] nav{background:rgba(30,23,16,.96)}
-.nav-brand{font-family:'Lora',serif;font-size:19px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none}
+.nav-brand{font-family:'Lora',serif;font-size:18px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none;flex-shrink:0}
 .nav-brand span{color:var(--ac)}
-.nav-links{display:flex;align-items:center;gap:2px}
-.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 13px;border-radius:var(--pill);transition:var(--tr)}
+.nav-links{display:flex;align-items:center;gap:1px;flex:1;justify-content:center}
+.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:5px 11px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
 .nav-link:hover{background:var(--acl);color:var(--ac)}
 .nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:8px}
-.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.theme-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
 .theme-btn:hover{border-color:var(--ac);color:var(--ac)}
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 14px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:5px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
 .sign-btn:hover{border-color:var(--ac);color:var(--ac)}
-.user-info{display:flex;align-items:center;gap:8px}
-.user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
+.user-info{display:flex;align-items:center;gap:6px}
+.user-avatar{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;flex-shrink:0}
 
 /* AUTH */
 .auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
@@ -60,47 +60,47 @@ nav{height:56px;display:flex;align-items:center;justify-content:space-between;pa
 /* LAYOUT */
 #app{display:none}
 #app.on{display:block}
-main{max-width:560px;margin:0 auto;padding:24px 16px}
+main{max-width:560px;margin:0 auto;padding:18px 14px}
 
 /* QUICK CARD */
-.quick-card{background:var(--ac);border-radius:var(--rlg);padding:18px 20px;margin-bottom:28px;box-shadow:0 4px 20px rgba(193,105,79,.28)}
-.quick-eyebrow{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px}
-.quick-title{font-family:'Lora',serif;font-size:16px;font-weight:400;color:#fff;margin-bottom:12px}
-.quick-btns{display:flex;gap:8px;flex-wrap:wrap}
-.qbtn{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:var(--pill);padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;transition:var(--tr)}
+.quick-card{background:var(--ac);border-radius:var(--r);padding:16px 18px;margin-bottom:22px;box-shadow:0 4px 20px rgba(193,105,79,.28)}
+.quick-eyebrow{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:3px}
+.quick-title{font-family:'Lora',serif;font-size:15px;font-weight:400;color:#fff;margin-bottom:10px}
+.quick-btns{display:flex;gap:7px;flex-wrap:wrap}
+.qbtn{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:var(--pill);padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;transition:var(--tr)}
 .qbtn:hover{background:rgba(255,255,255,.28)}
 
 /* STEP HEADERS */
-.step-hd{margin:28px 0 10px}
+.step-hd{margin:22px 0 8px}
 .step-hd:first-of-type{margin-top:0}
 .step-title{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em}
 .step-sub{font-size:12px;color:var(--mu);margin-top:2px}
 
 /* CARDS */
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:8px;box-shadow:var(--s1)}
-.field{margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:6px;box-shadow:var(--s1)}
+.field{margin-bottom:18px}
 .field:last-child{margin-bottom:0}
-.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
+.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:9px}
 
 /* LARGE CHOICE BUTTONS — behavior & entry type */
-.choice-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.choice-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.choice-btn{padding:18px 12px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
+.choice-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.choice-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.choice-btn{padding:14px 10px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
 .choice-btn:hover{border-color:var(--bdr2);background:var(--bg)}
 .choice-btn.on{background:var(--acl);border-color:var(--ac)}
-.choice-name{font-size:13px;font-weight:600;color:var(--tx2);display:block;margin-bottom:3px}
+.choice-name{font-size:13px;font-weight:600;color:var(--tx2);display:block}
 .choice-btn.on .choice-name{color:var(--ac)}
-.choice-sub{font-size:11px;color:var(--mu);display:block;line-height:1.4}
+.choice-sub{display:none}
 
 /* TIMING */
 .two-btn{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.flat-btn{padding:12px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
+.flat-btn{padding:11px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
 .flat-btn:hover{border-color:var(--bdr2)}
 .flat-btn.on{background:var(--acl);border-color:var(--ac);color:var(--ac)}
 
 /* TAGS */
-.tag-row{display:flex;flex-wrap:wrap;gap:7px}
-.tag{padding:8px 14px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;line-height:1}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:7px 13px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;line-height:1}
 .tag:hover{border-color:var(--bdr2);background:var(--bg)}
 .tag.on{background:var(--acl);border-color:var(--ac);color:var(--ac);font-weight:600}
 .tag.dashed{border-style:dashed;color:var(--mu)}
@@ -138,23 +138,21 @@ main{max-width:560px;margin:0 auto;padding:24px 16px}
 
 /* COMPLETION */
 .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.comp-btn{padding:12px 10px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none;font-family:'DM Sans',sans-serif}
+.comp-btn{padding:11px 10px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none;font-family:'DM Sans',sans-serif}
 .comp-btn:hover{border-color:var(--bdr2);background:var(--bg)}
-.comp-lbl{font-size:12px;font-weight:600;color:var(--tx2);display:block;margin-bottom:2px}
-.comp-sub{font-size:10px;color:var(--mu);display:block;line-height:1.3}
+.comp-lbl{font-size:12px;font-weight:600;color:var(--tx2);display:block}
+.comp-sub{display:none}
 .comp-btn.on{background:var(--acl);border-color:var(--ac)}
 .comp-btn.on .comp-lbl{color:var(--ac)}
-.comp-btn.on .comp-sub{color:var(--ac);opacity:.7}
 
 /* SEVERITY */
 .sev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.sev-btn{padding:11px 6px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none;font-family:'DM Sans',sans-serif}
+.sev-btn{padding:10px 6px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none;font-family:'DM Sans',sans-serif}
 .sev-btn:hover{border-color:var(--bdr2);background:var(--bg)}
-.sev-lbl{font-size:12px;font-weight:600;color:var(--tx2);display:block;margin-bottom:2px}
-.sev-sub{font-size:10px;color:var(--mu);display:block;line-height:1.3}
+.sev-lbl{font-size:12px;font-weight:600;color:var(--tx2);display:block}
+.sev-sub{display:none}
 .sev-btn.on{background:var(--acl);border-color:var(--ac)}
 .sev-btn.on .sev-lbl{color:var(--ac)}
-.sev-btn.on .sev-sub{color:var(--ac);opacity:.7}
 
 /* AWARENESS */
 .aw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -200,11 +198,11 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 .divider{height:1px;background:var(--bdr);margin:20px 0}
 
 /* SUBMIT */
-.submit-btn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);box-shadow:0 4px 18px rgba(193,105,79,.35);margin-top:12px}
+.submit-btn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:15px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);box-shadow:0 4px 18px rgba(193,105,79,.35);margin-top:10px}
 .submit-btn:hover{background:var(--ac-h)}
 .submit-btn:active{transform:scale(.99)}
 .submit-btn:disabled{opacity:.45;cursor:not-allowed}
-.reset-btn{width:100%;background:transparent;color:var(--mu);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:11px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px;transition:var(--tr)}
+.reset-btn{width:100%;background:transparent;color:var(--mu);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:6px;transition:var(--tr)}
 .reset-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
 
 /* STATUS */
@@ -725,6 +723,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-em-sc')">Self-conscious <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-em-fat')">Fatigue &amp; flat <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-em-rst')">Restless &amp; bored <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-em-pos')">Positive / excited <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-em-oth')">Other <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           </div>
           <div class="sub-acc-panel" id="ep-em-anx">
@@ -750,6 +749,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
           <div class="sub-acc-panel" id="ep-em-rst">
             <div class="tag-row" data-stc="etrig_restless" data-sg="etrig"><div class="tag" onclick="toggleTag(this,'etrig')">Bored</div><div class="tag" onclick="toggleTag(this,'etrig')">Restless</div><div class="tag" onclick="toggleTag(this,'etrig')">Antsy</div><div class="tag" onclick="toggleTag(this,'etrig')">Stuck</div><div class="tag" onclick="toggleTag(this,'etrig')">Procrastinating</div><div class="tag" onclick="toggleTag(this,'etrig')">Avoidant</div></div>
             <div class="add-other-row"><input type="text" class="add-other-input" id="ep-em-rst-in" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_restless',this.previousElementSibling)">Save</button></div>
+          </div>
+          <div class="sub-acc-panel" id="ep-em-pos">
+            <div class="tag-row" data-stc="etrig_positive" data-sg="etrig"><div class="tag" onclick="toggleTag(this,'etrig')">Excited</div><div class="tag" onclick="toggleTag(this,'etrig')">Anticipating something good</div><div class="tag" onclick="toggleTag(this,'etrig')">Celebratory</div><div class="tag" onclick="toggleTag(this,'etrig')">Relieved</div><div class="tag" onclick="toggleTag(this,'etrig')">Energized</div><div class="tag" onclick="toggleTag(this,'etrig')">Happy</div><div class="tag" onclick="toggleTag(this,'etrig')">Proud</div><div class="tag" onclick="toggleTag(this,'etrig')">Motivated</div></div>
+            <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_positive',this.previousElementSibling)">Save</button></div>
           </div>
           <div class="sub-acc-panel" id="ep-em-oth">
             <div class="tag-row" data-stc="etrig_other" data-sg="etrig"><div class="tag" onclick="toggleTag(this,'etrig')">Anticipating something</div><div class="tag" onclick="toggleTag(this,'etrig')">Excited</div><div class="tag" onclick="toggleTag(this,'etrig')">Nothing I can name</div></div>
@@ -782,6 +785,8 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     <!-- STEP 9: MOOD + URGE -->
     <div class="step-hd"><div class="step-title">How were you feeling?</div></div>
     <div class="card">
+
+      <!-- BEFORE emotions -->
       <div class="field">
         <span class="mood-section-lbl">Before</span>
         <div class="sub-acc-row">
@@ -823,58 +828,68 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
         </div>
       </div>
 
-      <div class="divider"></div>
-
+      <!-- URGE BEFORE -->
       <div class="field">
-        <span class="mood-section-lbl">After</span>
-        <div class="sub-acc-row">
-          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-calm')">Calm / relieved <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
-          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-neg')">Negative / self-critical <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
-          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-act')">Still activated <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
-          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-neu')">Neutral / flat <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
-          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-pos')">Positive <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+        <label class="field-label">Urge level before</label>
+        <div class="slider-row">
+          <input type="range" min="1" max="10" value="5" id="urge-before" oninput="updSlider(this,'ub-val','urge_before')">
+          <div class="slider-val" id="ub-val">5</div>
         </div>
-        <div class="sub-acc-panel" id="ep-ma-calm">
-          <div class="tag-row" data-stc="ma_calm" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Relieved</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Calm</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Satisfied</div><div class="etag" onclick="toggleEtag(this,'mood_after')">At ease</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Settled</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Grounded</div></div>
-          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_calm',this.previousElementSibling)">Save</button></div>
-        </div>
-        <div class="sub-acc-panel" id="ep-ma-neg">
-          <div class="tag-row" data-stc="ma_negative" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Disgusted</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Ashamed</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Guilty</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Regretful</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Frustrated with myself</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Disappointed</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Embarrassed</div></div>
-          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_negative',this.previousElementSibling)">Save</button></div>
-        </div>
-        <div class="sub-acc-panel" id="ep-ma-act">
-          <div class="tag-row" data-stc="ma_activated" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Still anxious</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Still stressed</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Still frustrated</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Worse than before</div></div>
-          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_activated',this.previousElementSibling)">Save</button></div>
-        </div>
-        <div class="sub-acc-panel" id="ep-ma-neu">
-          <div class="tag-row" data-stc="ma_neutral" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Unchanged</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Numb</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Disconnected</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Zoned out</div></div>
-          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_neutral',this.previousElementSibling)">Save</button></div>
-        </div>
-        <div class="sub-acc-panel" id="ep-ma-pos">
-          <div class="tag-row" data-stc="ma_positive" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Proud</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Accomplished</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Good</div></div>
-          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_positive',this.previousElementSibling)">Save</button></div>
-        </div>
+        <div class="slider-lbls"><span>1 — barely noticeable</span><span>10 — unmanageable</span></div>
       </div>
 
       <div class="divider"></div>
 
-      <div class="two-col">
-        <div>
-          <label class="field-label">Urge level before</label>
-          <div class="slider-row">
-            <input type="range" min="1" max="10" value="5" id="urge-before" oninput="updSlider(this,'ub-val','urge_before')">
-            <div class="slider-val" id="ub-val">5</div>
-          </div>
-          <div class="slider-lbls"><span>1 — barely noticeable</span><span>10 — unmanageable</span></div>
+      <!-- AFTER emotions -->
+      <div class="field">
+        <span class="mood-section-lbl">After</span>
+        <div class="sub-acc-row">
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-calm')">Calm / relieved <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-act')">Still activated <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-neg')">Self-critical <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-low')">Low / sad <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-sc')">Self-conscious <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-neu')">Neutral / flat <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'ep-ma-pos')">Positive <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
         </div>
-        <div>
-          <label class="field-label">Urge level after</label>
-          <div class="slider-row">
-            <input type="range" min="1" max="10" value="3" id="urge-after" oninput="updSlider(this,'ua-val','urge_after')">
-            <div class="slider-val" id="ua-val">3</div>
-          </div>
-          <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
+        <div class="sub-acc-panel" id="ep-ma-calm">
+          <div class="tag-row" data-stc="ma_calm" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Relieved</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Calm</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Satisfied</div><div class="etag" onclick="toggleEtag(this,'mood_after')">At ease</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Settled</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Grounded</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Content</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Relaxed</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_calm',this.previousElementSibling)">Save</button></div>
         </div>
+        <div class="sub-acc-panel" id="ep-ma-act">
+          <div class="tag-row" data-stc="ma_activated" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Still anxious</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Still stressed</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Still frustrated</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Still tense</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Worse than before</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_activated',this.previousElementSibling)">Save</button></div>
+        </div>
+        <div class="sub-acc-panel" id="ep-ma-neg">
+          <div class="tag-row" data-stc="ma_negative" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Disgusted with myself</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Ashamed</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Guilty</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Regretful</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Frustrated with myself</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Disappointed in myself</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_negative',this.previousElementSibling)">Save</button></div>
+        </div>
+        <div class="sub-acc-panel" id="ep-ma-low">
+          <div class="tag-row" data-stc="ma_low" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Sad</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Low</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Defeated</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Hopeless</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Deflated</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_low',this.previousElementSibling)">Save</button></div>
+        </div>
+        <div class="sub-acc-panel" id="ep-ma-sc">
+          <div class="tag-row" data-stc="ma_selfconscious" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Embarrassed</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Insecure</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Self-conscious</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Exposed</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_selfconscious',this.previousElementSibling)">Save</button></div>
+        </div>
+        <div class="sub-acc-panel" id="ep-ma-neu">
+          <div class="tag-row" data-stc="ma_neutral" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Unchanged</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Numb</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Disconnected</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Zoned out</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Flat</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Empty</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_neutral',this.previousElementSibling)">Save</button></div>
+        </div>
+        <div class="sub-acc-panel" id="ep-ma-pos">
+          <div class="tag-row" data-stc="ma_positive" data-sg="mood_after"><div class="etag" onclick="toggleEtag(this,'mood_after')">Proud</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Accomplished</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Good</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Motivated</div><div class="etag" onclick="toggleEtag(this,'mood_after')">Hopeful</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('ma_positive',this.previousElementSibling)">Save</button></div>
+        </div>
+      </div>
+
+      <!-- URGE AFTER -->
+      <div class="field" style="margin-bottom:0">
+        <label class="field-label">Urge level after</label>
+        <div class="slider-row">
+          <input type="range" min="1" max="10" value="3" id="urge-after" oninput="updSlider(this,'ua-val','urge_after')">
+          <div class="slider-val" id="ua-val">3</div>
+        </div>
+        <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
       </div>
 
     </div><!-- /mood card -->
@@ -1098,6 +1113,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-em-sc')">Self-conscious <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-em-fat')">Fatigue &amp; flat <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-em-rst')">Restless &amp; bored <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-em-pos')">Positive / excited <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
             <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-em-oth')">Other <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           </div>
           <div class="sub-acc-panel" id="r-em-anx">
@@ -1123,6 +1139,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
           <div class="sub-acc-panel" id="r-em-rst">
             <div class="tag-row" data-stc="etrig_restless" data-sg="r_etrig"><div class="tag" onclick="toggleTag(this,'r_etrig')">Bored</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Restless</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Antsy</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Stuck</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Procrastinating</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Avoidant</div></div>
             <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_restless',this.previousElementSibling)">Save</button></div>
+          </div>
+          <div class="sub-acc-panel" id="r-em-pos">
+            <div class="tag-row" data-stc="etrig_positive" data-sg="r_etrig"><div class="tag" onclick="toggleTag(this,'r_etrig')">Excited</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Anticipating something good</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Celebratory</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Relieved</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Energized</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Happy</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Proud</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Motivated</div></div>
+            <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('etrig_positive',this.previousElementSibling)">Save</button></div>
           </div>
           <div class="sub-acc-panel" id="r-em-oth">
             <div class="tag-row" data-stc="etrig_other" data-sg="r_etrig"><div class="tag" onclick="toggleTag(this,'r_etrig')">Anticipating something</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Excited</div><div class="tag" onclick="toggleTag(this,'r_etrig')">Nothing I can name</div></div>
@@ -1164,33 +1184,38 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
           <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-mb-low')">Low / sad <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-mb-sc')">Self-conscious <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-mb-rst')">Restless / flat <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="sub-acc-btn" onclick="toggleSubAcc(this,'r-mb-unc')">Uncertain / scattered <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
         </div>
         <div class="sub-acc-panel" id="r-mb-calm">
-          <div class="tag-row" data-stc="mb_calm" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Calm</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Content</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Relaxed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Focused</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Engaged</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Hopeful</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Proud</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Excited</div></div>
+          <div class="tag-row" data-stc="mb_calm" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Calm</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Content</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Relaxed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">At ease</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Focused</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Engaged</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Motivated</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Hopeful</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Proud</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Excited</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Energized</div></div>
           <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_calm',this.previousElementSibling)">Save</button></div>
         </div>
         <div class="sub-acc-panel" id="r-mb-tense">
-          <div class="tag-row" data-stc="mb_tense" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Anxious</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Nervous</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Stressed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Overwhelmed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Tense</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">On edge</div></div>
+          <div class="tag-row" data-stc="mb_tense" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Anxious</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Nervous</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Apprehensive</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Stressed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Overwhelmed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Pressured</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Tense</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Panicked</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">On edge</div></div>
           <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_tense',this.previousElementSibling)">Save</button></div>
         </div>
         <div class="sub-acc-panel" id="r-mb-fru">
-          <div class="tag-row" data-stc="mb_frustrated" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Frustrated</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Irritable</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Angry</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Annoyed</div></div>
+          <div class="tag-row" data-stc="mb_frustrated" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Frustrated</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Irritable</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Angry</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Annoyed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Resentful</div></div>
           <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_frustrated',this.previousElementSibling)">Save</button></div>
         </div>
         <div class="sub-acc-panel" id="r-mb-low">
-          <div class="tag-row" data-stc="mb_low" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Sad</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Low</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Lonely</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Defeated</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Ashamed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Guilty</div></div>
+          <div class="tag-row" data-stc="mb_low" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Sad</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Low</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Hopeless</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Lonely</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Defeated</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Disappointed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Grieving</div></div>
           <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_low',this.previousElementSibling)">Save</button></div>
         </div>
         <div class="sub-acc-panel" id="r-mb-sc">
-          <div class="tag-row" data-stc="mb_selfconscious" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Embarrassed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Regretful</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Insecure</div></div>
+          <div class="tag-row" data-stc="mb_selfconscious" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Guilty</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Ashamed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Embarrassed</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Regretful</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Insecure</div></div>
           <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_selfconscious',this.previousElementSibling)">Save</button></div>
         </div>
         <div class="sub-acc-panel" id="r-mb-rst">
-          <div class="tag-row" data-stc="mb_restless" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Bored</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Restless</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Antsy</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Tired</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Exhausted</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Numb</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Disconnected</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Zoned out</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Nothing in particular</div></div>
+          <div class="tag-row" data-stc="mb_restless" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Bored</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Restless</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Antsy</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Stuck</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Tired</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Exhausted</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Drained</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Numb</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Disconnected</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Zoned out</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Empty</div></div>
           <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_restless',this.previousElementSibling)">Save</button></div>
         </div>
+        <div class="sub-acc-panel" id="r-mb-unc">
+          <div class="tag-row" data-stc="mb_uncertain" data-sg="r_mood_before"><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Confused</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Uncertain</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Scattered</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Overwhelmed by decisions</div><div class="etag" onclick="toggleEtag(this,'r_mood_before')">Nothing in particular</div></div>
+          <div class="add-other-row"><input type="text" class="add-other-input" placeholder="Add your own..."><button class="add-other-btn" onclick="addCustomSubTag('mb_uncertain',this.previousElementSibling)">Save</button></div>
+        </div>
       </div>
-      <div>
+      <div class="field" style="margin-bottom:0">
         <label class="field-label">Urge level</label>
         <div class="slider-row">
           <input type="range" min="1" max="10" value="5" id="r-urge" oninput="updSlider(this,'r-urge-val','r_urge')">
@@ -1307,7 +1332,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, serverTimestamp, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -1329,6 +1354,19 @@ window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provid
 window.signOut = async () => { await fbSignOut(auth); };
 window._addEntry = async (uid, entry) => addDoc(collection(db,'users',uid,'entries'), {...entry, created_at: serverTimestamp()});
 
+// Custom sub-tag Firebase sync
+window._saveCustomSubTags = async (uid, data) => {
+  try {
+    await setDoc(doc(db,'users',uid,'settings','customSubTags'), { tags: data }, { merge: true });
+  } catch(e) { console.warn('Firebase custom tag save failed:', e); }
+};
+window._loadCustomSubTags = async (uid) => {
+  try {
+    const snap = await getDoc(doc(db,'users',uid,'settings','customSubTags'));
+    return snap.exists() ? (snap.data().tags || {}) : {};
+  } catch(e) { console.warn('Firebase custom tag load failed:', e); return {}; }
+};
+
 function updateAuthUI(user) {
   const isIn = !!user;
   window._uid = isIn ? user.uid : null;
@@ -1345,6 +1383,24 @@ function updateAuthUI(user) {
     const el = document.getElementById(id);
     if(el) el.textContent = isIn ? 'Signed in as ' + (user.displayName || user.email) : 'Not signed in';
   });
+  if (isIn) {
+    // Load Firebase custom tags, merge with localStorage, restore into DOM
+    window._loadCustomSubTags(user.uid).then(fbData => {
+      const localData = window.loadCustomSubTags();
+      // Merge: Firebase wins on overlap, but union all keys
+      const merged = Object.assign({}, localData);
+      Object.entries(fbData).forEach(([k, arr]) => {
+        if (!merged[k]) merged[k] = [];
+        arr.forEach(v => { if (!merged[k].includes(v)) merged[k].push(v); });
+      });
+      window.saveCustomSubTags(merged);
+      window.restoreCustomSubTags();
+      // Push merged back to Firebase in case local had extras
+      if (JSON.stringify(merged) !== JSON.stringify(fbData)) {
+        window._saveCustomSubTags(user.uid, merged);
+      }
+    });
+  }
 }
 onAuthStateChanged(auth, updateAuthUI);
 </script>
@@ -1473,6 +1529,11 @@ function restoreCustomSubTags() {
   });
 }
 
+// Expose on window so the Firebase module script can call them
+window.loadCustomSubTags = loadCustomSubTags;
+window.saveCustomSubTags = saveCustomSubTags;
+window.restoreCustomSubTags = restoreCustomSubTags;
+
 function alreadyHasTag(row, val) {
   return Array.from(row.querySelectorAll('.tag, .etag')).some(t => t.textContent.trim() === val);
 }
@@ -1484,10 +1545,7 @@ function injectCustomTag(row, val, sg) {
   el.textContent = val;
   const fn = isEtag ? 'toggleEtag' : 'toggleTag';
   el.setAttribute('onclick', `${fn}(this,'${sg}')`);
-  // Insert before the add-other-row, or at end of row
-  const addRow = row.parentElement.querySelector('.add-other-row');
-  if (addRow) row.appendChild(el);
-  else row.appendChild(el);
+  row.appendChild(el);
 }
 
 window.addCustomSubTag = (stc, inputEl) => {
@@ -1507,10 +1565,14 @@ window.addCustomSubTag = (stc, inputEl) => {
   // Inject tag visually
   injectCustomTag(row, val, sg);
 
-  // Persist to localStorage
+  // Persist to localStorage and Firebase
   const data = loadCustomSubTags();
   if (!data[stc]) data[stc] = [];
-  if (!data[stc].includes(val)) { data[stc].push(val); saveCustomSubTags(data); }
+  if (!data[stc].includes(val)) {
+    data[stc].push(val);
+    saveCustomSubTags(data);
+    if (window._uid) window._saveCustomSubTags(window._uid, data);
+  }
 
   // Flash confirmation and clear input
   inputEl.value = '';
@@ -1667,7 +1729,7 @@ window.submitEpisode = async () => {
     activity: [getOtherVal('ep-activity'),...S.activity].filter(Boolean).join(', '),
     emotional_triggers: S.etrig.join(', '),
     sensory_triggers: S.strig.join(', '),
-    other_trigger: getOtherVal('ep-trigger')||'',
+    other_trigger: '',
     mood_before: S.mood_before.join(', '),
     urge_before: S.urge_before,
     mood_after: S.mood_after.join(', '),
@@ -1703,7 +1765,7 @@ window.submitResist = async () => {
     activity: [getOtherVal('r-activity'),...(R.activity||[])].filter(Boolean).join(', '),
     emotional_triggers: (R.etrig||[]).join(', '),
     sensory_triggers: (R.strig||[]).join(', '),
-    other_trigger: getOtherVal('r-trigger')||'',
+    other_trigger: '',
     mood_before: (R.mood_before||[]).join(', '),
     urge_before: R.urge||5,
     mood_after: '',
@@ -1770,9 +1832,12 @@ window.qSlider = el=>{const pct=((el.value-1)/9)*100;el.style.background=`linear
 
 document.getElementById('q-save-btn').addEventListener('click', async()=>{
   if(!window._uid){toast('Not signed in',true);return;}
+  const btn = document.getElementById('q-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
   const entry={timestamp:localISO(),bfrb_type:QS.bfrb,entry_type:QS.type,awareness:'',body_areas:(QS.qArea||[]).join(', '),picked_what:'',mirror:'',completion:'',severity:'',duration:'',bite_what:'',bite_fingers:'',bite_intensity:'',bite_duration:'',location:'',activity:'',emotional_triggers:'',sensory_triggers:'',other_trigger:'',mood_before:'',urge_before:QS.urge,mood_after:'',urge_after:null,tried_intervention:false,interventions:'',intervention_effectiveness:null,notes:'(quick log)'};
   try{await window._addEntry(window._uid,entry);toast('Saved',false,true);closeQuick();}
   catch(e){toast('Error: '+e.message,true);}
+  finally{btn.disabled=false;btn.textContent='Save quick entry';}
 });
 
 // TOAST
@@ -1783,12 +1848,22 @@ window.toast = (msg,isErr=false,isOk=false)=>{
   setTimeout(()=>t.classList.remove('show'),3000);
 };
 
-// INIT sliders
+// INIT sliders + Enter key on custom tag inputs
 document.addEventListener('DOMContentLoaded',()=>{
   updSlider(document.getElementById('urge-before'),'ub-val','urge_before');
   updSlider(document.getElementById('urge-after'),'ua-val','urge_after');
   updSlider(document.getElementById('r-urge'),'r-urge-val','r_urge');
   qSlider(document.getElementById('q-urge'));
+
+  // Delegate Enter key on any .add-other-input → click its sibling Save button
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const el = e.target;
+    if (!el.classList.contains('add-other-input')) return;
+    e.preventDefault();
+    const btn = el.nextElementSibling;
+    if (btn && btn.classList.contains('add-other-btn')) btn.click();
+  });
 });
 </script>
 </body>
