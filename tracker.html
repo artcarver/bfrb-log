@@ -506,13 +506,50 @@ tbody tr:hover td{background:var(--bg)}
 </main>
 </div><!-- /app -->
 
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Import old logs</div>
+    <div class="modal-sub">Upload a CSV exported from Groundwork or your previous log. The file will be checked and previewed before anything is saved.</div>
+
+    <div class="modal-lbl">Select file</div>
+    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('csv-input').click()"
+         ondragover="event.preventDefault();this.classList.add('drag-over')"
+         ondragleave="this.classList.remove('drag-over')"
+         ondrop="handleDrop(event)">
+      <input type="file" id="csv-input" accept=".csv" onchange="handleFile(this.files[0])">
+      <div class="drop-label" id="drop-label">Drop CSV here or tap to browse</div>
+      <div class="drop-sub">Accepts the Groundwork export format or the converted file</div>
+    </div>
+
+    <div class="import-preview" id="import-preview">
+      <div class="preview-row"><span class="preview-key">Rows found</span><span class="preview-val" id="prev-rows">—</span></div>
+      <div class="preview-row"><span class="preview-key">Date range</span><span class="preview-val" id="prev-dates">—</span></div>
+      <div class="preview-row"><span class="preview-key">Episodes (did it)</span><span class="preview-val" id="prev-did">—</span></div>
+      <div class="preview-row"><span class="preview-key">Near misses</span><span class="preview-val" id="prev-near">—</span></div>
+      <div class="preview-row"><span class="preview-key">Resistances</span><span class="preview-val" id="prev-resist">—</span></div>
+    </div>
+
+    <div class="import-warn" id="import-warn"></div>
+
+    <div class="import-progress" id="import-progress">
+      <div class="prog-bar-track"><div class="prog-bar-fill" id="prog-fill"></div></div>
+      <div class="prog-label" id="prog-label">Preparing…</div>
+    </div>
+
+    <button class="modal-btn primary" id="import-confirm-btn" disabled onclick="runImport()">Import entries</button>
+    <button class="modal-btn cancel" onclick="closeImport()">Cancel</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, getDocs, query, orderBy, writeBatch, doc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -565,6 +602,33 @@ onAuthStateChanged(auth, user => {
     loadEntries(user.uid);
   }
 });
+
+// Exposed for the importer
+window._doImport = async function(rows) {
+  const uid = window._uid;
+  if (!uid) throw new Error('Not signed in');
+  const colRef = collection(db, 'users', uid, 'entries');
+
+  // Firestore writeBatch max 500 — chunk if needed
+  const CHUNK = 450;
+  let done = 0;
+  for (let i = 0; i < rows.length; i += CHUNK) {
+    const batch = writeBatch(db);
+    const chunk = rows.slice(i, i + CHUNK);
+    chunk.forEach(row => {
+      const ref = doc(colRef);
+      batch.set(ref, row);
+    });
+    await batch.commit();
+    done += chunk.length;
+    window._importProgress && window._importProgress(done, rows.length);
+  }
+  // Reload after import
+  const q = query(colRef, orderBy('timestamp', 'desc'));
+  const snap = await getDocs(q);
+  window.ALL_ENTRIES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  window.renderAll && window.renderAll();
+};
 </script>
 
 <!-- RENDER LOGIC -->
@@ -1227,6 +1291,256 @@ window.toast = (msg,isErr=false,isOk=false) => {
   void t.offsetWidth; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3000);
 };
+
+// ─── IMPORT ───
+
+// --- Field mappings for old CSV format auto-detection ---
+const SENSORY_TRIGGERS = new Set(['felt a texture','saw in mirror','idle hands','felt texture']);
+
+function classifyTriggers(str) {
+  if (!str) return { emotional: '', sensory: '' };
+  const parts = str.split(',').map(s => s.trim()).filter(Boolean);
+  const sensory = parts.filter(t => SENSORY_TRIGGERS.has(t.toLowerCase()));
+  const emotional = parts.filter(t => !SENSORY_TRIGGERS.has(t.toLowerCase()));
+  return { emotional: emotional.join(', '), sensory: sensory.join(', ') };
+}
+
+function mapOldRow(r) {
+  // Detect old format by presence of 'trigger' column (not 'emotional_triggers')
+  const outcome = (r.outcome || '').toLowerCase();
+  const entryType = outcome === 'stopped early' ? 'near' : 'did';
+  const { emotional, sensory } = classifyTriggers(r.trigger || '');
+  const ivRaw = (r.intervention || '').trim();
+  const tried = ivRaw && ivRaw.toLowerCase() !== 'nothing this time';
+  const awareness = (r.awareness || '').toLowerCase() === 'conscious' ? 'conscious' : 'automatic';
+  const urge = parseInt(r.urge_strength);
+  return {
+    timestamp: r.timestamp,
+    entry_type: entryType,
+    bfrb_type: r.bfrb_type || 'picking',
+    awareness,
+    location: r.location || '',
+    activity: r.activity || '',
+    body_areas: r.body_area || r.body_areas || '',
+    picked_what: r.physical_target || r.picked_what || '',
+    mirror: r.mirror || '',
+    completion: r.completion || '',
+    severity: r.severity || '',
+    duration: r.duration || '',
+    urge_before: isNaN(urge) ? (parseInt(r.urge_before) || '') : urge,
+    urge_after: parseInt(r.urge_after) || '',
+    emotional_triggers: emotional || r.emotional_triggers || '',
+    sensory_triggers: sensory || r.sensory_triggers || '',
+    mood_before: r.mood || r.mood_before || '',
+    mood_after: r.mood_after || '',
+    tried_intervention: tried ? true : (r.tried_intervention === 'true'),
+    interventions: tried ? ivRaw : (r.interventions || ''),
+    intervention_effectiveness: parseFloat(r.intervention_effectiveness) || '',
+    notes: r.notes || '',
+  };
+}
+
+function mapNewRow(r) {
+  // New format — mostly pass through, just coerce types
+  const urge_before = parseInt(r.urge_before);
+  const urge_after = parseInt(r.urge_after);
+  const eff = parseFloat(r.intervention_effectiveness);
+  return {
+    timestamp: r.timestamp,
+    entry_type: r.entry_type,
+    bfrb_type: r.bfrb_type || 'picking',
+    awareness: r.awareness,
+    location: r.location || '',
+    activity: r.activity || '',
+    body_areas: r.body_areas || '',
+    picked_what: r.picked_what || '',
+    bite_what: r.bite_what || '',
+    bite_fingers: r.bite_fingers || '',
+    mirror: r.mirror || '',
+    completion: r.completion || '',
+    severity: r.severity || '',
+    duration: r.duration || '',
+    urge_before: isNaN(urge_before) ? '' : urge_before,
+    urge_after: isNaN(urge_after) ? '' : urge_after,
+    emotional_triggers: r.emotional_triggers || '',
+    sensory_triggers: r.sensory_triggers || '',
+    mood_before: r.mood_before || '',
+    mood_after: r.mood_after || '',
+    tried_intervention: r.tried_intervention === 'true' || r.tried_intervention === true,
+    interventions: r.interventions || '',
+    intervention_effectiveness: isNaN(eff) ? '' : eff,
+    notes: r.notes || '',
+  };
+}
+
+// Minimal CSV parser (handles quoted fields with commas)
+function parseCSV(text) {
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim().split('\n');
+  if (lines.length < 2) return [];
+
+  function parseLine(line) {
+    const fields = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (inQ) {
+        if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
+        else if (c === '"') inQ = false;
+        else cur += c;
+      } else {
+        if (c === '"') inQ = true;
+        else if (c === ',') { fields.push(cur); cur = ''; }
+        else cur += c;
+      }
+    }
+    fields.push(cur);
+    return fields;
+  }
+
+  const headers = parseLine(lines[0]);
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const vals = parseLine(lines[i]);
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim(); });
+    rows.push(obj);
+  }
+  return { headers, rows };
+}
+
+let _parsedRows = [];
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) handleFile(file);
+}
+window.handleDrop = handleDrop;
+
+function handleFile(file) {
+  if (!file || !file.name.endsWith('.csv')) {
+    showImportWarn('Please select a .csv file.');
+    return;
+  }
+  document.getElementById('drop-label').textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = e => processCSV(e.target.result);
+  reader.readAsText(file);
+}
+window.handleFile = handleFile;
+
+function processCSV(text) {
+  const result = parseCSV(text);
+  if (!result || !result.rows.length) {
+    showImportWarn('Could not read any rows from this file. Make sure it is a valid CSV.');
+    return;
+  }
+  const { headers, rows } = result;
+
+  // Detect format: old has 'trigger', 'body_area', 'physical_target'; new has 'emotional_triggers'
+  const isOld = headers.includes('trigger') || headers.includes('body_area');
+
+  try {
+    _parsedRows = rows.map(r => isOld ? mapOldRow(r) : mapNewRow(r))
+      .filter(r => r.timestamp && r.entry_type);
+  } catch(err) {
+    showImportWarn('Error mapping rows: ' + err.message);
+    return;
+  }
+
+  if (!_parsedRows.length) {
+    showImportWarn('No valid rows found after mapping. Check the file has a timestamp and entry_type column.');
+    return;
+  }
+
+  // Check for duplicates against existing entries
+  const existingTs = new Set((window.ALL_ENTRIES || []).map(e => e.timestamp));
+  const dupes = _parsedRows.filter(r => existingTs.has(r.timestamp)).length;
+
+  // Populate preview
+  const dates = _parsedRows.map(r => r.timestamp.slice(0,10)).sort();
+  document.getElementById('prev-rows').textContent = _parsedRows.length;
+  document.getElementById('prev-dates').textContent = `${dates[0]} → ${dates[dates.length-1]}`;
+  document.getElementById('prev-did').textContent = _parsedRows.filter(r=>r.entry_type==='did').length;
+  document.getElementById('prev-near').textContent = _parsedRows.filter(r=>r.entry_type==='near').length;
+  document.getElementById('prev-resist').textContent = _parsedRows.filter(r=>r.entry_type==='resisted').length;
+  document.getElementById('import-preview').classList.add('on');
+
+  if (dupes > 0) {
+    showImportWarn(`⚠ ${dupes} row${dupes>1?'s':''} have the same timestamp as existing entries and will be added as duplicates. If you've already imported this file, cancel and don't import again.`);
+  } else {
+    document.getElementById('import-warn').classList.remove('on');
+  }
+
+  document.getElementById('import-confirm-btn').disabled = false;
+}
+
+function showImportWarn(msg) {
+  const el = document.getElementById('import-warn');
+  el.textContent = msg;
+  el.classList.add('on');
+}
+
+async function runImport() {
+  if (!_parsedRows.length) return;
+  if (!window._uid) { showImportWarn('You must be signed in to import.'); return; }
+
+  const btn = document.getElementById('import-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Importing…';
+
+  const progress = document.getElementById('import-progress');
+  progress.classList.add('on');
+
+  window._importProgress = (done, total) => {
+    const pct = Math.round(done / total * 100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = `${done} of ${total} entries saved…`;
+  };
+
+  try {
+    await window._doImport(_parsedRows);
+    document.getElementById('prog-label').textContent = `✓ ${_parsedRows.length} entries imported successfully`;
+    document.getElementById('prog-fill').style.width = '100%';
+    btn.textContent = 'Done';
+    setTimeout(() => { closeImport(); toast(`${_parsedRows.length} entries imported`, false, true); }, 1200);
+  } catch(err) {
+    console.error(err);
+    const msg = err.code === 'permission-denied'
+      ? 'Permission denied — make sure Firestore security rules allow writes for your account.'
+      : 'Import failed: ' + err.message;
+    showImportWarn(msg);
+    btn.disabled = false;
+    btn.textContent = 'Import entries';
+    progress.classList.remove('on');
+  }
+}
+window.runImport = runImport;
+
+function openImport() {
+  _parsedRows = [];
+  document.getElementById('import-modal').classList.add('on');
+  document.getElementById('import-preview').classList.remove('on');
+  document.getElementById('import-warn').classList.remove('on');
+  document.getElementById('import-progress').classList.remove('on');
+  document.getElementById('import-confirm-btn').disabled = true;
+  document.getElementById('import-confirm-btn').textContent = 'Import entries';
+  document.getElementById('drop-label').textContent = 'Drop CSV here or tap to browse';
+  document.getElementById('csv-input').value = '';
+}
+window.openImport = openImport;
+
+function closeImport() {
+  document.getElementById('import-modal').classList.remove('on');
+}
+window.closeImport = closeImport;
+
+// Close on backdrop click
+document.getElementById('import-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeImport();
+});
 
 // ─── INIT ───
 window.renderAll = renderAll;
