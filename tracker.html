@@ -3,1124 +3,1196 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Skin Journal — My Data</title>
+<title>Groundwork — Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-:root{--bg:#eae4db;--sur:#f7f3ed;--hi:#fff;--bdr:#d0c9be;--foc:#3d6b52;--tx:#1a1510;--tx2:#4a3e34;--mu:#8c7e72;--ac:#3d6b52;--acl:rgba(61,107,82,.09);--am:#a87020;--aml:rgba(168,112,32,.10);--rd:#9e3232;--rdl:rgba(158,50,50,.10);--r:14px;--rs:9px;--s1:0 1px 3px rgba(0,0,0,.05);--s2:0 2px 10px rgba(0,0,0,.08);--s3:0 8px 28px rgba(0,0,0,.13)}
-*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;min-height:100vh;padding-bottom:60px}
-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(247,243,237,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:50}
-.nav-brand{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:var(--tx);letter-spacing:-.02em}
-.nav-r{display:flex;align-items:center;gap:8px}
-.nav-lk{font-size:12px;font-weight:600;color:var(--tx2);text-decoration:none;padding:6px 13px;border:1px solid var(--bdr);border-radius:50px;background:var(--hi);transition:all .15s}
-.nav-lk:hover{border-color:var(--ac);color:var(--ac)}
-.so-btn{font-size:11px;font-weight:600;color:var(--mu);background:none;border:1px solid var(--bdr);border-radius:50px;padding:5px 12px;cursor:pointer}
-.av{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
-.ui{display:flex;align-items:center;gap:8px}
-main{max-width:920px;margin:0 auto;padding:22px 16px}
-.pg-title{font-family:'Fraunces',serif;font-size:24px;font-weight:300;color:var(--tx);margin-bottom:4px;letter-spacing:-.02em}
-.pg-sub{font-size:12px;color:var(--mu);margin-bottom:20px}
-/* RANGE */
-.range-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
-.rc{font-size:12px;font-weight:600;padding:6px 14px;border:1px solid var(--bdr);border-radius:50px;background:var(--hi);color:var(--tx2);cursor:pointer;transition:all .15s;user-select:none}
-.rc:hover{border-color:var(--ac);color:var(--ac)}
-.rc.on{background:var(--ac);border-color:var(--ac);color:#fff}
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
-@media(max-width:680px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.sc{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--rs);padding:14px;box-shadow:var(--s1)}
-.sc.green{background:linear-gradient(135deg,#2d5240 0%,var(--ac) 100%);border-color:transparent}
-.sc .sl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:5px}
-.sc.green .sl{color:rgba(255,255,255,.5)}
-.sc .sv{font-family:'Fraunces',serif;font-size:30px;font-weight:300;color:var(--ac);line-height:1}
-.sc.green .sv{color:#fff}
-.sc .ss{font-size:10px;color:var(--mu);margin-top:4px;font-weight:500}
-.sc.green .ss{color:rgba(255,255,255,.5)}
+:root {
+  --bg:#F4EDE3; --sur:#FAF6F1; --card:#FFFFFF; --bdr:#E2D8CE; --bdr2:#C8BAA8;
+  --tx:#2C1F14; --tx2:#5C4A38; --mu:#9C8878;
+  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10); --acl2:rgba(193,105,79,.18);
+  --ac-bar:rgba(193,105,79,.7);
+  --sage:#7A8C85; --sagel:rgba(122,140,133,.10); --sagem:rgba(122,140,133,.22); --sage-bar:rgba(122,140,133,.65);
+  --warm:#D4956A; --warml:rgba(212,149,106,.13); --warm-bar:rgba(212,149,106,.8);
+  --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
+  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08); --s3:0 8px 32px rgba(44,31,20,.12);
+  --tr:all .18s ease;
+}
+[data-theme="dark"] {
+  --bg:#1E1710; --sur:#261D14; --card:#2E231A; --bdr:#3D3028; --bdr2:#5A4538;
+  --tx:#F0E8DF; --tx2:#C8B8A8; --mu:#8C7868;
+  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12); --acl2:rgba(201,120,96,.22);
+  --ac-bar:rgba(201,120,96,.7);
+  --sage:#8A9E96; --sagel:rgba(138,158,150,.12); --sagem:rgba(138,158,150,.24); --sage-bar:rgba(138,158,150,.65);
+  --warm:#C4855A; --warml:rgba(196,133,90,.14); --warm-bar:rgba(196,133,90,.75);
+  --s1:0 1px 3px rgba(0,0,0,.2); --s2:0 2px 12px rgba(0,0,0,.25); --s3:0 8px 32px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
+
+/* NAV */
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s}
+[data-theme="dark"] nav{background:rgba(30,23,16,.96)}
+.nav-brand{font-family:'Lora',serif;font-size:19px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none}
+.nav-brand span{color:var(--ac)}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 13px;border-radius:var(--pill);transition:var(--tr)}
+.nav-link:hover{background:var(--acl);color:var(--ac)}
+.nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
+.nav-right{display:flex;align-items:center;gap:8px}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif}
+.theme-btn:hover{border-color:var(--ac);color:var(--ac)}
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 14px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
+.user-info{display:flex;align-items:center;gap:8px}
+.user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
+
+/* AUTH */
+.auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
+.auth-screen.on{display:flex}
+.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;box-shadow:var(--s3);text-align:center;max-width:320px;width:92%}
+.auth-logo{width:44px;height:44px;background:var(--acl2);border-radius:var(--r);margin:0 auto 22px;display:flex;align-items:center;justify-content:center}
+.auth-logo svg{width:22px;height:22px;fill:var(--ac)}
+.auth-title{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--tx);margin-bottom:8px;letter-spacing:-.02em}
+.auth-sub{font-size:13px;color:var(--mu);margin-bottom:28px;line-height:1.6}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.google-btn:hover{border-color:var(--ac);box-shadow:var(--s2)}
+
+/* LAYOUT */
+#app{display:none}
+#app.on{display:block}
+main{max-width:920px;margin:0 auto;padding:28px 16px}
+
+/* PAGE HEADER */
+.page-hd{margin-bottom:24px}
+.page-title{font-family:'Lora',serif;font-size:26px;font-weight:400;color:var(--tx);letter-spacing:-.02em}
+.page-sub{font-size:13px;color:var(--mu);margin-top:3px}
+
+/* RANGE PILLS */
+.range-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px}
+.range-pill{font-size:12px;font-weight:600;padding:7px 16px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--card);color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none}
+.range-pill:hover{border-color:var(--bdr2)}
+.range-pill.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.print-btn{margin-left:auto;font-size:12px;font-weight:600;padding:7px 16px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--card);color:var(--mu);cursor:pointer;transition:var(--tr)}
+.print-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:680px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;box-shadow:var(--s1)}
+.stat-card.featured{background:linear-gradient(135deg,#8a5a44 0%,var(--ac) 100%);border-color:transparent}
+.stat-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+.stat-card.featured .stat-label{color:rgba(255,255,255,.55)}
+.stat-value{font-family:'Lora',serif;font-size:32px;font-weight:400;color:var(--ac);line-height:1}
+.stat-card.featured .stat-value{color:#fff}
+.stat-sub{font-size:11px;color:var(--mu);margin-top:5px;font-weight:500;line-height:1.4}
+.stat-card.featured .stat-sub{color:rgba(255,255,255,.55)}
+
 /* SECTION */
-.sec{margin-bottom:24px}
-.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
+.section{margin-bottom:28px}
+.section-title{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em;margin-bottom:12px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1)}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:16px}
+.two-col-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.two-col-grid{grid-template-columns:1fr}}
+.three-col-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:720px){.three-col-grid{grid-template-columns:1fr}}
+
 /* CALENDAR */
-.cal-card{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--rs);padding:16px 14px;box-shadow:var(--s1);overflow:hidden}
-.cal-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:8px;flex-wrap:wrap}
-.cal-ttl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
-.cal-leg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--mu);flex-wrap:wrap}
-.lc{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.cal-outer{display:flex;align-items:flex-start;gap:4px}
-.cal-daylbls{display:flex;flex-direction:column;gap:3px;flex-shrink:0;margin-top:20px}
-.cal-dlbl{font-size:9px;font-weight:600;color:var(--mu);height:14px;line-height:14px}
-.cal-scroll{overflow-x:auto;flex:1;padding-bottom:4px}
-.cal-scroll::-webkit-scrollbar{height:4px}
-.cal-scroll::-webkit-scrollbar-track{background:var(--bdr);border-radius:10px}
-.cal-scroll::-webkit-scrollbar-thumb{background:var(--mu);border-radius:10px}
-.cal-inner{display:flex;flex-direction:column;min-width:fit-content}
-.cal-months{display:flex;gap:3px;margin-bottom:4px}
-.cal-mlbl{font-size:9px;font-weight:600;color:var(--mu);overflow:hidden;white-space:nowrap}
+.cal-wrap{overflow-x:auto;padding-bottom:6px}
+.cal-wrap::-webkit-scrollbar{height:4px}
+.cal-wrap::-webkit-scrollbar-track{background:var(--bdr);border-radius:10px}
+.cal-wrap::-webkit-scrollbar-thumb{background:var(--mu);border-radius:10px}
+.cal-outer{display:flex;align-items:flex-start;gap:6px;min-width:fit-content}
+.cal-day-labels{display:flex;flex-direction:column;gap:3px;flex-shrink:0;padding-top:22px}
+.cal-dl{font-size:9px;font-weight:600;color:var(--mu);height:14px;line-height:14px;width:20px}
+.cal-inner{flex:1}
+.cal-month-row{display:flex;gap:3px;margin-bottom:4px}
+.cal-mlbl{font-size:9px;font-weight:600;color:var(--mu);overflow:hidden;white-space:nowrap;text-overflow:clip}
 .cal-weeks{display:flex;gap:3px}
 .cal-week{display:flex;flex-direction:column;gap:3px}
-.cc{width:14px;height:14px;border-radius:2px;cursor:pointer;transition:transform .1s;flex-shrink:0;position:relative}
-.cc:hover{transform:scale(1.4);z-index:5}
-.cc.emp{background:transparent!important;cursor:default!important;pointer-events:none}
-.cc.c0{background:var(--bdr)}
-.cc.cr{background:rgba(61,107,82,.22);border:1px solid rgba(61,107,82,.4)}
-.cc.c1{background:rgba(158,50,50,.25)}
-.cc.c2{background:rgba(158,50,50,.50)}
-.cc.c3{background:rgba(158,50,50,.72)}
-.cc.c4{background:var(--rd)}
-.cc.ctoday{outline:2px solid var(--tx);outline-offset:1px}
-/* CHARTS */
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-@media(max-width:600px){.charts-grid{grid-template-columns:1fr}}
-.chart-card{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--rs);padding:16px;box-shadow:var(--s1)}
-.chart-card.wide{grid-column:1/-1}
-.ct{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
-.chart-card canvas{max-height:185px}
-.two-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:600px){.two-cards{grid-column:1fr}}
+.cal-cell{width:14px;height:14px;border-radius:3px;cursor:pointer;transition:transform .1s;flex-shrink:0;position:relative}
+.cal-cell:hover{transform:scale(1.5);z-index:5}
+.cal-cell.empty{background:transparent!important;cursor:default!important;pointer-events:none}
+.cal-cell.c0{background:var(--bdr)}
+.cal-cell.cr{background:rgba(122,140,133,.25);border:1px solid rgba(122,140,133,.45)}
+.cal-cell.c1{background:rgba(193,105,79,.18)}
+.cal-cell.c2{background:rgba(193,105,79,.38)}
+.cal-cell.c3{background:rgba(193,105,79,.60)}
+.cal-cell.c4{background:var(--ac)}
+.cal-cell.today{outline:2px solid var(--tx);outline-offset:1px}
+.cal-legend{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px;color:var(--mu);flex-wrap:wrap}
+.cal-legend-cells{display:flex;gap:3px;align-items:center}
+.cal-legend-cell{width:12px;height:12px;border-radius:2px}
+
 /* BAR LIST */
-.bar-list{display:flex;flex-direction:column;gap:9px;min-height:60px}
-.bi{display:flex;align-items:center;gap:10px}
-.bi-lbl{font-size:11px;font-weight:500;color:var(--tx);width:140px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bi-track{flex:1;height:6px;background:var(--bdr);border-radius:10px;overflow:hidden}
-.bi-fill{height:100%;border-radius:10px;transition:width .6s ease;background:var(--ac)}
-.bi-fill.red{background:var(--rd)}.bi-fill.amb{background:var(--am)}
-.bi-count{font-size:11px;font-weight:600;color:var(--mu);width:22px;text-align:right;flex-shrink:0}
-/* COMPLETION BREAKDOWN */
-.comp-bd{display:flex;flex-direction:column;gap:11px}
-.cbr{display:flex;align-items:center;gap:10px}
-.cbi{font-size:15px;width:22px;flex-shrink:0;text-align:center}
-.cbl{font-size:11px;font-weight:600;color:var(--tx2);width:170px;flex-shrink:0;line-height:1.3}
-.cbtr{flex:1;height:8px;background:var(--bdr);border-radius:10px;overflow:hidden}
-.cbf{height:100%;border-radius:10px;transition:width .6s ease}
-.cbf.green{background:var(--ac)}.cbf.amber{background:var(--am)}.cbf.red{background:var(--rd)}
-.cbp{font-size:11px;font-weight:700;color:var(--mu);width:32px;text-align:right;flex-shrink:0}
-/* MOOD DELTA */
-.mood-delta{display:flex;flex-direction:column;gap:8px}
-.mdr{display:flex;align-items:flex-start;gap:8px}
-.mdl{font-size:10px;font-weight:700;color:var(--mu);width:54px;flex-shrink:0;text-transform:uppercase;letter-spacing:.05em;padding-top:3px}
-.mdi{display:flex;gap:5px;flex-wrap:wrap}
-.mdt{font-size:10px;font-weight:600;padding:3px 9px;border-radius:50px}
-.mdt.bef{background:var(--rdl);color:var(--rd)}
-.mdt.aft{background:var(--acl);color:var(--ac)}
-/* ACRYLIC INSIGHT CARD */
-.insight-card{border-radius:var(--rs);padding:14px 16px;margin-bottom:10px}
-.insight-card.amber{background:var(--aml);border:1px solid rgba(168,112,32,.25)}
-.insight-card.green{background:var(--acl);border:1px solid rgba(61,107,82,.2)}
-.insight-hd{font-size:11px;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:6px}
-.insight-card.amber .insight-hd{color:var(--am)}
-.insight-card.green .insight-hd{color:var(--ac)}
-.insight-body{font-size:11px;line-height:1.65;color:var(--tx2)}
+.bar-list{display:flex;flex-direction:column;gap:8px}
+.bar-item{display:flex;align-items:center;gap:10px}
+.bar-label{font-size:12px;font-weight:500;color:var(--tx);flex:0 0 160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.3}
+@media(max-width:480px){.bar-label{flex:0 0 110px}}
+.bar-track{flex:1;height:7px;background:var(--bdr);border-radius:10px;overflow:hidden;min-width:40px}
+.bar-fill{height:100%;border-radius:10px;transition:width .6s cubic-bezier(.34,1.2,.64,1)}
+.bar-fill.ac{background:var(--ac-bar)}
+.bar-fill.sage{background:var(--sage-bar)}
+.bar-fill.warm{background:var(--warm-bar)}
+.bar-count{font-size:11px;font-weight:600;color:var(--mu);width:28px;text-align:right;flex-shrink:0}
+
+/* MOOD COLUMNS */
+.mood-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:500px){.mood-cols{grid-template-columns:1fr}}
+.mood-col-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
+.mood-word-list{display:flex;flex-direction:column;gap:6px}
+.mood-word-row{display:flex;align-items:center;gap:8px}
+.mood-word{font-size:12px;font-weight:500;color:var(--tx);flex:0 0 130px}
+.mood-bar-track{flex:1;height:6px;background:var(--bdr);border-radius:10px;overflow:hidden}
+.mood-bar-fill{height:100%;border-radius:10px;transition:width .6s cubic-bezier(.34,1.2,.64,1)}
+.mood-bar-fill.before{background:var(--ac-bar)}
+.mood-bar-fill.after{background:var(--sage-bar)}
+.mood-count{font-size:11px;color:var(--mu);width:22px;text-align:right;flex-shrink:0}
+
+/* URGE ARC */
+.urge-arc{display:flex;align-items:center;justify-content:center;gap:20px;padding:12px 0}
+.urge-num{font-family:'Lora',serif;font-size:48px;font-weight:400;line-height:1;color:var(--ac)}
+.urge-label{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);text-align:center;margin-top:4px}
+.urge-arrow{font-size:20px;color:var(--mu);flex-shrink:0;margin-top:-8px}
+.urge-block{text-align:center}
+
+/* CHAIN BREAKDOWN */
+.chain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:480px){.chain-grid{grid-template-columns:repeat(2,1fr)}}
+.chain-cell{padding:12px 8px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);text-align:center}
+.chain-pct{font-family:'Lora',serif;font-size:24px;font-weight:400;color:var(--ac);line-height:1}
+.chain-lbl{font-size:10px;font-weight:600;color:var(--mu);margin-top:4px;line-height:1.3}
+
+/* AWARENESS SPLIT */
+.aw-split{display:flex;gap:0;height:28px;border-radius:var(--pill);overflow:hidden;border:1px solid var(--bdr)}
+.aw-conscious-bar{background:var(--sage-bar);transition:width .6s cubic-bezier(.34,1.2,.64,1);display:flex;align-items:center;justify-content:center}
+.aw-auto-bar{background:var(--warm-bar);flex:1;display:flex;align-items:center;justify-content:center}
+.aw-bar-label{font-size:10px;font-weight:700;color:#fff;white-space:nowrap;padding:0 8px;overflow:hidden}
+.aw-legend{display:flex;gap:16px;margin-top:8px}
+.aw-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mu)}
+.aw-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* CHARTS */
+.chart-wrap{position:relative;height:200px}
+.chart-wrap.tall{height:240px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:32px 20px;color:var(--mu)}
+.empty-icon{font-size:28px;margin-bottom:8px;opacity:.5}
+.empty-text{font-size:13px;line-height:1.6}
+
+/* NOT ENOUGH DATA */
+.sparse-state{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px;text-align:center;font-size:12px;color:var(--mu);line-height:1.6}
+
 /* TABLE */
-.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center}
-select.fsel{background:var(--hi);border:1px solid var(--bdr);border-radius:50px;padding:6px 14px;color:var(--tx2);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:500;outline:none;cursor:pointer;-webkit-appearance:none;box-shadow:var(--s1)}
-select.fsel:focus{border-color:var(--foc)}
-.fcl{font-size:12px;font-weight:600;color:var(--mu);background:none;border:none;cursor:pointer;padding:6px 8px;transition:color .15s}
-.fcl:hover{color:var(--rd)}
-.table-wrap{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--rs);overflow:hidden;box-shadow:var(--s1)}
-.table-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bdr)}
-.rc-count{font-size:12px;font-weight:600;color:var(--mu)}
-.btn-row{display:flex;gap:6px;flex-wrap:wrap}
-.pill-btn{font-size:11px;font-weight:600;color:var(--tx2);background:var(--hi);border:1px solid var(--bdr);border-radius:50px;padding:6px 14px;cursor:pointer;transition:all .15s;box-shadow:var(--s1)}
-.pill-btn:hover{border-color:var(--ac);color:var(--ac)}
-.pill-btn.amber:hover{border-color:var(--am);color:var(--am)}
+.table-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.fsel{background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 14px;color:var(--tx2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;outline:none;cursor:pointer;-webkit-appearance:none;box-shadow:var(--s1);transition:var(--tr)}
+.fsel:focus{border-color:var(--ac)}
+.fclear{font-size:12px;font-weight:600;color:var(--mu);background:none;border:none;cursor:pointer;padding:6px 8px;transition:var(--tr);font-family:'DM Sans',sans-serif}
+.fclear:hover{color:var(--ac)}
+.rc-count{font-size:12px;color:var(--mu);margin-left:auto}
+.table-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--s1)}
 table{width:100%;border-collapse:collapse}
-th{padding:8px 12px;border-bottom:1px solid var(--bdr);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);text-align:left;background:var(--sur)}
-td{padding:10px 12px;border-bottom:1px solid var(--bdr);vertical-align:top;font-size:12px;color:var(--tx)}
+th{padding:9px 14px;border-bottom:1px solid var(--bdr);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);text-align:left;background:var(--sur);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--tx);vertical-align:top}
 tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:var(--bg);cursor:pointer}
-.tc{display:inline-block;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:600}
-.tcp{background:var(--rdl);color:var(--rd)}.tcr{background:var(--acl);color:var(--ac)}.tcn{background:var(--aml);color:var(--am)}.tca{background:var(--aml);color:var(--am)}
-.uc{display:inline-block;padding:2px 8px;border-radius:50px;font-size:11px;font-weight:700}
-.ul{background:rgba(61,107,82,.12);color:#1a5e38}.um{background:var(--aml);color:#7a4800}.uh{background:var(--rdl);color:#7a1a1a}
-.comp-chip{display:inline-block;padding:2px 7px;border-radius:50px;font-size:10px;font-weight:600;background:var(--aml);color:var(--am)}
-.pag{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px;border-top:1px solid var(--bdr)}
-.pag-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--hi);border:1px solid var(--bdr);border-radius:50px;padding:5px 14px;cursor:pointer;transition:all .15s}
-.pag-btn:hover{border-color:var(--ac);color:var(--ac)}
-.pag-btn:disabled{opacity:.4;cursor:not-allowed}
-.pag-info{font-size:12px;color:var(--mu)}
-/* EDIT MODAL */
-.mo{display:none;position:fixed;inset:0;background:rgba(18,15,12,.55);backdrop-filter:blur(5px);z-index:300;align-items:flex-end;justify-content:center}
-.mo.on{display:flex}
-.ms{background:var(--hi);border-radius:var(--r) var(--r) 0 0;padding:20px 20px 50px;width:100%;max-width:560px;box-shadow:var(--s3);animation:su .25s cubic-bezier(.34,1.2,.64,1);max-height:92vh;overflow-y:auto}
-.mh{width:36px;height:4px;background:var(--bdr);border-radius:10px;margin:0 auto 18px}
-.mt{font-family:'Fraunces',serif;font-size:19px;font-weight:300;color:var(--tx);margin-bottom:3px;letter-spacing:-.01em}
-.msu{font-size:11px;color:var(--mu);margin-bottom:18px}
-.esec{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--bdr)}
-.esec:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
-.esec-hd{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
-.etag-row{display:flex;flex-wrap:wrap;gap:7px}
-.etag{padding:7px 12px;border:1px solid var(--bdr);border-radius:50px;background:var(--bg);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .12s;user-select:none}
-.etag:hover{border-color:var(--ac);color:var(--ac)}
-.etag.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
-.etog-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.etog{padding:10px 8px;border:1px solid var(--bdr);border-radius:var(--rs);background:var(--bg);font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
-.etog:hover{border-color:var(--ac);color:var(--ac)}
-.etog.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.einput{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:9px 11px;color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:all .15s;-webkit-appearance:none;margin-top:2px}
-.einput:focus{border-color:var(--foc);box-shadow:0 0 0 3px var(--acl)}
-.etxt{resize:vertical;min-height:64px;line-height:1.5}
-.elbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:block}
-.e-save{width:100%;background:var(--ac);color:#fff;border:none;border-radius:50px;padding:14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;box-shadow:0 4px 14px rgba(61,107,82,.35);transition:all .15s}
-.e-save:hover{background:#2d5240}
-.e-del{width:100%;background:none;color:var(--rd);border:1px solid rgba(158,50,50,.3);border-radius:50px;padding:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .15s}
-.e-del:hover{background:var(--rdl)}
-.e-can{width:100%;background:none;color:var(--mu);border:none;padding:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:4px}
-/* IMPORT MODAL */
-.import-drop{border:2px dashed var(--bdr);border-radius:var(--rs);padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg);margin-bottom:12px}
-.import-drop:hover,.import-drop.drag{border-color:var(--ac);background:var(--acl)}
-.import-drop-icon{font-size:28px;margin-bottom:8px}
-.import-drop-txt{font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:4px}
-.import-drop-sub{font-size:11px;color:var(--mu)}
-.import-preview{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px;margin-bottom:12px;display:none}
-.import-preview-hd{font-size:11px;font-weight:700;color:var(--tx2);margin-bottom:4px}
-.import-preview-body{font-size:11px;color:var(--mu);line-height:1.6}
-.import-btn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:50px;padding:13px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(61,107,82,.3);transition:all .15s;display:none}
-.import-btn:hover{background:#2d5240}
-/* EMPTY / LOADING */
-.empty,.loading{text-align:center;padding:40px 20px;font-size:13px;color:var(--mu);font-weight:500}
-.spin{width:22px;height:22px;border:2px solid var(--bdr);border-top-color:var(--ac);border-radius:50%;animation:spin .8s linear infinite;margin:14px auto 0}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* LOGIN */
-.ls{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
-.ls.on{display:flex}
-.lc{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--r);padding:38px 30px;box-shadow:var(--s3);text-align:center;max-width:310px;width:92%}
-.lm{width:52px;height:52px;background:var(--ac);border-radius:14px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
-.lt{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--tx);margin-bottom:6px;letter-spacing:-.02em}
-.lsub{font-size:13px;color:var(--mu);margin-bottom:26px;line-height:1.55}
-.gb{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--hi);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx);cursor:pointer;transition:all .15s;box-shadow:var(--s1)}
-.gb:hover{border-color:var(--foc);box-shadow:var(--s2)}
-/* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:50px;padding:11px 22px;font-size:13px;font-weight:600;color:#fff;box-shadow:var(--s3);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.toast.ok{background:var(--ac)}.toast.err{background:var(--rd)}
-@keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
-#app-content{display:none}
-#app-content.on{display:block}
+tbody tr{cursor:pointer;transition:background .12s}
+tbody tr:hover td{background:var(--bg)}
+.tc{display:inline-block;padding:2px 9px;border-radius:var(--pill);font-size:10px;font-weight:600}
+.tc-ep{background:var(--acl);color:var(--ac)}
+.tc-re{background:var(--sagel);color:var(--sage)}
+.tc-ne{background:var(--warml);color:var(--warm)}
+.td-muted{color:var(--mu)}
+
+/* ROW EXPAND */
+.row-detail{display:none;background:var(--sur)}
+.row-detail.on{display:table-row}
+.row-detail td{padding:14px 16px;font-size:12px;line-height:1.8;color:var(--tx2)}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 16px}
+@media(max-width:540px){.detail-grid{grid-template-columns:1fr 1fr}}
+.detail-field{font-size:11px}
+.detail-key{font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);font-size:10px;margin-bottom:2px}
+.detail-val{color:var(--tx2)}
+
+/* LOADING */
+.loading{text-align:center;padding:60px 20px;color:var(--mu);font-size:13px}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--bdr);margin:24px 0}
+
+/* UTIL */
 .hidden{display:none!important}
+.flex-between{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:13px;font-weight:600;color:#fff;box-shadow:var(--s3);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--sage)}.toast.err{background:var(--ac)}
+
+/* PRINT */
+@media print {
+  nav,.range-row,.print-btn,.table-filters,.theme-btn,.sign-btn,.user-info{display:none!important}
+  body{background:#fff!important;color:#000!important;font-size:11px}
+  .card,.stat-card{box-shadow:none!important;border:1px solid #ccc!important}
+  main{padding:0!important;max-width:100%!important}
+  .section{break-inside:avoid}
+}
+
+/* IMPORT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,18,10,.55);backdrop-filter:blur(4px);z-index:300;align-items:flex-end;justify-content:center}
+.modal-overlay.on{display:flex}
+.modal-sheet{background:var(--card);border-radius:var(--rlg) var(--rlg) 0 0;padding:24px 24px 52px;width:100%;max-width:560px;box-shadow:var(--s3);animation:su .25s cubic-bezier(.34,1.2,.64,1);max-height:88vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--bdr);border-radius:10px;margin:0 auto 20px}
+.modal-title{font-family:'Lora',serif;font-size:20px;font-weight:400;color:var(--tx);margin-bottom:6px}
+.modal-sub{font-size:12px;color:var(--mu);margin-bottom:20px;line-height:1.65}
+.modal-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:16px 0 8px}
+.drop-zone{border:2px dashed var(--bdr);border-radius:var(--r);padding:32px 20px;text-align:center;cursor:pointer;transition:var(--tr);background:var(--sur)}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--ac);background:var(--acl)}
+.drop-zone input{display:none}
+.drop-label{font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:4px}
+.drop-sub{font-size:11px;color:var(--mu)}
+.import-preview{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px 16px;margin-top:14px;display:none}
+.import-preview.on{display:block}
+.preview-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--bdr)}
+.preview-row:last-child{border-bottom:none}
+.preview-key{color:var(--mu);font-weight:600}
+.preview-val{color:var(--tx);font-weight:500}
+.import-warn{background:var(--warml);border:1px solid var(--warm);border-radius:var(--rsm);padding:12px 14px;font-size:12px;color:var(--tx2);margin-top:12px;line-height:1.65;display:none}
+.import-warn.on{display:block}
+.import-progress{margin-top:16px;display:none}
+.import-progress.on{display:block}
+.prog-bar-track{height:6px;background:var(--bdr);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.prog-bar-fill{height:100%;background:var(--ac);border-radius:10px;transition:width .2s ease;width:0%}
+.prog-label{font-size:11px;color:var(--mu);text-align:center}
+.modal-btn{width:100%;border:none;border-radius:var(--pill);padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--tr);margin-top:14px}
+.modal-btn.primary{background:var(--ac);color:#fff;box-shadow:0 4px 14px rgba(193,105,79,.35)}
+.modal-btn.primary:hover{background:var(--ac-h)}
+.modal-btn.primary:disabled{opacity:.45;cursor:not-allowed}
+.modal-btn.cancel{background:none;color:var(--mu);font-size:12px;margin-top:6px}
+@keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
-<div id="toast" class="toast"></div>
 
-<!-- LOGIN -->
-<div class="ls" id="login-screen">
-  <div class="lc">
-    <div class="lm"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-    <div class="lt">Skin Journal</div>
-    <div class="lsub">Sign in to view your patterns</div>
-    <button class="gb" id="sign-in-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+<!-- AUTH -->
+<div class="auth-screen on" id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+    </div>
+    <div class="auth-title">Groundwork</div>
+    <div class="auth-sub">Sign in to view your patterns.</div>
+    <button class="google-btn" onclick="signInWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Continue with Google
     </button>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
-<div class="mo" id="edit-modal">
-  <div class="ms">
-    <div class="mh"></div>
-    <div class="mt">Edit entry</div>
-    <div class="msu" id="edit-sub">—</div>
-    <input type="hidden" id="edit-id">
-
-    <div class="esec">
-      <div class="esec-hd">What happened</div>
-      <div class="etog-row" id="e-type">
-        <div class="etog" onclick="eType(this,'picked')">&#128308; Picked</div>
-        <div class="etog" onclick="eType(this,'resisted')">&#128154; Resisted</div>
-        <div class="etog" onclick="eType(this,'near')">&#127865; Near miss</div>
-        <div class="etog" onclick="eType(this,'acrylic')">&#128133; Acrylic only</div>
-      </div>
-      <div class="elbl" style="margin-top:12px">When</div>
-      <input type="datetime-local" class="einput" id="edit-ts">
-    </div>
-
-    <div class="esec" id="e-pick-sec">
-      <div class="esec-hd">Body area</div>
-      <div class="etag-row" id="e-area">
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Forehead</div><div class="etag" onclick="eMul(this,'e_body_areas')">Cheeks</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Chin</div><div class="etag" onclick="eMul(this,'e_body_areas')">Nose</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Around mouth</div><div class="etag" onclick="eMul(this,'e_body_areas')">Jawline</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Temples</div><div class="etag" onclick="eMul(this,'e_body_areas')">Scalp</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Neck</div><div class="etag" onclick="eMul(this,'e_body_areas')">Shoulders</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Chest</div><div class="etag" onclick="eMul(this,'e_body_areas')">Upper back</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Lower back</div><div class="etag" onclick="eMul(this,'e_body_areas')">Upper arms</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Forearms</div><div class="etag" onclick="eMul(this,'e_body_areas')">Hands / fingers</div>
-        <div class="etag" onclick="eMul(this,'e_body_areas')">Cuticles</div><div class="etag" onclick="eMul(this,'e_body_areas')">Thighs</div>
-      </div>
-      <div class="elbl" style="margin-top:12px">What you picked</div>
-      <div class="etag-row" id="e-picked">
-        <div class="etag" onclick="eMul(this,'e_picked_what')">Pimple</div><div class="etag" onclick="eMul(this,'e_picked_what')">Whitehead</div>
-        <div class="etag" onclick="eMul(this,'e_picked_what')">Scab</div><div class="etag" onclick="eMul(this,'e_picked_what')">Dry skin</div>
-        <div class="etag" onclick="eMul(this,'e_picked_what')">Uneven texture</div><div class="etag" onclick="eMul(this,'e_picked_what')">Ingrown hair</div>
-        <div class="etag" onclick="eMul(this,'e_picked_what')">Cuticle</div><div class="etag" onclick="eMul(this,'e_picked_what')">Blackhead</div>
-        <div class="etag" onclick="eMul(this,'e_picked_what')">Nothing specific</div>
-      </div>
-      <div class="elbl" style="margin-top:12px">Behavior completion</div>
-      <div class="etag-row" id="e-comp">
-        <div class="etag" onclick="eSingle(this,'e_completion')">Put it down</div><div class="etag" onclick="eSingle(this,'e_completion')">Examined it</div>
-        <div class="etag" onclick="eSingle(this,'e_completion')">Touched to lips</div><div class="etag" onclick="eSingle(this,'e_completion')">Ingested</div>
-      </div>
-      <div class="elbl" style="margin-top:12px">Skin impact</div>
-      <div class="etag-row" id="e-sev">
-        <div class="etag" onclick="eSingle(this,'e_severity')">None</div><div class="etag" onclick="eSingle(this,'e_severity')">Minor</div>
-        <div class="etag" onclick="eSingle(this,'e_severity')">Moderate</div><div class="etag" onclick="eSingle(this,'e_severity')">Significant</div>
-      </div>
-    </div>
-
-    <div class="esec">
-      <div class="esec-hd">Triggers</div>
-      <div class="etag-row" id="e-etrig">
-        <div class="etag" onclick="eMul(this,'e_etrig')">Stressed</div><div class="etag" onclick="eMul(this,'e_etrig')">Anxious</div>
-        <div class="etag" onclick="eMul(this,'e_etrig')">Overwhelmed</div><div class="etag" onclick="eMul(this,'e_etrig')">Frustrated</div>
-        <div class="etag" onclick="eMul(this,'e_etrig')">Bored</div><div class="etag" onclick="eMul(this,'e_etrig')">Tired</div>
-        <div class="etag" onclick="eMul(this,'e_etrig')">Procrastinating</div><div class="etag" onclick="eMul(this,'e_etrig')">Idle hands</div>
-        <div class="etag" onclick="eMul(this,'e_etrig')">Zoning out</div><div class="etag" onclick="eMul(this,'e_etrig')">Winding down</div>
-        <div class="etag" onclick="eMul(this,'e_etrig')">Restless</div><div class="etag" onclick="eMul(this,'e_etrig')">Sad</div>
-      </div>
-      <div class="elbl" style="margin-top:12px">Sensory triggers</div>
-      <div class="etag-row" id="e-strig">
-        <div class="etag" onclick="eMul(this,'e_strig')">Felt a texture</div><div class="etag" onclick="eMul(this,'e_strig')">Saw in mirror</div>
-        <div class="etag" onclick="eMul(this,'e_strig')">Magnifying mirror</div><div class="etag" onclick="eMul(this,'e_strig')">Itching</div>
-        <div class="etag" onclick="eMul(this,'e_strig')">Skin felt rough</div><div class="etag" onclick="eMul(this,'e_strig')">Noticed a bump</div>
-        <div class="etag" onclick="eMul(this,'e_strig')">Scanning skin</div><div class="etag" onclick="eMul(this,'e_strig')">Touching face</div>
-        <div class="etag" onclick="eMul(this,'e_strig')">Bright lighting</div>
-      </div>
-    </div>
-
-    <div class="esec">
-      <div class="esec-hd">Mood before</div>
-      <div class="etag-row" id="e-mbef">
-        <div class="etag" onclick="eMul(this,'e_mood_before')">Calm</div><div class="etag" onclick="eMul(this,'e_mood_before')">Tense</div>
-        <div class="etag" onclick="eMul(this,'e_mood_before')">Anxious</div><div class="etag" onclick="eMul(this,'e_mood_before')">Sad</div>
-        <div class="etag" onclick="eMul(this,'e_mood_before')">Numb</div><div class="etag" onclick="eMul(this,'e_mood_before')">Irritable</div>
-        <div class="etag" onclick="eMul(this,'e_mood_before')">Restless</div><div class="etag" onclick="eMul(this,'e_mood_before')">Bored</div>
-        <div class="etag" onclick="eMul(this,'e_mood_before')">Overwhelmed</div><div class="etag" onclick="eMul(this,'e_mood_before')">Content</div>
-      </div>
-      <div class="elbl" style="margin-top:12px">Mood after</div>
-      <div class="etag-row" id="e-maft">
-        <div class="etag" onclick="eMul(this,'e_mood_after')">Relieved</div><div class="etag" onclick="eMul(this,'e_mood_after')">Calm</div>
-        <div class="etag" onclick="eMul(this,'e_mood_after')">Guilty</div><div class="etag" onclick="eMul(this,'e_mood_after')">Ashamed</div>
-        <div class="etag" onclick="eMul(this,'e_mood_after')">Numb</div><div class="etag" onclick="eMul(this,'e_mood_after')">Satisfied</div>
-        <div class="etag" onclick="eMul(this,'e_mood_after')">Regretful</div><div class="etag" onclick="eMul(this,'e_mood_after')">Neutral</div>
-        <div class="etag" onclick="eMul(this,'e_mood_after')">Proud</div><div class="etag" onclick="eMul(this,'e_mood_after')">Defeated</div>
-      </div>
-    </div>
-
-    <div class="esec">
-      <div class="esec-hd">Notes</div>
-      <textarea class="einput etxt" id="edit-notes" placeholder="Any notes..."></textarea>
-    </div>
-
-    <button class="e-save" onclick="saveEdit()">Save changes</button>
-    <button class="e-del" onclick="deleteEntry()">Delete this entry</button>
-    <button class="e-can" onclick="closeEdit()">Cancel</button>
-  </div>
-</div>
-
-<!-- IMPORT MODAL -->
-<div class="mo" id="import-modal">
-  <div class="ms">
-    <div class="mh"></div>
-    <div class="mt">Import from old app</div>
-    <div class="msu">Converts your old CSV format into the new data model</div>
-    <div class="import-drop" id="import-drop" onclick="document.getElementById('csv-input').click()" ondragover="importDragOver(event)" ondragleave="importDragLeave(event)" ondrop="importDrop(event)">
-      <div class="import-drop-icon">&#128196;</div>
-      <div class="import-drop-txt">Drop CSV file here or tap to browse</div>
-      <div class="import-drop-sub">bfrb-log-cleaned.csv or any old export</div>
-    </div>
-    <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="importFile(this)">
-    <div class="import-preview" id="import-preview">
-      <div class="import-preview-hd" id="import-preview-hd">Ready to import</div>
-      <div class="import-preview-body" id="import-preview-body"></div>
-    </div>
-    <button class="import-btn" id="import-btn" onclick="doImport()">Import entries</button>
-    <button class="e-can" onclick="closeImport()">Cancel</button>
-  </div>
-</div>
-
 <!-- NAV -->
 <nav>
-  <div class="nav-brand">Skin Journal</div>
-  <div class="nav-r" id="nav-r"><a href="index.html" class="nav-lk">&#8592; Log event</a></div>
+  <a class="nav-brand" href="index.html">Ground<span>work</span></a>
+  <div class="nav-links">
+    <a class="nav-link" href="index.html">Log</a>
+    <a class="nav-link active" href="tracker.html">Patterns</a>
+    <a class="nav-link" href="context.html">Context</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="toggleTheme()">◐</button>
+    <div class="user-info" id="user-info" style="display:none">
+      <img class="user-avatar" id="user-avatar" src="" alt="">
+      <button class="sign-btn" onclick="signOut()">Sign out</button>
+    </div>
+    <button class="sign-btn" id="sign-btn-nav" onclick="signInWithGoogle()">Sign in</button>
+  </div>
 </nav>
 
 <!-- APP -->
-<div id="app-content">
+<div id="app">
 <main>
-  <div class="pg-title">My patterns</div>
-  <div class="pg-sub" id="pg-sub">Loading your data&#8230;</div>
 
-  <div class="range-row">
-    <div class="rc on" onclick="setRange(7,this)">7 days</div>
-    <div class="rc" onclick="setRange(14,this)">14 days</div>
-    <div class="rc" onclick="setRange(30,this)">30 days</div>
-    <div class="rc" onclick="setRange(90,this)">3 months</div>
-    <div class="rc" onclick="setRange(0,this)">All time</div>
+  <!-- HEADER -->
+  <div class="page-hd">
+    <div class="page-title">Patterns</div>
+    <div class="page-sub" id="page-sub">Loading your data...</div>
   </div>
 
-  <div class="stats-grid">
-    <div class="sc green"><div class="sl">Pick-free streak</div><div class="sv" id="s-streak">&#8212;</div><div class="ss" id="s-streak-s">days in a row</div></div>
-    <div class="sc"><div class="sl">Picks logged</div><div class="sv" id="s-picks">&#8212;</div><div class="ss" id="s-picks-s">this period</div></div>
-    <div class="sc"><div class="sl">Urges resisted</div><div class="sv" id="s-resisted">&#8212;</div><div class="ss" id="s-res-s">wins</div></div>
-    <div class="sc"><div class="sl">Avg urge before</div><div class="sv" id="s-urge">&#8212;</div><div class="ss">out of 10</div></div>
+  <!-- RANGE + PRINT -->
+  <div class="range-row">
+    <div class="range-pill on" data-days="7" onclick="setRange(this)">7 days</div>
+    <div class="range-pill" data-days="30" onclick="setRange(this)">30 days</div>
+    <div class="range-pill" data-days="90" onclick="setRange(this)">90 days</div>
+    <div class="range-pill" data-days="0" onclick="setRange(this)">All time</div>
+    <button class="print-btn" onclick="window.print()">Print for session</button>
+    <button class="print-btn" onclick="openImport()" style="border-color:var(--ac);color:var(--ac)">Import old logs</button>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stat-grid">
+    <div class="stat-card featured">
+      <div class="stat-label">Resistance rate</div>
+      <div class="stat-value" id="stat-resist">—</div>
+      <div class="stat-sub" id="stat-resist-sub">of urges resisted</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Episodes</div>
+      <div class="stat-value" id="stat-episodes">—</div>
+      <div class="stat-sub" id="stat-ep-sub">in this period</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg urge before</div>
+      <div class="stat-value" id="stat-urge">—</div>
+      <div class="stat-sub">out of 10</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Automatic episodes</div>
+      <div class="stat-value" id="stat-auto">—</div>
+      <div class="stat-sub">didn't notice until after</div>
+    </div>
   </div>
 
   <!-- CALENDAR -->
-  <div class="sec">
-    <div class="sec-lbl">Daily frequency &#8212; last 26 weeks</div>
-    <div class="cal-card">
-      <div class="cal-top">
-        <div class="cal-ttl">Pick frequency calendar</div>
-        <div class="cal-leg">
-          Less&nbsp;<div class="lc" style="background:var(--bdr)"></div><div class="lc c1"></div><div class="lc c2"></div><div class="lc c3"></div><div class="lc c4"></div>&nbsp;More
-          &nbsp;<div class="lc cr"></div>&nbsp;Resisted only
-        </div>
-      </div>
-      <div class="cal-outer">
-        <div class="cal-daylbls">
-          <div class="cal-dlbl">Mon</div><div class="cal-dlbl">Tue</div><div class="cal-dlbl">Wed</div>
-          <div class="cal-dlbl">Thu</div><div class="cal-dlbl">Fri</div><div class="cal-dlbl">Sat</div><div class="cal-dlbl">Sun</div>
-        </div>
-        <div class="cal-scroll">
-          <div class="cal-inner">
-            <div class="cal-months" id="cal-months"></div>
-            <div class="cal-weeks" id="cal-weeks"></div>
-          </div>
-        </div>
+  <div class="section">
+    <div class="section-title">Daily frequency</div>
+    <div class="card">
+      <div id="cal-container"><div class="loading">Loading calendar...</div></div>
+    </div>
+  </div>
+
+  <!-- TIME OF DAY + AWARENESS -->
+  <div class="two-col-grid section">
+    <div class="card">
+      <div class="card-title">Time of day</div>
+      <div class="chart-wrap">
+        <canvas id="tod-chart"></canvas>
       </div>
     </div>
-  </div>
-
-  <!-- BEHAVIOR COMPLETION -->
-  <div class="sec">
-    <div class="sec-lbl">Behavior chain &#8212; what happens after picking</div>
-    <div class="chart-card">
-      <div class="ct">Post-pick completion breakdown</div>
-      <div class="comp-bd" id="comp-bd"><div class="loading">No data yet</div></div>
+    <div class="card">
+      <div class="card-title">Awareness — conscious vs automatic</div>
+      <div id="aw-content">
+        <div class="sparse-state">Not enough data yet — log a few more episodes with awareness filled in.</div>
+      </div>
+      <div class="divider" style="margin:16px 0 12px"></div>
+      <div class="card-title">Awareness trend by week</div>
+      <div class="chart-wrap" id="aw-trend-wrap">
+        <div class="sparse-state">Needs 3+ weeks of data.</div>
+      </div>
     </div>
   </div>
 
-  <!-- TIME PATTERNS -->
-  <div class="sec">
-    <div class="sec-lbl">Time patterns</div>
-    <div class="charts-grid">
-      <div class="chart-card wide"><div class="ct">Time of day (picks by hour)</div><canvas id="chart-hour"></canvas></div>
-      <div class="chart-card"><div class="ct">Day of week</div><canvas id="chart-dow"></canvas></div>
-      <div class="chart-card"><div class="ct">Weekly trend</div><canvas id="chart-weekly"></canvas></div>
+  <!-- ANTECEDENTS -->
+  <div class="section">
+    <div class="section-title">Antecedents</div>
+    <div class="two-col-grid">
+      <div class="card">
+        <div class="card-title">Emotional triggers</div>
+        <div id="etrig-list"><div class="empty-state"><div class="empty-text">No emotional triggers logged yet.</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Sensory triggers</div>
+        <div id="strig-list"><div class="empty-state"><div class="empty-text">No sensory triggers logged yet.</div></div></div>
+      </div>
+    </div>
+    <div class="two-col-grid" style="margin-top:12px">
+      <div class="card">
+        <div class="card-title">Locations</div>
+        <div id="loc-list"><div class="empty-state"><div class="empty-text">No locations logged yet.</div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Activities</div>
+        <div id="act-list"><div class="empty-state"><div class="empty-text">No activities logged yet.</div></div></div>
+      </div>
     </div>
   </div>
 
-  <!-- URGE + AWARENESS -->
-  <div class="sec">
-    <div class="sec-lbl">Urge &amp; awareness</div>
-    <div class="charts-grid">
-      <div class="chart-card"><div class="ct">Urge before vs after (picks only)</div><canvas id="chart-urge"></canvas></div>
-      <div class="chart-card"><div class="ct">Conscious vs subconscious</div><canvas id="chart-awareness"></canvas></div>
+  <!-- REINFORCEMENT -->
+  <div class="section">
+    <div class="section-title">Reinforcement picture</div>
+    <div class="two-col-grid">
+      <div class="card">
+        <div class="card-title">Mood before vs after — top words</div>
+        <div id="mood-content">
+          <div class="sparse-state">Log mood before and after a few episodes to see the pattern.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Urge level — before vs after episodes</div>
+        <div id="urge-arc-content">
+          <div class="sparse-state">Log urge levels for a few episodes.</div>
+        </div>
+        <div class="divider" style="margin:16px 0"></div>
+        <div class="card-title">Behavior chain — picking</div>
+        <div id="chain-content">
+          <div class="sparse-state">Log a few picking episodes with completion filled in.</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- TRIGGERS + AREAS + INTERVENTIONS -->
-  <div class="sec">
-    <div class="sec-lbl">Triggers, areas &amp; interventions</div>
-    <div class="two-cards">
-      <div class="chart-card"><div class="ct">Top emotional triggers</div><div class="bar-list" id="bar-etrig"></div></div>
-      <div class="chart-card"><div class="ct">Top sensory triggers</div><div class="bar-list" id="bar-strig"></div></div>
-      <div class="chart-card"><div class="ct">Most picked body areas</div><div class="bar-list" id="bar-areas"></div></div>
-      <div class="chart-card"><div class="ct">Best interventions (avg effectiveness)</div><div class="bar-list" id="bar-int"></div></div>
+  <!-- INTERVENTIONS -->
+  <div class="section" id="int-section">
+    <div class="section-title">Interventions</div>
+    <div class="three-col-grid">
+      <div class="card">
+        <div class="card-title">What you tried</div>
+        <div id="int-tried-list"><div class="sparse-state">No intervention data yet.</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Average effectiveness</div>
+        <div id="int-eff-list"><div class="sparse-state">Rate effectiveness on a few entries.</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Effectiveness over time</div>
+        <div class="chart-wrap" id="eff-trend-wrap">
+          <div class="sparse-state">Needs 3+ weeks of rated entries.</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ACRYLIC CHEWING -->
-  <div class="sec" id="acr-sec" style="display:none">
-    <div class="sec-lbl">Acrylic chewing patterns</div>
-    <div class="charts-grid">
-      <div class="chart-card"><div class="ct">Acrylic chewing intensity</div><canvas id="chart-acr-int"></canvas></div>
-      <div class="chart-card"><div class="ct">Acrylic awareness</div><canvas id="chart-acr-aw"></canvas></div>
-    </div>
-    <div class="insight-card amber" id="acr-insight">
-      <div class="insight-hd">&#128133; Acrylic chewing &#8212; displaced oral BFRB</div>
-      <div class="insight-body" id="acr-insight-body">Loading...</div>
-    </div>
-  </div>
-
-  <!-- MOOD DELTA -->
-  <div class="sec">
-    <div class="sec-lbl">Emotional function of picking</div>
-    <div class="chart-card">
-      <div class="ct">Most common mood shift &#8212; before &#8594; after picking</div>
-      <div class="mood-delta" id="mood-delta"><div class="loading" style="padding:16px 0">No mood data yet</div></div>
-    </div>
-  </div>
-
-  <!-- TABLE -->
-  <div class="sec">
-    <div class="sec-lbl">All entries</div>
-    <div class="filter-row">
-      <select class="fsel" id="f-type" onchange="applyFilters()">
-        <option value="">All types</option>
-        <option value="picked">Picked</option>
-        <option value="resisted">Resisted</option>
-        <option value="near">Near miss</option>
-        <option value="acrylic">Acrylic</option>
-      </select>
-      <select class="fsel" id="f-bfrb" onchange="applyFilters()">
+  <!-- ENTRY LOG -->
+  <div class="section">
+    <div class="section-title">Entry log</div>
+    <div class="table-filters">
+      <select class="fsel" id="filter-bfrb" onchange="applyFilters()">
         <option value="">All behaviors</option>
         <option value="picking">Skin picking</option>
-        <option value="acrylic">Acrylic chewing</option>
-        <option value="both">Both</option>
+        <option value="biting">Nail / skin biting</option>
       </select>
-      <select class="fsel" id="f-comp" onchange="applyFilters()">
-        <option value="">All completions</option>
-        <option value="released">Put it down</option>
-        <option value="examined">Examined</option>
-        <option value="tasted">Tasted</option>
-        <option value="ingested">Ingested</option>
+      <select class="fsel" id="filter-type" onchange="applyFilters()">
+        <option value="">All types</option>
+        <option value="did">Did it</option>
+        <option value="resisted">Resisted</option>
+        <option value="near">Near miss</option>
       </select>
-      <button class="fcl" onclick="clearFilters()">Clear &#215;</button>
+      <button class="fclear" onclick="clearFilters()">Clear</button>
+      <span class="rc-count" id="rc-count"></span>
     </div>
     <div class="table-wrap">
-      <div class="table-top">
-        <div class="rc-count" id="rc-count">Loading&#8230;</div>
-        <div class="btn-row">
-          <button class="pill-btn amber" onclick="openImport()">&#8593; Import CSV</button>
-          <button class="pill-btn" onclick="exportCSV()">&#8595; Export CSV</button>
-        </div>
-      </div>
-      <div id="table-container"><div class="loading">Loading entries&#8230;<div class="spin"></div></div></div>
-      <div class="pag" id="pagination" style="display:none">
-        <button class="pag-btn" id="pag-prev" onclick="prevPage()">&#8592; Prev</button>
-        <div class="pag-info" id="pag-info"></div>
-        <button class="pag-btn" id="pag-next" onclick="nextPage()">Next &#8594;</button>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Date / time</th>
+            <th>Behavior</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Top trigger</th>
+            <th>Urge before</th>
+            <th>Urge after</th>
+          </tr>
+        </thead>
+        <tbody id="entry-tbody">
+          <tr><td colspan="7" class="loading">Loading entries...</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
 </main>
-</div>
+</div><!-- /app -->
 
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import{getFirestore,collection,getDocs,doc,addDoc,updateDoc,deleteDoc,query,orderBy,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const FB={apiKey:"AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",authDomain:"skin-picking-log.firebaseapp.com",projectId:"skin-picking-log",storageBucket:"skin-picking-log.firebasestorage.app",messagingSenderId:"162906566118",appId:"1:162906566118:web:a89abbd383fc847ba97a27"};
-const app=initializeApp(FB);
-const auth=getAuth(app);
-const db=getFirestore(app);
-const gp=new GoogleAuthProvider();
+const firebaseConfig = {
+  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
+  authDomain: "skin-picking-log.firebaseapp.com",
+  projectId: "skin-picking-log",
+  storageBucket: "skin-picking-log.firebasestorage.app",
+  messagingSenderId: "162906566118",
+  appId: "1:162906566118:web:a89abbd383fc847ba97a27",
+  measurementId: "G-JR8BBWVVZT"
+};
 
-window._db=db;
-window._col=(uid)=>collection(db,'users',uid,'events');
-window._addDoc=addDoc;
-window._updateDoc=(uid,id,data)=>updateDoc(doc(db,'users',uid,'events',id),data);
-window._deleteDoc=(uid,id)=>deleteDoc(doc(db,'users',uid,'events',id));
-window._serverTimestamp=serverTimestamp;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-document.getElementById('sign-in-btn').addEventListener('click',()=>signInWithPopup(auth,gp).catch(e=>window.toast(e.message,true)));
-window.doSignOut=()=>signOut(auth);
+window._uid = null;
+window.ALL_ENTRIES = [];
 
-onAuthStateChanged(auth,async u=>{
-  const ls=document.getElementById('login-screen'),ac=document.getElementById('app-content');
-  if(u){
-    ls.classList.remove('on');ac.classList.add('on');
-    document.getElementById('nav-r').innerHTML=`<a href="index.html" class="nav-lk">&larr; Log event</a><div class="ui"><img src="${u.photoURL||''}" class="av" alt=""><button class="so-btn" onclick="doSignOut()">Sign out</button></div>`;
-    window._uid=u.uid;
-    await loadEntries(u.uid);
-  }else{ls.classList.add('on');ac.classList.remove('on');window._uid=null;}
-});
+window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { toast('Sign-in failed', true); }};
+window.signOut = async () => { await fbSignOut(auth); };
 
-async function loadEntries(uid){
-  try{
-    const q=query(window._col(uid),orderBy('timestamp','desc'));
-    const snap=await getDocs(q);
-    window.ALL_ENTRIES=snap.docs.map(d=>({id:d.id,...d.data()}));
-    document.getElementById('pg-sub').textContent=window.ALL_ENTRIES.length+' total entries logged';
-    applyFilters();
+async function loadEntries(uid) {
+  try {
+    const q = query(collection(db,'users',uid,'entries'), orderBy('timestamp','desc'));
+    const snap = await getDocs(q);
+    window.ALL_ENTRIES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderAll();
-  }catch(e){
-    document.getElementById('table-container').innerHTML='<div class="empty">Could not load &#8212; check Firebase config.<br><small>'+e.message+'</small></div>';
+  } catch(e) {
+    console.error(e);
+    toast('Error loading data: ' + e.message, true);
   }
 }
-window.reloadEntries=()=>{if(window._uid)loadEntries(window._uid);};
+
+onAuthStateChanged(auth, user => {
+  const isIn = !!user;
+  window._uid = isIn ? user.uid : null;
+  document.getElementById('auth-screen').classList.toggle('on', !isIn);
+  document.getElementById('app').classList.toggle('on', isIn);
+  document.getElementById('sign-btn-nav').style.display = isIn ? 'none' : '';
+  document.getElementById('user-info').style.display = isIn ? 'flex' : 'none';
+  if (isIn) {
+    if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
+    loadEntries(user.uid);
+  }
+});
 </script>
 
+<!-- RENDER LOGIC -->
 <script>
-window.ALL_ENTRIES=[];
-window.FILTERED=[];
-let currentPage=0;
-const PAGE_SIZE=20;
-let rangeDays=7;
-let chartHour,chartDow,chartWeekly,chartUrge,chartAw,chartAcrInt,chartAcrAw;
-let ES={};// edit state
+// ─── THEME ───
+function toggleTheme(){const d=document.documentElement;const n=d.getAttribute('data-theme')==='dark'?'':'dark';d.setAttribute('data-theme',n);localStorage.setItem('theme',n);if(window.todChart)rebuildCharts();}
+(()=>{const t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})();
 
-/* ─── RANGE ─── */
-window.setRange=(days,chip)=>{
-  rangeDays=days;
-  document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));
-  chip.classList.add('on');
+// ─── STATE ───
+let currentDays = 7;
+let filteredEntries = [];
+let todChart = null, awTrendChart = null, effTrendChart = null;
+
+// ─── RANGE ───
+window.setRange = pill => {
+  document.querySelectorAll('.range-pill').forEach(p => p.classList.remove('on'));
+  pill.classList.add('on');
+  currentDays = parseInt(pill.dataset.days);
   renderAll();
 };
 
-function getRangeEntries(){
-  const now=new Date();
-  const cutoff=rangeDays>0?new Date(now-rangeDays*86400000):new Date(0);
-  return window.ALL_ENTRIES.filter(e=>new Date(e.timestamp)>=cutoff);
+// ─── FILTER ENTRIES BY DATE ───
+function getFiltered() {
+  let entries = window.ALL_ENTRIES || [];
+  if (currentDays > 0) {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - currentDays);
+    entries = entries.filter(e => new Date(e.timestamp) >= cutoff);
+  }
+  return entries;
 }
 
-/* ─── RENDER ALL ─── */
-function renderAll(){
-  const entries=getRangeEntries();
+// ─── MAIN RENDER ───
+function renderAll() {
+  const entries = getFiltered();
+  filteredEntries = entries;
+
+  const total = entries.length;
+  document.getElementById('page-sub').textContent =
+    total === 0 ? 'No entries in this period' :
+    `${total} entr${total===1?'y':'ies'} in the selected period`;
+
   renderStats(entries);
-  renderCalendar();
-  renderCompletionBreakdown(entries);
-  renderChartHour(entries);
-  renderChartDow(entries);
-  renderChartWeekly(entries);
-  renderChartUrge(entries);
-  renderChartAwareness(entries);
-  renderBarTriggers(entries);
-  renderBarAreas(entries);
-  renderBarInterventions(entries);
-  renderAcrylic(entries);
-  renderMoodDelta(entries);
+  renderCalendar(entries);
+  renderTimeOfDay(entries);
+  renderAwareness(entries);
+  renderTriggers(entries);
+  renderLocAct(entries);
+  renderMood(entries);
+  renderUrgeArc(entries);
+  renderChain(entries);
+  renderInterventions(entries);
+  renderTable(entries);
 }
 
-/* ─── STATS ─── */
-function renderStats(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked');
-  const resisted=entries.filter(e=>e.entry_type==='resisted');
-  document.getElementById('s-streak').textContent=calcStreak();
-  document.getElementById('s-picks').textContent=picks.length;
-  document.getElementById('s-picks-s').textContent='in '+(rangeDays>0?rangeDays+' days':'all time');
-  document.getElementById('s-resisted').textContent=resisted.length;
-  const total=picks.length+resisted.length;
-  document.getElementById('s-res-s').textContent=total?Math.round(resisted.length/total*100)+'% resistance rate':'wins logged';
-  const urges=entries.filter(e=>e.urge_before>0).map(e=>Number(e.urge_before));
-  document.getElementById('s-urge').textContent=urges.length?(urges.reduce((a,b)=>a+b,0)/urges.length).toFixed(1):'—';
+// ─── HELPERS ───
+function splitField(str) {
+  if (!str) return [];
+  return str.split(',').map(s => s.trim()).filter(Boolean);
 }
-
-function calcStreak(){
-  const pickDays=new Set(window.ALL_ENTRIES.filter(e=>e.entry_type==='picked').map(e=>new Date(e.timestamp).toDateString()));
-  let streak=0,d=new Date();d.setHours(0,0,0,0);
-  while(!pickDays.has(d.toDateString())){streak++;d.setDate(d.getDate()-1);if(streak>3650)break;}
-  return Math.max(0,streak-1);
-}
-
-/* ─── CALENDAR ─── */
-function renderCalendar(){
-  const weeksEl=document.getElementById('cal-weeks');
-  const monthsEl=document.getElementById('cal-months');
-  weeksEl.innerHTML='';monthsEl.innerHTML='';
-  const today=new Date();today.setHours(23,59,59,999);
-  const dayMap={};
-  window.ALL_ENTRIES.forEach(e=>{
-    const ds=new Date(e.timestamp).toDateString();
-    if(!dayMap[ds])dayMap[ds]={picks:0,resisted:0};
-    if(e.entry_type==='picked')dayMap[ds].picks++;
-    else if(e.entry_type==='resisted')dayMap[ds].resisted++;
+function countItems(entries, field) {
+  const counts = {};
+  entries.forEach(e => {
+    splitField(e[field]).forEach(v => { counts[v] = (counts[v]||0) + 1; });
   });
-  const start=new Date(today);start.setDate(start.getDate()-26*7);
-  const dow=start.getDay();start.setDate(start.getDate()-(dow===0?6:dow-1));
-  const wkCount=Math.ceil((today-start)/(7*86400000))+1;
-  const monthSeen={};let col=0;
-  for(let w=0;w<wkCount;w++){
-    const wkEl=document.createElement('div');wkEl.className='cal-week';
-    for(let d=0;d<7;d++){
-      const date=new Date(start);date.setDate(start.getDate()+w*7+d);
-      const cell=document.createElement('div');cell.className='cc';
-      if(date>today){cell.classList.add('emp');}
-      else{
-        const ds=date.toDateString(),data=dayMap[ds]||{picks:0,resisted:0},p=data.picks;
-        if(p===0&&data.resisted>0)cell.classList.add('cr');
-        else if(p===0)cell.classList.add('c0');
-        else if(p===1)cell.classList.add('c1');
-        else if(p===2)cell.classList.add('c2');
-        else if(p===3)cell.classList.add('c3');
-        else cell.classList.add('c4');
-        if(date.toDateString()===today.toDateString())cell.classList.add('ctoday');
-        const fd=date.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
-        cell.title=fd+': '+p+' pick'+(p!==1?'s':'')+', '+data.resisted+' resisted';
-        if(d===0){const mo=date.getMonth();if(!monthSeen[mo]){monthSeen[mo]={col,lbl:date.toLocaleDateString('en-AU',{month:'short'})};}}
+  return Object.entries(counts).sort((a,b) => b[1]-a[1]);
+}
+function avg(arr) {
+  if (!arr.length) return 0;
+  return arr.reduce((a,b) => a+b, 0) / arr.length;
+}
+function pct(n, d) {
+  if (!d) return '—';
+  return Math.round(n/d*100) + '%';
+}
+function episodes(entries) {
+  return entries.filter(e => e.entry_type === 'did' || e.entry_type === 'near');
+}
+function cssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function destroyChart(chartVar) {
+  if (chartVar) { try { chartVar.destroy(); } catch(e){} }
+  return null;
+}
+function isoDate(ts) {
+  return ts ? ts.slice(0,10) : '';
+}
+
+// ─── STATS ───
+function renderStats(entries) {
+  const eps = episodes(entries);
+  const resisted = entries.filter(e => e.entry_type === 'resisted');
+  const total_with_urge = entries.filter(e => e.entry_type === 'did' || e.entry_type === 'near');
+  const resistRate = pct(resisted.length, entries.length);
+  const epCount = eps.length;
+  const pickCount = eps.filter(e=>e.bfrb_type==='picking').length;
+  const biteCount = eps.filter(e=>e.bfrb_type==='biting').length;
+  const urgeVals = eps.filter(e=>e.urge_before>0).map(e=>e.urge_before);
+  const autoEps = eps.filter(e=>e.awareness==='automatic');
+  const autoPct = eps.length ? Math.round(autoEps.length/eps.length*100)+'%' : '—';
+
+  document.getElementById('stat-resist').textContent = resistRate;
+  document.getElementById('stat-resist-sub').textContent = `${resisted.length} of ${entries.length} total logs`;
+  document.getElementById('stat-episodes').textContent = epCount;
+  document.getElementById('stat-ep-sub').textContent =
+    epCount===0 ? 'no episodes' :
+    `${pickCount} picking · ${biteCount} biting`;
+  document.getElementById('stat-urge').textContent = urgeVals.length ? avg(urgeVals).toFixed(1) : '—';
+  document.getElementById('stat-auto').textContent = autoPct;
+}
+
+// ─── CALENDAR ───
+function renderCalendar(entries) {
+  const container = document.getElementById('cal-container');
+
+  // Build date -> count map
+  const dayCounts = {};
+  entries.forEach(e => {
+    const d = isoDate(e.timestamp);
+    if (d) dayCounts[d] = (dayCounts[d]||0) + (e.entry_type !== 'resisted' ? 1 : 0);
+  });
+  const resistDays = new Set();
+  entries.filter(e=>e.entry_type==='resisted').forEach(e=>{ const d=isoDate(e.timestamp); if(d) resistDays.add(d); });
+
+  // Date range
+  const today = new Date();
+  const rangeStart = new Date(today);
+  rangeStart.setDate(today.getDate() - (currentDays > 0 ? currentDays - 1 : 364));
+  // Go back to start of that week (Sunday)
+  const startDow = rangeStart.getDay();
+  rangeStart.setDate(rangeStart.getDate() - startDow);
+
+  // Build weeks array
+  const weeks = [];
+  let cur = new Date(rangeStart);
+  while (cur <= today) {
+    const week = [];
+    for (let d = 0; d < 7; d++) {
+      week.push(new Date(cur));
+      cur.setDate(cur.getDate()+1);
+    }
+    weeks.push(week);
+  }
+
+  // Max count for scaling
+  const maxCount = Math.max(1, ...Object.values(dayCounts));
+
+  // Build HTML
+  let html = '<div class="cal-outer"><div class="cal-day-labels">';
+  ['S','M','T','W','T','F','S'].forEach(d => { html += `<div class="cal-dl">${d}</div>`; });
+  html += '</div><div class="cal-inner"><div class="cal-month-row">';
+
+  let lastMonth = -1;
+  weeks.forEach(week => {
+    const firstDay = week.find(d => d <= today);
+    if (firstDay && firstDay.getMonth() !== lastMonth) {
+      lastMonth = firstDay.getMonth();
+      const lbl = firstDay.toLocaleDateString('en-US',{month:'short'});
+      html += `<div class="cal-mlbl" style="width:17px">${lbl}</div>`;
+    } else {
+      html += `<div class="cal-mlbl" style="width:17px"></div>`;
+    }
+  });
+  html += '</div><div class="cal-weeks">';
+
+  weeks.forEach(week => {
+    html += '<div class="cal-week">';
+    week.forEach(day => {
+      const ds = day.toISOString().slice(0,10);
+      const isToday = ds === today.toISOString().slice(0,10);
+      const isFuture = day > today;
+      const count = dayCounts[ds] || 0;
+      const isResistOnly = !count && resistDays.has(ds);
+
+      let cls = 'cal-cell';
+      if (isFuture) { cls += ' empty'; }
+      else if (isResistOnly) { cls += ' cr'; }
+      else if (count === 0) { cls += ' c0'; }
+      else {
+        const intensity = count / maxCount;
+        if (intensity < 0.25) cls += ' c1';
+        else if (intensity < 0.5) cls += ' c2';
+        else if (intensity < 0.75) cls += ' c3';
+        else cls += ' c4';
       }
-      wkEl.appendChild(cell);
-    }
-    weeksEl.appendChild(wkEl);col++;
-  }
-  // month labels (approximate, 17px per col)
-  let lastC=-8;
-  Object.values(monthSeen).sort((a,b)=>a.col-b.col).forEach(m=>{
-    if(m.col-lastC<3)return;lastC=m.col;
-    const l=document.createElement('div');l.className='cal-mlbl';
-    l.textContent=m.lbl;l.style.minWidth='44px';monthsEl.appendChild(l);
-  });
-}
-
-/* ─── COMPLETION ─── */
-function renderCompletionBreakdown(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked'&&e.completion);
-  const el=document.getElementById('comp-bd');
-  if(!picks.length){el.innerHTML='<div class="loading" style="padding:16px 0">No picks with completion data yet</div>';return;}
-  const counts={};picks.forEach(e=>{counts[e.completion]=(counts[e.completion]||0)+1;});
-  const total=picks.length;
-  const defs=[
-    {k:'released',icon:'&#9995;',lbl:'Put it down',cls:'green'},
-    {k:'examined',icon:'&#128065;',lbl:'Examined it',cls:'green'},
-    {k:'tasted',icon:'&#128068;',lbl:'Touched to lips / tasted',cls:'amber'},
-    {k:'ingested',icon:'&#9888;&#65039;',lbl:'Ingested / swallowed',cls:'red'},
-  ];
-  let html=defs.map(d=>{
-    const n=counts[d.k]||0,pct=Math.round(n/total*100);
-    return`<div class="cbr"><div class="cbi">${d.icon}</div><div class="cbl">${d.lbl}</div><div class="cbtr"><div class="cbf ${d.cls}" style="width:${pct}%"></div></div><div class="cbp">${pct}%</div></div>`;
-  }).join('');
-  const oral=(counts['tasted']||0)+(counts['ingested']||0);
-  if(oral>0){
-    const p=Math.round(oral/total*100);
-    html+=`<div class="insight-card amber" style="margin-top:12px"><div class="insight-hd">&#9888;&#65039; Oral completion: ${p}% of picks</div><div class="insight-body">This is the same oral sensory drive that used to fuel nail biting &#8212; now redirected through the acrylic layer. The behavior chain is: pick &#8594; taste/ingest. Chewing gum, mints, or flavoured lip balm are the most effective competing responses for this specific step.</div></div>`;
-  }
-  el.innerHTML=html;
-}
-
-/* ─── CHART HELPERS ─── */
-function chartOpts(yLabel=''){
-  return{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{family:'Plus Jakarta Sans',size:10},color:'#8c7e72'}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{family:'Plus Jakarta Sans',size:10},color:'#8c7e72',stepSize:1},beginAtZero:true}}};
-}
-function doughnutOpts(){
-  return{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:{family:'Plus Jakarta Sans',size:11},color:'#4a3e34',boxWidth:10,padding:12}}}};
-}
-function destroyChart(ref){if(ref){try{ref.destroy();}catch(e){}}}
-
-/* ─── HOUR OF DAY ─── */
-function renderChartHour(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked');
-  const hours=new Array(24).fill(0);
-  picks.forEach(e=>hours[new Date(e.timestamp).getHours()]++);
-  const ctx=document.getElementById('chart-hour').getContext('2d');
-  destroyChart(chartHour);
-  chartHour=new Chart(ctx,{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+':00'),datasets:[{data:hours,backgroundColor:hours.map((_,i)=>(i>=22||i<6)?'rgba(168,112,32,.6)':'rgba(158,50,50,.55)'),borderRadius:3,borderSkipped:false}]},options:chartOpts()});
-}
-
-/* ─── DAY OF WEEK ─── */
-function renderChartDow(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked');
-  const days=new Array(7).fill(0);
-  picks.forEach(e=>days[new Date(e.timestamp).getDay()]++);
-  const ord=[1,2,3,4,5,6,0];
-  const ctx=document.getElementById('chart-dow').getContext('2d');
-  destroyChart(chartDow);
-  chartDow=new Chart(ctx,{type:'bar',data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[{data:ord.map(i=>days[i]),backgroundColor:'rgba(158,50,50,.55)',borderRadius:4,borderSkipped:false}]},options:chartOpts()});
-}
-
-/* ─── WEEKLY TREND ─── */
-function renderChartWeekly(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked');
-  const wm={};
-  picks.forEach(e=>{const d=new Date(e.timestamp);d.setHours(0,0,0,0);d.setDate(d.getDate()-d.getDay());const k=d.toISOString().split('T')[0];wm[k]=(wm[k]||0)+1;});
-  const keys=Object.keys(wm).sort();
-  const ctx=document.getElementById('chart-weekly').getContext('2d');
-  destroyChart(chartWeekly);
-  chartWeekly=new Chart(ctx,{type:'line',data:{labels:keys.map(k=>{const d=new Date(k);return d.toLocaleDateString('en-AU',{day:'numeric',month:'short'});}),datasets:[{data:keys.map(k=>wm[k]),tension:.35,borderColor:'var(--ac)',backgroundColor:'rgba(61,107,82,.08)',fill:true,pointBackgroundColor:'var(--ac)',pointRadius:3}]},options:chartOpts()});
-}
-
-/* ─── URGE BEFORE/AFTER ─── */
-function renderChartUrge(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked'&&e.urge_before&&e.urge_after);
-  if(!picks.length)return;
-  const avgB=(picks.reduce((a,e)=>a+Number(e.urge_before),0)/picks.length).toFixed(1);
-  const avgA=(picks.reduce((a,e)=>a+Number(e.urge_after),0)/picks.length).toFixed(1);
-  const ctx=document.getElementById('chart-urge').getContext('2d');
-  destroyChart(chartUrge);
-  chartUrge=new Chart(ctx,{type:'bar',data:{labels:['Before pick','After pick'],datasets:[{data:[avgB,avgA],backgroundColor:['rgba(158,50,50,.6)','rgba(61,107,82,.6)'],borderRadius:6,borderSkipped:false}]},options:chartOpts()});
-}
-
-/* ─── AWARENESS ─── */
-function renderChartAwareness(entries){
-  const con=entries.filter(e=>e.awareness==='Conscious').length;
-  const sub=entries.filter(e=>e.awareness==='Subconscious').length;
-  if(!con&&!sub)return;
-  const ctx=document.getElementById('chart-awareness').getContext('2d');
-  destroyChart(chartAw);
-  chartAw=new Chart(ctx,{type:'doughnut',data:{labels:['Conscious','Subconscious'],datasets:[{data:[con,sub],backgroundColor:['rgba(61,107,82,.7)','rgba(168,112,32,.7)'],borderWidth:0}]},options:doughnutOpts()});
-}
-
-/* ─── BAR LISTS ─── */
-function barList(id,map,colorCls){
-  const el=document.getElementById(id);
-  const sorted=Object.entries(map).filter(([k])=>k&&k.trim()).sort((a,b)=>b[1]-a[1]).slice(0,7);
-  if(!sorted.length){el.innerHTML='<div style="font-size:11px;color:var(--mu);padding:8px 0">No data yet</div>';return;}
-  const max=sorted[0][1];
-  el.innerHTML=sorted.map(([k,v])=>`<div class="bi"><div class="bi-lbl" title="${k}">${k}</div><div class="bi-track"><div class="bi-fill ${colorCls}" style="width:${Math.round(v/max*100)}%"></div></div><div class="bi-count">${v}</div></div>`).join('');
-}
-
-function renderBarTriggers(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked');
-  const em={},sm={};
-  picks.forEach(e=>{
-    // emotional_triggers from new format, or trigger from old format
-    const et=e.emotional_triggers||'';const st=e.sensory_triggers||'';
-    // Old CSV had combined 'trigger' field — split sensory vs emotional heuristically
-    const oldTrig=e.trigger||'';
-    const sensoryWords=['felt a texture','saw in mirror','magnifying','itching','rough','bump','scanning','lighting'];
-    oldTrig.split(', ').filter(Boolean).forEach(t=>{const tl=t.toLowerCase();if(sensoryWords.some(w=>tl.includes(w)))sm[t]=(sm[t]||0)+1;else em[t]=(em[t]||0)+1;});
-    et.split(', ').filter(Boolean).forEach(t=>{em[t]=(em[t]||0)+1;});
-    st.split(', ').filter(Boolean).forEach(t=>{sm[t]=(sm[t]||0)+1;});
-  });
-  barList('bar-etrig',em,'red');barList('bar-strig',sm,'amb');
-}
-
-function renderBarAreas(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked');
-  const m={};
-  picks.forEach(e=>{
-    const areas=e.body_areas||e.body_area||'';
-    areas.split(', ').filter(Boolean).forEach(a=>{m[a]=(m[a]||0)+1;});
-  });
-  barList('bar-areas',m,'red');
-}
-
-function renderBarInterventions(entries){
-  const tried=entries.filter(e=>e.tried_intervention&&e.interventions);
-  const effMap={};
-  tried.forEach(e=>{
-    const eff=Number(e.intervention_effectiveness)||0;
-    (e.interventions||'').split(', ').filter(Boolean).forEach(i=>{
-      if(!effMap[i])effMap[i]=[];effMap[i].push(eff);
+      if (isToday) cls += ' today';
+      const title = isFuture ? '' : `${ds}: ${count} episode${count!==1?'s':''}${isResistOnly?' (resistance only)':''}`;
+      html += `<div class="${cls}" title="${title}" onclick="filterTableByDate('${ds}')"></div>`;
     });
-    // old format
-    if(e.intervention&&e.intervention!=='Nothing this time'){
-      if(!effMap[e.intervention])effMap[e.intervention]=[];effMap[e.intervention].push(3);
+    html += '</div>';
+  });
+
+  html += '</div></div></div>';
+  html += `<div class="cal-legend">
+    <div class="cal-legend-cells">
+      <div class="cal-legend-cell" style="background:var(--bdr)"></div>
+      <div class="cal-legend-cell" style="background:rgba(193,105,79,.18)"></div>
+      <div class="cal-legend-cell" style="background:rgba(193,105,79,.38)"></div>
+      <div class="cal-legend-cell" style="background:rgba(193,105,79,.60)"></div>
+      <div class="cal-legend-cell" style="background:var(--ac)"></div>
+    </div>
+    <span>Fewer episodes</span><span style="margin-left:auto">More episodes</span>
+    <div style="display:flex;align-items:center;gap:4px;margin-left:12px">
+      <div class="cal-legend-cell" style="background:rgba(122,140,133,.25);border:1px solid rgba(122,140,133,.45)"></div>
+      <span>Resistance only</span>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+// ─── TIME OF DAY ───
+const TOD_BUCKETS = [
+  {label:'Early am\n5–9', hours:[5,6,7,8]},
+  {label:'Morning\n9–12', hours:[9,10,11]},
+  {label:'Afternoon\n12–5', hours:[12,13,14,15,16]},
+  {label:'Evening\n5–9', hours:[17,18,19,20]},
+  {label:'Late night\n9–1', hours:[21,22,23,0]},
+  {label:'Night\n1–5', hours:[1,2,3,4]},
+];
+
+function renderTimeOfDay(entries) {
+  const eps = episodes(entries);
+  const pickCounts = new Array(6).fill(0);
+  const biteCounts = new Array(6).fill(0);
+
+  eps.forEach(e => {
+    const h = new Date(e.timestamp).getHours();
+    const bi = TOD_BUCKETS.findIndex(b => b.hours.includes(h));
+    if (bi === -1) return;
+    if (e.bfrb_type === 'picking') pickCounts[bi]++;
+    else if (e.bfrb_type === 'biting') biteCounts[bi]++;
+  });
+
+  const labels = TOD_BUCKETS.map(b => b.label);
+  todChart = destroyChart(todChart);
+  const ctx = document.getElementById('tod-chart').getContext('2d');
+  todChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label:'Picking', data:pickCounts, backgroundColor:cssVar('--ac-bar'), borderRadius:6, borderSkipped:false },
+        { label:'Biting', data:biteCounts, backgroundColor:cssVar('--sage-bar'), borderRadius:6, borderSkipped:false }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{family:'DM Sans',size:11},color:cssVar('--tx2'),boxWidth:12,boxHeight:12}}},
+      scales:{
+        x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),maxRotation:0}},
+        y:{grid:{color:cssVar('--bdr')},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),stepSize:1,precision:0},beginAtZero:true}
+      }
     }
   });
-  const sorted=Object.entries(effMap).map(([k,v])=>({k,avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length})).sort((a,b)=>b.avg-a.avg);
-  const el=document.getElementById('bar-int');
-  if(!sorted.length){el.innerHTML='<div style="font-size:11px;color:var(--mu);padding:8px 0">No intervention data yet</div>';return;}
-  el.innerHTML=sorted.slice(0,7).map(item=>`<div class="bi"><div class="bi-lbl" title="${item.k}">${item.k}</div><div class="bi-track"><div class="bi-fill" style="width:${Math.round(item.avg/5*100)}%"></div></div><div class="bi-count">${item.avg.toFixed(1)}</div></div>`).join('');
 }
 
-/* ─── ACRYLIC ─── */
-function renderAcrylic(entries){
-  const acrEntries=entries.filter(e=>e.bfrb_type==='acrylic'||e.bfrb_type==='both');
-  const sec=document.getElementById('acr-sec');
-  if(!acrEntries.length){sec.style.display='none';return;}
-  sec.style.display='block';
-  // Intensity chart
-  const intMap={'Light / gentle':0,'Moderate':0,'Heavy / hard':0};
-  acrEntries.forEach(e=>{if(e.acr_intensity&&intMap.hasOwnProperty(e.acr_intensity))intMap[e.acr_intensity]++;});
-  const ctx1=document.getElementById('chart-acr-int').getContext('2d');
-  destroyChart(chartAcrInt);
-  chartAcrInt=new Chart(ctx1,{type:'doughnut',data:{labels:Object.keys(intMap),datasets:[{data:Object.values(intMap),backgroundColor:['rgba(61,107,82,.6)','rgba(168,112,32,.6)','rgba(158,50,50,.6)'],borderWidth:0}]},options:doughnutOpts()});
-  // Awareness chart
-  const awCon=acrEntries.filter(e=>e.acr_awareness==='Conscious').length;
-  const awSub=acrEntries.filter(e=>e.acr_awareness==='Subconscious').length;
-  const ctx2=document.getElementById('chart-acr-aw').getContext('2d');
-  destroyChart(chartAcrAw);
-  chartAcrAw=new Chart(ctx2,{type:'doughnut',data:{labels:['Conscious','Subconscious'],datasets:[{data:[awCon,awSub],backgroundColor:['rgba(61,107,82,.6)','rgba(168,112,32,.6)'],borderWidth:0}]},options:doughnutOpts()});
-  // Insight
-  const pct=Math.round(acrEntries.length/entries.length*100);
-  const coOccur=entries.filter(e=>e.bfrb_type==='both').length;
-  document.getElementById('acr-insight-body').textContent=`${acrEntries.length} acrylic chewing episodes logged (${pct}% of all entries). ${coOccur>0?coOccur+' co-occurred with picking — these combined episodes suggest the oral urge is part of the same behavior chain, not a separate habit.':''} Acrylics act as a physical barrier to nail biting but don't address the oral sensory need, which can intensify over time. The most effective substitute is chewing gum or mints during high-risk activities (studying, screens).`;
-}
+// ─── AWARENESS ───
+function renderAwareness(entries) {
+  const eps = episodes(entries).filter(e => e.awareness);
+  const conscious = eps.filter(e => e.awareness === 'conscious').length;
+  const auto = eps.filter(e => e.awareness === 'automatic').length;
+  const total = conscious + auto;
+  const el = document.getElementById('aw-content');
 
-/* ─── MOOD DELTA ─── */
-function renderMoodDelta(entries){
-  const picks=entries.filter(e=>e.entry_type==='picked'&&(e.mood_before||e.mood)&&e.mood_after);
-  const el=document.getElementById('mood-delta');
-  if(!picks.length){el.innerHTML='<div style="font-size:11px;color:var(--mu)">Log mood before and after picks to see your emotional pattern here.</div>';return;}
-  const bm={},am={};
-  picks.forEach(e=>{
-    const mb=e.mood_before||e.mood||'';const ma=e.mood_after||'';
-    mb.split(', ').filter(Boolean).forEach(m=>{bm[m]=(bm[m]||0)+1;});
-    ma.split(', ').filter(Boolean).forEach(m=>{am[m]=(am[m]||0)+1;});
+  if (total < 3) {
+    el.innerHTML = '<div class="sparse-state">Log awareness on a few more episodes.</div>';
+  } else {
+    const cPct = Math.round(conscious/total*100);
+    const aPct = 100 - cPct;
+    el.innerHTML = `
+      <div class="aw-split">
+        <div class="aw-conscious-bar" style="width:${cPct}%">
+          ${cPct >= 20 ? `<span class="aw-bar-label">Conscious ${cPct}%</span>` : ''}
+        </div>
+        <div class="aw-auto-bar">
+          ${aPct >= 20 ? `<span class="aw-bar-label">Automatic ${aPct}%</span>` : ''}
+        </div>
+      </div>
+      <div class="aw-legend">
+        <div class="aw-legend-item"><div class="aw-dot" style="background:var(--sage-bar)"></div> Conscious — ${conscious} episodes</div>
+        <div class="aw-legend-item"><div class="aw-dot" style="background:var(--warm-bar)"></div> Automatic — ${auto} episodes</div>
+      </div>`;
+  }
+
+  // Awareness trend
+  const trendEl = document.getElementById('aw-trend-wrap');
+  // Group by ISO week
+  const weekMap = {};
+  episodes(entries).filter(e=>e.awareness).forEach(e => {
+    const d = new Date(e.timestamp);
+    const wk = getISOWeek(d);
+    if (!weekMap[wk]) weekMap[wk] = {conscious:0, automatic:0};
+    weekMap[wk][e.awareness] = (weekMap[wk][e.awareness]||0) + 1;
   });
-  const topB=Object.entries(bm).sort((a,b)=>b[1]-a[1]).slice(0,4).map(x=>x[0]);
-  const topA=Object.entries(am).sort((a,b)=>b[1]-a[1]).slice(0,4).map(x=>x[0]);
-  el.innerHTML=`
-    <div class="mdr"><div class="mdl">Before</div><div class="mdi">${topB.map(m=>`<div class="mdt bef">${m}</div>`).join('')}</div></div>
-    <div style="font-size:18px;color:var(--mu);padding-left:62px">&#8595;</div>
-    <div class="mdr"><div class="mdl">After</div><div class="mdi">${topA.map(m=>`<div class="mdt aft">${m}</div>`).join('')}</div></div>
-    <div style="font-size:11px;color:var(--mu);margin-top:10px;border-top:1px solid var(--bdr);padding-top:10px;line-height:1.65">
-      This before&#8594;after shift shows what picking does for you emotionally. If you feel <strong>${topB[0]||'tense'}</strong> before and <strong>${topA[0]||'relieved'}</strong> after, the behavior is serving as a tension-release mechanism &#8212; the primary target for HRT competing responses. Gum, movement, or a physical barrier at the moment of <em>tension</em> (not after the urge peaks) is most effective.
-    </div>`;
+  const wkKeys = Object.keys(weekMap).sort();
+  if (wkKeys.length < 3) {
+    trendEl.innerHTML = '<div class="sparse-state">Needs 3+ weeks of data to show trend.</div>';
+    awTrendChart = destroyChart(awTrendChart);
+  } else {
+    trendEl.innerHTML = '<canvas id="aw-trend-chart"></canvas>';
+    awTrendChart = destroyChart(awTrendChart);
+    const ctx2 = document.getElementById('aw-trend-chart').getContext('2d');
+    awTrendChart = new Chart(ctx2, {
+      type:'bar',
+      data:{
+        labels: wkKeys.map(w => 'Wk '+w.split('-W')[1]),
+        datasets:[
+          {label:'Conscious',data:wkKeys.map(w=>weekMap[w].conscious||0),backgroundColor:cssVar('--sage-bar'),borderRadius:4,borderSkipped:false},
+          {label:'Automatic',data:wkKeys.map(w=>weekMap[w].automatic||0),backgroundColor:cssVar('--warm-bar'),borderRadius:4,borderSkipped:false}
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{font:{family:'DM Sans',size:11},color:cssVar('--tx2'),boxWidth:12,boxHeight:12}}},
+        scales:{
+          x:{stacked:true,grid:{display:false},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu')}},
+          y:{stacked:true,grid:{color:cssVar('--bdr')},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),precision:0},beginAtZero:true}
+        }
+      }
+    });
+  }
 }
 
-/* ─── TABLE ─── */
-window.applyFilters=()=>{
-  const tf=document.getElementById('f-type').value;
-  const bf=document.getElementById('f-bfrb').value;
-  const cf=document.getElementById('f-comp').value;
-  window.FILTERED=window.ALL_ENTRIES.filter(e=>{
-    if(tf&&e.entry_type!==tf)return false;
-    if(bf&&e.bfrb_type!==bf)return false;
-    if(cf&&e.completion!==cf)return false;
-    return true;
-  });
-  currentPage=0;renderTable();
-};
+function getISOWeek(d) {
+  const date = new Date(d.getTime());
+  date.setHours(0,0,0,0);
+  date.setDate(date.getDate()+3-(date.getDay()+6)%7);
+  const week1 = new Date(date.getFullYear(),0,4);
+  const wn = 1+Math.round(((date.getTime()-week1.getTime())/86400000-3+(week1.getDay()+6)%7)/7);
+  return `${date.getFullYear()}-W${String(wn).padStart(2,'0')}`;
+}
 
-window.clearFilters=()=>{
-  ['f-type','f-bfrb','f-comp'].forEach(id=>document.getElementById(id).value='');
+// ─── TRIGGERS ───
+function renderBarList(containerId, pairs, colorClass, topN=10) {
+  const el = document.getElementById(containerId);
+  const top = pairs.slice(0, topN);
+  if (!top.length) { el.innerHTML = '<div class="empty-state"><div class="empty-text">None logged yet.</div></div>'; return; }
+  const max = top[0][1];
+  el.innerHTML = '<div class="bar-list">' +
+    top.map(([label, count]) =>
+      `<div class="bar-item">
+        <div class="bar-label" title="${label}">${label}</div>
+        <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${Math.round(count/max*100)}%"></div></div>
+        <div class="bar-count">${count}</div>
+      </div>`
+    ).join('') + '</div>';
+}
+
+function renderTriggers(entries) {
+  renderBarList('etrig-list', countItems(entries, 'emotional_triggers'), 'ac');
+  renderBarList('strig-list', countItems(entries, 'sensory_triggers'), 'sage');
+}
+
+function renderLocAct(entries) {
+  renderBarList('loc-list', countItems(entries, 'location'), 'warm', 8);
+  renderBarList('act-list', countItems(entries, 'activity'), 'warm', 8);
+}
+
+// ─── MOOD ───
+function renderMood(entries) {
+  const eps = episodes(entries);
+  const el = document.getElementById('mood-content');
+  const beforeCounts = {};
+  const afterCounts = {};
+  eps.forEach(e => {
+    splitField(e.mood_before).forEach(m => { beforeCounts[m]=(beforeCounts[m]||0)+1; });
+    splitField(e.mood_after).forEach(m => { afterCounts[m]=(afterCounts[m]||0)+1; });
+  });
+  const topBefore = Object.entries(beforeCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const topAfter = Object.entries(afterCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  if (!topBefore.length && !topAfter.length) {
+    el.innerHTML = '<div class="sparse-state">Log mood before and after a few episodes.</div>';
+    return;
+  }
+  const maxB = topBefore[0]?.[1] || 1;
+  const maxA = topAfter[0]?.[1] || 1;
+
+  const renderWords = (pairs, maxVal, cls) =>
+    pairs.map(([w,c]) => `<div class="mood-word-row">
+      <div class="mood-word">${w}</div>
+      <div class="mood-bar-track"><div class="mood-bar-fill ${cls}" style="width:${Math.round(c/maxVal*100)}%"></div></div>
+      <div class="mood-count">${c}</div>
+    </div>`).join('');
+
+  el.innerHTML = `<div class="mood-cols">
+    <div>
+      <div class="mood-col-label">Before</div>
+      <div class="mood-word-list">${renderWords(topBefore, maxB, 'before')}</div>
+    </div>
+    <div>
+      <div class="mood-col-label">After</div>
+      <div class="mood-word-list">${renderWords(topAfter, maxA, 'after')}</div>
+    </div>
+  </div>`;
+}
+
+// ─── URGE ARC ───
+function renderUrgeArc(entries) {
+  const eps = episodes(entries);
+  const el = document.getElementById('urge-arc-content');
+  const withBefore = eps.filter(e => e.urge_before > 0);
+  const withAfter = eps.filter(e => e.urge_after != null && e.urge_after > 0);
+
+  if (withBefore.length < 3) {
+    el.innerHTML = '<div class="sparse-state">Log urge levels for a few episodes.</div>';
+    return;
+  }
+  const avgBefore = avg(withBefore.map(e=>e.urge_before)).toFixed(1);
+  const avgAfter = withAfter.length >= 3 ? avg(withAfter.map(e=>e.urge_after)).toFixed(1) : null;
+  const diff = avgAfter ? (parseFloat(avgAfter) - parseFloat(avgBefore)).toFixed(1) : null;
+  const arrow = diff ? (parseFloat(diff) < 0 ? '↓' : parseFloat(diff) > 0 ? '↑' : '→') : '→';
+
+  el.innerHTML = `<div class="urge-arc">
+    <div class="urge-block">
+      <div class="urge-num">${avgBefore}</div>
+      <div class="urge-label">Before</div>
+    </div>
+    <div class="urge-arrow">${arrow}</div>
+    <div class="urge-block">
+      <div class="urge-num">${avgAfter || '—'}</div>
+      <div class="urge-label">After</div>
+    </div>
+  </div>
+  ${diff ? `<div style="text-align:center;font-size:11px;color:var(--mu);margin-top:4px">Average change: ${diff > 0 ? '+':''}${diff} per episode</div>` : ''}`;
+}
+
+// ─── BEHAVIOR CHAIN ───
+function renderChain(entries) {
+  const pickEps = episodes(entries).filter(e => e.bfrb_type === 'picking' && e.completion);
+  const el = document.getElementById('chain-content');
+  if (pickEps.length < 3) {
+    el.innerHTML = '<div class="sparse-state">Log a few picking episodes with completion filled in.</div>';
+    return;
+  }
+  const counts = {released:0, examined:0, oral:0, ingested:0};
+  pickEps.forEach(e => { if (counts[e.completion] !== undefined) counts[e.completion]++; });
+  const total = pickEps.length;
+  const stages = [
+    {key:'released', label:'Released / discarded'},
+    {key:'examined', label:'Examined it'},
+    {key:'oral', label:'Oral contact'},
+    {key:'ingested', label:'Ingested'},
+  ];
+  el.innerHTML = `<div class="chain-grid">${
+    stages.map(s => `<div class="chain-cell">
+      <div class="chain-pct">${Math.round(counts[s.key]/total*100)}%</div>
+      <div class="chain-lbl">${s.label}</div>
+    </div>`).join('')
+  }</div><div style="font-size:10px;color:var(--mu);margin-top:10px">Based on ${total} picking episodes</div>`;
+}
+
+// ─── INTERVENTIONS ───
+function renderInterventions(entries) {
+  const withTried = entries.filter(e => e.tried_intervention && e.interventions);
+
+  // What was tried
+  renderBarList('int-tried-list', countItems(withTried, 'interventions'), 'sage', 10);
+
+  // Average effectiveness per intervention
+  const effMap = {};
+  entries.filter(e => e.tried_intervention && e.interventions && e.intervention_effectiveness).forEach(e => {
+    splitField(e.interventions).forEach(iv => {
+      if (!effMap[iv]) effMap[iv] = [];
+      effMap[iv].push(e.intervention_effectiveness);
+    });
+  });
+  const effPairs = Object.entries(effMap)
+    .map(([k, vals]) => [k, parseFloat(avg(vals).toFixed(1))])
+    .sort((a,b) => b[1]-a[1]);
+
+  const effEl = document.getElementById('int-eff-list');
+  if (!effPairs.length) {
+    effEl.innerHTML = '<div class="sparse-state">Rate effectiveness on a few entries.</div>';
+  } else {
+    effEl.innerHTML = '<div class="bar-list">' +
+      effPairs.map(([label, score]) =>
+        `<div class="bar-item">
+          <div class="bar-label" title="${label}">${label}</div>
+          <div class="bar-track"><div class="bar-fill warm" style="width:${Math.round(score/5*100)}%"></div></div>
+          <div class="bar-count">${score}</div>
+        </div>`
+      ).join('') + '</div>' +
+      '<div style="font-size:10px;color:var(--mu);margin-top:8px">Scores out of 5</div>';
+  }
+
+  // Effectiveness over time
+  const trendEl = document.getElementById('eff-trend-wrap');
+  const weekEff = {};
+  entries.filter(e => e.tried_intervention && e.intervention_effectiveness).forEach(e => {
+    const wk = getISOWeek(new Date(e.timestamp));
+    if (!weekEff[wk]) weekEff[wk] = [];
+    weekEff[wk].push(e.intervention_effectiveness);
+  });
+  const wkKeys = Object.keys(weekEff).sort();
+  if (wkKeys.length < 3) {
+    trendEl.innerHTML = '<div class="sparse-state">Needs 3+ weeks of rated entries.</div>';
+    effTrendChart = destroyChart(effTrendChart);
+  } else {
+    trendEl.innerHTML = '<canvas id="eff-trend-chart"></canvas>';
+    effTrendChart = destroyChart(effTrendChart);
+    const ctx = document.getElementById('eff-trend-chart').getContext('2d');
+    effTrendChart = new Chart(ctx, {
+      type:'line',
+      data:{
+        labels: wkKeys.map(w => 'Wk '+w.split('-W')[1]),
+        datasets:[{
+          label:'Avg effectiveness',
+          data: wkKeys.map(w => parseFloat(avg(weekEff[w]).toFixed(2))),
+          borderColor: cssVar('--warm'),
+          backgroundColor: cssVar('--warml'),
+          borderWidth:2,
+          pointBackgroundColor: cssVar('--warm'),
+          pointRadius:4,
+          tension:0.3,
+          fill:true
+        }]
+      },
+      options:{
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu')}},
+          y:{min:1,max:5,grid:{color:cssVar('--bdr')},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),stepSize:1}}
+        }
+      }
+    });
+  }
+}
+
+// ─── TABLE ───
+let tableFilteredEntries = [];
+
+function applyFilters() {
+  const bfrb = document.getElementById('filter-bfrb').value;
+  const type = document.getElementById('filter-type').value;
+  tableFilteredEntries = filteredEntries.filter(e =>
+    (!bfrb || e.bfrb_type === bfrb) &&
+    (!type || e.entry_type === type)
+  );
+  renderTableRows(tableFilteredEntries);
+}
+window.applyFilters = applyFilters;
+
+function clearFilters() {
+  document.getElementById('filter-bfrb').value = '';
+  document.getElementById('filter-type').value = '';
   applyFilters();
-};
+}
+window.clearFilters = clearFilters;
 
-function renderTable(){
-  const start=currentPage*PAGE_SIZE,end=start+PAGE_SIZE;
-  const page=window.FILTERED.slice(start,end);
-  const total=window.FILTERED.length;
-  document.getElementById('rc-count').textContent=total+' entr'+(total===1?'y':'ies');
-  const pag=document.getElementById('pagination');
-  if(total>PAGE_SIZE){
-    pag.style.display='flex';
-    document.getElementById('pag-info').textContent='Page '+(currentPage+1)+' of '+Math.ceil(total/PAGE_SIZE);
-    document.getElementById('pag-prev').disabled=currentPage===0;
-    document.getElementById('pag-next').disabled=end>=total;
-  }else{pag.style.display='none';}
-  if(!page.length){document.getElementById('table-container').innerHTML='<div class="empty">No entries match your filters</div>';return;}
-  const compLbl={released:'Put down',examined:'Examined',tasted:'Tasted',ingested:'&#9888; Ingested'};
-  const rows=page.map(e=>{
-    const d=new Date(e.timestamp);
-    const ds=d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'2-digit'});
-    const ts=d.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
-    const tc={picked:'tcp',resisted:'tcr',near:'tcn',acrylic:'tca'}[e.entry_type]||'tcp';
-    const tl={picked:'Picked',resisted:'Resisted &#10003;',near:'Near miss',acrylic:'Acrylic'}[e.entry_type]||e.entry_type;
-    const urge=Number(e.urge_before)||0;
-    const uc=urge<=3?'ul':urge<=6?'um':'uh';
-    const areas=(e.body_areas||e.body_area||'&#8212;').split(',').slice(0,2).join(', ');
-    const trig=((e.emotional_triggers||e.trigger||'')+(e.sensory_triggers?', '+e.sensory_triggers:'')).split(',')[0]||'&#8212;';
-    const comp=e.completion&&e.completion!=='released'?`<span class="comp-chip">${compLbl[e.completion]||e.completion}</span>`:'';
-    return`<tr onclick="openEdit('${e.id}')"><td><div style="font-weight:600">${ds}</div><div style="font-size:10px;color:var(--mu)">${ts}</div></td><td><span class="tc ${tc}">${tl}</span></td><td>${areas}</td><td>${trig}</td><td>${comp}</td><td><span class="uc ${uc}">${urge||'&#8212;'}</span></td></tr>`;
+function renderTable(entries) {
+  tableFilteredEntries = entries;
+  renderTableRows(entries);
+}
+
+function renderTableRows(entries) {
+  const tbody = document.getElementById('entry-tbody');
+  document.getElementById('rc-count').textContent = `${entries.length} entr${entries.length===1?'y':'ies'}`;
+
+  if (!entries.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--mu);padding:32px">No entries match the current filters.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = entries.map((e, i) => {
+    const dt = new Date(e.timestamp);
+    const dateStr = dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const timeStr = dt.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    const typeLabel = e.entry_type==='did'?'Did it':e.entry_type==='resisted'?'Resisted':'Near miss';
+    const typeCls = e.entry_type==='did'?'tc-ep':e.entry_type==='resisted'?'tc-re':'tc-ne';
+    const bfrbLabel = e.bfrb_type==='picking'?'Skin picking':'Nail / skin biting';
+    const topTrigger = splitField(e.emotional_triggers)[0] || splitField(e.sensory_triggers)[0] || '—';
+    const topTriggerShort = topTrigger.length > 22 ? topTrigger.slice(0,20)+'…' : topTrigger;
+    const locShort = (e.location||'—').length > 22 ? (e.location||'—').slice(0,20)+'…' : (e.location||'—');
+
+    return `<tr onclick="toggleRow(${i})">
+      <td><span style="font-weight:600">${dateStr}</span><br><span class="td-muted" style="font-size:11px">${timeStr}</span></td>
+      <td>${bfrbLabel}</td>
+      <td><span class="tc ${typeCls}">${typeLabel}</span></td>
+      <td class="td-muted">${locShort}</td>
+      <td class="td-muted">${topTriggerShort}</td>
+      <td>${e.urge_before||'—'}</td>
+      <td>${e.urge_after||'—'}</td>
+    </tr>
+    <tr class="row-detail" id="row-detail-${i}">
+      <td colspan="7">
+        <div class="detail-grid">
+          ${e.awareness ? `<div class="detail-field"><div class="detail-key">Awareness</div><div class="detail-val">${e.awareness}</div></div>` : ''}
+          ${e.body_areas ? `<div class="detail-field"><div class="detail-key">Body areas</div><div class="detail-val">${e.body_areas}</div></div>` : ''}
+          ${e.picked_what ? `<div class="detail-field"><div class="detail-key">Picked</div><div class="detail-val">${e.picked_what}</div></div>` : ''}
+          ${e.bite_what ? `<div class="detail-field"><div class="detail-key">Bite — what</div><div class="detail-val">${e.bite_what}</div></div>` : ''}
+          ${e.bite_fingers ? `<div class="detail-field"><div class="detail-key">Fingers</div><div class="detail-val">${e.bite_fingers}</div></div>` : ''}
+          ${e.mirror ? `<div class="detail-field"><div class="detail-key">Mirror</div><div class="detail-val">${e.mirror}</div></div>` : ''}
+          ${e.completion ? `<div class="detail-field"><div class="detail-key">Completion</div><div class="detail-val">${e.completion}</div></div>` : ''}
+          ${e.severity ? `<div class="detail-field"><div class="detail-key">Skin impact</div><div class="detail-val">${e.severity}</div></div>` : ''}
+          ${e.duration||e.bite_duration ? `<div class="detail-field"><div class="detail-key">Duration</div><div class="detail-val">${e.duration||e.bite_duration}</div></div>` : ''}
+          ${e.activity ? `<div class="detail-field"><div class="detail-key">Activity</div><div class="detail-val">${e.activity}</div></div>` : ''}
+          ${e.emotional_triggers ? `<div class="detail-field"><div class="detail-key">Emotional triggers</div><div class="detail-val">${e.emotional_triggers}</div></div>` : ''}
+          ${e.sensory_triggers ? `<div class="detail-field"><div class="detail-key">Sensory triggers</div><div class="detail-val">${e.sensory_triggers}</div></div>` : ''}
+          ${e.mood_before ? `<div class="detail-field"><div class="detail-key">Mood before</div><div class="detail-val">${e.mood_before}</div></div>` : ''}
+          ${e.mood_after ? `<div class="detail-field"><div class="detail-key">Mood after</div><div class="detail-val">${e.mood_after}</div></div>` : ''}
+          ${e.interventions ? `<div class="detail-field"><div class="detail-key">Interventions tried</div><div class="detail-val">${e.interventions}</div></div>` : ''}
+          ${e.intervention_effectiveness ? `<div class="detail-field"><div class="detail-key">Effectiveness</div><div class="detail-val">${e.intervention_effectiveness} / 5</div></div>` : ''}
+          ${e.notes ? `<div class="detail-field" style="grid-column:1/-1"><div class="detail-key">Notes</div><div class="detail-val">${e.notes}</div></div>` : ''}
+        </div>
+      </td>
+    </tr>`;
   }).join('');
-  document.getElementById('table-container').innerHTML=`<table><thead><tr><th>Date</th><th>Type</th><th>Area</th><th>Trigger</th><th>Completion</th><th>Urge</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
-window.prevPage=()=>{currentPage--;renderTable();scrollToTable();};
-window.nextPage=()=>{currentPage++;renderTable();scrollToTable();};
-function scrollToTable(){window.scrollTo({top:document.getElementById('table-container').offsetTop-80,behavior:'smooth'});}
-
-/* ─── EDIT ─── */
-window.openEdit=id=>{
-  const e=window.ALL_ENTRIES.find(x=>x.id===id);if(!e)return;
-  ES={...e};
-  document.getElementById('edit-id').value=id;
-  const d=new Date(e.timestamp);
-  const p=n=>String(n).padStart(2,'0');
-  document.getElementById('edit-ts').value=`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}`;
-  document.getElementById('edit-sub').textContent=d.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'})+' at '+d.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
-  document.getElementById('edit-notes').value=e.notes||'';
-  // type
-  document.querySelectorAll('#e-type .etog').forEach(t=>{const v=t.onclick.toString().match(/'(\w+)'/)[1];t.classList.toggle('on',v===e.entry_type);});
-  // tag groups
-  restoreTags('e-area','e_body_areas',e.body_areas||e.body_area||'');
-  restoreTags('e-picked','e_picked_what',e.picked_what||'');
-  restoreSingle('e-comp','e_completion',e.completion||'');
-  restoreSingle('e-sev','e_severity',e.severity||'');
-  restoreTags('e-etrig','e_etrig',(e.emotional_triggers||e.trigger||''));
-  restoreTags('e-strig','e_strig',e.sensory_triggers||'');
-  restoreTags('e-mbef','e_mood_before',e.mood_before||e.mood||'');
-  restoreTags('e-maft','e_mood_after',e.mood_after||'');
-  document.getElementById('edit-modal').classList.add('on');
+window.toggleRow = i => {
+  const row = document.getElementById('row-detail-'+i);
+  if (row) row.classList.toggle('on');
 };
 
-function restoreTags(containerId,field,valStr){
-  const vals=(valStr||'').split(', ').filter(Boolean).map(v=>v.trim().toLowerCase());
-  document.getElementById(containerId).querySelectorAll('.etag').forEach(t=>{
-    t.classList.toggle('on',vals.includes(t.textContent.trim().toLowerCase()));
-    if(t.classList.contains('on'))ES[field]=(ES[field]||[t.textContent.trim()]);
-  });
-  ES[field]=vals.map(v=>{const m=document.getElementById(containerId).querySelector(`.etag`);return v;});
-  // rebuild actual array from dom
-  ES[field]=[];
-  document.getElementById(containerId).querySelectorAll('.etag.on').forEach(t=>ES[field].push(t.textContent.trim()));
+window.filterTableByDate = ds => {
+  document.querySelector('.section-title:last-of-type')?.scrollIntoView({behavior:'smooth'});
+  tableFilteredEntries = filteredEntries.filter(e => isoDate(e.timestamp) === ds);
+  renderTableRows(tableFilteredEntries);
+  document.getElementById('rc-count').textContent += ` (filtered to ${ds})`;
+};
+
+// ─── REBUILD CHARTS ON THEME CHANGE ───
+function rebuildCharts() {
+  const entries = getFiltered();
+  renderTimeOfDay(entries);
+  renderAwareness(entries);
+  renderInterventions(entries);
 }
+window.rebuildCharts = rebuildCharts;
 
-function restoreSingle(containerId,field,val){
-  document.getElementById(containerId).querySelectorAll('.etag').forEach(t=>{
-    const match=t.textContent.trim().toLowerCase()===val.toLowerCase();
-    t.classList.toggle('on',match);
-  });
-  ES[field]=val;
-}
-
-window.closeEdit=()=>document.getElementById('edit-modal').classList.remove('on');
-document.getElementById('edit-modal').addEventListener('click',e=>{if(e.target===document.getElementById('edit-modal'))closeEdit();});
-
-window.eType=(el,val)=>{document.querySelectorAll('#e-type .etog').forEach(t=>t.classList.remove('on'));el.classList.add('on');ES.entry_type=val;};
-window.eMul=(el,field)=>{if(!Array.isArray(ES[field]))ES[field]=[];const v=el.textContent.trim(),i=ES[field].indexOf(v);if(i>-1){ES[field].splice(i,1);el.classList.remove('on');}else{ES[field].push(v);el.classList.add('on');}};
-window.eSingle=(el,field)=>{el.closest('.etag-row').querySelectorAll('.etag').forEach(t=>t.classList.remove('on'));el.classList.add('on');ES[field]=el.textContent.trim();};
-
-window.saveEdit=async()=>{
-  if(!window._uid||!ES.id)return;
-  const tsv=document.getElementById('edit-ts').value;
-  const update={
-    timestamp:tsv.length===16?tsv+':00':tsv,
-    entry_type:ES.entry_type||'picked',
-    body_areas:(ES.e_body_areas||[]).join(', '),
-    picked_what:(ES.e_picked_what||[]).join(', '),
-    completion:ES.e_completion||'',
-    severity:ES.e_severity||'',
-    emotional_triggers:(ES.e_etrig||[]).join(', '),
-    sensory_triggers:(ES.e_strig||[]).join(', '),
-    mood_before:(ES.e_mood_before||[]).join(', '),
-    mood_after:(ES.e_mood_after||[]).join(', '),
-    notes:document.getElementById('edit-notes').value.trim(),
-  };
-  try{
-    await window._updateDoc(window._uid,ES.id,update);
-    const idx=window.ALL_ENTRIES.findIndex(e=>e.id===ES.id);
-    if(idx>-1)window.ALL_ENTRIES[idx]={...window.ALL_ENTRIES[idx],...update};
-    toast('Saved &#10003;',false,true);closeEdit();applyFilters();renderAll();
-  }catch(err){toast('Error: '+err.message,true);}
+// ─── TOAST ───
+window.toast = (msg,isErr=false,isOk=false) => {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(isErr?' err':'')+(isOk?' ok':'');
+  void t.offsetWidth; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 };
 
-window.deleteEntry=async()=>{
-  if(!confirm('Delete this entry? This cannot be undone.'))return;
-  if(!window._uid||!ES.id)return;
-  try{
-    await window._deleteDoc(window._uid,ES.id);
-    window.ALL_ENTRIES=window.ALL_ENTRIES.filter(e=>e.id!==ES.id);
-    toast('Entry deleted');closeEdit();applyFilters();renderAll();
-  }catch(err){toast('Error: '+err.message,true);}
-};
-
-/* ─── CSV EXPORT ─── */
-window.exportCSV=()=>{
-  const cols=['timestamp','bfrb_type','entry_type','awareness','body_areas','picked_what','mirror','completion','severity','duration','acr_duration','acr_intensity','acr_nails','acr_awareness','location','activity','emotional_triggers','sensory_triggers','other_trigger','mood_before','urge_before','mood_after','urge_after','tried_intervention','interventions','intervention_effectiveness','notes'];
-  const rows=window.ALL_ENTRIES.map(e=>cols.map(c=>`"${String(e[c]??'').replace(/"/g,'""')}"`).join(','));
-  const csv=[cols.join(','),...rows].join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='skin-journal-export.csv';a.click();
-};
-
-/* ─── CSV IMPORT ─── */
-let importRows=[];
-
-window.openImport=()=>{
-  importRows=[];
-  document.getElementById('import-preview').style.display='none';
-  document.getElementById('import-btn').style.display='none';
-  document.getElementById('csv-input').value='';
-  document.getElementById('import-modal').classList.add('on');
-};
-window.closeImport=()=>document.getElementById('import-modal').classList.remove('on');
-document.getElementById('import-modal').addEventListener('click',e=>{if(e.target===document.getElementById('import-modal'))closeImport();});
-
-window.importDragOver=e=>{e.preventDefault();document.getElementById('import-drop').classList.add('drag');};
-window.importDragLeave=()=>document.getElementById('import-drop').classList.remove('drag');
-window.importDrop=e=>{e.preventDefault();document.getElementById('import-drop').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)parseCSV(f);};
-window.importFile=input=>{if(input.files[0])parseCSV(input.files[0]);};
-
-function parseCSV(file){
-  const reader=new FileReader();
-  reader.onload=evt=>{
-    const text=evt.target.result;
-    const lines=text.trim().split('\n');
-    const header=csvParseLine(lines[0]).map(h=>h.trim().toLowerCase().replace(/\s+/g,'_'));
-    importRows=lines.slice(1).filter(l=>l.trim()).map(line=>{
-      const vals=csvParseLine(line);
-      const row={};header.forEach((h,i)=>row[h]=vals[i]||'');
-      return convertOldRow(row);
-    }).filter(Boolean);
-    const preview=document.getElementById('import-preview');
-    preview.style.display='block';
-    document.getElementById('import-preview-hd').textContent=`${importRows.length} entries ready to import`;
-    // Show sample
-    const sample=importRows.slice(0,3).map(r=>`${r.timestamp.split('T')[0]} — ${r.entry_type} — ${r.body_areas||r.emotional_triggers||'(quick)'}`).join('\n');
-    document.getElementById('import-preview-body').textContent=sample+(importRows.length>3?'\n\u2026and '+(importRows.length-3)+' more':'');
-    document.getElementById('import-btn').style.display='block';
-  };
-  reader.readAsText(file);
-}
-
-function csvParseLine(line){
-  const result=[];let cur='';let inQ=false;
-  for(let i=0;i<line.length;i++){
-    const c=line[i];
-    if(c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
-    else if(c===','&&!inQ){result.push(cur);cur='';}
-    else cur+=c;
-  }
-  result.push(cur);return result;
-}
-
-// Convert old CSV row format to new schema
-function convertOldRow(r){
-  if(!r.timestamp)return null;
-  // Map old 'trigger' field — split sensory vs emotional
-  const sensoryWords=['felt a texture','saw in mirror','magnifying','itching','rough','bump','scanning','lighting'];
-  const allTriggers=(r.trigger||'').split(', ').filter(Boolean);
-  const etrig=[],strig=[];
-  allTriggers.forEach(t=>{
-    const tl=t.toLowerCase();
-    if(sensoryWords.some(w=>tl.includes(w)))strig.push(t);else etrig.push(t);
-  });
-  // Map old 'outcome' to entry_type
-  let entryType='picked';
-  if(r.outcome==='Stopped early')entryType='near';
-  else if(r.entry_type==='resisted')entryType='resisted';
-  // Map old completion
-  let completion='';
-  if(r.outcome==='Completed urge')completion='examined';
-  if(r.outcome==='Stopped early')completion='released';
-  // Map old intervention
-  const hasTried=r.intervention&&r.intervention!=='Nothing this time'&&r.intervention!=='';
-  return{
-    timestamp:r.timestamp,
-    bfrb_type:'picking',
-    entry_type:entryType,
-    awareness:r.awareness||'',
-    body_areas:r.body_area||r.body_areas||'',
-    picked_what:r.physical_target||r.picked_what||'',
-    mirror:'',
-    completion:completion,
-    severity:'',
-    duration:r.duration||'',
-    acr_duration:'',acr_intensity:'',acr_nails:'',acr_awareness:'',
-    location:r.location||'',
-    activity:r.activity||'',
-    emotional_triggers:etrig.join(', '),
-    sensory_triggers:strig.join(', '),
-    other_trigger:'',
-    mood_before:r.mood||r.mood_before||'',
-    urge_before:Number(r.urge_strength||r.urge_before)||0,
-    mood_after:r.mood_after||'',
-    urge_after:Number(r.urge_after)||0,
-    tried_intervention:hasTried,
-    interventions:hasTried?r.intervention:'',
-    intervention_effectiveness:null,
-    notes:r.notes||'(imported from old app)',
-    _imported:true,
-  };
-}
-
-window.doImport=async()=>{
-  if(!window._uid||!importRows.length)return;
-  const btn=document.getElementById('import-btn');
-  btn.disabled=true;btn.textContent='Importing\u2026';
-  let ok=0,fail=0;
-  for(const row of importRows){
-    try{
-      const ref=await window._addDoc(window._col(window._uid),{...row,created_at:window._serverTimestamp()});
-      window.ALL_ENTRIES.unshift({id:ref.id,...row});
-      ok++;
-    }catch(e){fail++;console.error(e);}
-  }
-  window.ALL_ENTRIES.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
-  document.getElementById('pg-sub').textContent=window.ALL_ENTRIES.length+' total entries logged';
-  toast(`Imported ${ok} entries`+(fail?` (${fail} failed)`):'',fail>0,fail===0);
-  btn.disabled=false;btn.textContent='Import entries';
-  closeImport();applyFilters();renderAll();
-};
-
-/* ─── TOAST ─── */
-window.toast=(msg,isErr=false,isOk=false)=>{
-  const t=document.getElementById('toast');t.textContent=msg;
-  t.className='toast'+(isErr?' err':'')+(isOk?' ok':'');
-  void t.offsetWidth;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3200);
-};
-
-/* ─── INIT ─── */
-window.ALL_ENTRIES=[];
-window.FILTERED=[];
+// ─── INIT ───
+window.renderAll = renderAll;
 </script>
 </body>
 </html>
