@@ -77,18 +77,16 @@ main{max-width:920px;margin:0 auto;padding:28px 16px}
 .range-pill.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .print-btn{margin-left:auto;font-size:12px;font-weight:600;padding:7px 16px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--card);color:var(--mu);cursor:pointer;transition:var(--tr)}
 .print-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
+.import-btn{border-color:var(--ac)!important;color:var(--ac)!important}
+.import-btn:hover{background:var(--acl)!important;border-color:var(--ac-h)!important;color:var(--ac-h)!important}
 
 /* STAT CARDS */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
 @media(max-width:680px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;box-shadow:var(--s1)}
-.stat-card.featured{background:linear-gradient(135deg,#8a5a44 0%,var(--ac) 100%);border-color:transparent}
 .stat-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
-.stat-card.featured .stat-label{color:rgba(255,255,255,.55)}
 .stat-value{font-family:'Lora',serif;font-size:32px;font-weight:400;color:var(--ac);line-height:1}
-.stat-card.featured .stat-value{color:#fff}
 .stat-sub{font-size:11px;color:var(--mu);margin-top:5px;font-weight:500;line-height:1.4}
-.stat-card.featured .stat-sub{color:rgba(255,255,255,.55)}
 
 /* SECTION */
 .section{margin-bottom:28px}
@@ -103,11 +101,12 @@ main{max-width:920px;margin:0 auto;padding:28px 16px}
 @media(max-width:720px){.three-col-grid{grid-template-columns:1fr}}
 
 /* CALENDAR */
-.cal-wrap{overflow-x:auto;padding-bottom:6px}
+.cal-card{overflow:hidden}
+.cal-wrap{overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
 .cal-wrap::-webkit-scrollbar{height:4px}
 .cal-wrap::-webkit-scrollbar-track{background:var(--bdr);border-radius:10px}
 .cal-wrap::-webkit-scrollbar-thumb{background:var(--mu);border-radius:10px}
-.cal-outer{display:flex;align-items:flex-start;gap:6px;min-width:fit-content}
+.cal-outer{display:flex;align-items:flex-start;gap:6px;width:max-content}
 .cal-day-labels{display:flex;flex-direction:column;gap:3px;flex-shrink:0;padding-top:22px}
 .cal-dl{font-size:9px;font-weight:600;color:var(--mu);height:14px;line-height:14px;width:20px}
 .cal-inner{flex:1}
@@ -329,12 +328,12 @@ tbody tr:hover td{background:var(--bg)}
     <div class="range-pill" data-days="90" onclick="setRange(this)">90 days</div>
     <div class="range-pill" data-days="0" onclick="setRange(this)">All time</div>
     <button class="print-btn" onclick="window.print()">Print for session</button>
-    <button class="print-btn" onclick="openImport()" style="border-color:var(--ac);color:var(--ac)">Import old logs</button>
+    <button class="print-btn import-btn" onclick="openImport()">Import old logs</button>
   </div>
 
   <!-- STAT CARDS -->
   <div class="stat-grid">
-    <div class="stat-card featured">
+    <div class="stat-card">
       <div class="stat-label">Resistance rate</div>
       <div class="stat-value" id="stat-resist">—</div>
       <div class="stat-sub" id="stat-resist-sub">of urges resisted</div>
@@ -359,7 +358,7 @@ tbody tr:hover td{background:var(--bg)}
   <!-- CALENDAR -->
   <div class="section">
     <div class="section-title">Daily frequency</div>
-    <div class="card">
+    <div class="card cal-card">
       <div id="cal-container"><div class="loading">Loading calendar...</div></div>
     </div>
   </div>
@@ -533,7 +532,13 @@ async function loadEntries(uid) {
     renderAll();
   } catch(e) {
     console.error(e);
-    toast('Error loading data: ' + e.message, true);
+    if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
+      document.getElementById('page-sub').textContent = 'No entries yet — start logging to see your patterns here.';
+      window.ALL_ENTRIES = [];
+      renderAll();
+    } else {
+      toast('Could not load entries — check your connection and try refreshing.', true);
+    }
   }
 }
 
@@ -698,7 +703,7 @@ function renderCalendar(entries) {
   const maxCount = Math.max(1, ...Object.values(dayCounts));
 
   // Build HTML
-  let html = '<div class="cal-outer"><div class="cal-day-labels">';
+  let html = '<div class="cal-wrap"><div class="cal-outer"><div class="cal-day-labels">';
   ['S','M','T','W','T','F','S'].forEach(d => { html += `<div class="cal-dl">${d}</div>`; });
   html += '</div><div class="cal-inner"><div class="cal-month-row">';
 
@@ -742,7 +747,7 @@ function renderCalendar(entries) {
     html += '</div>';
   });
 
-  html += '</div></div></div>';
+  html += '</div></div></div></div>';
   html += `<div class="cal-legend">
     <div class="cal-legend-cells">
       <div class="cal-legend-cell" style="background:var(--bdr)"></div>
