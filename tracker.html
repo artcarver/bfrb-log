@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Groundwork — Patterns</title>
+<title>Groundwork - Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -11,540 +11,128 @@
 :root {
   --bg:#F4EDE3; --sur:#FAF6F1; --card:#FFFFFF; --bdr:#E2D8CE; --bdr2:#C8BAA8;
   --tx:#2C1F14; --tx2:#5C4A38; --mu:#9C8878;
-  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10); --acl2:rgba(193,105,79,.18);
-  --ac-bar:rgba(193,105,79,.7);
-  --sage:#7A8C85; --sagel:rgba(122,140,133,.10); --sagem:rgba(122,140,133,.22); --sage-bar:rgba(122,140,133,.65);
-  --warm:#D4956A; --warml:rgba(212,149,106,.13); --warm-bar:rgba(212,149,106,.8);
+  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10);
+  --sage:#7A8C85; --sagel:rgba(122,140,133,.10);
+  --warm:#D4956A; --warml:rgba(212,149,106,.13);
   --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
-  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08); --s3:0 8px 32px rgba(44,31,20,.12);
-  --tr:all .18s ease;
+  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08);
+  --tr:all .15s ease;
 }
 [data-theme="dark"] {
   --bg:#1E1710; --sur:#261D14; --card:#2E231A; --bdr:#3D3028; --bdr2:#5A4538;
   --tx:#F0E8DF; --tx2:#C8B8A8; --mu:#8C7868;
-  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12); --acl2:rgba(201,120,96,.22);
-  --ac-bar:rgba(201,120,96,.7);
-  --sage:#8A9E96; --sagel:rgba(138,158,150,.12); --sagem:rgba(138,158,150,.24); --sage-bar:rgba(138,158,150,.65);
-  --warm:#C4855A; --warml:rgba(196,133,90,.14); --warm-bar:rgba(196,133,90,.75);
-  --s1:0 1px 3px rgba(0,0,0,.2); --s2:0 2px 12px rgba(0,0,0,.25); --s3:0 8px 32px rgba(0,0,0,.35);
+  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12);
+  --sage:#8A9E96; --sagel:rgba(138,158,150,.12);
+  --warm:#C4855A; --warml:rgba(196,133,90,.14);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:60px;transition:background .3s,color .3s}
 
-/* NAV */
-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s;gap:8px}
+nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
 [data-theme="dark"] nav{background:rgba(30,23,16,.96)}
-.nav-brand{font-family:'Lora',serif;font-size:18px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none;flex-shrink:0}
+.nav-brand{font-family:'Lora',serif;font-size:18px;color:var(--tx);text-decoration:none}
 .nav-brand span{color:var(--ac)}
-.nav-links{display:flex;align-items:center;gap:1px;flex:1;justify-content:center}
-.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 12px;border-radius:var(--pill);transition:var(--tr);white-space:nowrap}
-.nav-link:hover{background:var(--acl);color:var(--ac)}
-.nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;position:relative}
-.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--sur);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif;flex-shrink:0}
-.theme-btn:hover{border-color:var(--ac);color:var(--ac)}
-@media(max-width:520px){.theme-btn{display:none}}
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1);white-space:nowrap}
-.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
-.avatar-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;flex-shrink:0;border-radius:50%}
-.user-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover;display:block;transition:border-color .18s}
-.avatar-btn:hover .user-avatar{border-color:var(--ac)}
-.profile-menu{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--s3);min-width:160px;overflow:hidden;display:none;z-index:200}
-.profile-menu.on{display:block}
-.profile-menu-item{display:flex;align-items:center;gap:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left}
-.profile-menu-item:hover{background:var(--bg);color:var(--tx)}
-.profile-menu-item+.profile-menu-item{border-top:1px solid var(--bdr)}
-.profile-menu-icon{font-size:14px;flex-shrink:0;width:16px;text-align:center}
 
-/* AUTH */
 .auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
 .auth-screen.on{display:flex}
-.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;box-shadow:var(--s3);text-align:center;max-width:320px;width:92%}
-.auth-logo{width:44px;height:44px;background:var(--acl2);border-radius:var(--r);margin:0 auto 22px;display:flex;align-items:center;justify-content:center}
-.auth-logo svg{width:22px;height:22px;fill:var(--ac)}
-.auth-title{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--tx);margin-bottom:8px;letter-spacing:-.02em}
-.auth-sub{font-size:13px;color:var(--mu);margin-bottom:28px;line-height:1.6}
-.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
-.google-btn:hover{border-color:var(--ac);box-shadow:var(--s2)}
+.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;text-align:center;max-width:320px;width:92%}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;margin-top:20px}
 
-/* LAYOUT */
 #app{display:none}
 #app.on{display:block}
-main{max-width:920px;margin:0 auto;padding:28px 16px}
+main{max-width:800px;margin:0 auto;padding:24px 14px}
 
-/* PAGE HEADER */
-.page-hd{margin-bottom:24px}
-.page-title{font-family:'Lora',serif;font-size:26px;font-weight:400;color:var(--tx);letter-spacing:-.02em}
-.page-sub{font-size:13px;color:var(--mu);margin-top:3px}
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx)}
+.time-filter{padding:6px 12px;border-radius:var(--pill);border:1px solid var(--bdr);background:var(--sur);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;cursor:pointer}
 
-/* RANGE PILLS */
-.range-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px}
-.range-pill{font-size:12px;font-weight:600;padding:7px 16px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--card);color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none}
-.range-pill:hover{border-color:var(--bdr2)}
-.range-pill.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.print-btn{margin-left:auto;font-size:12px;font-weight:600;padding:7px 16px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--card);color:var(--mu);cursor:pointer;transition:var(--tr)}
-.print-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
-.import-btn{border-color:var(--ac)!important;color:var(--ac)!important}
-.import-btn:hover{background:var(--acl)!important;border-color:var(--ac-h)!important;color:var(--ac-h)!important}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;text-align:center;box-shadow:var(--s1)}
+.stat-val{font-family:'Lora',serif;font-size:28px;color:var(--ac);line-height:1.2}
+.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:4px}
 
-/* STAT CARDS */
-.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
-@media(max-width:800px){.stat-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:520px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 18px;box-shadow:var(--s1)}
-.stat-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
-.stat-value{font-family:'Lora',serif;font-size:32px;font-weight:400;color:var(--ac);line-height:1}
-.stat-sub{font-size:11px;color:var(--mu);margin-top:5px;font-weight:500;line-height:1.4}
+.chart-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:600px){.chart-grid{grid-template-columns:1fr 1fr}}
 
-/* SECTION */
-.section{margin-bottom:28px}
-.section-title{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em;margin-bottom:12px}
+.chart-card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1)}
+.chart-title{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:16px;text-align:center}
+.chart-wrapper{position:relative;height:220px;width:100%}
 
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1)}
-.card-title{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:16px}
-.two-col-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:600px){.two-col-grid{grid-template-columns:1fr}}
-.three-col-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-@media(max-width:720px){.three-col-grid{grid-template-columns:1fr}}
-
-/* CALENDAR */
-.cal-card{overflow:hidden}
-.cal-wrap{overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
-.cal-wrap::-webkit-scrollbar{height:4px}
-.cal-wrap::-webkit-scrollbar-track{background:var(--bdr);border-radius:10px}
-.cal-wrap::-webkit-scrollbar-thumb{background:var(--mu);border-radius:10px}
-.cal-outer{display:flex;align-items:flex-start;gap:6px;width:max-content}
-.cal-day-labels{display:flex;flex-direction:column;gap:3px;flex-shrink:0;padding-top:22px}
-.cal-dl{font-size:9px;font-weight:600;color:var(--mu);height:14px;line-height:14px;width:20px}
-.cal-inner{flex:1}
-.cal-month-row{display:flex;gap:3px;margin-bottom:4px}
-.cal-mlbl{font-size:9px;font-weight:600;color:var(--mu);overflow:hidden;white-space:nowrap;text-overflow:clip}
-.cal-weeks{display:flex;gap:3px}
-.cal-week{display:flex;flex-direction:column;gap:3px}
-.cal-cell{width:14px;height:14px;border-radius:3px;cursor:pointer;transition:transform .1s;flex-shrink:0;position:relative}
-.cal-cell:hover{transform:scale(1.5);z-index:5}
-.cal-cell.empty{background:transparent!important;cursor:default!important;pointer-events:none}
-.cal-cell.c0{background:var(--bdr)}
-.cal-cell.cr{background:rgba(122,140,133,.25);border:1px solid rgba(122,140,133,.45)}
-.cal-cell.c1{background:rgba(193,105,79,.18)}
-.cal-cell.c2{background:rgba(193,105,79,.38)}
-.cal-cell.c3{background:rgba(193,105,79,.60)}
-.cal-cell.c4{background:var(--ac)}
-.cal-cell.today{outline:2px solid var(--tx);outline-offset:1px}
-.cal-legend{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:10px;color:var(--mu);flex-wrap:wrap}
-.cal-legend-cells{display:flex;gap:3px;align-items:center}
-.cal-legend-cell{width:12px;height:12px;border-radius:2px}
-
-/* BAR LIST */
-.bar-list{display:flex;flex-direction:column;gap:8px}
-.bar-item{display:flex;align-items:center;gap:10px}
-.bar-label{font-size:12px;font-weight:500;color:var(--tx);flex:0 0 160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.3}
-@media(max-width:480px){.bar-label{flex:0 0 110px}}
-.bar-track{flex:1;height:7px;background:var(--bdr);border-radius:10px;overflow:hidden;min-width:40px}
-.bar-fill{height:100%;border-radius:10px;transition:width .6s cubic-bezier(.34,1.2,.64,1)}
-.bar-fill.ac{background:var(--ac-bar)}
-.bar-fill.sage{background:var(--sage-bar)}
-.bar-fill.warm{background:var(--warm-bar)}
-.bar-count{font-size:11px;font-weight:600;color:var(--mu);width:28px;text-align:right;flex-shrink:0}
-
-/* MOOD COLUMNS */
-.mood-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:500px){.mood-cols{grid-template-columns:1fr}}
-.mood-col-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
-.mood-word-list{display:flex;flex-direction:column;gap:6px}
-.mood-word-row{display:flex;align-items:center;gap:8px}
-.mood-word{font-size:12px;font-weight:500;color:var(--tx);flex:0 0 130px}
-.mood-bar-track{flex:1;height:6px;background:var(--bdr);border-radius:10px;overflow:hidden}
-.mood-bar-fill{height:100%;border-radius:10px;transition:width .6s cubic-bezier(.34,1.2,.64,1)}
-.mood-bar-fill.before{background:var(--ac-bar)}
-.mood-bar-fill.after{background:var(--sage-bar)}
-.mood-count{font-size:11px;color:var(--mu);width:22px;text-align:right;flex-shrink:0}
-
-/* URGE ARC */
-.urge-arc{display:flex;align-items:center;justify-content:center;gap:20px;padding:12px 0}
-.urge-num{font-family:'Lora',serif;font-size:48px;font-weight:400;line-height:1;color:var(--ac)}
-.urge-label{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);text-align:center;margin-top:4px}
-.urge-arrow{font-size:20px;color:var(--mu);flex-shrink:0;margin-top:-8px}
-.urge-block{text-align:center}
-
-/* CHAIN BREAKDOWN */
-.chain-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-@media(max-width:480px){.chain-grid{grid-template-columns:repeat(2,1fr)}}
-.chain-cell{padding:12px 8px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);text-align:center}
-.chain-pct{font-family:'Lora',serif;font-size:24px;font-weight:400;color:var(--ac);line-height:1}
-.chain-lbl{font-size:10px;font-weight:600;color:var(--mu);margin-top:4px;line-height:1.3}
-
-/* AWARENESS SPLIT */
-.aw-split{display:flex;gap:0;height:28px;border-radius:var(--pill);overflow:hidden;border:1px solid var(--bdr)}
-.aw-conscious-bar{background:var(--sage-bar);transition:width .6s cubic-bezier(.34,1.2,.64,1);display:flex;align-items:center;justify-content:center}
-.aw-auto-bar{background:var(--warm-bar);flex:1;display:flex;align-items:center;justify-content:center}
-.aw-bar-label{font-size:10px;font-weight:700;color:#fff;white-space:nowrap;padding:0 8px;overflow:hidden}
-.aw-legend{display:flex;gap:16px;margin-top:8px}
-.aw-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mu)}
-.aw-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* CHARTS */
-.chart-wrap{position:relative;height:200px}
-.chart-wrap.tall{height:240px}
-
-/* EMPTY STATE */
-.empty-state{text-align:center;padding:32px 20px;color:var(--mu)}
-.empty-icon{font-size:28px;margin-bottom:8px;opacity:.5}
-.empty-text{font-size:13px;line-height:1.6}
-
-/* NOT ENOUGH DATA */
-.sparse-state{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px;text-align:center;font-size:12px;color:var(--mu);line-height:1.6}
-
-/* TABLE */
-.table-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
-.fsel{background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 14px;color:var(--tx2);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;outline:none;cursor:pointer;-webkit-appearance:none;box-shadow:var(--s1);transition:var(--tr)}
-.fsel:focus{border-color:var(--ac)}
-.fclear{font-size:12px;font-weight:600;color:var(--mu);background:none;border:none;cursor:pointer;padding:6px 8px;transition:var(--tr);font-family:'DM Sans',sans-serif}
-.fclear:hover{color:var(--ac)}
-.rc-count{font-size:12px;color:var(--mu);margin-left:auto}
-.table-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--s1)}
-table{width:100%;border-collapse:collapse}
-th{padding:9px 14px;border-bottom:1px solid var(--bdr);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);text-align:left;background:var(--sur);white-space:nowrap}
-td{padding:11px 14px;border-bottom:1px solid var(--bdr);font-size:12px;color:var(--tx);vertical-align:top}
-tr:last-child td{border-bottom:none}
-tbody tr{cursor:pointer;transition:background .12s}
-tbody tr:hover td{background:var(--bg)}
-.tc{display:inline-block;padding:2px 9px;border-radius:var(--pill);font-size:10px;font-weight:600}
-.tc-ep{background:var(--acl);color:var(--ac)}
-.tc-re{background:var(--sagel);color:var(--sage)}
-.tc-ne{background:var(--warml);color:var(--warm)}
-.td-muted{color:var(--mu)}
-
-/* ROW EXPAND */
-.row-detail{display:none;background:var(--sur)}
-.row-detail.on{display:table-row}
-.row-detail td{padding:14px 16px;font-size:12px;line-height:1.8;color:var(--tx2)}
-.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 16px}
-@media(max-width:540px){.detail-grid{grid-template-columns:1fr 1fr}}
-.detail-field{font-size:11px}
-.detail-key{font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);font-size:10px;margin-bottom:2px}
-.detail-val{color:var(--tx2)}
-
-/* LOADING */
-.loading{text-align:center;padding:60px 20px;color:var(--mu);font-size:13px}
-
-/* DIVIDER */
-.divider{height:1px;background:var(--bdr);margin:24px 0}
-
-/* UTIL */
-.hidden{display:none!important}
-.flex-between{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:13px;font-weight:600;color:#fff;box-shadow:var(--s3);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.toast.ok{background:var(--sage)}.toast.err{background:var(--ac)}
-
-/* PRINT */
-@media print {
-  nav,.range-row,.print-btn,.table-filters,.theme-btn,.sign-btn,.avatar-btn,.profile-menu{display:none!important}
-  body{background:#fff!important;color:#000!important;font-size:11px}
-  .card,.stat-card{box-shadow:none!important;border:1px solid #ccc!important}
-  main{padding:0!important;max-width:100%!important}
-  .section{break-inside:avoid}
-}
-
-/* IMPORT MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,18,10,.55);backdrop-filter:blur(4px);z-index:300;align-items:flex-end;justify-content:center}
-.modal-overlay.on{display:flex}
-.modal-sheet{background:var(--card);border-radius:var(--rlg) var(--rlg) 0 0;padding:24px 24px 52px;width:100%;max-width:560px;box-shadow:var(--s3);animation:su .25s cubic-bezier(.34,1.2,.64,1);max-height:88vh;overflow-y:auto}
-.modal-handle{width:36px;height:4px;background:var(--bdr);border-radius:10px;margin:0 auto 20px}
-.modal-title{font-family:'Lora',serif;font-size:20px;font-weight:400;color:var(--tx);margin-bottom:6px}
-.modal-sub{font-size:12px;color:var(--mu);margin-bottom:20px;line-height:1.65}
-.modal-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:16px 0 8px}
-.drop-zone{border:2px dashed var(--bdr);border-radius:var(--r);padding:32px 20px;text-align:center;cursor:pointer;transition:var(--tr);background:var(--sur)}
-.drop-zone:hover,.drop-zone.drag-over{border-color:var(--ac);background:var(--acl)}
-.drop-zone input{display:none}
-.drop-label{font-size:13px;font-weight:600;color:var(--tx2);margin-bottom:4px}
-.drop-sub{font-size:11px;color:var(--mu)}
-.import-preview{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px 16px;margin-top:14px;display:none}
-.import-preview.on{display:block}
-.preview-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--bdr)}
-.preview-row:last-child{border-bottom:none}
-.preview-key{color:var(--mu);font-weight:600}
-.preview-val{color:var(--tx);font-weight:500}
-.import-warn{background:var(--warml);border:1px solid var(--warm);border-radius:var(--rsm);padding:12px 14px;font-size:12px;color:var(--tx2);margin-top:12px;line-height:1.65;display:none}
-.import-warn.on{display:block}
-.import-progress{margin-top:16px;display:none}
-.import-progress.on{display:block}
-.prog-bar-track{height:6px;background:var(--bdr);border-radius:10px;overflow:hidden;margin-bottom:8px}
-.prog-bar-fill{height:100%;background:var(--ac);border-radius:10px;transition:width .2s ease;width:0%}
-.prog-label{font-size:11px;color:var(--mu);text-align:center}
-.modal-btn{width:100%;border:none;border-radius:var(--pill);padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--tr);margin-top:14px}
-.modal-btn.primary{background:var(--ac);color:#fff;box-shadow:0 4px 14px rgba(193,105,79,.35)}
-.modal-btn.primary:hover{background:var(--ac-h)}
-.modal-btn.primary:disabled{opacity:.45;cursor:not-allowed}
-.modal-btn.cancel{background:none;color:var(--mu);font-size:12px;margin-top:6px}
-@keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
+.empty-state{text-align:center;padding:40px 20px;color:var(--mu);font-size:14px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);margin-top:20px}
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
-    <div class="auth-logo">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-    </div>
-    <div class="auth-title">Groundwork</div>
-    <div class="auth-sub">Sign in to view your patterns.</div>
-    <button class="google-btn" onclick="signInWithGoogle()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-      Continue with Google
-    </button>
+    <div style="font-family:'Lora',serif;font-size:24px;margin-bottom:8px">Groundwork</div>
+    <div style="font-size:14px;color:var(--mu)">Sign in to view patterns.</div>
+    <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
   </div>
 </div>
 
-<!-- NAV -->
 <div id="gw-nav"></div>
 
-<!-- APP -->
 <div id="app">
 <main>
-
-  <!-- HEADER -->
-  <div class="page-hd">
-    <div class="page-title">Patterns</div>
-    <div class="page-sub" id="page-sub">Loading your data...</div>
+  <div class="header-row">
+    <div class="page-title">Clinical Patterns</div>
+    <select class="time-filter" id="time-filter" onchange="loadData()">
+      <option value="7">Last 7 Days</option>
+      <option value="30" selected>Last 30 Days</option>
+      <option value="all">All Time</option>
+    </select>
   </div>
 
-  <!-- RANGE + PRINT -->
-  <div class="range-row">
-    <div class="range-pill on" data-days="7" onclick="setRange(this)">7 days</div>
-    <div class="range-pill" data-days="30" onclick="setRange(this)">30 days</div>
-    <div class="range-pill" data-days="90" onclick="setRange(this)">90 days</div>
-    <div class="range-pill" data-days="0" onclick="setRange(this)">All time</div>
-    <button class="print-btn" onclick="window.print()">Print for session</button>
-    <button class="print-btn import-btn" onclick="openImport()">Import old logs</button>
-  </div>
-
-  <!-- STAT CARDS -->
-  <div class="stat-grid">
-    <div class="stat-card">
-      <div class="stat-label">Resistance rate</div>
-      <div class="stat-value" id="stat-resist">—</div>
-      <div class="stat-sub" id="stat-resist-sub">of urges resisted</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Episodes</div>
-      <div class="stat-value" id="stat-episodes">—</div>
-      <div class="stat-sub" id="stat-ep-sub">in this period</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Avg urge before</div>
-      <div class="stat-value" id="stat-urge">—</div>
-      <div class="stat-sub">out of 10</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Automatic episodes</div>
-      <div class="stat-value" id="stat-auto">—</div>
-      <div class="stat-sub">didn't notice until after</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Resist streak</div>
-      <div class="stat-value" id="stat-streak">—</div>
-      <div class="stat-sub" id="stat-streak-sub">consecutive days resisted</div>
-    </div>
-  </div>
-
-  <!-- CALENDAR -->
-  <div class="section">
-    <div class="section-title">Daily frequency</div>
-    <div class="card cal-card">
-      <div id="cal-container"><div class="loading">Loading calendar...</div></div>
-    </div>
-  </div>
-
-  <!-- TIME OF DAY + AWARENESS -->
-  <div class="two-col-grid section">
-    <div class="card">
-      <div class="card-title">Time of day</div>
-      <div class="chart-wrap">
-        <canvas id="tod-chart"></canvas>
+  <div id="loading" style="text-align:center;color:var(--mu);padding:40px">Analyzing logs...</div>
+  
+  <div id="dashboard" style="display:none">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-lbl">Total Logs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-resist" style="color:var(--sage)">0%</div>
+        <div class="stat-lbl">Resist / Near Miss Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-urge">0</div>
+        <div class="stat-lbl">Avg Urge Level</div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-title">Awareness — conscious vs automatic</div>
-      <div id="aw-content">
-        <div class="sparse-state">Not enough data yet — log a few more episodes with awareness filled in.</div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Outcomes</div>
+        <div class="chart-wrapper"><canvas id="chart-outcomes"></canvas></div>
       </div>
-      <div class="divider" style="margin:16px 0 12px"></div>
-      <div class="card-title">Awareness trend by week</div>
-      <div class="chart-wrap" id="aw-trend-wrap">
-        <div class="sparse-state">Needs 3+ weeks of data.</div>
+      <div class="chart-card">
+        <div class="chart-title">High-Risk Windows (Time of Day)</div>
+        <div class="chart-wrapper"><canvas id="chart-time"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Primary Triggers</div>
+        <div class="chart-wrapper"><canvas id="chart-triggers"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Intervention Win Rate</div>
+        <div class="chart-wrapper"><canvas id="chart-tools"></canvas></div>
       </div>
     </div>
   </div>
 
-  <!-- ANTECEDENTS -->
-  <div class="section">
-    <div class="section-title">Antecedents</div>
-    <div class="two-col-grid">
-      <div class="card">
-        <div class="card-title">Emotional triggers</div>
-        <div id="etrig-list"><div class="empty-state"><div class="empty-text">No emotional triggers logged yet.</div></div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Sensory triggers</div>
-        <div id="strig-list"><div class="empty-state"><div class="empty-text">No sensory triggers logged yet.</div></div></div>
-      </div>
-    </div>
-    <div class="two-col-grid" style="margin-top:12px">
-      <div class="card">
-        <div class="card-title">Locations</div>
-        <div id="loc-list"><div class="empty-state"><div class="empty-text">No locations logged yet.</div></div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Activities</div>
-        <div id="act-list"><div class="empty-state"><div class="empty-text">No activities logged yet.</div></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- REINFORCEMENT -->
-  <div class="section">
-    <div class="section-title">Reinforcement picture</div>
-    <div class="two-col-grid">
-      <div class="card">
-        <div class="card-title">Mood before vs after — top words</div>
-        <div id="mood-content">
-          <div class="sparse-state">Log mood before and after a few episodes to see the pattern.</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Urge level — before vs after episodes</div>
-        <div id="urge-arc-content">
-          <div class="sparse-state">Log urge levels for a few episodes.</div>
-        </div>
-        <div class="divider" style="margin:16px 0"></div>
-        <div class="card-title">Behavior chain — picking</div>
-        <div id="chain-content">
-          <div class="sparse-state">Log a few picking episodes with completion filled in.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INTERVENTIONS -->
-  <div class="section" id="int-section">
-    <div class="section-title">Interventions</div>
-    <div class="three-col-grid">
-      <div class="card">
-        <div class="card-title">What you tried</div>
-        <div id="int-tried-list"><div class="sparse-state">No intervention data yet.</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Average effectiveness</div>
-        <div id="int-eff-list"><div class="sparse-state">Rate effectiveness on a few entries.</div></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Effectiveness over time</div>
-        <div class="chart-wrap" id="eff-trend-wrap">
-          <div class="sparse-state">Needs 3+ weeks of rated entries.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ENTRY LOG -->
-  <div class="section">
-    <div class="section-title">Entry log</div>
-    <div class="table-filters">
-      <select class="fsel" id="filter-bfrb" onchange="applyFilters()">
-        <option value="">All behaviors</option>
-        <option value="picking">Skin picking</option>
-        <option value="biting">Nail / skin biting</option>
-      </select>
-      <select class="fsel" id="filter-type" onchange="applyFilters()">
-        <option value="">All types</option>
-        <option value="did">Did it</option>
-        <option value="resisted">Resisted</option>
-        <option value="near">Near miss</option>
-      </select>
-      <select class="fsel" id="filter-awareness" onchange="applyFilters()">
-        <option value="">All awareness</option>
-        <option value="conscious">Conscious</option>
-        <option value="automatic">Automatic</option>
-      </select>
-      <button class="fclear" onclick="clearFilters()">Clear</button>
-      <span class="rc-count" id="rc-count"></span>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date / time</th>
-            <th>Behavior</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Top trigger</th>
-            <th>Urge before</th>
-            <th>Urge after</th>
-          </tr>
-        </thead>
-        <tbody id="entry-tbody">
-          <tr><td colspan="7" class="loading">Loading entries...</td></tr>
-        </tbody>
-      </table>
-    </div>
+  <div id="empty-state" class="empty-state" style="display:none">
+    Not enough data in this timeframe. Log more events to generate clinical patterns.
   </div>
 
 </main>
-</div><!-- /app -->
-
-<!-- IMPORT MODAL -->
-<div class="modal-overlay" id="import-modal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Import old logs</div>
-    <div class="modal-sub">Upload a CSV exported from Groundwork or your previous log. The file will be checked and previewed before anything is saved.</div>
-
-    <div class="modal-lbl">Select file</div>
-    <div class="drop-zone" id="drop-zone" onclick="document.getElementById('csv-input').click()"
-         ondragover="event.preventDefault();this.classList.add('drag-over')"
-         ondragleave="this.classList.remove('drag-over')"
-         ondrop="handleDrop(event)">
-      <input type="file" id="csv-input" accept=".csv" onchange="handleFile(this.files[0])">
-      <div class="drop-label" id="drop-label">Drop CSV here or tap to browse</div>
-      <div class="drop-sub">Accepts the Groundwork export format or the converted file</div>
-    </div>
-
-    <div class="import-preview" id="import-preview">
-      <div class="preview-row"><span class="preview-key">Rows found</span><span class="preview-val" id="prev-rows">—</span></div>
-      <div class="preview-row"><span class="preview-key">Date range</span><span class="preview-val" id="prev-dates">—</span></div>
-      <div class="preview-row"><span class="preview-key">Episodes (did it)</span><span class="preview-val" id="prev-did">—</span></div>
-      <div class="preview-row"><span class="preview-key">Near misses</span><span class="preview-val" id="prev-near">—</span></div>
-      <div class="preview-row"><span class="preview-key">Resistances</span><span class="preview-val" id="prev-resist">—</span></div>
-    </div>
-
-    <div class="import-warn" id="import-warn"></div>
-
-    <div class="import-progress" id="import-progress">
-      <div class="prog-bar-track"><div class="prog-bar-fill" id="prog-fill"></div></div>
-      <div class="prog-label" id="prog-label">Preparing…</div>
-    </div>
-
-    <button class="modal-btn primary" id="import-confirm-btn" disabled onclick="runImport()">Import entries</button>
-    <button class="modal-btn cancel" onclick="closeImport()">Cancel</button>
-  </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
-<script src="nav.js"></script>
-
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, getDocs, query, orderBy, writeBatch, doc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, query, where, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -552,8 +140,7 @@ const firebaseConfig = {
   projectId: "skin-picking-log",
   storageBucket: "skin-picking-log.firebasestorage.app",
   messagingSenderId: "162906566118",
-  appId: "1:162906566118:web:a89abbd383fc847ba97a27",
-  measurementId: "G-JR8BBWVVZT"
+  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -562,990 +149,237 @@ const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
 window._uid = null;
-window.ALL_ENTRIES = [];
+let chartInstances = {};
 
-window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { toast('Sign-in failed', true); }};
+window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
 window.signOut = async () => { await fbSignOut(auth); };
 
-async function loadEntries(uid) {
-  try {
-    const q = query(collection(db,'users',uid,'entries'), orderBy('timestamp','desc'));
-    const snap = await getDocs(q);
-    window.ALL_ENTRIES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderAll();
-  } catch(e) {
-    console.error(e);
-    if (e.code === 'permission-denied' || (e.message && e.message.toLowerCase().includes('permission'))) {
-      document.getElementById('page-sub').textContent = 'No entries yet — start logging to see your patterns here.';
-      window.ALL_ENTRIES = [];
-      renderAll();
-    } else {
-      toast('Could not load entries — check your connection and try refreshing.', true);
-    }
-  }
-}
-
 onAuthStateChanged(auth, user => {
-  const isIn = !!user;
-  window._uid = isIn ? user.uid : null;
-  document.getElementById('auth-screen').classList.toggle('on', !isIn);
-  document.getElementById('app').classList.toggle('on', isIn);
-  document.getElementById('sign-btn-nav').style.display = isIn ? 'none' : '';
-  document.getElementById('avatar-btn').style.display = isIn ? 'flex' : 'none';
-  if (isIn) {
-    if (user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
-    loadEntries(user.uid);
-  }
+  window._uid = user ? user.uid : null;
+  document.getElementById('auth-screen').classList.toggle('on', !user);
+  document.getElementById('app').classList.toggle('on', !!user);
+  if (user) loadData();
 });
 
-// Profile menu handled by nav.js
+// Set global chart defaults based on theme
+Chart.defaults.color = '#9C8878';
+Chart.defaults.font.family = "'DM Sans', sans-serif";
 
-// Exposed for the importer
-window._doImport = async function(rows) {
-  const uid = window._uid;
-  if (!uid) throw new Error('Not signed in');
-  const colRef = collection(db, 'users', uid, 'entries');
+window.loadData = async () => {
+  if (!window._uid) return;
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'none';
 
-  // Firestore writeBatch max 500 — chunk if needed
-  const CHUNK = 450;
-  let done = 0;
-  for (let i = 0; i < rows.length; i += CHUNK) {
-    const batch = writeBatch(db);
-    const chunk = rows.slice(i, i + CHUNK);
-    chunk.forEach(row => {
-      const ref = doc(colRef);
-      batch.set(ref, row);
-    });
-    await batch.commit();
-    done += chunk.length;
-    window._importProgress && window._importProgress(done, rows.length);
-  }
-  // Reload after import
-  const q = query(colRef, orderBy('timestamp', 'desc'));
-  const snap = await getDocs(q);
-  window.ALL_ENTRIES = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  window.renderAll && window.renderAll();
-};
-</script>
-
-<!-- RENDER LOGIC -->
-<script>
-// ─── THEME (nav.js handles toggle; override to also rebuild charts) ───
-(function(){
-  const _base = window.toggleTheme;
-  window.toggleTheme = function() {
-    if (_base) _base();
-    if (window.todChart) rebuildCharts();
-  };
-})();
-
-// ─── STATE ───
-let currentDays = 7;
-let filteredEntries = [];
-let todChart = null, awTrendChart = null, effTrendChart = null;
-
-// ─── RANGE ───
-window.setRange = pill => {
-  document.querySelectorAll('.range-pill').forEach(p => p.classList.remove('on'));
-  pill.classList.add('on');
-  currentDays = parseInt(pill.dataset.days);
-  renderAll();
-};
-
-// ─── FILTER ENTRIES BY DATE ───
-function getFiltered() {
-  let entries = window.ALL_ENTRIES || [];
-  if (currentDays > 0) {
+  const days = document.getElementById('time-filter').value;
+  let q;
+  
+  if (days === 'all') {
+    q = query(collection(db, 'users', window._uid, 'entries'), orderBy('created_at', 'desc'));
+  } else {
     const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - currentDays);
-    entries = entries.filter(e => new Date(e.timestamp) >= cutoff);
-  }
-  return entries;
-}
-
-// ─── MAIN RENDER ───
-function renderAll() {
-  const entries = getFiltered();
-  filteredEntries = entries;
-
-  const total = entries.length;
-  document.getElementById('page-sub').textContent =
-    total === 0 ? 'No entries in this period' :
-    `${total} entr${total===1?'y':'ies'} in the selected period`;
-
-  renderStats(entries);
-  renderCalendar(entries);
-  renderTimeOfDay(entries);
-  renderAwareness(entries);
-  renderTriggers(entries);
-  renderLocAct(entries);
-  renderMood(entries);
-  renderUrgeArc(entries);
-  renderChain(entries);
-  renderInterventions(entries);
-  renderTable(entries);
-}
-
-// ─── HELPERS ───
-function splitField(str) {
-  if (!str) return [];
-  return str.split(',').map(s => s.trim()).filter(Boolean);
-}
-function countItems(entries, field) {
-  const counts = {};
-  entries.forEach(e => {
-    splitField(e[field]).forEach(v => { counts[v] = (counts[v]||0) + 1; });
-  });
-  return Object.entries(counts).sort((a,b) => b[1]-a[1]);
-}
-function avg(arr) {
-  if (!arr.length) return 0;
-  return arr.reduce((a,b) => a+b, 0) / arr.length;
-}
-function pct(n, d) {
-  if (!d) return '—';
-  return Math.round(n/d*100) + '%';
-}
-function episodes(entries) {
-  return entries.filter(e => e.entry_type === 'did' || e.entry_type === 'near');
-}
-function cssVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
-function destroyChart(chartVar) {
-  if (chartVar) { try { chartVar.destroy(); } catch(e){} }
-  return null;
-}
-function isoDate(ts) {
-  return ts ? ts.slice(0,10) : '';
-}
-
-// ─── STATS ───
-function renderStats(entries) {
-  const eps = episodes(entries);
-  const resisted = entries.filter(e => e.entry_type === 'resisted');
-  const resistRate = pct(resisted.length, entries.length);
-  const epCount = eps.length;
-  const pickCount = eps.filter(e=>e.bfrb_type==='picking').length;
-  const biteCount = eps.filter(e=>e.bfrb_type==='biting').length;
-  const urgeVals = eps.filter(e=>e.urge_before>0).map(e=>e.urge_before);
-  const autoEps = eps.filter(e=>e.awareness==='automatic');
-  const autoPct = eps.length ? Math.round(autoEps.length/eps.length*100)+'%' : '—';
-
-  // Resist streak — longest run of calendar days with only resisted/near entries (no episodes)
-  // Using ALL entries (not range-filtered) so streak is always accurate
-  const allEntries = window.ALL_ENTRIES || [];
-  const episodeDays = new Set(allEntries.filter(e=>e.entry_type==='did'||e.entry_type==='near').map(e=>isoDate(e.timestamp)));
-  const loggedDays = [...new Set(allEntries.map(e=>isoDate(e.timestamp)))].sort();
-  let streak = 0, best = 0, cur = 0;
-  loggedDays.forEach(d => {
-    if (!episodeDays.has(d)) { cur++; best = Math.max(best, cur); }
-    else cur = 0;
-  });
-  // Current streak (from most recent logged day backwards)
-  for (let i = loggedDays.length - 1; i >= 0; i--) {
-    if (!episodeDays.has(loggedDays[i])) streak++;
-    else break;
+    cutoff.setDate(cutoff.getDate() - parseInt(days));
+    q = query(collection(db, 'users', window._uid, 'entries'), where('created_at', '>=', cutoff), orderBy('created_at', 'desc'));
   }
 
-  document.getElementById('stat-resist').textContent = resistRate;
-  document.getElementById('stat-resist-sub').textContent = `${resisted.length} of ${entries.length} total logs`;
-  document.getElementById('stat-episodes').textContent = epCount;
-  document.getElementById('stat-ep-sub').textContent =
-    epCount===0 ? 'no episodes' : `${pickCount} picking · ${biteCount} biting`;
-  document.getElementById('stat-urge').textContent = urgeVals.length ? avg(urgeVals).toFixed(1) : '—';
-  document.getElementById('stat-auto').textContent = autoPct;
-  document.getElementById('stat-streak').textContent = streak > 0 ? streak : best > 0 ? best : '—';
-  document.getElementById('stat-streak-sub').textContent = streak > 0
-    ? `days in a row (active)`
-    : best > 0 ? `best logged streak` : 'no resist-only days yet';
-}
-
-// ─── CALENDAR ───
-function renderCalendar(entries) {
-  const container = document.getElementById('cal-container');
-
-  // Build date -> count map
-  const dayCounts = {};
-  entries.forEach(e => {
-    const d = isoDate(e.timestamp);
-    if (d) dayCounts[d] = (dayCounts[d]||0) + (e.entry_type !== 'resisted' ? 1 : 0);
-  });
-  const resistDays = new Set();
-  entries.filter(e=>e.entry_type==='resisted').forEach(e=>{ const d=isoDate(e.timestamp); if(d) resistDays.add(d); });
-
-  // Date range
-  const today = new Date();
-  const rangeStart = new Date(today);
-  rangeStart.setDate(today.getDate() - (currentDays > 0 ? currentDays - 1 : 364));
-  // Go back to start of that week (Sunday)
-  const startDow = rangeStart.getDay();
-  rangeStart.setDate(rangeStart.getDate() - startDow);
-
-  // Build weeks array
-  const weeks = [];
-  let cur = new Date(rangeStart);
-  while (cur <= today) {
-    const week = [];
-    for (let d = 0; d < 7; d++) {
-      week.push(new Date(cur));
-      cur.setDate(cur.getDate()+1);
+  try {
+    const snap = await getDocs(q);
+    const entries = [];
+    snap.forEach(doc => entries.push(doc.data()));
+    
+    if (entries.length === 0) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'block';
+      return;
     }
-    weeks.push(week);
+
+    processData(entries);
+  } catch (e) {
+    console.error("Error fetching logs:", e);
+    document.getElementById('loading').textContent = "Error loading data. Check console.";
   }
+};
 
-  // Max count for scaling
-  const maxCount = Math.max(1, ...Object.values(dayCounts));
+function processData(entries) {
+  let total = entries.length;
+  let resisted = 0;
+  let totalUrge = 0;
+  
+  let outcomes = { resisted: 0, near_miss: 0, did: 0 };
+  let times = { morning: 0, afternoon: 0, evening: 0, night: 0 };
+  let triggers = {};
+  let tools = {};
 
-  // Build HTML
-  let html = '<div class="cal-wrap"><div class="cal-outer"><div class="cal-day-labels">';
-  ['S','M','T','W','T','F','S'].forEach(d => { html += `<div class="cal-dl">${d}</div>`; });
-  html += '</div><div class="cal-inner"><div class="cal-month-row">';
+  entries.forEach(e => {
+    // Top line stats
+    if (e.entry_type === 'resisted' || e.entry_type === 'near_miss') resisted++;
+    if (e.urge_before) totalUrge += e.urge_before;
 
-  let lastMonth = -1;
-  weeks.forEach(week => {
-    const firstDay = week.find(d => d <= today);
-    if (firstDay && firstDay.getMonth() !== lastMonth) {
-      lastMonth = firstDay.getMonth();
-      const lbl = firstDay.toLocaleDateString('en-US',{month:'short'});
-      html += `<div class="cal-mlbl" style="width:17px">${lbl}</div>`;
-    } else {
-      html += `<div class="cal-mlbl" style="width:17px"></div>`;
+    // Outcomes
+    if (e.entry_type) outcomes[e.entry_type]++;
+
+    // Time of Day (Morning 6-12, Afternoon 12-17, Evening 17-22, Night 22-6)
+    if (e.created_at) {
+      const date = e.created_at.toDate ? e.created_at.toDate() : new Date(e.created_at);
+      const hour = date.getHours();
+      if (hour >= 6 && hour < 12) times.morning++;
+      else if (hour >= 12 && hour < 17) times.afternoon++;
+      else if (hour >= 17 && hour < 22) times.evening++;
+      else times.night++;
+    }
+
+    // Triggers
+    if (e.primary_trigger) {
+      triggers[e.primary_trigger] = (triggers[e.primary_trigger] || 0) + 1;
+    }
+
+    // Tools & Effectiveness
+    if (e.tried_intervention && e.interventions) {
+      const isWin = (e.entry_type === 'resisted' || e.entry_type === 'near_miss');
+      e.interventions.split(',').forEach(tool => {
+        const t = tool.trim();
+        if (!tools[t]) tools[t] = { attempts: 0, wins: 0 };
+        tools[t].attempts++;
+        if (isWin) tools[t].wins++;
+      });
     }
   });
-  html += '</div><div class="cal-weeks">';
 
-  weeks.forEach(week => {
-    html += '<div class="cal-week">';
-    week.forEach(day => {
-      const ds = day.toISOString().slice(0,10);
-      const isToday = ds === today.toISOString().slice(0,10);
-      const isFuture = day > today;
-      const count = dayCounts[ds] || 0;
-      const isResistOnly = !count && resistDays.has(ds);
+  // Update UI Stats
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-resist').textContent = Math.round((resisted / total) * 100) + '%';
+  document.getElementById('stat-urge').textContent = (totalUrge / total).toFixed(1);
 
-      let cls = 'cal-cell';
-      if (isFuture) { cls += ' empty'; }
-      else if (isResistOnly) { cls += ' cr'; }
-      else if (count === 0) { cls += ' c0'; }
-      else {
-        const intensity = count / maxCount;
-        if (intensity < 0.25) cls += ' c1';
-        else if (intensity < 0.5) cls += ' c2';
-        else if (intensity < 0.75) cls += ' c3';
-        else cls += ' c4';
-      }
-      if (isToday) cls += ' today';
-      const title = isFuture ? '' : `${ds}: ${count} episode${count!==1?'s':''}${isResistOnly?' (resistance only)':''}`;
-      html += `<div class="${cls}" title="${title}" onclick="filterTableByDate('${ds}')"></div>`;
-    });
-    html += '</div>';
-  });
+  // Render Charts
+  renderOutcomes(outcomes);
+  renderTimeOfDay(times);
+  renderTriggers(triggers);
+  renderTools(tools);
 
-  html += '</div></div></div></div>';
-  html += `<div class="cal-legend">
-    <div class="cal-legend-cells">
-      <div class="cal-legend-cell" style="background:var(--bdr)"></div>
-      <div class="cal-legend-cell" style="background:rgba(193,105,79,.18)"></div>
-      <div class="cal-legend-cell" style="background:rgba(193,105,79,.38)"></div>
-      <div class="cal-legend-cell" style="background:rgba(193,105,79,.60)"></div>
-      <div class="cal-legend-cell" style="background:var(--ac)"></div>
-    </div>
-    <span>Fewer episodes</span><span style="margin-left:auto">More episodes</span>
-    <div style="display:flex;align-items:center;gap:4px;margin-left:12px">
-      <div class="cal-legend-cell" style="background:rgba(122,140,133,.25);border:1px solid rgba(122,140,133,.45)"></div>
-      <span>Resistance only</span>
-    </div>
-  </div>`;
-
-  container.innerHTML = html;
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
 }
 
-// ─── TIME OF DAY ───
-const TOD_BUCKETS = [
-  {label:'Early am\n5–9', hours:[5,6,7,8]},
-  {label:'Morning\n9–12', hours:[9,10,11]},
-  {label:'Afternoon\n12–5', hours:[12,13,14,15,16]},
-  {label:'Evening\n5–9', hours:[17,18,19,20]},
-  {label:'Late night\n9–1', hours:[21,22,23,0]},
-  {label:'Night\n1–5', hours:[1,2,3,4]},
-];
+function destroyChart(id) {
+  if (chartInstances[id]) chartInstances[id].destroy();
+}
 
-function renderTimeOfDay(entries) {
-  const eps = episodes(entries);
-  const pickCounts = new Array(6).fill(0);
-  const biteCounts = new Array(6).fill(0);
+const colors = {
+  ac: '#C1694F',
+  sage: '#7A8C85',
+  warm: '#D4956A',
+  mu: '#9C8878',
+  bdr: '#E2D8CE'
+};
 
-  eps.forEach(e => {
-    const h = new Date(e.timestamp).getHours();
-    const bi = TOD_BUCKETS.findIndex(b => b.hours.includes(h));
-    if (bi === -1) return;
-    if (e.bfrb_type === 'picking') pickCounts[bi]++;
-    else if (e.bfrb_type === 'biting') biteCounts[bi]++;
-  });
-
-  const labels = TOD_BUCKETS.map(b => b.label);
-  todChart = destroyChart(todChart);
-  const ctx = document.getElementById('tod-chart').getContext('2d');
-  todChart = new Chart(ctx, {
-    type: 'bar',
+function renderOutcomes(data) {
+  destroyChart('chart-outcomes');
+  const ctx = document.getElementById('chart-outcomes').getContext('2d');
+  chartInstances['chart-outcomes'] = new Chart(ctx, {
+    type: 'doughnut',
     data: {
-      labels,
-      datasets: [
-        { label:'Picking', data:pickCounts, backgroundColor:cssVar('--ac-bar'), borderRadius:6, borderSkipped:false },
-        { label:'Biting', data:biteCounts, backgroundColor:cssVar('--sage-bar'), borderRadius:6, borderSkipped:false }
-      ]
+      labels: ['Resisted', 'Near Miss', 'Did it'],
+      datasets: [{
+        data: [data.resisted, data.near_miss, data.did],
+        backgroundColor: [colors.sage, colors.warm, colors.ac],
+        borderWidth: 0
+      }]
     },
     options: {
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{labels:{font:{family:'DM Sans',size:11},color:cssVar('--tx2'),boxWidth:12,boxHeight:12}}},
-      scales:{
-        x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),maxRotation:0}},
-        y:{grid:{color:cssVar('--bdr')},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),stepSize:1,precision:0},beginAtZero:true}
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom' } },
+      cutout: '70%'
+    }
+  });
+}
+
+function renderTimeOfDay(data) {
+  destroyChart('chart-time');
+  const ctx = document.getElementById('chart-time').getContext('2d');
+  chartInstances['chart-time'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
+      datasets: [{
+        label: 'Episodes',
+        data: [data.morning, data.afternoon, data.evening, data.night],
+        backgroundColor: colors.mu,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+        x: { grid: { display: false } }
       }
     }
   });
 }
 
-// ─── AWARENESS ───
-function renderAwareness(entries) {
-  const eps = episodes(entries).filter(e => e.awareness);
-  const conscious = eps.filter(e => e.awareness === 'conscious').length;
-  const auto = eps.filter(e => e.awareness === 'automatic').length;
-  const total = conscious + auto;
-  const el = document.getElementById('aw-content');
-
-  if (total < 3) {
-    el.innerHTML = '<div class="sparse-state">Log awareness on a few more episodes.</div>';
-  } else {
-    const cPct = Math.round(conscious/total*100);
-    const aPct = 100 - cPct;
-    el.innerHTML = `
-      <div class="aw-split">
-        <div class="aw-conscious-bar" style="width:${cPct}%">
-          ${cPct >= 20 ? `<span class="aw-bar-label">Conscious ${cPct}%</span>` : ''}
-        </div>
-        <div class="aw-auto-bar">
-          ${aPct >= 20 ? `<span class="aw-bar-label">Automatic ${aPct}%</span>` : ''}
-        </div>
-      </div>
-      <div class="aw-legend">
-        <div class="aw-legend-item"><div class="aw-dot" style="background:var(--sage-bar)"></div> Conscious — ${conscious} episodes</div>
-        <div class="aw-legend-item"><div class="aw-dot" style="background:var(--warm-bar)"></div> Automatic — ${auto} episodes</div>
-      </div>`;
-  }
-
-  // Awareness trend
-  const trendEl = document.getElementById('aw-trend-wrap');
-  // Group by ISO week
-  const weekMap = {};
-  episodes(entries).filter(e=>e.awareness).forEach(e => {
-    const d = new Date(e.timestamp);
-    const wk = getISOWeek(d);
-    if (!weekMap[wk]) weekMap[wk] = {conscious:0, automatic:0};
-    weekMap[wk][e.awareness] = (weekMap[wk][e.awareness]||0) + 1;
-  });
-  const wkKeys = Object.keys(weekMap).sort();
-  if (wkKeys.length < 3) {
-    trendEl.innerHTML = '<div class="sparse-state">Needs 3+ weeks of data to show trend.</div>';
-    awTrendChart = destroyChart(awTrendChart);
-  } else {
-    trendEl.innerHTML = '<canvas id="aw-trend-chart"></canvas>';
-    awTrendChart = destroyChart(awTrendChart);
-    const ctx2 = document.getElementById('aw-trend-chart').getContext('2d');
-    awTrendChart = new Chart(ctx2, {
-      type:'bar',
-      data:{
-        labels: wkKeys.map(w => 'Wk '+w.split('-W')[1]),
-        datasets:[
-          {label:'Conscious',data:wkKeys.map(w=>weekMap[w].conscious||0),backgroundColor:cssVar('--sage-bar'),borderRadius:4,borderSkipped:false},
-          {label:'Automatic',data:wkKeys.map(w=>weekMap[w].automatic||0),backgroundColor:cssVar('--warm-bar'),borderRadius:4,borderSkipped:false}
-        ]
-      },
-      options:{
-        responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{labels:{font:{family:'DM Sans',size:11},color:cssVar('--tx2'),boxWidth:12,boxHeight:12}}},
-        scales:{
-          x:{stacked:true,grid:{display:false},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu')}},
-          y:{stacked:true,grid:{color:cssVar('--bdr')},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),precision:0},beginAtZero:true}
-        }
-      }
-    });
-  }
-}
-
-function getISOWeek(d) {
-  const date = new Date(d.getTime());
-  date.setHours(0,0,0,0);
-  date.setDate(date.getDate()+3-(date.getDay()+6)%7);
-  const week1 = new Date(date.getFullYear(),0,4);
-  const wn = 1+Math.round(((date.getTime()-week1.getTime())/86400000-3+(week1.getDay()+6)%7)/7);
-  return `${date.getFullYear()}-W${String(wn).padStart(2,'0')}`;
-}
-
-// ─── TRIGGERS ───
-function renderBarList(containerId, pairs, colorClass, topN=10) {
-  const el = document.getElementById(containerId);
-  const top = pairs.slice(0, topN);
-  if (!top.length) { el.innerHTML = '<div class="empty-state"><div class="empty-text">None logged yet.</div></div>'; return; }
-  const max = top[0][1];
-  el.innerHTML = '<div class="bar-list">' +
-    top.map(([label, count]) =>
-      `<div class="bar-item">
-        <div class="bar-label" title="${label}">${label}</div>
-        <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${Math.round(count/max*100)}%"></div></div>
-        <div class="bar-count">${count}</div>
-      </div>`
-    ).join('') + '</div>';
-}
-
-function renderTriggers(entries) {
-  renderBarList('etrig-list', countItems(entries, 'emotional_triggers'), 'ac');
-  renderBarList('strig-list', countItems(entries, 'sensory_triggers'), 'sage');
-}
-
-function renderLocAct(entries) {
-  renderBarList('loc-list', countItems(entries, 'location'), 'warm', 8);
-  renderBarList('act-list', countItems(entries, 'activity'), 'warm', 8);
-}
-
-// ─── MOOD ───
-function renderMood(entries) {
-  const eps = episodes(entries);
-  const el = document.getElementById('mood-content');
-  const beforeCounts = {};
-  const afterCounts = {};
-  eps.forEach(e => {
-    splitField(e.mood_before).forEach(m => { beforeCounts[m]=(beforeCounts[m]||0)+1; });
-    splitField(e.mood_after).forEach(m => { afterCounts[m]=(afterCounts[m]||0)+1; });
-  });
-  const topBefore = Object.entries(beforeCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const topAfter = Object.entries(afterCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
-
-  if (!topBefore.length && !topAfter.length) {
-    el.innerHTML = '<div class="sparse-state">Log mood before and after a few episodes.</div>';
-    return;
-  }
-  const maxB = topBefore[0]?.[1] || 1;
-  const maxA = topAfter[0]?.[1] || 1;
-
-  const renderWords = (pairs, maxVal, cls) =>
-    pairs.map(([w,c]) => `<div class="mood-word-row">
-      <div class="mood-word">${w}</div>
-      <div class="mood-bar-track"><div class="mood-bar-fill ${cls}" style="width:${Math.round(c/maxVal*100)}%"></div></div>
-      <div class="mood-count">${c}</div>
-    </div>`).join('');
-
-  el.innerHTML = `<div class="mood-cols">
-    <div>
-      <div class="mood-col-label">Before</div>
-      <div class="mood-word-list">${renderWords(topBefore, maxB, 'before')}</div>
-    </div>
-    <div>
-      <div class="mood-col-label">After</div>
-      <div class="mood-word-list">${renderWords(topAfter, maxA, 'after')}</div>
-    </div>
-  </div>`;
-}
-
-// ─── URGE ARC ───
-function renderUrgeArc(entries) {
-  const eps = episodes(entries);
-  const el = document.getElementById('urge-arc-content');
-  const withBefore = eps.filter(e => e.urge_before > 0);
-  const withAfter = eps.filter(e => e.urge_after != null && e.urge_after > 0);
-
-  if (withBefore.length < 3) {
-    el.innerHTML = '<div class="sparse-state">Log urge levels for a few episodes.</div>';
-    return;
-  }
-  const avgBefore = avg(withBefore.map(e=>e.urge_before)).toFixed(1);
-  const avgAfter = withAfter.length >= 3 ? avg(withAfter.map(e=>e.urge_after)).toFixed(1) : null;
-  const diff = avgAfter ? (parseFloat(avgAfter) - parseFloat(avgBefore)).toFixed(1) : null;
-  const arrow = diff ? (parseFloat(diff) < 0 ? '↓' : parseFloat(diff) > 0 ? '↑' : '→') : '→';
-
-  el.innerHTML = `<div class="urge-arc">
-    <div class="urge-block">
-      <div class="urge-num">${avgBefore}</div>
-      <div class="urge-label">Before</div>
-    </div>
-    <div class="urge-arrow">${arrow}</div>
-    <div class="urge-block">
-      <div class="urge-num">${avgAfter || '—'}</div>
-      <div class="urge-label">After</div>
-    </div>
-  </div>
-  ${diff ? `<div style="text-align:center;font-size:11px;color:var(--mu);margin-top:4px">Average change: ${diff > 0 ? '+':''}${diff} per episode</div>` : ''}`;
-}
-
-// ─── BEHAVIOR CHAIN ───
-function renderChain(entries) {
-  const pickEps = episodes(entries).filter(e => e.bfrb_type === 'picking' && e.completion);
-  const el = document.getElementById('chain-content');
-  if (pickEps.length < 3) {
-    el.innerHTML = '<div class="sparse-state">Log a few picking episodes with completion filled in.</div>';
-    return;
-  }
-  const counts = {released:0, examined:0, oral:0, ingested:0};
-  pickEps.forEach(e => { if (counts[e.completion] !== undefined) counts[e.completion]++; });
-  const total = pickEps.length;
-  const stages = [
-    {key:'released', label:'Released / discarded'},
-    {key:'examined', label:'Examined it'},
-    {key:'oral', label:'Oral contact'},
-    {key:'ingested', label:'Ingested'},
-  ];
-  el.innerHTML = `<div class="chain-grid">${
-    stages.map(s => `<div class="chain-cell">
-      <div class="chain-pct">${Math.round(counts[s.key]/total*100)}%</div>
-      <div class="chain-lbl">${s.label}</div>
-    </div>`).join('')
-  }</div><div style="font-size:10px;color:var(--mu);margin-top:10px">Based on ${total} picking episodes</div>`;
-}
-
-// ─── INTERVENTIONS ───
-function renderInterventions(entries) {
-  const withTried = entries.filter(e => e.tried_intervention && e.interventions);
-
-  // What was tried
-  renderBarList('int-tried-list', countItems(withTried, 'interventions'), 'sage', 10);
-
-  // Average effectiveness per intervention
-  const effMap = {};
-  entries.filter(e => e.tried_intervention && e.interventions && e.intervention_effectiveness).forEach(e => {
-    splitField(e.interventions).forEach(iv => {
-      if (!effMap[iv]) effMap[iv] = [];
-      effMap[iv].push(e.intervention_effectiveness);
-    });
-  });
-  const effPairs = Object.entries(effMap)
-    .map(([k, vals]) => [k, parseFloat(avg(vals).toFixed(1))])
-    .sort((a,b) => b[1]-a[1]);
-
-  const effEl = document.getElementById('int-eff-list');
-  if (!effPairs.length) {
-    effEl.innerHTML = '<div class="sparse-state">Rate effectiveness on a few entries.</div>';
-  } else {
-    effEl.innerHTML = '<div class="bar-list">' +
-      effPairs.map(([label, score]) =>
-        `<div class="bar-item">
-          <div class="bar-label" title="${label}">${label}</div>
-          <div class="bar-track"><div class="bar-fill warm" style="width:${Math.round(score/5*100)}%"></div></div>
-          <div class="bar-count">${score}</div>
-        </div>`
-      ).join('') + '</div>' +
-      '<div style="font-size:10px;color:var(--mu);margin-top:8px">Scores out of 5</div>';
-  }
-
-  // Effectiveness over time
-  const trendEl = document.getElementById('eff-trend-wrap');
-  const weekEff = {};
-  entries.filter(e => e.tried_intervention && e.intervention_effectiveness).forEach(e => {
-    const wk = getISOWeek(new Date(e.timestamp));
-    if (!weekEff[wk]) weekEff[wk] = [];
-    weekEff[wk].push(e.intervention_effectiveness);
-  });
-  const wkKeys = Object.keys(weekEff).sort();
-  if (wkKeys.length < 3) {
-    trendEl.innerHTML = '<div class="sparse-state">Needs 3+ weeks of rated entries.</div>';
-    effTrendChart = destroyChart(effTrendChart);
-  } else {
-    trendEl.innerHTML = '<canvas id="eff-trend-chart"></canvas>';
-    effTrendChart = destroyChart(effTrendChart);
-    const ctx = document.getElementById('eff-trend-chart').getContext('2d');
-    effTrendChart = new Chart(ctx, {
-      type:'line',
-      data:{
-        labels: wkKeys.map(w => 'Wk '+w.split('-W')[1]),
-        datasets:[{
-          label:'Avg effectiveness',
-          data: wkKeys.map(w => parseFloat(avg(weekEff[w]).toFixed(2))),
-          borderColor: cssVar('--warm'),
-          backgroundColor: cssVar('--warml'),
-          borderWidth:2,
-          pointBackgroundColor: cssVar('--warm'),
-          pointRadius:4,
-          tension:0.3,
-          fill:true
-        }]
-      },
-      options:{
-        responsive:true, maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu')}},
-          y:{min:1,max:5,grid:{color:cssVar('--bdr')},ticks:{font:{family:'DM Sans',size:10},color:cssVar('--mu'),stepSize:1}}
-        }
-      }
-    });
-  }
-}
-
-// ─── TABLE ───
-let tableFilteredEntries = [];
-
-function applyFilters() {
-  const bfrb = document.getElementById('filter-bfrb').value;
-  const type = document.getElementById('filter-type').value;
-  const awareness = document.getElementById('filter-awareness').value;
-  tableFilteredEntries = filteredEntries.filter(e =>
-    (!bfrb || e.bfrb_type === bfrb) &&
-    (!type || e.entry_type === type) &&
-    (!awareness || e.awareness === awareness)
-  );
-  renderTableRows(tableFilteredEntries);
-}
-window.applyFilters = applyFilters;
-
-function clearFilters() {
-  document.getElementById('filter-bfrb').value = '';
-  document.getElementById('filter-type').value = '';
-  document.getElementById('filter-awareness').value = '';
-  applyFilters();
-}
-window.clearFilters = clearFilters;
-
-function renderTable(entries) {
-  tableFilteredEntries = entries;
-  renderTableRows(entries);
-}
-
-function renderTableRows(entries) {
-  const tbody = document.getElementById('entry-tbody');
-  document.getElementById('rc-count').textContent = `${entries.length} entr${entries.length===1?'y':'ies'}`;
-
-  if (!entries.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--mu);padding:32px">No entries match the current filters.</td></tr>';
-    return;
-  }
-
-  tbody.innerHTML = entries.map((e, i) => {
-    const dt = new Date(e.timestamp);
-    const dateStr = dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    const timeStr = dt.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-    const typeLabel = e.entry_type==='did'?'Did it':e.entry_type==='resisted'?'Resisted':'Near miss';
-    const typeCls = e.entry_type==='did'?'tc-ep':e.entry_type==='resisted'?'tc-re':'tc-ne';
-    const bfrbLabel = e.bfrb_type==='picking'?'Skin picking':'Nail / skin biting';
-    const topTrigger = splitField(e.emotional_triggers)[0] || splitField(e.sensory_triggers)[0] || '—';
-    const topTriggerShort = topTrigger.length > 22 ? topTrigger.slice(0,20)+'…' : topTrigger;
-    const locShort = (e.location||'—').length > 22 ? (e.location||'—').slice(0,20)+'…' : (e.location||'—');
-
-    return `<tr onclick="toggleRow(${i})">
-      <td><span style="font-weight:600">${dateStr}</span><br><span class="td-muted" style="font-size:11px">${timeStr}</span></td>
-      <td>${bfrbLabel}</td>
-      <td><span class="tc ${typeCls}">${typeLabel}</span></td>
-      <td class="td-muted">${locShort}</td>
-      <td class="td-muted">${topTriggerShort}</td>
-      <td>${e.urge_before||'—'}</td>
-      <td>${e.urge_after||'—'}</td>
-    </tr>
-    <tr class="row-detail" id="row-detail-${i}">
-      <td colspan="7">
-        <div class="detail-grid">
-          ${e.awareness ? `<div class="detail-field"><div class="detail-key">Awareness</div><div class="detail-val">${e.awareness}</div></div>` : ''}
-          ${e.body_areas ? `<div class="detail-field"><div class="detail-key">Body areas</div><div class="detail-val">${e.body_areas}</div></div>` : ''}
-          ${e.picked_what ? `<div class="detail-field"><div class="detail-key">Picked</div><div class="detail-val">${e.picked_what}</div></div>` : ''}
-          ${e.bite_what ? `<div class="detail-field"><div class="detail-key">Bite — what</div><div class="detail-val">${e.bite_what}</div></div>` : ''}
-          ${e.bite_fingers ? `<div class="detail-field"><div class="detail-key">Fingers</div><div class="detail-val">${e.bite_fingers}</div></div>` : ''}
-          ${e.mirror ? `<div class="detail-field"><div class="detail-key">Mirror</div><div class="detail-val">${e.mirror}</div></div>` : ''}
-          ${e.completion ? `<div class="detail-field"><div class="detail-key">Completion</div><div class="detail-val">${e.completion}</div></div>` : ''}
-          ${e.severity ? `<div class="detail-field"><div class="detail-key">Skin impact</div><div class="detail-val">${e.severity}</div></div>` : ''}
-          ${e.duration||e.bite_duration ? `<div class="detail-field"><div class="detail-key">Duration</div><div class="detail-val">${e.duration||e.bite_duration}</div></div>` : ''}
-          ${e.activity ? `<div class="detail-field"><div class="detail-key">Activity</div><div class="detail-val">${e.activity}</div></div>` : ''}
-          ${e.emotional_triggers ? `<div class="detail-field"><div class="detail-key">Emotional triggers</div><div class="detail-val">${e.emotional_triggers}</div></div>` : ''}
-          ${e.sensory_triggers ? `<div class="detail-field"><div class="detail-key">Sensory triggers</div><div class="detail-val">${e.sensory_triggers}</div></div>` : ''}
-          ${e.mood_before ? `<div class="detail-field"><div class="detail-key">Mood before</div><div class="detail-val">${e.mood_before}</div></div>` : ''}
-          ${e.mood_after ? `<div class="detail-field"><div class="detail-key">Mood after</div><div class="detail-val">${e.mood_after}</div></div>` : ''}
-          ${e.interventions ? `<div class="detail-field"><div class="detail-key">Interventions tried</div><div class="detail-val">${e.interventions}</div></div>` : ''}
-          ${e.intervention_effectiveness ? `<div class="detail-field"><div class="detail-key">Effectiveness</div><div class="detail-val">${e.intervention_effectiveness} / 5</div></div>` : ''}
-          ${e.notes ? `<div class="detail-field" style="grid-column:1/-1"><div class="detail-key">Notes</div><div class="detail-val">${e.notes}</div></div>` : ''}
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-window.toggleRow = i => {
-  const row = document.getElementById('row-detail-'+i);
-  if (row) row.classList.toggle('on');
-};
-
-window.filterTableByDate = ds => {
-  document.querySelector('.section-title:last-of-type')?.scrollIntoView({behavior:'smooth'});
-  tableFilteredEntries = filteredEntries.filter(e => isoDate(e.timestamp) === ds);
-  renderTableRows(tableFilteredEntries);
-  document.getElementById('rc-count').textContent += ` (filtered to ${ds})`;
-};
-
-// ─── REBUILD CHARTS ON THEME CHANGE ───
-function rebuildCharts() {
-  const entries = getFiltered();
-  renderTimeOfDay(entries);
-  renderAwareness(entries);
-  renderInterventions(entries);
-}
-window.rebuildCharts = rebuildCharts;
-
-// ─── TOAST ───
-window.toast = (msg,isErr=false,isOk=false) => {
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast'+(isErr?' err':'')+(isOk?' ok':'');
-  void t.offsetWidth; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3000);
-};
-
-// ─── IMPORT ───
-
-// --- Field mappings for old CSV format auto-detection ---
-const SENSORY_TRIGGERS = new Set(['felt a texture','saw in mirror','idle hands','felt texture']);
-
-function classifyTriggers(str) {
-  if (!str) return { emotional: '', sensory: '' };
-  const parts = str.split(',').map(s => s.trim()).filter(Boolean);
-  const sensory = parts.filter(t => SENSORY_TRIGGERS.has(t.toLowerCase()));
-  const emotional = parts.filter(t => !SENSORY_TRIGGERS.has(t.toLowerCase()));
-  return { emotional: emotional.join(', '), sensory: sensory.join(', ') };
-}
-
-function mapOldRow(r) {
-  // Detect old format by presence of 'trigger' column (not 'emotional_triggers')
-  const outcome = (r.outcome || '').toLowerCase();
-  const entryType = outcome === 'stopped early' ? 'near' : 'did';
-  const { emotional, sensory } = classifyTriggers(r.trigger || '');
-  const ivRaw = (r.intervention || '').trim();
-  const tried = ivRaw && ivRaw.toLowerCase() !== 'nothing this time';
-  const awareness = (r.awareness || '').toLowerCase() === 'conscious' ? 'conscious' : 'automatic';
-  const urge = parseInt(r.urge_strength);
-  return {
-    timestamp: r.timestamp,
-    entry_type: entryType,
-    bfrb_type: r.bfrb_type || 'picking',
-    awareness,
-    location: r.location || '',
-    activity: r.activity || '',
-    body_areas: r.body_area || r.body_areas || '',
-    picked_what: r.physical_target || r.picked_what || '',
-    mirror: r.mirror || '',
-    completion: r.completion || '',
-    severity: r.severity || '',
-    duration: r.duration || '',
-    urge_before: isNaN(urge) ? (parseInt(r.urge_before) || '') : urge,
-    urge_after: parseInt(r.urge_after) || '',
-    emotional_triggers: emotional || r.emotional_triggers || '',
-    sensory_triggers: sensory || r.sensory_triggers || '',
-    mood_before: r.mood || r.mood_before || '',
-    mood_after: r.mood_after || '',
-    tried_intervention: tried ? true : (r.tried_intervention === 'true'),
-    interventions: tried ? ivRaw : (r.interventions || ''),
-    intervention_effectiveness: parseFloat(r.intervention_effectiveness) || '',
-    notes: r.notes || '',
-  };
-}
-
-function mapNewRow(r) {
-  // New format — mostly pass through, just coerce types
-  const urge_before = parseInt(r.urge_before);
-  const urge_after = parseInt(r.urge_after);
-  const eff = parseFloat(r.intervention_effectiveness);
-  return {
-    timestamp: r.timestamp,
-    entry_type: r.entry_type,
-    bfrb_type: r.bfrb_type || 'picking',
-    awareness: r.awareness,
-    location: r.location || '',
-    activity: r.activity || '',
-    body_areas: r.body_areas || '',
-    picked_what: r.picked_what || '',
-    bite_what: r.bite_what || '',
-    bite_fingers: r.bite_fingers || '',
-    mirror: r.mirror || '',
-    completion: r.completion || '',
-    severity: r.severity || '',
-    duration: r.duration || '',
-    urge_before: isNaN(urge_before) ? '' : urge_before,
-    urge_after: isNaN(urge_after) ? '' : urge_after,
-    emotional_triggers: r.emotional_triggers || '',
-    sensory_triggers: r.sensory_triggers || '',
-    mood_before: r.mood_before || '',
-    mood_after: r.mood_after || '',
-    tried_intervention: r.tried_intervention === 'true' || r.tried_intervention === true,
-    interventions: r.interventions || '',
-    intervention_effectiveness: isNaN(eff) ? '' : eff,
-    notes: r.notes || '',
-  };
-}
-
-// Minimal CSV parser (handles quoted fields with commas)
-function parseCSV(text) {
-  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim().split('\n');
-  if (lines.length < 2) return [];
-
-  function parseLine(line) {
-    const fields = [];
-    let cur = '', inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (inQ) {
-        if (c === '"' && line[i+1] === '"') { cur += '"'; i++; }
-        else if (c === '"') inQ = false;
-        else cur += c;
-      } else {
-        if (c === '"') inQ = true;
-        else if (c === ',') { fields.push(cur); cur = ''; }
-        else cur += c;
+function renderTriggers(data) {
+  destroyChart('chart-triggers');
+  const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  const ctx = document.getElementById('chart-triggers').getContext('2d');
+  chartInstances['chart-triggers'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(i => i[0].split('/')[0].trim()), // Shorten label
+      datasets: [{
+        data: sorted.map(i => i[1]),
+        backgroundColor: colors.warm,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+        y: { grid: { display: false } }
       }
     }
-    fields.push(cur);
-    return fields;
-  }
-
-  const headers = parseLine(lines[0]);
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const vals = parseLine(lines[i]);
-    const obj = {};
-    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim(); });
-    rows.push(obj);
-  }
-  return { headers, rows };
+  });
 }
 
-let _parsedRows = [];
+function renderTools(data) {
+  destroyChart('chart-tools');
+  // Calculate win rate percentage
+  const sorted = Object.entries(data)
+    .filter(i => i[1].attempts > 0)
+    .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100)])
+    .sort((a,b) => b[1] - a[1])
+    .slice(0, 5);
 
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('drop-zone').classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if (file) handleFile(file);
+  const ctx = document.getElementById('chart-tools').getContext('2d');
+  chartInstances['chart-tools'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(i => i[0]),
+      datasets: [{
+        label: 'Win Rate %',
+        data: sorted.map(i => i[1]),
+        backgroundColor: colors.sage,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      plugins: { 
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => ctx.raw + '% success' } }
+      },
+      scales: {
+        x: { max: 100, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
 }
-window.handleDrop = handleDrop;
-
-function handleFile(file) {
-  if (!file || !file.name.endsWith('.csv')) {
-    showImportWarn('Please select a .csv file.');
-    return;
-  }
-  document.getElementById('drop-label').textContent = file.name;
-  const reader = new FileReader();
-  reader.onload = e => processCSV(e.target.result);
-  reader.readAsText(file);
-}
-window.handleFile = handleFile;
-
-function processCSV(text) {
-  const result = parseCSV(text);
-  if (!result || !result.rows.length) {
-    showImportWarn('Could not read any rows from this file. Make sure it is a valid CSV.');
-    return;
-  }
-  const { headers, rows } = result;
-
-  // Detect format: old has 'trigger', 'body_area', 'physical_target'; new has 'emotional_triggers'
-  const isOld = headers.includes('trigger') || headers.includes('body_area');
-
-  try {
-    _parsedRows = rows.map(r => isOld ? mapOldRow(r) : mapNewRow(r))
-      .filter(r => r.timestamp && r.entry_type);
-  } catch(err) {
-    showImportWarn('Error mapping rows: ' + err.message);
-    return;
-  }
-
-  if (!_parsedRows.length) {
-    showImportWarn('No valid rows found after mapping. Check the file has a timestamp and entry_type column.');
-    return;
-  }
-
-  // Check for duplicates against existing entries
-  const existingTs = new Set((window.ALL_ENTRIES || []).map(e => e.timestamp));
-  const dupes = _parsedRows.filter(r => existingTs.has(r.timestamp)).length;
-
-  // Populate preview
-  const dates = _parsedRows.map(r => r.timestamp.slice(0,10)).sort();
-  document.getElementById('prev-rows').textContent = _parsedRows.length;
-  document.getElementById('prev-dates').textContent = `${dates[0]} → ${dates[dates.length-1]}`;
-  document.getElementById('prev-did').textContent = _parsedRows.filter(r=>r.entry_type==='did').length;
-  document.getElementById('prev-near').textContent = _parsedRows.filter(r=>r.entry_type==='near').length;
-  document.getElementById('prev-resist').textContent = _parsedRows.filter(r=>r.entry_type==='resisted').length;
-  document.getElementById('import-preview').classList.add('on');
-
-  if (dupes > 0) {
-    showImportWarn(`⚠ ${dupes} row${dupes>1?'s':''} have the same timestamp as existing entries and will be added as duplicates. If you've already imported this file, cancel and don't import again.`);
-  } else {
-    document.getElementById('import-warn').classList.remove('on');
-  }
-
-  document.getElementById('import-confirm-btn').disabled = false;
-}
-
-function showImportWarn(msg) {
-  const el = document.getElementById('import-warn');
-  el.textContent = msg;
-  el.classList.add('on');
-}
-
-async function runImport() {
-  if (!_parsedRows.length) return;
-  if (!window._uid) { showImportWarn('You must be signed in to import.'); return; }
-
-  const btn = document.getElementById('import-confirm-btn');
-  btn.disabled = true;
-  btn.textContent = 'Importing…';
-
-  const progress = document.getElementById('import-progress');
-  progress.classList.add('on');
-
-  window._importProgress = (done, total) => {
-    const pct = Math.round(done / total * 100);
-    document.getElementById('prog-fill').style.width = pct + '%';
-    document.getElementById('prog-label').textContent = `${done} of ${total} entries saved…`;
-  };
-
-  try {
-    await window._doImport(_parsedRows);
-    document.getElementById('prog-label').textContent = `✓ ${_parsedRows.length} entries imported successfully`;
-    document.getElementById('prog-fill').style.width = '100%';
-    btn.textContent = 'Done';
-    setTimeout(() => { closeImport(); toast(`${_parsedRows.length} entries imported`, false, true); }, 1200);
-  } catch(err) {
-    console.error(err);
-    const msg = err.code === 'permission-denied'
-      ? 'Permission denied — make sure Firestore security rules allow writes for your account.'
-      : 'Import failed: ' + err.message;
-    showImportWarn(msg);
-    btn.disabled = false;
-    btn.textContent = 'Import entries';
-    progress.classList.remove('on');
-  }
-}
-window.runImport = runImport;
-
-function openImport() {
-  _parsedRows = [];
-  document.getElementById('import-modal').classList.add('on');
-  document.getElementById('import-preview').classList.remove('on');
-  document.getElementById('import-warn').classList.remove('on');
-  document.getElementById('import-progress').classList.remove('on');
-  document.getElementById('import-confirm-btn').disabled = true;
-  document.getElementById('import-confirm-btn').textContent = 'Import entries';
-  document.getElementById('drop-label').textContent = 'Drop CSV here or tap to browse';
-  document.getElementById('csv-input').value = '';
-}
-window.openImport = openImport;
-
-function closeImport() {
-  document.getElementById('import-modal').classList.remove('on');
-}
-window.closeImport = closeImport;
-
-// Close on backdrop click
-document.getElementById('import-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeImport();
-});
-
-// ─── INIT ───
-window.renderAll = renderAll;
 </script>
+<script src="nav.js"></script>
 </body>
 </html>
