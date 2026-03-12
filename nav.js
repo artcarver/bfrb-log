@@ -15,6 +15,9 @@
     document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
     localStorage.setItem('gw-theme', isDark ? '' : 'dark');
     localStorage.setItem('theme', isDark ? '' : 'dark');
+    // Keep PWA theme-color in sync
+    const tcMeta = document.getElementById('theme-color-meta');
+    if (tcMeta) tcMeta.setAttribute('content', isDark ? '#F4EDE3' : '#1E1710');
   };
 
   // 2. FIREBASE STUBS
@@ -37,7 +40,7 @@
           <a href="index.html" class="nav-link ${isPage('index.html') ? 'active' : ''}">Log</a>
           <a href="tracker.html" class="nav-link ${isPage('tracker.html') ? 'active' : ''}">Patterns</a>
           <a href="interventions.html" class="nav-link ${isPage('interventions.html') ? 'active' : ''}">Tools</a>
-          <a href="context.html" class="nav-link ${isPage('context.html') ? 'active' : ''}">Context</a>
+          <a href="context.html" class="nav-link ${isPage('context.html') ? 'active' : ''}">Profile</a>
         </div>
         <div class="nav-right">
           <button id="sign-btn-nav" class="sign-btn" onclick="signInWithGoogle()" style="display:none">Sign in</button>
@@ -46,10 +49,10 @@
           </button>
           <div class="profile-menu" id="profile-menu">
             <button class="profile-menu-item" onclick="toggleTheme();toggleProfileMenu()">
-              <span class="profile-menu-icon">&#9680;</span> Toggle Theme
+              <span class="profile-menu-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span> Theme
             </button>
             <button class="profile-menu-item" onclick="signOut()">
-              <span class="profile-menu-icon">&rarr;</span> Sign out
+              <span class="profile-menu-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span> Sign out
             </button>
           </div>
         </div>
@@ -223,7 +226,12 @@
       }
     });
 
-    setInterval(syncAuthUI, 300);
+    // Watch #app class changes instead of polling
+    const appEl = document.getElementById('app');
+    if (appEl) {
+      const observer = new MutationObserver(syncAuthUI);
+      observer.observe(appEl, { attributes: true, attributeFilter: ['class'] });
+    }
     syncAuthUI();
   }
 

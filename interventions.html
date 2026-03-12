@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Access evidence-based BFRB intervention tools and timers.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Groundwork">
+    <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork - Tools</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -46,8 +52,9 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 /* HOT STATE BUTTONS - EMERGENCY LEVERS */
 .hot-grid{display:grid;grid-template-columns:1fr;gap:16px}
 @media(min-width:500px){.hot-grid{grid-template-columns:1fr 1fr}}
-.hot-btn {   background: var(--card);   border: 2.5px solid var(--bdr);   border-radius: var(--r);   padding: 24px 16px;   text-align: center;   cursor: pointer;   transition: var(--tr);   display: flex;   flex-direction: column;   align-items: center;   justify-content: center;   gap: 14px;   box-shadow: var(--s1);   position: relative;   overflow: hidden; }
+.hot-btn {   background: var(--card);   border: 2px solid var(--bdr);   border-radius: var(--r);   padding: 24px 16px;   text-align: center;   cursor: pointer;   transition: var(--tr);   display: flex;   flex-direction: column;   align-items: center;   justify-content: center;   gap: 14px;   box-shadow: var(--s1);   position: relative;   overflow: hidden; }
 .hot-btn:hover{border-color:var(--ac);transform:translateY(-2px);box-shadow:var(--s2)}
+.hot-btn:active{transform:translateY(0);box-shadow:var(--s1);border-color:var(--ac)}
 .hot-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .hot-icon.ac{background:var(--acl);color:var(--ac)}
 .hot-icon.sage{background:var(--sagel);color:var(--sage)}
@@ -59,7 +66,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
 /* COLD STATE CARDS */
 .card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:16px}
-.card-title{font-size:12px;font-weight:700;color:var(--tx);margin-bottom:16px;text-transform:uppercase;letter-spacing:.05em}
+.card-title{font-family:'Lora',serif;font-size:16px;font-weight:500;color:var(--tx);margin-bottom:16px}
 
 /* TAGS FOR PREFS */
 .grid-auto{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:10px}
@@ -69,7 +76,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
 /* ACTIVE CHECKLIST */
 .check-list{display:flex;flex-direction:column;gap:10px}
-.check-item{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);cursor:pointer;user-select:none;transition:var(--tr);box-shadow:var(--s1)}
+.check-item{display:flex;align-items:center;gap:16px;padding:16px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);cursor:pointer;user-select:none;transition:var(--tr);box-shadow:var(--s1);touch-action:manipulation}
 .check-box{width:24px;height:24px;border:2px solid var(--mu);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--tr);background:var(--card)}
 .check-item.checked{background:var(--sagem);border-color:var(--sage);box-shadow:none}
 .check-item.checked .check-box{background:var(--sage);border-color:var(--sage)}
@@ -79,12 +86,12 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 .check-item.checked .check-text{font-weight:600;color:var(--tx)}
 
 /* FULLSCREEN TIMER OVERLAY */
-.timer-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:900;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
-.timer-overlay.on{display:flex}
+.timer-overlay{position:fixed;inset:0;background:var(--bg);z-index:900;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;display:flex;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
+.timer-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
 .timer-close{position:absolute;top:24px;right:24px;background:none;border:none;font-size:36px;color:var(--mu);cursor:pointer;line-height:1;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center}
 .timer-inst{font-family:'Lora',serif;font-size:26px;color:var(--tx);line-height:1.4;margin-bottom:40px;max-width:400px}
-.timer-readout{font-family:'DM Sans',sans-serif;font-size:80px;font-weight:300;color:var(--ac);line-height:1;margin-bottom:40px;font-variant-numeric:tabular-nums}
-@media(max-width:400px){.timer-readout{font-size:64px} .timer-inst{font-size:22px}}
+.timer-readout{font-family:'DM Sans',sans-serif;font-size:clamp(52px,18vw,80px);font-weight:300;color:var(--ac);line-height:1;margin-bottom:40px;font-variant-numeric:tabular-nums}
+@media(max-width:400px){.timer-inst{font-size:22px}}
 .timer-readout.sage{color:var(--sage)}
 .timer-readout.warm{color:var(--warm)}
 .timer-readout.mu{color:var(--tx2)}
@@ -93,10 +100,22 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 .timer-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--pill);padding:16px 20px;font-size:15px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);min-height:56px;width:100%}
 .timer-btn:hover{border-color:var(--ac);color:var(--ac)}
 .timer-btn.done{background:var(--sage);border-color:var(--sage);color:#fff}
-.timer-btn-ghost{background:transparent;border:1.5px solid var(--bdr2);border-radius:var(--pill);padding:14px 20px;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);width:100%}
+.timer-btn-ghost{background:transparent;border:1.5px solid var(--bdr);border-radius:var(--pill);padding:14px 20px;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);width:100%}
 .timer-btn-ghost:hover{border-color:var(--tx);color:var(--tx)}
 </style>
-</head>
+
+    <script>
+      // Keep theme-color meta in sync with colour scheme
+      (function() {
+        const stored = localStorage.getItem('gw-theme');
+        if (stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          const m = document.getElementById('theme-color-meta');
+          if (m) m.setAttribute('content', '#1E1710');
+        }
+      })();
+    </script>
+  </head>
 <body>
 
 <div class="auth-screen on" id="auth-screen">
@@ -114,7 +133,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
   <div class="sec-hd">
     <div class="sec-title">Acute Interventions</div>
-    <div class="sec-note">Execute immediately</div>
+    <div class="sec-note">Use during active urge</div>
   </div>
 
   <div class="hot-grid">
@@ -124,7 +143,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       </div>
       <div>
         <div class="hot-title">Motor Block (CR)</div>
-        <div class="hot-sub">Hands occupied or mouth closed. 90 sec.</div>
+        <div class="hot-sub">Clench fists or press lips together. Competing response, 90 sec.</div>
       </div>
     </button>
 
@@ -134,7 +153,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       </div>
       <div>
         <div class="hot-title">Decoupling Redirect</div>
-        <div class="hot-sub">Mimic the motion, then forcefully redirect. 60 sec.</div>
+        <div class="hot-sub">Initiate the movement, redirect before contact. Repeat. 60 sec.</div>
       </div>
     </button>
 
@@ -144,7 +163,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
       </div>
       <div>
         <div class="hot-title">Urge Surf</div>
-        <div class="hot-sub">Watch the feeling peak and fall without acting. 5 min.</div>
+        <div class="hot-sub">Observe the urge without acting. It will peak and subside. 5 min.</div>
       </div>
     </button>
 
@@ -153,8 +172,8 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
         <svg><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
       </div>
       <div>
-        <div class="hot-title">Cognitive Unhook</div>
-        <div class="hot-sub">Break the permission-giving trance. 30 sec.</div>
+        <div class="hot-title">Cognitive Defusion</div>
+        <div class="hot-sub">The urge is neurological, not a directive. It will pass without action. 30 sec.</div>
       </div>
     </button>
 
@@ -163,8 +182,8 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
         <svg><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
       </div>
       <div>
-        <div class="hot-title">Sensory Shock</div>
-        <div class="hot-sub">Grip ice or splash cold water on face. 60 sec.</div>
+        <div class="hot-title">Tactile Substitute</div>
+        <div class="hot-sub">Grip a textured object firmly. Redirect sensory focus. 60 sec.</div>
       </div>
     </button>
 
@@ -196,13 +215,13 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
   </div>
 
   <div class="card">
-    <div class="card-title">Target: Deep Pressure & Pain</div>
+    <div class="card-title">Target: Deep Pressure & Sensation</div>
     <div class="grid-auto">
       <div class="tag" onclick="togglePref(this)">Spiky massage ring</div>
       <div class="tag" onclick="togglePref(this)">Chewable silicone</div>
-      <div class="tag" onclick="togglePref(this)">Gripping ice</div>
       <div class="tag" onclick="togglePref(this)">Tension band</div>
       <div class="tag" onclick="togglePref(this)">Strong mints</div>
+      <div class="tag" onclick="togglePref(this)">Rough textured cloth</div>
     </div>
   </div>
 
@@ -218,8 +237,8 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
   </div>
 
   <div class="sec-hd">
-    <div class="sec-title">Active Defenses</div>
-    <div class="sec-note">Lock in environmental barriers</div>
+    <div class="sec-title">Stimulus Control</div>
+    <div class="sec-note">Environmental barriers</div>
   </div>
 
   <div class="check-list">
@@ -255,13 +274,14 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
   
   <div class="timer-actions">
     <button class="timer-btn" id="timer-action" onclick="togglePause()">Pause Timer</button>
-    <button class="timer-btn-ghost" id="timer-fail" onclick="logFail()">Friction Failed: Log Episode</button>
+    <button class="timer-btn-ghost" id="timer-fail" onclick="logFail()">Intervention didn't hold — log episode</button>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -273,6 +293,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
@@ -291,34 +312,46 @@ onAuthStateChanged(auth, user => {
 window.togglePref = (el) => { el.classList.toggle('on'); savePrefs(); };
 window.toggleCheck = (el) => { el.classList.toggle('checked'); savePrefs(); };
 
+let _savePrefTimer = null;
 function savePrefs() {
-  const onTags = Array.from(document.querySelectorAll('.tag.on')).map(el => el.textContent.trim());
-  const checks = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('checked'));
-  localStorage.setItem('gw-tools-prefs', JSON.stringify({ tags: onTags, checks }));
+  if (!window._uid) return;
+  clearTimeout(_savePrefTimer);
+  _savePrefTimer = setTimeout(async () => {
+    const onTags = Array.from(document.querySelectorAll('.tag.on')).map(el => el.textContent.trim());
+    const checks = Array.from(document.querySelectorAll('.check-item')).map(el => el.classList.contains('checked'));
+    try {
+      await setDoc(doc(db, 'users', window._uid, 'prefs', 'tools'), { tags: onTags, checks });
+    } catch(e) {
+      console.error('Failed to save prefs:', e);
+    }
+  }, 800);
 }
 
-function loadPrefs() {
+async function loadPrefs() {
   try {
-    const data = JSON.parse(localStorage.getItem('gw-tools-prefs') || '{"tags":[],"checks":[]}');
+    const snap = await getDoc(doc(db, 'users', window._uid, 'prefs', 'tools'));
+    const data = snap.exists() ? snap.data() : { tags: [], checks: [] };
     document.querySelectorAll('.tag').forEach(el => {
-      if (data.tags.includes(el.textContent.trim())) el.classList.add('on');
+      if ((data.tags || []).includes(el.textContent.trim())) el.classList.add('on');
     });
     document.querySelectorAll('.check-item').forEach((el, i) => {
-      if (data.checks[i]) el.classList.add('checked');
+      if ((data.checks || [])[i]) el.classList.add('checked');
     });
-  } catch(e) {}
+  } catch(e) {
+    console.error('Failed to load prefs:', e);
+  }
 }
 
 let timerInterval = null;
 let currentSeconds = 0;
 
 const modes = {
-  motor: { sec: 90, class: 'ac', text: 'Clench fists or seal lips. Anchor them and hold.' },
-  decouple: { sec: 60, class: 'ac', text: 'Mimic the motion. Accelerate away forcefully before contact. Repeat.' },
-  surf: { sec: 300, class: 'sage', text: 'Locate the physical urge. Watch it rise and fall without acting.' },
-  unhook: { sec: 30, class: 'mu', text: 'The urge is a neurological misfire, not a command. Step away.' },
-  shock: { sec: 60, class: 'sage', text: 'Grip ice tightly or splash freezing water on your face. Focus on the cold.' },
-  ground: { sec: 120, class: 'warm', text: 'Feet flat. Inhale 4, hold 7, exhale 8.' }
+  motor: { sec: 90, class: 'ac', text: 'Clench both fists or press lips firmly together. Hold the competing response.' },
+  decouple: { sec: 60, class: 'ac', text: 'Begin the movement toward the target area. Redirect forcefully before contact. Repeat.' },
+  surf: { sec: 300, class: 'sage', text: 'Locate the urge as a physical sensation. Observe it without acting. It will peak and pass.' },
+  unhook: { sec: 30, class: 'mu', text: 'The urge is a neurological signal, not a directive. You do not have to act on it.' },
+  shock: { sec: 60, class: 'sage', text: 'Grip a textured object — stress ball, rubber band, rough fabric. Keep focus on the sensation.' },
+  ground: { sec: 120, class: 'warm', text: 'Feet flat on the floor. Inhale 4 counts, hold 7, exhale 8.' }
 };
 
 window.openTimer = (type) => {
@@ -367,11 +400,21 @@ function finishTimer() {
   timerInterval = null;
   
   const btn = document.getElementById('timer-action');
-  btn.className = 'timer-btn done';
-  btn.textContent = 'Intervention Successful: Log It';
-  btn.onclick = window.logSuccess;
-
-  document.getElementById('timer-fail').style.display = 'none';
+  const readout = document.getElementById('timer-readout');
+  
+  // Brief acknowledgment moment before showing log option
+  readout.textContent = 'Done';
+  btn.className = 'timer-btn';
+  btn.textContent = '...';
+  btn.disabled = true;
+  
+  setTimeout(() => {
+    btn.className = 'timer-btn done';
+    btn.textContent = 'Intervention held — log it';
+    btn.onclick = window.logSuccess;
+    btn.disabled = false;
+    document.getElementById('timer-fail').style.display = 'none';
+  }, 1200);
 }
 
 function updateReadout() {
@@ -387,11 +430,11 @@ window.closeTimer = () => {
 };
 
 window.logSuccess = () => {
-  window.location.href = 'index.html';
+  window.location.href = 'index.html?from=intervention&outcome=held';
 };
 
 window.logFail = () => {
-  window.location.href = 'index.html';
+  window.location.href = 'index.html?from=intervention&outcome=failed';
 };
 </script>
 <script src="nav.js"></script>

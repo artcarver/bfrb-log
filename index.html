@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Log BFRB episodes, near misses, and resistances in real time.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Groundwork">
+    <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork - Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -85,8 +91,14 @@ input:focus, textarea:focus{border-color:var(--ac)}
 textarea{resize:vertical;min-height:80px}
 
 /* STICKY ACTION BAR */
-.action-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(250,246,241,0.95);border-top:1px solid var(--bdr);padding:16px;display:flex;justify-content:center;z-index:100;backdrop-filter:blur(10px)}
+.action-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(250,246,241,0.95);border-top:1px solid var(--bdr);padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:100;backdrop-filter:blur(10px)}
 [data-theme="dark"] .action-bar{background:rgba(38,29,20,0.95)}
+
+/* STEP INDICATOR */
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 0 4px;margin-bottom:4px}
+.step-pip{width:28px;height:4px;border-radius:2px;background:var(--bdr);transition:background .3s}
+.step-pip.active{background:var(--ac)}
+.step-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}
 .action-inner{width:100%;max-width:540px;display:flex;gap:12px}
 
 .btn-primary{flex:1;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);box-shadow:var(--s2)}
@@ -109,7 +121,19 @@ textarea{resize:vertical;min-height:80px}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 .toast.err{background:var(--ac)}
 </style>
-</head>
+
+    <script>
+      // Keep theme-color meta in sync with colour scheme
+      (function() {
+        const stored = localStorage.getItem('gw-theme');
+        if (stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          const m = document.getElementById('theme-color-meta');
+          if (m) m.setAttribute('content', '#1E1710');
+        }
+      })();
+    </script>
+  </head>
 <body>
 
 <div class="auth-screen on" id="auth-screen">
@@ -126,6 +150,11 @@ textarea{resize:vertical;min-height:80px}
 <main>
 
   <div id="screen-core">
+    <div class="step-indicator">
+      <div class="step-pip active" id="pip-1"></div>
+      <div class="step-pip" id="pip-2"></div>
+      <div class="step-label" id="step-label">Step 1 of 2 — Event</div>
+    </div>
     <div class="card">
       <div class="card-title">Log Event</div>
       
@@ -153,15 +182,15 @@ textarea{resize:vertical;min-height:80px}
         <div class="grid-3">
           <div class="tag sage-on" onclick="selectOutcome('Resisted', this)">
             <div>Resisted</div>
-            <div class="tag-sub">No touching</div>
+            <div class="tag-sub">Urge present, no contact</div>
           </div>
           <div class="tag" onclick="selectOutcome('Near Miss', this)">
             <div>Near Miss</div>
-            <div class="tag-sub">Touched, no damage</div>
+            <div class="tag-sub">Contact, no tissue damage</div>
           </div>
-          <div class="tag" onclick="selectOutcome('Did it', this)">
-            <div>Did it</div>
-            <div class="tag-sub">Damaged skin/nail</div>
+          <div class="tag" onclick="selectOutcome('Episode', this)">
+            <div>Episode</div>
+            <div class="tag-sub">Tissue involvement</div>
           </div>
         </div>
       </div>
@@ -218,14 +247,18 @@ textarea{resize:vertical;min-height:80px}
 
         <div class="field">
           <label class="field-label">Awareness</label>
-          <div class="grid-2">
+          <div class="grid-3">
             <div class="tag" onclick="selectTag('core','awareness',this)">
               <div>Automatic</div>
-              <div class="tag-sub">Unconscious / Trance</div>
+              <div class="tag-sub">Low / no awareness</div>
             </div>
             <div class="tag" onclick="selectTag('core','awareness',this)">
-              <div>Focused</div>
-              <div class="tag-sub">Deliberate / Urge-driven</div>
+              <div>Aware</div>
+              <div class="tag-sub">Noticed while doing it</div>
+            </div>
+            <div class="tag" onclick="selectTag('core','awareness',this)">
+              <div>Urge-driven</div>
+              <div class="tag-sub">Felt compelled</div>
             </div>
           </div>
         </div>
@@ -263,10 +296,10 @@ textarea{resize:vertical;min-height:80px}
 
   <div id="screen-context" class="hidden">
     <div class="card">
-      <div class="card-title">Context Analysis</div>
+      <div class="card-title">Context</div>
 
       <div class="field">
-        <label class="field-label">Pre-Action (Motor Precursor)</label>
+        <label class="field-label">Pre-event activity</label>
         <div class="grid-2">
           <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling</div>
           <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting Posture</div>
@@ -365,9 +398,13 @@ textarea{resize:vertical;min-height:80px}
 
   <div id="screen-success" class="hidden">
     <div class="success-msg">
-      <div class="success-icon">✓</div>
-      <div class="card-title">Saved</div>
-      <button class="btn-primary" style="margin-top:24px; max-width:200px" onclick="resetForm()">Log another event</button>
+      <div class="success-icon" id="success-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="card-title" id="success-title">Logged</div>
+      <div style="font-size:14px;color:var(--mu);margin-top:8px;text-align:center;max-width:320px" id="success-body"></div>
+      <button class="btn-primary" style="margin-top:24px; max-width:200px" onclick="resetForm()">Log another</button>
+      <div style="margin-top:14px">
+        <a href="tracker.html" id="edit-entry-link" style="font-size:13px;color:var(--mu);text-decoration:none;border-bottom:1px solid var(--bdr2)">Edit this entry in Patterns</a>
+      </div>
     </div>
   </div>
 
@@ -405,7 +442,30 @@ onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;
   document.getElementById('auth-screen').classList.toggle('on', !user);
   document.getElementById('app').classList.toggle('on', !!user);
+  if (user) {
+    const s = document.getElementById('core-urge');
+    updateSlider(s, 'core-urge-val', 'urge');
+    handleArrivalParams();
+  }
 });
+
+function handleArrivalParams() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('from') === 'intervention') {
+    const outcome = params.get('outcome');
+    if (outcome === 'held') {
+      // Pre-select Resisted
+      const resistedTag = document.querySelector('#screen-core .grid-3 .tag.sage-on');
+      if (resistedTag) { resistedTag.click(); }
+    } else if (outcome === 'failed') {
+      // Pre-select Episode
+      const episodeTag = [...document.querySelectorAll('#screen-core .grid-3 .tag')].find(t => t.textContent.trim().startsWith('Episode'));
+      if (episodeTag) { episodeTag.click(); }
+    }
+    // Clean URL
+    history.replaceState({}, '', 'index.html');
+  }
+}
 
 // STATE
 const state = {
@@ -447,7 +507,7 @@ window.selectOutcome = (val, el) => {
   
   state.core.outcome = val;
   
-  const isDidIt = val === 'Did it';
+  const isDidIt = val === 'Episode';
   const isNearMiss = val === 'Near Miss';
   const showDetails = isDidIt || isNearMiss;
   
@@ -527,7 +587,7 @@ window.submitCore = async () => {
   
   let outcomeKey = 'resisted';
   if (state.core.outcome === 'Near Miss') outcomeKey = 'near_miss';
-  if (state.core.outcome === 'Did it') outcomeKey = 'did';
+  if (state.core.outcome === 'Episode') outcomeKey = 'did';
 
   const docData = {
     bfrb_type: state.core.bfrb,
@@ -551,11 +611,24 @@ window.submitCore = async () => {
     window._currentDocId = docRef.id;
     
     // Toggle Post-Feeling field visibility based on outcome
-    document.getElementById('post-feeling-field').style.display = outcomeKey === 'did' ? 'block' : 'none';
+    document.getElementById('post-feeling-field').style.display = (outcomeKey === 'did' || outcomeKey === 'near_miss') ? 'block' : 'none';
+
+    // Outcome-specific success screen
+    const successMessages = {
+      resisted: { title: 'Logged.', body: 'Resistance entries are the most clinically useful data point. Your therapist will want to see these.' },
+      near_miss: { title: 'Logged.', body: 'Near misses show active friction in the urge-response chain — useful for pattern analysis.' },
+      did: { title: 'Logged.', body: 'Episode data drives the pattern analysis. This entry counts.' }
+    };
+    const msg = successMessages[outcomeKey];
+    document.getElementById('success-title').textContent = msg.title;
+    document.getElementById('success-body').textContent = msg.body;
 
     document.getElementById('screen-core').classList.add('hidden');
     document.getElementById('bar-core').classList.add('hidden');
     document.getElementById('screen-context').classList.remove('hidden');
+    document.getElementById('pip-1').classList.remove('active');
+    document.getElementById('pip-2').classList.add('active');
+    document.getElementById('step-label').textContent = 'Step 2 of 2 — Context';
     window.scrollTo({top: 0, behavior: 'smooth'});
   } catch(e) {
     showToast('Error saving log', true);
@@ -595,8 +668,12 @@ window.resetForm = () => {
   state.ctx = { pre_action: null, trigger: null, environment: null, post_feeling: null, tried_tool: null, tools: [], eff: null };
   window._currentDocId = null;
 
+  document.getElementById('success-title').textContent = 'Logged.';
+  document.getElementById('success-body').textContent = '';
+
   document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  document.querySelector('.grid-2 .tag').classList.add('on'); 
+  const firstTag = document.querySelector('#screen-core .grid-2 .tag');
+  if (firstTag) firstTag.classList.add('on');
   
   document.getElementById('core-time').value = '';
   document.getElementById('core-time-wrap').classList.add('hidden');
@@ -608,21 +685,37 @@ window.resetForm = () => {
   const slider = document.getElementById('core-urge');
   slider.value = 5;
   updateSlider(slider, 'core-urge-val', 'urge');
-
-  document.getElementById('intervention-block').classList.add('hidden');
   
   const coreBtn = document.getElementById('btn-save-core');
   coreBtn.disabled = false; coreBtn.textContent = 'Save Log';
   const ctxBtn = document.getElementById('btn-save-ctx');
   ctxBtn.disabled = false; ctxBtn.textContent = 'Save Context';
 
+  document.getElementById('pip-1').classList.add('active');
+  document.getElementById('pip-2').classList.remove('active');
+  document.getElementById('step-label').textContent = 'Step 1 of 2 — Event';
+
   document.getElementById('screen-core').classList.remove('hidden');
   document.getElementById('bar-core').classList.remove('hidden');
   document.getElementById('screen-context').classList.add('hidden');
-  document.getElementById('bar-ctx').classList.remove('hidden');
+  document.getElementById('bar-ctx').classList.add('hidden');
   document.getElementById('screen-success').classList.add('hidden');
   window.scrollTo({top: 0, behavior: 'smooth'});
 };
+
+// Desktop: Enter key advances the active step (but not when user is typing in a textarea)
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
+  const screenCore = document.getElementById('screen-core');
+  const screenCtx  = document.getElementById('screen-context');
+  if (!screenCore.classList.contains('hidden') && !document.getElementById('screen-success').classList.contains('hidden') === false) {
+    e.preventDefault();
+    document.getElementById('btn-save-core').click();
+  } else if (!screenCtx.classList.contains('hidden')) {
+    e.preventDefault();
+    document.getElementById('btn-save-ctx').click();
+  }
+});
 </script>
 <script src="nav.js"></script>
 </body>

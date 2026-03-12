@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Analyse BFRB patterns, triggers, and intervention outcomes over time.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Groundwork">
+    <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork - Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -86,6 +92,10 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 }
 .select-btn:hover { border-color: var(--bdr2); }
 
+[data-theme="dark"] .select-btn {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23C8B8A8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
 /* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;text-align:center;box-shadow:var(--s1)}
@@ -109,13 +119,13 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 .log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px;margin-bottom:12px;box-shadow:var(--s1)}
 .log-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
 .log-date{font-size:13px;font-weight:600;color:var(--tx2)}
-.log-badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:6px;background:var(--sur);color:var(--mu)}
+.log-badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 10px;border-radius:var(--rsm);background:var(--sur);color:var(--mu)}
 .log-badge.resisted{background:var(--sagel);color:var(--sage)}
 .log-badge.near_miss{background:var(--warml);color:var(--warm)}
 .log-badge.did{background:var(--acl);color:var(--ac)}
 
 .log-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--tx2);margin-bottom:12px}
-.meta-tag{background:var(--sur);padding:4px 10px;border-radius:6px;border:1px solid var(--bdr);display:inline-block;white-space:nowrap}
+.meta-tag{background:var(--sur);padding:4px 10px;border-radius:var(--rsm);border:1px solid var(--bdr);display:inline-block;white-space:nowrap}
 .meta-tag strong{color:var(--tx);font-weight:600;margin-right:4px}
 
 .log-notes{font-size:13px;color:var(--tx);background:var(--bg);padding:12px;border-radius:var(--rsm);border:1px solid var(--bdr);line-height:1.5}
@@ -124,11 +134,15 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 .log-act-btn:hover{color:var(--tx)}
 .log-act-btn.del:hover{color:var(--ac)}
 
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:13px;font-weight:600;color:#fff;transition:all .3s ease;z-index:999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.err{background:var(--ac)}
+.chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--mu);pointer-events:none;padding-top:28px}
 .empty-state{text-align:center;padding:40px 20px;color:var(--mu);font-size:14px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);margin-top:20px}
 
 /* EDIT MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,18,10,.6);backdrop-filter:blur(4px);z-index:900;align-items:center;justify-content:center;padding:16px}
-.modal-overlay.on{display:flex}
+.modal-overlay{position:fixed;inset:0;background:rgba(28,18,10,.6);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
+.modal-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
 .modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:400px;box-shadow:var(--s2)}
 .modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:16px}
 .modal-field{margin-bottom:16px}
@@ -141,7 +155,19 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 .modal-btn.primary{background:var(--ac);color:#fff;border-color:var(--ac)}
 .modal-btn.primary:hover{background:var(--ac-h)}
 </style>
-</head>
+
+    <script>
+      // Keep theme-color meta in sync with colour scheme
+      (function() {
+        const stored = localStorage.getItem('gw-theme');
+        if (stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          const m = document.getElementById('theme-color-meta');
+          if (m) m.setAttribute('content', '#1E1710');
+        }
+      })();
+    </script>
+  </head>
 <body>
 
 <div class="auth-screen on" id="auth-screen">
@@ -157,7 +183,7 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 <div id="app">
 <main>
   <div class="header-row">
-    <div class="page-title">Clinical Patterns</div>
+    <div class="page-title">Patterns</div>
     <div class="controls">
       <select class="select-btn" id="time-filter" onchange="loadData()">
         <option value="7">Last 7 Days</option>
@@ -167,21 +193,25 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
     </div>
   </div>
 
-  <div id="loading" style="text-align:center;color:var(--mu);padding:40px">Analyzing logs...</div>
+  <div id="loading" style="text-align:center;color:var(--mu);padding:40px">Loading...</div>
   
   <div id="dashboard" style="display:none">
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-val" id="stat-total">0</div>
-        <div class="stat-lbl">Total Logs</div>
+        <div class="stat-lbl">Entries</div>
       </div>
       <div class="stat-card">
         <div class="stat-val" id="stat-resist" style="color:var(--sage)">0%</div>
-        <div class="stat-lbl">Resist / Near Miss Rate</div>
+        <div class="stat-lbl">Resisted + Near Miss</div>
       </div>
       <div class="stat-card">
         <div class="stat-val" id="stat-urge">0</div>
-        <div class="stat-lbl">Avg Urge Level</div>
+        <div class="stat-lbl">Avg urge</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-since" style="color:var(--sage)">—</div>
+        <div class="stat-lbl" id="stat-since-lbl">Days since episode</div>
       </div>
     </div>
 
@@ -191,29 +221,29 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
         <div class="chart-wrapper"><canvas id="chart-outcomes"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">High-Risk Windows (Time of Day)</div>
+        <div class="chart-title">Time of day</div>
         <div class="chart-wrapper"><canvas id="chart-time"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Primary Triggers</div>
+        <div class="chart-title">Triggers</div>
         <div class="chart-wrapper"><canvas id="chart-triggers"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Body Areas Targeted</div>
+        <div class="chart-title">Body areas</div>
         <div class="chart-wrapper"><canvas id="chart-areas"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Specific Target Types</div>
+        <div class="chart-title">Target types</div>
         <div class="chart-wrapper"><canvas id="chart-targets"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Intervention Win Rate</div>
+        <div class="chart-title">Intervention effectiveness</div>
         <div class="chart-wrapper"><canvas id="chart-tools"></canvas></div>
       </div>
     </div>
 
     <div class="feed-header">
-      <div class="feed-title">Raw Log Ledger</div>
+      <div class="feed-title">Log history</div>
       <div class="feed-controls">
         <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
         <button class="action-btn" id="btn-import" onclick="triggerImport()">Import CSV</button>
@@ -226,7 +256,7 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
   </div>
 
   <div id="empty-state" class="empty-state" style="display:none">
-    Not enough data in this timeframe. Log more events to generate clinical patterns.
+    No entries in this timeframe.
     <div style="margin-top:20px">
       <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">
       <button class="action-btn" id="btn-import-empty" onclick="document.getElementById('import-file-empty').click()">Import CSV</button>
@@ -236,13 +266,15 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 </main>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <div class="modal-overlay" id="edit-modal">
   <div class="modal-card">
     <div class="modal-title">Edit Log</div>
     <div class="modal-field">
       <label class="modal-label">Outcome</label>
       <select class="modal-select" id="edit-outcome">
-        <option value="did">Did it</option>
+        <option value="did">Episode</option>
         <option value="near_miss">Near Miss</option>
         <option value="resisted">Resisted</option>
       </select>
@@ -297,9 +329,34 @@ onAuthStateChanged(auth, user => {
   if (user) loadData();
 });
 
-Chart.defaults.color = '#9C8878';
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 
+// Read CSS vars at runtime so charts respect dark/light mode
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function getChartColors() {
+  return {
+    ac:   getCSSVar('--ac'),
+    sage: getCSSVar('--sage'),
+    warm: getCSSVar('--warm'),
+    mu:   getCSSVar('--mu'),
+  };
+}
+function applyChartDefaults() {
+  Chart.defaults.color = getCSSVar('--mu');
+}
+
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 window.loadData = async () => {
   if (!window._uid) return;
   document.getElementById('loading').style.display = 'block';
@@ -401,7 +458,21 @@ function processData(entries) {
   document.getElementById('stat-resist').textContent = Math.round((resisted / total) * 100) + '%';
   document.getElementById('stat-urge').textContent = (totalUrge / total).toFixed(1);
 
+  // Time since last episode — find most recent 'did' entry across ALL entries (not just timeframe)
+  const lastEpisode = entries.filter(e => e.entry_type === 'did').map(e => {
+    return e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+  }).sort((a, b) => b - a)[0];
+  if (lastEpisode) {
+    const days = Math.floor((Date.now() - lastEpisode.getTime()) / 86400000);
+    document.getElementById('stat-since').textContent = days;
+    document.getElementById('stat-since-lbl').textContent = days === 0 ? 'Episode today' : 'Days since episode';
+    document.getElementById('stat-since').style.color = days >= 7 ? 'var(--sage)' : 'var(--ac)';
+  } else {
+    document.getElementById('stat-since').textContent = '—';
+  }
+
   renderOutcomes(outcomes);
+  applyChartDefaults();
   renderTimeOfDay(times);
   renderTriggers(triggers);
   renderAreas(areas);
@@ -424,7 +495,7 @@ function renderFeed() {
   const container = document.getElementById('log-feed');
   const toShow = feedExpanded ? window._currentEntries : window._currentEntries.slice(0, 5);
   
-  const labels = { resisted: 'Resisted', near_miss: 'Near Miss', did: 'Did it' };
+  const labels = { resisted: 'Resisted', near_miss: 'Near Miss', did: 'Episode' };
 
   container.innerHTML = toShow.map(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
@@ -447,7 +518,7 @@ function renderFeed() {
     let notesHTML = e.notes ? `<div class="log-notes">${escapeHtml(e.notes)}</div>` : '';
 
     return `
-      <div class="log-card">
+      <div class="log-card" data-id="${e.id}">
         <div class="log-top">
           <div class="log-date">${dateStr}</div>
           <div class="log-badge ${outClass}">${outLabel}</div>
@@ -469,16 +540,33 @@ window.toggleFeed = () => {
   renderFeed();
 };
 
-window.deleteLog = async (id) => {
-  if (!confirm("Permanently delete this log? This cannot be undone.")) return;
+window.deleteLog = (id) => {
+  // Show inline confirm inside the card
+  const card = document.querySelector(`[data-id="${id}"]`);
+  if (!card) return;
+  const actions = card.querySelector('.log-actions');
+  actions.innerHTML = `
+    <span style="font-size:12px;color:var(--tx2);font-weight:500">Delete this entry?</span>
+    <button class="log-act-btn del" onclick="confirmDelete('${id}')">Yes, delete</button>
+    <button class="log-act-btn" onclick="renderFeed()">Cancel</button>
+  `;
+};
+
+window.confirmDelete = async (id) => {
   try {
     await deleteDoc(doc(db, 'users', window._uid, 'entries', id));
     window._currentEntries = window._currentEntries.filter(e => e.id !== id);
-    processData(window._currentEntries);
+    if (window._currentEntries.length > 0) {
+      processData(window._currentEntries);
+    } else {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'block';
+    }
     renderFeed();
   } catch(e) {
-    alert("Failed to delete entry. Check console.");
+    showToast('Failed to delete entry');
     console.error(e);
+    renderFeed();
   }
 };
 
@@ -519,7 +607,7 @@ window.saveEdit = async () => {
     renderFeed();
     closeEdit();
   } catch(e) {
-    alert("Failed to update entry.");
+    showToast("Failed to update entry");
     console.error(e);
   }
   btn.disabled = false;
@@ -552,7 +640,7 @@ window.handleImport = async (event) => {
     const text = e.target.result;
     const lines = text.split('\n').filter(l => l.trim() !== '');
     if (lines.length < 2) {
-      alert("File is empty or invalid.");
+      showToast("File is empty or invalid", true);
       resetImportBtn();
       return;
     }
@@ -609,11 +697,11 @@ window.handleImport = async (event) => {
         await batch.commit();
       }
       
-      alert(`Successfully imported ${count} logs!`);
+      showToast(`Imported ${count} entries`);
       loadData(); 
     } catch(err) {
        console.error(err);
-       alert("Error importing logs. Check console.");
+       showToast("Import failed — check file format", true);
     }
     resetImportBtn();
   };
@@ -635,7 +723,7 @@ function resetImportBtn() {
 window.exportCSV = () => {
   const entries = window._currentEntries;
   if (!entries || entries.length === 0) {
-    alert("No data to export in the current timeframe.");
+    showToast("No data in this timeframe");
     return;
   }
 
@@ -668,26 +756,50 @@ window.exportCSV = () => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.setAttribute("href", url);
-  link.setAttribute("download", `BFRB_Log_Export_${new Date().toLocaleDateString('en-US').replace(/\//g,'-')}.csv`);
+  link.setAttribute("download", `BFRB_Log_Export_${new Date().toISOString().slice(0,10)}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 };
 
-// CHART LOGIC
+// Re-render charts when theme changes so colors update
+const themeObserver = new MutationObserver(() => {
+  if (window._currentEntries && window._currentEntries.length > 0) {
+    applyChartDefaults();
+    processData(window._currentEntries);
+  }
+});
+themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+
+function setChartEmpty(id, isEmpty, msg) {
+  const card = document.getElementById(id)?.closest('.chart-card');
+  if (!card) return;
+  let overlay = card.querySelector('.chart-empty');
+  if (isEmpty) {
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'chart-empty';
+      card.style.position = 'relative';
+      card.appendChild(overlay);
+    }
+    overlay.textContent = msg || 'No data logged yet';
+  } else {
+    if (overlay) overlay.remove();
+  }
+}
 function destroyChart(id) {
   if (chartInstances[id]) chartInstances[id].destroy();
 }
 
-const colors = { ac: '#C1694F', sage: '#7A8C85', warm: '#D4956A', mu: '#9C8878' };
-
 function renderOutcomes(data) {
   destroyChart('chart-outcomes');
+  const colors = getChartColors();
   const ctx = document.getElementById('chart-outcomes').getContext('2d');
   chartInstances['chart-outcomes'] = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Resisted', 'Near Miss', 'Did it'],
+      labels: ['Resisted', 'Near Miss', 'Episode'],
       datasets: [{
         data: [data.resisted, data.near_miss, data.did],
         backgroundColor: [colors.sage, colors.warm, colors.ac],
@@ -700,6 +812,7 @@ function renderOutcomes(data) {
 
 function renderTimeOfDay(data) {
   destroyChart('chart-time');
+  const colors = getChartColors();
   const ctx = document.getElementById('chart-time').getContext('2d');
   chartInstances['chart-time'] = new Chart(ctx, {
     type: 'bar',
@@ -714,14 +827,17 @@ function renderTimeOfDay(data) {
     },
     options: {
       responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }, x: { grid: { display: false } } }
+      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: getCSSVar('--bdr') } }, x: { grid: { display: false } } }
     }
   });
 }
 
 function renderTriggers(data) {
   destroyChart('chart-triggers');
+  const colors = getChartColors();
   const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  if (sorted.length === 0) { setChartEmpty('chart-triggers', true, 'No triggers logged yet'); return; }
+  setChartEmpty('chart-triggers', false);
   const ctx = document.getElementById('chart-triggers').getContext('2d');
   chartInstances['chart-triggers'] = new Chart(ctx, {
     type: 'bar',
@@ -735,14 +851,17 @@ function renderTriggers(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false } } }
+      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: getCSSVar('--bdr') } }, y: { grid: { display: false } } }
     }
   });
 }
 
 function renderAreas(data) {
   destroyChart('chart-areas');
+  const colors = getChartColors();
   const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  if (sorted.length === 0) { setChartEmpty('chart-areas', true, 'No body areas logged yet'); return; }
+  setChartEmpty('chart-areas', false);
   const ctx = document.getElementById('chart-areas').getContext('2d');
   chartInstances['chart-areas'] = new Chart(ctx, {
     type: 'bar',
@@ -756,14 +875,17 @@ function renderAreas(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false } } }
+      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: getCSSVar('--bdr') } }, y: { grid: { display: false } } }
     }
   });
 }
 
 function renderTargets(data) {
   destroyChart('chart-targets');
+  const colors = getChartColors();
   const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+  if (sorted.length === 0) { setChartEmpty('chart-targets', true, 'No target types logged yet'); return; }
+  setChartEmpty('chart-targets', false);
   const ctx = document.getElementById('chart-targets').getContext('2d');
   chartInstances['chart-targets'] = new Chart(ctx, {
     type: 'bar',
@@ -777,19 +899,22 @@ function renderTargets(data) {
     },
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false } } }
+      scales: { x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: getCSSVar('--bdr') } }, y: { grid: { display: false } } }
     }
   });
 }
 
 function renderTools(data) {
   destroyChart('chart-tools');
+  const colors = getChartColors();
   const sorted = Object.entries(data)
     .filter(i => i[1].attempts > 0)
     .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100)])
     .sort((a,b) => b[1] - a[1])
     .slice(0, 5);
 
+  if (sorted.length === 0) { setChartEmpty('chart-tools', true, 'No intervention data yet'); return; }
+  setChartEmpty('chart-tools', false);
   const ctx = document.getElementById('chart-tools').getContext('2d');
   chartInstances['chart-tools'] = new Chart(ctx, {
     type: 'bar',
@@ -805,7 +930,7 @@ function renderTools(data) {
     options: {
       indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: (ctx) => ctx.raw + '% success' } } },
-      scales: { x: { max: 100, beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }, y: { grid: { display: false } } }
+      scales: { x: { max: 100, beginAtZero: true, grid: { color: getCSSVar('--bdr') } }, y: { grid: { display: false } } }
     }
   });
 }

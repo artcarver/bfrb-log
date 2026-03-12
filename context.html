@@ -2,7 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Build your BFRB baseline profile and prepare for therapy sessions.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Groundwork">
+    <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork - Context</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
@@ -62,7 +68,8 @@ main{max-width:720px;margin:0 auto;padding:24px 14px}
 .scamp-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px}
 .scamp-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;justify-content:space-between}
 .scamp-label span.badge{background:var(--sur);padding:2px 6px;border-radius:4px;font-size:10px}
-textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:60px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
+.scamp-save-badge{font-size:11px;color:var(--sage);font-weight:600;opacity:0;transition:opacity .3s ease}
+textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:80px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
 textarea.scamp-input::placeholder{color:var(--bdr2)}
 
 .rule-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
@@ -85,8 +92,9 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 .reflection-form textarea{width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;resize:vertical;min-height:100px;margin-bottom:16px;transition:var(--tr)}
 .reflection-form textarea:focus{border-color:var(--ac)}
 .field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
-.btn-primary{background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);min-height:48px;width:100%}
-.btn-primary:hover{background:var(--ac-h)}
+.btn-primary{background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);min-height:48px;width:100%}
+.btn-primary:hover{background:var(--ac-h);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(1px)}
 .btn-primary:disabled{opacity:0.5;cursor:not-allowed}
 
 .past-reflections{margin-top:32px}
@@ -107,14 +115,42 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:14px;font-weight:600;color:#fff;transition:all .3s ease;z-index:999;pointer-events:none}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* REPORT MODAL */
+.report-modal{position:fixed;inset:0;background:rgba(28,18,10,.6);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
+.report-modal.on{opacity:1;visibility:visible;pointer-events:auto}
+.report-modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:500px;box-shadow:0 8px 32px rgba(44,31,20,.15)}
+.report-modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:6px}
+.report-modal-hint{font-size:13px;color:var(--mu);margin-bottom:14px}
+.report-modal-body{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'DM Sans',monospace;font-size:13px;color:var(--tx2);resize:none;outline:none;min-height:280px;line-height:1.6}
+.report-copy-btn{flex:1;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s ease}
+.report-copy-btn:hover{background:var(--ac-h)}
+.report-close-btn{flex:1;background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s ease}
+.report-close-btn:hover{border-color:var(--bdr2);color:var(--tx)}
+
+/* REFLECTION DELETE */
+.ref-del{background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:16px;line-height:1;padding:4px 6px;transition:all .15s ease;float:right;margin-left:8px}
+.ref-del:hover{color:var(--ac)}
 </style>
-</head>
+
+    <script>
+      // Keep theme-color meta in sync with colour scheme
+      (function() {
+        const stored = localStorage.getItem('gw-theme');
+        if (stored === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          const m = document.getElementById('theme-color-meta');
+          if (m) m.setAttribute('content', '#1E1710');
+        }
+      })();
+    </script>
+  </head>
 <body>
 
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
     <div style="font-family:'Lora',serif;font-size:24px;margin-bottom:8px">Groundwork</div>
-    <div style="font-size:14px;color:var(--mu)">Sign in to access context.</div>
+    <div style="font-size:14px;color:var(--mu)">Sign in to continue.</div>
     <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
   </div>
 </div>
@@ -125,7 +161,7 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 <main>
   
   <div class="header-row">
-    <div class="page-title">Clinical Context</div>
+    <div class="page-title">My Profile</div>
     <button class="export-btn" onclick="generateReport()" id="btn-export">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
       Generate Report
@@ -133,45 +169,55 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
   </div>
 
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('personal', this)">My Context</button>
-    <button class="tab-btn" onclick="switchTab('framework', this)">Clinical Framework</button>
+    <button class="tab-btn active" onclick="switchTab('personal', this)">My profile</button>
+    <button class="tab-btn" onclick="switchTab('framework', this)">Framework</button>
   </div>
 
   <div id="tab-personal" class="tab-pane active">
     <div class="card">
       <div class="card-header">
         <div class="card-title">SCAMP Baseline Profile</div>
-        <div class="card-desc">Define your persistent drivers. Auto-saves when you click away.</div>
+        <div class="card-desc">Your persistent BFRB drivers. Auto-saves on blur.</div>
       </div>
       
       <div class="scamp-grid">
         <div class="scamp-block">
-          <div class="scamp-label">Sensory <span class="badge">Tactile/Visual</span></div>
-          <textarea class="scamp-input" id="scamp-s" placeholder="e.g., Seeking irregular textures..." onblur="saveBaseline('sensory', this.value)"></textarea>
+          <div class="scamp-row">
+          <div class="scamp-label">Sensory <span class="badge">Tactile/Visual</span><span class="scamp-save-badge"></span></div>
+          <textarea class="scamp-input" id="scamp-s" placeholder="e.g., Seeking irregular textures..." onblur="saveBaseline('sensory', this.value, this)"></textarea>
+          </div>
         </div>
         <div class="scamp-block">
-          <div class="scamp-label">Cognitive <span class="badge">Thoughts/Beliefs</span></div>
-          <textarea class="scamp-input" id="scamp-c" placeholder="e.g., Perfectionism, permission giving..." onblur="saveBaseline('cognitive', this.value)"></textarea>
+          <div class="scamp-row">
+          <div class="scamp-label">Cognitive <span class="badge">Thoughts/Beliefs</span><span class="scamp-save-badge"></span></div>
+          <textarea class="scamp-input" id="scamp-c" placeholder="e.g., Perfectionism, permission giving..." onblur="saveBaseline('cognitive', this.value, this)"></textarea>
+          </div>
         </div>
         <div class="scamp-block">
-          <div class="scamp-label">Affective <span class="badge">Emotions/States</span></div>
-          <textarea class="scamp-input" id="scamp-a" placeholder="e.g., Executive fatigue, anxiety..." onblur="saveBaseline('affective', this.value)"></textarea>
+          <div class="scamp-row">
+          <div class="scamp-label">Affective <span class="badge">Emotions/States</span><span class="scamp-save-badge"></span></div>
+          <textarea class="scamp-input" id="scamp-a" placeholder="e.g., Executive fatigue, anxiety..." onblur="saveBaseline('affective', this.value, this)"></textarea>
+          </div>
         </div>
         <div class="scamp-block">
-          <div class="scamp-label">Motor <span class="badge">Postures/Chains</span></div>
-          <textarea class="scamp-input" id="scamp-m" placeholder="e.g., Resting chin on left hand..." onblur="saveBaseline('motor', this.value)"></textarea>
+          <div class="scamp-row">
+          <div class="scamp-label">Motor <span class="badge">Postures/Chains</span><span class="scamp-save-badge"></span></div>
+          <textarea class="scamp-input" id="scamp-m" placeholder="e.g., Resting chin on left hand..." onblur="saveBaseline('motor', this.value, this)"></textarea>
+          </div>
         </div>
         <div class="scamp-block" style="grid-column: 1 / -1;">
-          <div class="scamp-label">Place <span class="badge">Environment</span></div>
-          <textarea class="scamp-input" id="scamp-p" placeholder="e.g., Bathroom mirror at night..." onblur="saveBaseline('place', this.value)"></textarea>
+          <div class="scamp-row">
+          <div class="scamp-label">Place <span class="badge">Environment</span><span class="scamp-save-badge"></span></div>
+          <textarea class="scamp-input" id="scamp-p" placeholder="e.g., Bathroom mirror at night..." onblur="saveBaseline('place', this.value, this)"></textarea>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <div class="card-title">Stimulus Control Rules</div>
-        <div class="card-desc">Active environmental barriers. Check off when implemented.</div>
+        <div class="card-title">Stimulus Control</div>
+        <div class="card-desc">Environmental barriers. Check off when in place.</div>
       </div>
       <div class="rule-list" id="rule-list"></div>
       <div class="add-rule-form">
@@ -182,15 +228,15 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 
     <div class="card">
       <div class="card-header">
-        <div class="card-title">Weekly Therapy Prep</div>
-        <div class="card-desc">Log narrative context to discuss in your next session.</div>
+        <div class="card-title">Session Prep</div>
+        <div class="card-desc">Notes for your next appointment.</div>
       </div>
       <div class="reflection-form">
-        <label class="field-label">What worked well this week?</label>
-        <textarea id="ref-worked" placeholder="Did a specific tool help? Notice a new trigger early?"></textarea>
-        <label class="field-label">Where did the friction fail?</label>
+        <label class="field-label">What worked?</label>
+        <textarea id="ref-worked" placeholder="A tool that held, a trigger you caught early..."></textarea>
+        <label class="field-label">What didn't?</label>
         <textarea id="ref-failed" placeholder="What bypassed your barriers?"></textarea>
-        <button class="btn-primary" id="btn-save-ref" onclick="saveReflection()">Save Reflection</button>
+        <button class="btn-primary" id="btn-save-ref" onclick="saveReflection()">Save</button>
       </div>
       <div class="past-reflections" id="past-reflections"></div>
     </div>
@@ -280,6 +326,18 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 </main>
 </div>
 
+<div class="report-modal" id="report-modal">
+  <div class="report-modal-card">
+    <div class="report-modal-title">Session Report</div>
+    <div class="report-modal-hint">Copy the text below and paste it into an email or notes app.</div>
+    <textarea class="report-modal-body" id="report-text" readonly></textarea>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="report-copy-btn" onclick="copyReportText()">Copy text</button>
+      <button class="report-close-btn" onclick="closeReportModal()">Done</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -348,19 +406,29 @@ async function loadContextData() {
   loadReflections();
 }
 
-window.saveBaseline = async (field, value) => {
+window.saveBaseline = async (field, value, el) => {
   if (!window._uid) return;
   const ref = doc(db, 'users', window._uid, 'context', 'baseline');
+  // Show saving state in the field's label
+  const row = el ? el.closest('.scamp-row') : null;
+  const badge = row ? row.querySelector('.scamp-save-badge') : null;
+  if (badge) { badge.textContent = 'Saving…'; badge.style.opacity = '1'; }
   try {
     await setDoc(ref, { [field]: value.trim() }, { merge: true });
-    showToast('Saved profile');
-  } catch(e) { console.error("Error saving baseline:", e); }
+    if (badge) {
+      badge.textContent = 'Saved';
+      setTimeout(() => { badge.style.opacity = '0'; }, 1500);
+    }
+  } catch(e) {
+    console.error("Error saving baseline:", e);
+    if (badge) { badge.textContent = 'Error'; badge.style.color = 'var(--ac)'; }
+  }
 };
 
 function renderRules() {
   const list = document.getElementById('rule-list');
   if (currentRules.length === 0) {
-    list.innerHTML = `<div style="font-size:14px;color:var(--mu);padding:8px 0">No rules established.</div>`;
+    list.innerHTML = `<div style="font-size:14px;color:var(--mu);padding:8px 0">None added yet.</div>`;
     return;
   }
   list.innerHTML = currentRules.map(r => `
@@ -421,19 +489,19 @@ async function loadReflections() {
   const snap = await getDocs(q);
   
   if (snap.empty) {
-    list.innerHTML = `<div style="font-size:14px;color:var(--mu)">No past reflections found.</div>`;
+    list.innerHTML = `<div style="font-size:14px;color:var(--mu)">No entries yet.</div>`;
     return;
   }
   
   let html = '';
-  snap.forEach(doc => {
-    const d = doc.data();
+  snap.forEach(docSnap => {
+    const d = docSnap.data();
     const dateStr = d.created_at ? new Date(d.created_at).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) : 'Date unknown';
     html += `
-      <div class="ref-item">
-        <div class="ref-date">${dateStr}</div>
-        ${d.worked ? `<div class="ref-block"><strong>What worked:</strong>${d.worked}</div>` : ''}
-        ${d.failed ? `<div class="ref-block"><strong>Friction failed:</strong>${d.failed}</div>` : ''}
+      <div class="ref-item" id="ref-${docSnap.id}">
+        <div class="ref-date">${dateStr}<button class="ref-del" onclick="deleteReflection('${docSnap.id}')" title="Delete">&times;</button></div>
+        ${d.worked ? `<div class="ref-block"><strong>What worked:</strong> ${d.worked}</div>` : ''}
+        ${d.failed ? `<div class="ref-block"><strong>What didn't:</strong> ${d.failed}</div>` : ''}
       </div>
     `;
   });
@@ -460,12 +528,44 @@ window.saveReflection = async () => {
     console.error(e);
     showToast('Error saving reflection');
   }
-  btn.disabled = false; btn.textContent = 'Save Reflection';
+  btn.disabled = false; btn.textContent = 'Save';
+};
+
+window.deleteReflection = async (id) => {
+  const el = document.getElementById('ref-' + id);
+  if (el) el.style.opacity = '0.4';
+  try {
+    await deleteDoc(doc(db, 'users', window._uid, 'reflections', id));
+    loadReflections();
+  } catch(e) {
+    console.error(e);
+    if (el) el.style.opacity = '1';
+    showToast('Error deleting entry');
+  }
+};
+
+window.closeReportModal = () => {
+  document.getElementById('report-modal').classList.remove('on');
+};
+
+window.copyReportText = async () => {
+  const text = document.getElementById('report-text').value;
+  const btn = document.querySelector('.report-copy-btn');
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy text'; }, 2000);
+  } catch(e) {
+    // Select all as final fallback
+    document.getElementById('report-text').select();
+    btn.textContent = 'Select all & copy';
+  }
 };
 
 window.generateReport = async () => {
   const btn = document.getElementById('btn-export');
   btn.innerHTML = 'Compiling...';
+  btn.disabled = true;
   
   try {
     const thirtyDaysAgo = new Date();
@@ -491,13 +591,13 @@ window.generateReport = async () => {
     const inactiveRules = currentRules.filter(r => !r.active).map(r => `[ ] ${r.text}`);
     const rulesText = [...activeRules, ...inactiveRules].join('\n') || 'None established.';
 
-    let report = `CLINICAL CONTEXT REPORT
+    let report = `GROUNDWORK — SESSION REPORT
 Generated: ${new Date().toLocaleDateString('en-US')}
 
---- 30-DAY BEHAVIORAL SUMMARY ---
-Total Logged Events: ${logsTotal}
-Episodes (Did It): ${logsDid}
-Intercepts: ${logsResist} Resisted, ${logsNear} Near Miss
+--- 30-DAY SUMMARY ---
+Total Entries: ${logsTotal}
+Episodes: ${logsDid}
+Resisted: ${logsResist}  |  Near Miss: ${logsNear}
 
 --- SCAMP BASELINE PROFILE ---
 SENSORY: ${s}
@@ -519,22 +619,32 @@ ${rulesText}
       if (count >= 2) return;
       const d = doc.data();
       const dt = new Date(d.created_at).toLocaleDateString('en-US');
-      report += `\n[${dt}]\nWhat worked: ${d.worked || 'N/A'}\nWhere friction failed: ${d.failed || 'N/A'}\n`;
+      report += `\n[${dt}]\nWhat worked: ${d.worked || 'N/A'}\nWhat didn't: ${d.failed || 'N/A'}\n`;
       count++;
     });
     if (count === 0) report += "No recent reflections logged.\n";
 
-    await navigator.clipboard.writeText(report);
-    showToast('Report copied to clipboard!');
+    // Try clipboard first, fall back to modal
+    let clipboardOk = false;
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(report);
+        clipboardOk = true;
+        showToast('Report copied to clipboard');
+      } catch(e) { /* fall through */ }
+    }
+    if (!clipboardOk) {
+      document.getElementById('report-text').value = report;
+      document.getElementById('report-modal').classList.add('on');
+    }
   } catch (e) {
     console.error(e);
-    showToast('Failed to generate report');
+    showToast('Error generating report');
   }
   
-  btn.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-    Generate Report
-  `;
+  const svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+  btn.innerHTML = `${svgIcon} Generate Report`;
+  btn.disabled = false;
 };
 </script>
 <script src="nav.js"></script>
