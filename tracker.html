@@ -102,7 +102,7 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 /* RAW LOG FEED */
 .feed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:12px;border-bottom:2px solid var(--bdr);padding-bottom:12px}
 .feed-title{font-family:'Lora',serif;font-size:20px;color:var(--tx)}
-.feed-controls{display:flex;gap:12px;align-items:center}
+.feed-controls{display:flex;gap:8px;align-items:center}
 .feed-toggle{background:none;border:none;color:var(--mu);font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr)}
 .feed-toggle:hover{color:var(--tx)}
 
@@ -215,6 +215,8 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
     <div class="feed-header">
       <div class="feed-title">Raw Log Ledger</div>
       <div class="feed-controls">
+        <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
+        <button class="action-btn" id="btn-import" onclick="triggerImport()">Import CSV</button>
         <button class="action-btn" onclick="exportCSV()">Export CSV</button>
         <button class="feed-toggle" id="feed-toggle" onclick="toggleFeed()">View All</button>
       </div>
@@ -225,6 +227,10 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 
   <div id="empty-state" class="empty-state" style="display:none">
     Not enough data in this timeframe. Log more events to generate clinical patterns.
+    <div style="margin-top:20px">
+      <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">
+      <button class="action-btn" id="btn-import-empty" onclick="document.getElementById('import-file-empty').click()">Import CSV</button>
+    </div>
   </div>
 
 </main>
@@ -259,7 +265,7 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -520,6 +526,112 @@ window.saveEdit = async () => {
   btn.textContent = "Save Changes";
 };
 
+// --- IMPORT CSV LOGIC ---
+window.triggerImport = () => {
+  document.getElementById('import-file').click();
+};
+
+window.handleImport = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const btn = document.getElementById('btn-import');
+  if (btn) {
+    btn.textContent = "Importing...";
+    btn.disabled = true;
+  }
+  
+  const btnEmpty = document.getElementById('btn-import-empty');
+  if (btnEmpty) {
+    btnEmpty.textContent = "Importing...";
+    btnEmpty.disabled = true;
+  }
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const text = e.target.result;
+    const lines = text.split('\n').filter(l => l.trim() !== '');
+    if (lines.length < 2) {
+      alert("File is empty or invalid.");
+      resetImportBtn();
+      return;
+    }
+
+    let count = 0;
+    try {
+      let batch = writeBatch(db);
+      let ops = 0;
+
+      for (let i = 1; i < lines.length; i++) {
+        // Splitting by comma while ignoring commas inside double quotes
+        const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
+        if (row.length < 4) continue;
+
+        const dateStr = row[0]; 
+        const timeStr = row[1]; 
+        let createdAt = new Date();
+        if (dateStr && timeStr) {
+          createdAt = new Date(`${dateStr} ${timeStr}`);
+        }
+
+        const docRef = doc(collection(db, 'users', window._uid, 'entries'));
+        batch.set(docRef, {
+          created_at: createdAt,
+          bfrb_type: row[2] || 'picking',
+          entry_type: row[3] || 'did',
+          urge_before: parseInt(row[4]) || 5,
+          body_areas: row[5] || '',
+          target: row[6] || '',
+          awareness: row[7] || '',
+          duration: row[8] || '',
+          post_ritual: row[9] || '',
+          pre_action: row[10] || '',
+          primary_trigger: row[11] || '',
+          environment: row[12] || '',
+          post_feeling: row[13] || '',
+          interventions: row[14] || '',
+          tried_intervention: !!row[14],
+          intervention_effectiveness: row[15] ? parseInt(row[15]) : null,
+          notes: row[16] || ''
+        });
+        
+        count++;
+        ops++;
+        
+        if (ops === 450) { 
+           await batch.commit();
+           batch = writeBatch(db);
+           ops = 0;
+        }
+      }
+      
+      if (ops > 0) {
+        await batch.commit();
+      }
+      
+      alert(`Successfully imported ${count} logs!`);
+      loadData(); 
+    } catch(err) {
+       console.error(err);
+       alert("Error importing logs. Check console.");
+    }
+    resetImportBtn();
+  };
+  reader.readAsText(file);
+};
+
+function resetImportBtn() {
+  const btn = document.getElementById('btn-import');
+  if (btn) { btn.textContent = "Import CSV"; btn.disabled = false; }
+  const btnEmpty = document.getElementById('btn-import-empty');
+  if (btnEmpty) { btnEmpty.textContent = "Import CSV"; btnEmpty.disabled = false; }
+  
+  const f1 = document.getElementById('import-file');
+  if (f1) f1.value = "";
+  const f2 = document.getElementById('import-file-empty');
+  if (f2) f2.value = "";
+}
+
 window.exportCSV = () => {
   const entries = window._currentEntries;
   if (!entries || entries.length === 0) {
@@ -542,22 +654,10 @@ window.exportCSV = () => {
     let timeStr = d.toLocaleTimeString('en-US');
 
     const row = [
-      dateStr,
-      timeStr,
-      e.bfrb_type || '',
-      e.entry_type || '',
-      e.urge_before || '',
-      e.body_areas || '',
-      e.target || '',
-      e.awareness || '',
-      e.duration || '',
-      e.post_ritual || '',
-      e.pre_action || '',
-      e.primary_trigger || '',
-      e.environment || '',
-      e.post_feeling || '',
-      e.interventions || '',
-      e.intervention_effectiveness || '',
+      dateStr, timeStr, e.bfrb_type || '', e.entry_type || '', e.urge_before || '',
+      e.body_areas || '', e.target || '', e.awareness || '', e.duration || '', e.post_ritual || '',
+      e.pre_action || '', e.primary_trigger || '', e.environment || '', e.post_feeling || '',
+      e.interventions || '', e.intervention_effectiveness || '',
       e.notes ? e.notes.replace(/"/g, '""').replace(/\n/g, ' ') : ''
     ];
 
