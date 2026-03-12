@@ -110,8 +110,13 @@ textarea{resize:vertical;min-height:80px}
 .btn-ghost{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:16px 24px;font-size:14px;font-weight:600;cursor:pointer;transition:var(--tr)}
 .btn-ghost:hover{border-color:var(--bdr2);color:var(--tx)}
 
-/* DIVIDER */
-.divider{height:1px;background:var(--bdr);margin:24px 0}
+/* AREA GROUPS */
+.area-group{margin-bottom:6px}
+.area-parent{width:100%;text-align:left;justify-content:flex-start;position:relative;padding-right:32px}
+.area-parent::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-65%) rotate(45deg);transition:transform .2s;opacity:.5}
+.area-parent.open::after{transform:translateY(-35%) rotate(-135deg)}
+.area-sub{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;margin-top:6px;padding-left:12px}
+.area-sub.hidden{display:none}
 
 /* SUCCESS SCREEN */
 .success-msg{text-align:center;padding:60px 20px;display:flex;flex-direction:column;align-items:center}
@@ -183,16 +188,9 @@ textarea{resize:vertical;min-height:80px}
         <div class="grid-3">
           <div class="tag sage-on" onclick="selectOutcome('Resisted', this)">
             <div>Resisted</div>
-            <div class="tag-sub">Urge present, no contact</div>
           </div>
-          <div class="tag" onclick="selectOutcome('Near Miss', this)">
-            <div>Near Miss</div>
-            <div class="tag-sub">Contact, no tissue damage</div>
-          </div>
-          <div class="tag" onclick="selectOutcome('Episode', this)">
-            <div>Episode</div>
-            <div class="tag-sub">Tissue involvement</div>
-          </div>
+          <div class="tag" onclick="selectOutcome('Near Miss', this)">Near Miss</div>
+          <div class="tag" onclick="selectOutcome('Episode', this)">Episode</div>
         </div>
       </div>
 
@@ -201,13 +199,66 @@ textarea{resize:vertical;min-height:80px}
         
         <div class="field" id="where-field">
           <label class="field-label">Where (Area)</label>
-          <div class="grid-auto" id="where-tags-picking" style="display:none">
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms / Hands</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Legs</div>
+          <div id="where-tags-picking" style="display:none">
+            <div class="area-group">
+              <div class="tag area-parent" onclick="toggleArea('face',this)">Face</div>
+              <div class="area-sub hidden" id="area-face">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Temples</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Nose</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Chin / Jaw</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips</div>
+              </div>
+            </div>
+            <div class="area-group">
+              <div class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck</div>
+              <div class="area-sub hidden" id="area-head">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Ears</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Neck</div>
+              </div>
+            </div>
+            <div class="area-group">
+              <div class="tag area-parent" onclick="toggleArea('torso',this)">Chest &amp; Back</div>
+              <div class="area-sub hidden" id="area-torso">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</div>
+              </div>
+            </div>
+            <div class="area-group">
+              <div class="tag area-parent" onclick="toggleArea('arms',this)">Arms &amp; Hands</div>
+              <div class="area-sub hidden" id="area-arms">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Hands</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</div>
+              </div>
+            </div>
+            <div class="area-group">
+              <div class="tag area-parent" onclick="toggleArea('legs',this)">Legs &amp; Feet</div>
+              <div class="area-sub hidden" id="area-legs">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Thighs</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Knees</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Calves</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Ankles</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Feet</div>
+              </div>
+            </div>
+            <div class="area-group">
+              <div class="tag area-parent" onclick="toggleArea('lower',this)">Groin &amp; Glutes</div>
+              <div class="area-sub hidden" id="area-lower">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Groin</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Buttocks</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Inner Thighs</div>
+              </div>
+            </div>
           </div>
           <div class="grid-auto" id="where-tags-biting" style="display:none">
             <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
@@ -249,18 +300,9 @@ textarea{resize:vertical;min-height:80px}
         <div class="field">
           <label class="field-label">Awareness</label>
           <div class="grid-3">
-            <div class="tag" onclick="selectTag('core','awareness',this)">
-              <div>Automatic</div>
-              <div class="tag-sub">Low / no awareness</div>
-            </div>
-            <div class="tag" onclick="selectTag('core','awareness',this)">
-              <div>Aware</div>
-              <div class="tag-sub">Noticed while doing it</div>
-            </div>
-            <div class="tag" onclick="selectTag('core','awareness',this)">
-              <div>Urge-driven</div>
-              <div class="tag-sub">Felt compelled</div>
-            </div>
+            <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
+            <div class="tag" onclick="selectTag('core','awareness',this)">Mid-action</div>
+            <div class="tag" onclick="selectTag('core','awareness',this)">Urge first</div>
           </div>
         </div>
 
@@ -315,18 +357,10 @@ textarea{resize:vertical;min-height:80px}
           <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / Stress</div>
           <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / Idle</div>
           <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / Depleted</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">
-            <div>Sensory</div><div class="tag-sub">Felt a bump/edge</div>
-          </div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">
-            <div>Visual</div><div class="tag-sub">Saw it in mirror</div>
-          </div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">
-            <div>Perfectionism</div><div class="tag-sub">Must be smooth</div>
-          </div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">
-            <div>Cognitive</div><div class="tag-sub">Permission thought</div>
-          </div>
+          <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory</div>
+          <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual</div>
+          <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
+          <div class="tag" onclick="selectTag('ctx','trigger',this)">Cognitive</div>
         </div>
       </div>
 
@@ -492,11 +526,16 @@ window.selectBehavior = (val, el) => {
   state.core.where = [];
   state.core.what = [];
   
-  document.getElementById('where-tags-picking').style.display = val === 'picking' ? 'grid' : 'none';
-  document.getElementById('where-tags-biting').style.display = val === 'biting' ? 'grid' : 'none';
+  // Reset area groups
+  document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
+  document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
   
-  document.getElementById('what-tags-picking').style.display = val === 'picking' ? 'grid' : 'none';
-  document.getElementById('what-tags-biting').style.display = val === 'biting' ? 'grid' : 'none';
+  const pickingDisplay = val === 'picking' ? '' : 'none';
+  const bitingDisplay  = val === 'biting'  ? '' : 'none';
+  document.getElementById('where-tags-picking').style.display = pickingDisplay;
+  document.getElementById('where-tags-biting').style.display  = bitingDisplay;
+  document.getElementById('what-tags-picking').style.display  = pickingDisplay;
+  document.getElementById('what-tags-biting').style.display   = bitingDisplay;
   
   document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
 };
@@ -539,11 +578,29 @@ window.selectTag = (level, key, el) => {
   state[level][key] = mainText;
 };
 
+window.toggleArea = (id, el) => {
+  const sub = document.getElementById('area-' + id);
+  if (!sub) return;
+  const isOpen = !sub.classList.contains('hidden');
+  sub.classList.toggle('hidden', isOpen);
+  el.classList.toggle('open', !isOpen);
+  // If closing, deselect all sub-tags and remove from state
+  if (isOpen) {
+    sub.querySelectorAll('.tag.on').forEach(t => {
+      const val = t.textContent.trim();
+      const idx = state.core.where.indexOf(val);
+      if (idx > -1) state.core.where.splice(idx, 1);
+      t.classList.remove('on');
+    });
+  }
+};
+
 window.toggleMultiTag = (level, key, el) => {
-  const val = el.querySelector('div') ? el.querySelector('div').textContent.trim() : el.textContent.trim();
-  const idx = state[level][key].indexOf(val);
-  if(idx > -1) { state[level][key].splice(idx, 1); el.classList.remove('on'); }
-  else { state[level][key].push(val); el.classList.add('on'); }
+  const val = el.textContent.trim();
+  const arr = state[level][key];
+  const idx = arr.indexOf(val);
+  if (idx > -1) { arr.splice(idx, 1); el.classList.remove('on'); }
+  else { arr.push(val); el.classList.add('on'); }
 };
 
 window.updateSlider = (el, valId, key) => {
@@ -673,6 +730,8 @@ window.resetForm = () => {
   document.getElementById('success-body').textContent = '';
 
   document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
+  document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
   const firstTag = document.querySelector('#screen-core .grid-2 .tag');
   if (firstTag) firstTag.classList.add('on');
   

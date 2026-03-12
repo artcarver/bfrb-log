@@ -97,10 +97,10 @@ main{max-width:900px;margin:0 auto;padding:24px 14px}
 }
 
 /* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:12px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;text-align:center;box-shadow:var(--s1)}
 .stat-val{font-family:'Lora',serif;font-size:28px;color:var(--tx);line-height:1.2}
-.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:4px}
+.stat-lbl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--mu);margin-top:4px;line-height:1.3}
 
 /* CHARTS */
 .chart-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:32px}
@@ -468,7 +468,7 @@ function processData(entries) {
     const days = Math.floor((Date.now() - lastEpisode.getTime()) / 86400000);
     document.getElementById('stat-since').textContent = days;
     document.getElementById('stat-since-lbl').textContent = days === 0 ? 'Episode today' : 'Days since episode';
-    document.getElementById('stat-since').style.color = days >= 7 ? 'var(--sage)' : 'var(--ac)';
+    document.getElementById('stat-since').style.color = days === 0 ? 'var(--mu)' : 'var(--sage)';
   } else {
     document.getElementById('stat-since').textContent = '—';
   }
@@ -861,7 +861,27 @@ function renderTriggers(data) {
 function renderAreas(data) {
   destroyChart('chart-areas');
   const colors = getChartColors();
-  const sorted = Object.entries(data).sort((a,b) => b[1] - a[1]).slice(0, 5);
+
+  // Map sub-values back to parent category so chart shows meaningful groupings
+  const AREA_MAP = {
+    'Forehead':'Face','Temples':'Face','Cheeks':'Face','Nose':'Face','Chin / Jaw':'Face','Lips':'Face',
+    'Scalp':'Head & Neck','Hairline':'Head & Neck','Behind Ears':'Head & Neck','Ears':'Head & Neck','Neck':'Head & Neck',
+    'Chest':'Chest & Back','Shoulders':'Chest & Back','Abdomen':'Chest & Back','Upper Back':'Chest & Back','Lower Back':'Chest & Back',
+    'Upper Arms':'Arms & Hands','Forearms':'Arms & Hands','Wrists':'Arms & Hands','Hands':'Arms & Hands','Fingers / Cuticles':'Arms & Hands',
+    'Thighs':'Legs & Feet','Knees':'Legs & Feet','Shins / Calves':'Legs & Feet','Ankles':'Legs & Feet','Feet':'Legs & Feet',
+    'Groin':'Groin & Glutes','Buttocks':'Groin & Glutes','Inner Thighs':'Groin & Glutes',
+    // Legacy values from old format
+    'Face':'Face','Back':'Chest & Back','Arms / Hands':'Arms & Hands','Legs':'Legs & Feet',
+    'Chest / Shoulders':'Chest & Back','Scalp':'Head & Neck'
+  };
+
+  const grouped = {};
+  Object.entries(data).forEach(([key, count]) => {
+    const parent = AREA_MAP[key] || key;
+    grouped[parent] = (grouped[parent] || 0) + count;
+  });
+
+  const sorted = Object.entries(grouped).sort((a,b) => b[1] - a[1]);
   if (sorted.length === 0) { setChartEmpty('chart-areas', true, 'No body areas logged yet'); return; }
   setChartEmpty('chart-areas', false);
   const ctx = document.getElementById('chart-areas').getContext('2d');
