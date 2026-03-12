@@ -2,1050 +2,769 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>BFRB Log</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skin Journal — Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f7f2ef;
-    --surface: #ffffff;
-    --surface2: #f0e9e4;
-    --border: #e4d8d0;
-    --border-focus: #c07a60;
-    --text: #2c1a12;
-    --text-secondary: #6b4535;
-    --text-muted: #a07060;
-    --accent: #b85c40;
-    --accent-light: rgba(184,92,64,0.10);
-    --accent-mid: rgba(184,92,64,0.18);
-    --green: #4a8c5c;
-    --green-light: rgba(74,140,92,0.12);
-    --amber: #b8820a;
-    --amber-light: rgba(184,130,10,0.10);
-    --red: #b83a3a;
-    --red-light: rgba(184,58,58,0.10);
-    --purple: #7a5898;
-    --purple-light: rgba(122,88,152,0.10);
-    --teal: #3a8878;
-    --teal-light: rgba(58,136,120,0.10);
-    --rose: #b04468;
-    --rose-light: rgba(176,68,104,0.10);
-    --shadow-sm: 0 1px 4px rgba(18,36,80,0.07);
-    --shadow: 0 2px 12px rgba(18,36,80,0.09);
-    --shadow-lg: 0 8px 32px rgba(18,36,80,0.13);
-    --radius: 14px;
-    --radius-sm: 8px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg); color: var(--text);
-    font-family: 'Inter', sans-serif; font-size: 14px;
-    min-height: 100vh; padding-bottom: 100px;
-  }
-
-  nav {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px; height: 56px;
-    background: rgba(255,255,255,0.96); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
-  }
-  .nav-brand { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--text); }
-  .nav-right { display: flex; align-items: center; gap: 8px; }
-  .nav-link {
-    font-size: 12px; font-weight: 600; color: var(--text-secondary);
-    text-decoration: none; padding: 6px 14px; border: 1px solid var(--border);
-    border-radius: 50px; background: var(--surface); transition: all 0.15s;
-  }
-  .nav-link:hover { border-color: var(--accent); color: var(--accent); }
-  .signout-btn {
-    font-size: 11px; font-weight: 600; color: var(--text-muted); background: none;
-    border: 1px solid var(--border); border-radius: 50px;
-    padding: 5px 12px; cursor: pointer; transition: all 0.15s;
-  }
-  .user-avatar { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border); object-fit: cover; }
-  .user-info { display: flex; align-items: center; gap: 8px; }
-
-
-  main { max-width: 540px; margin: 0 auto; padding: 20px 14px; }
-
-  .section-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--text-muted); margin: 24px 0 6px 2px;
-  }
-  .section-label:first-child { margin-top: 0; }
-
-  .quick-log-card {
-    background: linear-gradient(135deg, #7a2e18 0%, var(--accent) 100%);
-    border-radius: var(--radius); padding: 18px 20px;
-    margin-bottom: 20px; box-shadow: 0 4px 18px rgba(184,92,64,0.28);
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .quick-btn-primary {
-    background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.35);
-    border-radius: var(--radius-sm); padding: 12px 20px;
-    font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
-    color: #fff; cursor: pointer; transition: all 0.14s; text-align: left;
-    letter-spacing: 0.01em;
-  }
-  .quick-btn-primary:hover { background: rgba(255,255,255,0.26); }
-  .quick-btn-primary:active { transform: scale(0.99); }
-  .quick-log-hint { font-size: 11px; color: rgba(255,255,255,0.6); padding-left: 2px; }
-
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
-  }
-  .field { margin-bottom: 20px; }
-  .field:last-child { margin-bottom: 0; }
-  label {
-    display: block; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;
-  }
-
-  .toggle-group { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .toggle-btn {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 50px;
-    padding: 13px 8px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600;
-    color: var(--text-secondary); cursor: pointer; text-align: center; transition: all 0.12s; user-select: none;
-  }
-  .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .toggle-btn.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
-
-  .tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    background: var(--bg); border: 1px solid var(--border); border-radius: 50px;
-    padding: 8px 14px; font-size: 13px; font-weight: 500; color: var(--text-secondary);
-    cursor: pointer; transition: all 0.12s; user-select: none;
-  }
-  .tag:hover { border-color: var(--accent); color: var(--accent); }
-  .tag:active { transform: scale(0.96); }
-  .tag.other-tag { border-style: dashed; }
-
-  /* Category expand buttons */
-  .cat-tag {
-    padding: 9px 14px !important;
-    font-size: 12px !important;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .cat-tag.cat-open {
-    background: var(--accent) !important; border-color: var(--accent) !important;
-    color: #fff !important;
-  }
-  .cat-tag .cat-arrow {
-    width: 12px; height: 12px; flex-shrink: 0;
-    display: inline-flex; align-items: center; justify-content: center;
-    opacity: 0.5; transition: transform 0.2s;
-  }
-  .cat-tag .cat-arrow::before {
-    content: ''; display: block;
-    width: 6px; height: 6px;
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
-    transform: rotate(-45deg) translateY(-1px);
-    transition: transform 0.2s;
-  }
-  .cat-tag.cat-open .cat-arrow::before {
-    transform: rotate(45deg) translateY(-2px);
-  }
-
-  /* Sub-panels (nested tag groups) */
-  .sub-panel {
-    display: none; margin-top: 8px;
-    padding: 12px 12px 10px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border); background: var(--surface2);
-    animation: fadeIn 0.15s ease;
-  }
-  .sub-panel.open { display: block; }
-  .sub-panel-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* Custom saved tags area */
-  .custom-tags-section { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); display: none; }
-  .custom-tags-section.has-tags { display: block; }
-  .custom-tags-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; letter-spacing: 0.05em; }
-
-  /* single selected color for all tags */
-  .tag.sel-blue, .tag.sel-green, .tag.sel-purple,
-  .tag.sel-amber, .tag.sel-teal, .tag.sel-rose {
-    background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600;
-  }
-
-  input[type="text"], input[type="datetime-local"], textarea, select {
-    width: 100%; background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
-    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 400;
-    outline: none; transition: border-color 0.15s, box-shadow 0.15s;
-    -webkit-appearance: none; appearance: none;
-  }
-  input:focus, textarea:focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-light); }
-  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
-  .other-input { margin-top: 8px; display: none; }
-  .other-input.visible { display: block; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  @media (max-width: 420px) { .two-col { grid-template-columns: 1fr; } }
-
-  .slider-row { display: flex; align-items: center; gap: 12px; }
-  input[type="range"] {
-    -webkit-appearance: none; appearance: none; flex: 1; height: 6px;
-    background: var(--border); border-radius: 10px; outline: none; cursor: pointer; padding: 0; border: none;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent); cursor: pointer; box-shadow: 0 2px 6px rgba(184,92,64,0.35);
-    border: 3px solid #fff; transition: transform 0.12s;
-  }
-  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-  input[type="range"]::-moz-range-thumb {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent); cursor: pointer; box-shadow: 0 2px 6px rgba(184,92,64,0.35);
-    border: 3px solid #fff; transition: transform 0.12s;
-  }
-  .slider-val { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); width: 32px; text-align: right; line-height: 1; }
-  .slider-labels { display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 6px; }
-
-  .submit-btn {
-    width: 100%; background: var(--accent); color: #fff; border: none;
-    border-radius: 50px; padding: 15px; font-family: 'Inter', sans-serif;
-    font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.15s;
-    box-shadow: 0 4px 16px rgba(184,92,64,0.32); margin-top: 10px;
-  }
-  .submit-btn:hover { background: #9e4a30; box-shadow: 0 6px 20px rgba(184,92,64,0.42); }
-  .submit-btn:active { transform: scale(0.99); }
-  .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-  .clear-btn {
-    width: 100%; background: transparent; color: var(--text-muted);
-    border: 1px solid var(--border); border-radius: 50px; padding: 11px;
-    font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
-    cursor: pointer; margin-top: 8px; transition: all 0.15s;
-  }
-  .clear-btn:hover { border-color: var(--border-focus); color: var(--text-secondary); }
-
-  .db-status {
-    text-align: center; margin-top: 16px; font-size: 11px; font-weight: 500;
-    color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 5px;
-  }
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; }
-  .status-dot.connected { background: var(--green); }
-  .status-dot.error { background: var(--red); }
-
-  .toast {
-    position: fixed; bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    background: var(--text); border-radius: 50px; padding: 11px 22px;
-    font-size: 13px; font-weight: 600; color: #fff; box-shadow: var(--shadow-lg);
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); z-index: 999; white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.success { background: var(--green); }
-  .toast.error { background: var(--red); }
-
-  .login-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; }
-  .login-screen.visible { display: flex; }
-  .login-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 36px 28px; box-shadow: var(--shadow-lg); text-align: center; max-width: 300px; width: 90%;
-  }
-  .login-mark {
-    width: 44px; height: 44px; background: var(--accent); border-radius: 12px;
-    margin: 0 auto 18px; display: flex; align-items: center; justify-content: center;
-  }
-  .login-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 6px; }
-  .login-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
-  .google-btn {
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-    width: 100%; background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 18px; font-family: 'Inter', sans-serif;
-    font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer;
-    transition: all 0.15s; box-shadow: var(--shadow-sm);
-  }
-  .google-btn:hover { border-color: var(--border-focus); box-shadow: var(--shadow); }
-
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(18,30,54,0.5);
-    backdrop-filter: blur(4px); z-index: 300; align-items: flex-end; justify-content: center;
-  }
-  .modal-overlay.visible { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: var(--radius) var(--radius) 0 0;
-    padding: 20px 20px 36px; width: 100%; max-width: 540px; box-shadow: var(--shadow-lg);
-    animation: slideUp 0.25s cubic-bezier(0.34,1.2,0.64,1);
-  }
-  @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 10px; margin: 0 auto 18px; }
-  .modal-title { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); margin-bottom: 3px; }
-  .modal-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; }
-  .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .modal-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .modal-tag {
-    padding: 10px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-    background: var(--bg); font-size: 12px; font-weight: 500; color: var(--text-secondary);
-    cursor: pointer; text-align: center; transition: all 0.12s; user-select: none;
-  }
-  .modal-tag:hover { border-color: var(--accent); color: var(--accent); }
-  .modal-tag.sel { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
-  .modal-save-btn {
-    width: 100%; background: var(--accent); color: #fff; border: none;
-    border-radius: 50px; padding: 14px; font-family: 'Inter', sans-serif;
-    font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px;
-    box-shadow: 0 4px 14px rgba(184,92,64,0.32); transition: all 0.15s;
-  }
-  .modal-save-btn:hover { background: #9e4a30; }
-  .modal-cancel {
-    width: 100%; background: none; color: var(--text-muted); border: none;
-    padding: 10px; font-family: 'Inter', sans-serif; font-size: 12px;
-    font-weight: 600; cursor: pointer; margin-top: 4px; transition: color 0.15s;
-  }
-  .modal-cancel:hover { color: var(--text-secondary); }
-  .modal-field-label {
-    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
-  }
-
-  #app-content { display: none; }
-  #app-content.visible { display: block; }
+:root{
+  --bg:#eae4db;--sur:#f7f3ed;--hi:#fff;
+  --bdr:#d0c9be;--foc:#3d6b52;
+  --tx:#1a1510;--tx2:#4a3e34;--mu:#8c7e72;
+  --ac:#3d6b52;--acl:rgba(61,107,82,.09);
+  --am:#a87020;--aml:rgba(168,112,32,.10);
+  --rd:#9e3232;--rdl:rgba(158,50,50,.10);
+  --r:14px;--rs:9px;
+  --s1:0 1px 3px rgba(0,0,0,.05);--s2:0 2px 10px rgba(0,0,0,.08);--s3:0 8px 28px rgba(0,0,0,.13);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;min-height:100vh;padding-bottom:120px}
+nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(247,243,237,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
+.nav-brand{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:var(--tx);letter-spacing:-.02em}
+.nav-r{display:flex;align-items:center;gap:8px}
+.nav-lk{font-size:12px;font-weight:600;color:var(--tx2);text-decoration:none;padding:6px 13px;border:1px solid var(--bdr);border-radius:50px;background:var(--hi);transition:all .15s}
+.nav-lk:hover{border-color:var(--ac);color:var(--ac)}
+.so-btn{font-size:11px;font-weight:600;color:var(--mu);background:none;border:1px solid var(--bdr);border-radius:50px;padding:5px 12px;cursor:pointer}
+.av{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
+.ui{display:flex;align-items:center;gap:8px}
+main{max-width:520px;margin:0 auto;padding:20px 14px}
+.sh{display:flex;align-items:flex-start;gap:11px;margin:28px 0 9px}
+.sn{width:24px;height:24px;border-radius:50%;background:var(--ac);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.st{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--tx);letter-spacing:-.01em}
+.ss{font-size:11px;color:var(--mu);margin-top:2px}
+.card{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;margin-bottom:10px;box-shadow:var(--s1)}
+.fld{margin-bottom:18px}
+.fld:last-child{margin-bottom:0}
+label,.lbl{display:block;font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-bottom:9px}
+.fn{font-size:10px;color:var(--mu);margin-top:5px;font-style:italic;line-height:1.5}
+.bfrb-grid,.et-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.bt,.et{padding:13px 8px;border:1.5px solid var(--bdr);border-radius:var(--rs);background:var(--sur);cursor:pointer;text-align:center;transition:all .15s;user-select:none}
+.bt-icon,.et-icon{font-size:18px;margin-bottom:4px}
+.bt-lbl,.et-lbl{font-size:11px;font-weight:700;color:var(--tx2);display:block}
+.bt-sub,.et-sub{font-size:10px;color:var(--mu);display:block;margin-top:2px}
+.bt.pick.on{background:var(--rdl);border-color:var(--rd)}.bt.pick.on .bt-lbl{color:var(--rd)}
+.bt.acr.on{background:var(--aml);border-color:var(--am)}.bt.acr.on .bt-lbl{color:var(--am)}
+.bt.both.on{background:var(--acl);border-color:var(--ac)}.bt.both.on .bt-lbl{color:var(--ac)}
+.et.p.on{background:var(--rdl);border-color:var(--rd)}.et.p.on .et-lbl{color:var(--rd)}
+.et.r.on{background:var(--acl);border-color:var(--ac)}.et.r.on .et-lbl{color:var(--ac)}
+.et.n.on{background:var(--aml);border-color:var(--am)}.et.n.on .et-lbl{color:var(--am)}
+.win{background:rgba(61,107,82,.08);border:1px solid rgba(61,107,82,.2);border-radius:var(--rs);padding:12px 14px;display:flex;align-items:flex-start;gap:10px;margin-top:10px}
+.win-tx{font-size:12px;color:var(--ac);font-weight:500;line-height:1.55}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.tb{padding:12px 8px;border:1px solid var(--bdr);border-radius:var(--rs);background:var(--bg);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;color:var(--tx2);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
+.tb:hover{border-color:var(--ac);color:var(--ac)}
+.tb.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.tg-row{display:flex;flex-wrap:wrap;gap:7px}
+.tag{padding:8px 13px;border:1px solid var(--bdr);border-radius:50px;background:var(--bg);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .12s;user-select:none}
+.tag:hover{border-color:var(--ac);color:var(--ac)}
+.tag:active{transform:scale(.97)}
+.tag.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.tag.dash{border-style:dashed}
+.acc-btns{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px}
+.ab{display:flex;align-items:center;gap:6px;padding:8px 13px;border:1px solid var(--bdr);border-radius:50px;background:var(--bg);cursor:pointer;font-size:12px;font-weight:600;color:var(--tx2);transition:all .12s;user-select:none}
+.ab:hover{border-color:var(--ac);color:var(--ac)}
+.ab.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.ab svg{width:10px;height:10px;flex-shrink:0;transition:transform .2s}
+.ab.on svg{transform:rotate(180deg)}
+.ap{display:none;padding:11px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rs);margin-bottom:6px;animation:fi .15s ease}
+.ap.on{display:block}
+.ap-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.cb{padding:12px 11px;border:1.5px solid var(--bdr);border-radius:var(--rs);background:var(--bg);cursor:pointer;text-align:left;transition:all .12s;user-select:none}
+.cb-l{font-size:12px;font-weight:700;color:var(--tx2);display:block;margin-bottom:2px}
+.cb-s{font-size:10px;color:var(--mu);display:block}
+.cb.on{border-color:var(--ac);background:var(--acl)}.cb.on .cb-l{color:var(--ac)}
+.cb[data-v="tasted"].on,.cb[data-v="ingested"].on{border-color:var(--am);background:var(--aml)}
+.cb[data-v="tasted"].on .cb-l,.cb[data-v="ingested"].on .cb-l{color:var(--am)}
+.ing-note{font-size:11px;color:var(--am);background:var(--aml);border:1px solid rgba(168,112,32,.2);border-radius:var(--rs);padding:10px 12px;margin-top:8px;display:none;line-height:1.6}
+.ing-note.on{display:block}
+.sv{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.svb{padding:10px 4px;border:1.5px solid var(--bdr);border-radius:var(--rs);background:var(--bg);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
+.sv-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 5px}
+.sv-lbl{font-size:10px;font-weight:600;color:var(--tx2)}
+.svb[data-v="none"] .sv-dot{background:var(--ac)}
+.svb[data-v="minor"] .sv-dot{background:var(--am)}
+.svb[data-v="moderate"] .sv-dot{background:#c05020}
+.svb[data-v="significant"] .sv-dot{background:var(--rd)}
+.svb.on[data-v="none"]{border-color:var(--ac);background:var(--acl)}
+.svb.on[data-v="minor"]{border-color:var(--am);background:var(--aml)}
+.svb.on[data-v="moderate"]{border-color:#c05020;background:rgba(192,80,32,.08)}
+.svb.on[data-v="significant"]{border-color:var(--rd);background:var(--rdl)}
+.nail-btn{padding:7px 10px;border:1.5px solid var(--bdr);border-radius:var(--rs);background:var(--bg);font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;text-align:center;transition:all .12s;user-select:none}
+.nail-btn:hover{border-color:var(--am);color:var(--am)}
+.nail-btn.on{background:var(--am);border-color:var(--am);color:#fff}
+.sl-row{display:flex;align-items:center;gap:12px}
+input[type=range]{-webkit-appearance:none;flex:1;height:6px;background:var(--bdr);border-radius:10px;outline:none;cursor:pointer;padding:0;border:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--ac);cursor:pointer;box-shadow:0 2px 6px rgba(61,107,82,.4);border:3px solid #fff;transition:transform .12s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--ac);cursor:pointer;border:3px solid #fff}
+.sl-val{font-family:'Fraunces',serif;font-size:26px;font-weight:300;color:var(--ac);width:30px;text-align:right;line-height:1;flex-shrink:0}
+.sl-lbls{display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:var(--mu);margin-top:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:400px){.two{grid-template-columns:1fr}}
+.col-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+input[type=text],input[type=datetime-local],textarea{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:var(--rs);padding:10px 12px;color:var(--tx);font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
+input:focus,textarea:focus{border-color:var(--foc);box-shadow:0 0 0 3px var(--acl)}
+textarea{resize:vertical;min-height:78px;line-height:1.6}
+.oi{margin-top:8px;display:none}
+.oi.on{display:block}
+.eff-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.eff-btn{width:38px;height:38px;border:1.5px solid var(--bdr);border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .12s;user-select:none;background:var(--bg)}
+.eff-btn:hover{border-color:var(--am)}
+.eff-btn.on{background:var(--aml);border-color:var(--am)}
+.eff-lbl{font-size:11px;color:var(--mu);margin-left:2px}
+.sub-btn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:50px;padding:15px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;box-shadow:0 4px 16px rgba(61,107,82,.35);margin-top:10px}
+.sub-btn:hover{background:#2d5240}
+.sub-btn:active{transform:scale(.99)}
+.sub-btn:disabled{opacity:.45;cursor:not-allowed}
+.clr-btn{width:100%;background:transparent;color:var(--mu);border:1px solid var(--bdr);border-radius:50px;padding:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .15s}
+.clr-btn:hover{border-color:var(--rd);color:var(--rd)}
+.dbs{text-align:center;margin-top:16px;font-size:11px;color:var(--mu);display:flex;align-items:center;justify-content:center;gap:5px}
+.sd{width:6px;height:6px;border-radius:50%;background:var(--bdr);flex-shrink:0}
+.sd.on{background:var(--ac)}.sd.err{background:var(--rd)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:50px;padding:11px 22px;font-size:13px;font-weight:600;color:#fff;box-shadow:var(--s3);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--ac)}.toast.err{background:var(--rd)}
+.qc{background:linear-gradient(135deg,#2d5240 0%,var(--ac) 100%);border-radius:var(--r);padding:16px 18px;margin-bottom:24px;box-shadow:0 4px 18px rgba(61,107,82,.32);display:flex;flex-direction:column;gap:6px}
+.qb{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:var(--rs);padding:12px 16px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:all .14s;text-align:left}
+.qb:hover{background:rgba(255,255,255,.26)}
+.qh{font-size:11px;color:rgba(255,255,255,.6);padding-left:2px}
+.mo{display:none;position:fixed;inset:0;background:rgba(18,15,12,.55);backdrop-filter:blur(4px);z-index:300;align-items:flex-end;justify-content:center}
+.mo.on{display:flex}
+.ms{background:var(--hi);border-radius:var(--r) var(--r) 0 0;padding:20px 20px 44px;width:100%;max-width:520px;box-shadow:var(--s3);animation:su .25s cubic-bezier(.34,1.2,.64,1);max-height:90vh;overflow-y:auto}
+.mh{width:36px;height:4px;background:var(--bdr);border-radius:10px;margin:0 auto 18px}
+.mt{font-family:'Fraunces',serif;font-size:19px;font-weight:300;color:var(--tx);margin-bottom:3px;letter-spacing:-.01em}
+.msu{font-size:11px;color:var(--mu);margin-bottom:16px}
+.mlbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:14px 0 8px}
+.mlbl:first-of-type{margin-top:0}
+.q-tag{padding:8px 13px;border:1px solid var(--bdr);border-radius:50px;background:var(--bg);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:all .12s;user-select:none}
+.q-tag:hover{border-color:var(--ac);color:var(--ac)}
+.q-tag.on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.q-tag.am{background:var(--am);border-color:var(--am);color:#fff;font-weight:600}
+.ms-save{width:100%;background:var(--ac);color:#fff;border:none;border-radius:50px;padding:14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;box-shadow:0 4px 14px rgba(61,107,82,.35);transition:all .15s}
+.ms-save:hover{background:#2d5240}
+.ms-cancel{width:100%;background:none;color:var(--mu);border:none;padding:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:4px}
+.ls{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
+.ls.on{display:flex}
+.lc{background:var(--hi);border:1px solid var(--bdr);border-radius:var(--r);padding:38px 30px;box-shadow:var(--s3);text-align:center;max-width:310px;width:92%}
+.lm{width:52px;height:52px;background:var(--ac);border-radius:14px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center}
+.lt{font-family:'Fraunces',serif;font-size:22px;font-weight:300;color:var(--tx);margin-bottom:6px;letter-spacing:-.02em}
+.lsub{font-size:13px;color:var(--mu);margin-bottom:26px;line-height:1.55}
+.gb{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--hi);border:1px solid var(--bdr);border-radius:var(--rs);padding:12px 18px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx);cursor:pointer;transition:all .15s;box-shadow:var(--s1)}
+.gb:hover{border-color:var(--foc);box-shadow:var(--s2)}
+@keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
+#app{display:none}
+#app.on{display:block}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-
-<nav>
-  <div class="nav-brand">BFRB Log</div>
-  <div class="nav-right" id="nav-right">
-    <a href="tracker.html" class="nav-link">View data</a>
-  </div>
-</nav>
-
-<div class="login-screen" id="login-screen">
-  <div class="login-card">
-    <div class="login-mark">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    </div>
-    <div class="login-title">BFRB Log</div>
-    <div class="login-sub">Your private space to track skin-picking patterns.</div>
-    <button class="google-btn" onclick="signInWithGoogle()">
+<div id="toast" class="toast"></div>
+<div class="ls" id="login-screen">
+  <div class="lc">
+    <div class="lm"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+    <div class="lt">Skin Journal</div>
+    <div class="lsub">Your private space to understand and change BFRB patterns.</div>
+    <button class="gb" id="sign-in-btn">
       <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       Continue with Google
     </button>
   </div>
 </div>
-
-<div class="modal-overlay" id="quick-modal">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Quick log</div>
-    <div class="modal-sub">Log the essentials in seconds.</div>
-    <div class="modal-field-label">Urge strength</div>
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <input type="range" min="1" max="10" value="5" id="q-urge-slider" oninput="document.getElementById('q-urge-val').textContent=this.value;updateQuickSlider(this)">
-      <span style="font-family:'DM Serif Display',serif;font-size:26px;color:var(--accent);width:30px;text-align:right;line-height:1" id="q-urge-val">5</span>
+<div class="mo" id="quick-modal">
+  <div class="ms">
+    <div class="mh"></div>
+    <div class="mt">Quick log</div>
+    <div class="msu">Under 30 seconds — essentials only</div>
+    <div class="mlbl">What behavior?</div>
+    <div class="tg-row" id="q-bfrb">
+      <div class="q-tag on" data-v="picking" onclick="qBfrb(this)">Skin picking</div>
+      <div class="q-tag" data-v="acrylic" onclick="qBfrb(this)">Acrylic chewing</div>
+      <div class="q-tag" data-v="both" onclick="qBfrb(this)">Both</div>
     </div>
-    <div class="modal-field-label">Awareness</div>
-    <div class="modal-row" style="margin-bottom:16px">
-      <div class="modal-tag" id="q-aware-c" onclick="qSetAwareness('Conscious')">Conscious</div>
-      <div class="modal-tag" id="q-aware-s" onclick="qSetAwareness('Subconscious')">Subconscious</div>
+    <div id="q-pick-block">
+      <div class="mlbl">What happened?</div>
+      <div class="tg-row" id="q-type">
+        <div class="q-tag on" data-v="picked" onclick="qType(this)">Picked</div>
+        <div class="q-tag" data-v="resisted" onclick="qType(this)">Resisted &#10003;</div>
+        <div class="q-tag" data-v="near" onclick="qType(this)">Near miss</div>
+      </div>
+      <div id="q-area-block">
+        <div class="mlbl">Body area</div>
+        <div class="tg-row" id="q-area">
+          <div class="q-tag" onclick="qToggle(this,'qArea')">Face</div>
+          <div class="q-tag" onclick="qToggle(this,'qArea')">Scalp</div>
+          <div class="q-tag" onclick="qToggle(this,'qArea')">Upper arms</div>
+          <div class="q-tag" onclick="qToggle(this,'qArea')">Back</div>
+          <div class="q-tag" onclick="qToggle(this,'qArea')">Chest</div>
+        </div>
+        <div class="mlbl">What happened to it?</div>
+        <div class="tg-row" id="q-completion">
+          <div class="q-tag" data-v="released" onclick="qSingle(this,'qCompletion')">Put it down</div>
+          <div class="q-tag" data-v="examined" onclick="qSingle(this,'qCompletion')">Examined</div>
+          <div class="q-tag" data-v="tasted" onclick="qSingleAmber(this,'qCompletion')">Tasted</div>
+          <div class="q-tag" data-v="ingested" onclick="qSingleAmber(this,'qCompletion')">Ingested</div>
+        </div>
+      </div>
     </div>
-    <div class="modal-field-label">Trigger</div>
-    <div class="modal-row-3" id="q-triggers" style="margin-bottom:16px">
-      <div class="modal-tag" onclick="qToggle(this)">Stressed</div>
-      <div class="modal-tag" onclick="qToggle(this)">Bored</div>
-      <div class="modal-tag" onclick="qToggle(this)">Anxious</div>
-      <div class="modal-tag" onclick="qToggle(this)">Tired</div>
-      <div class="modal-tag" onclick="qToggle(this)">Idle hands</div>
-      <div class="modal-tag" onclick="qToggle(this)">In the zone</div>
+    <div class="mlbl">Main trigger</div>
+    <div class="tg-row" id="q-trigger">
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Stressed</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Anxious</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Bored</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Felt a texture</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Saw in mirror</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Idle</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Winding down</div>
+      <div class="q-tag" onclick="qSingle(this,'qTrigger')">Tired</div>
     </div>
-    <div class="modal-field-label">Outcome</div>
-    <div class="modal-row-3" id="q-outcomes" style="margin-bottom:16px">
-      <div class="modal-tag" onclick="qSingle(this,'outcome')">Stopped early</div>
-      <div class="modal-tag" onclick="qSingle(this,'outcome')">Completed urge</div>
-      <div class="modal-tag" onclick="qSingle(this,'outcome')">Partial stop</div>
+    <div class="mlbl">Urge strength</div>
+    <div class="sl-row" style="margin-bottom:4px">
+      <input type="range" id="q-urge" min="1" max="10" value="5" oninput="qSlider(this)">
+      <span class="sl-val" id="q-urge-val">5</span>
     </div>
-    <button class="modal-save-btn" onclick="saveQuickEntry()">Save entry</button>
-    <button class="modal-cancel" onclick="closeQuickModal()">Cancel</button>
+    <div class="sl-lbls"><span>Mild</span><span>Overwhelming</span></div>
+    <button class="ms-save" id="q-save-btn">Save</button>
+    <button class="ms-cancel" onclick="closeQuick()">Cancel</button>
   </div>
 </div>
-
-<div id="app-content">
-  <main>
-    <div class="quick-log-card">
-      <button class="quick-btn-primary" onclick="openQuickModal()">Quick log — tap to log in seconds</button>
-      <div class="quick-log-hint">Saves urge, trigger and outcome without the full form</div>
-    </div>
-
-    <div class="section-label">When did this happen?</div>
-    <div class="card">
-      <div class="field">
-        <div class="toggle-group">
-          <div class="toggle-btn selected" id="type-realtime" onclick="setType('realtime')">Right now</div>
-          <div class="toggle-btn" id="type-backdated" onclick="setType('backdated')">Earlier</div>
-        </div>
+<nav>
+  <div class="nav-brand">Skin Journal</div>
+  <div class="nav-r" id="nav-r"><a href="tracker.html" class="nav-lk">My data &#8594;</a></div>
+</nav>
+<div id="app">
+<main>
+  <div class="qc">
+    <button class="qb" onclick="openQuick()">&#9889; Quick log &#8212; under 30 seconds</button>
+    <div class="qh">Body area, trigger, urge &#8212; saved in seconds</div>
+  </div>
+  <div class="sh">
+    <div class="sn">1</div>
+    <div><div class="st">What are you logging?</div><div class="ss">Track picking, acrylic chewing, or both</div></div>
+  </div>
+  <div class="card">
+    <div class="bfrb-grid">
+      <div class="bt pick on" id="bt-pick" onclick="setBfrb('picking')">
+        <div class="bt-icon">&#128308;</div><span class="bt-lbl">Skin picking</span><span class="bt-sub">Pimples, scabs, texture</span>
       </div>
-      <div class="field" id="datetime-field" style="display:none">
-        <label>Event time</label>
-        <input type="datetime-local" id="event-time">
+      <div class="bt acr" id="bt-acr" onclick="setBfrb('acrylic')">
+        <div class="bt-icon">&#128133;</div><span class="bt-lbl">Acrylic chewing</span><span class="bt-sub">Chewing on nails</span>
       </div>
-    </div>
-
-    <div class="section-label">Awareness &amp; context</div>
-    <div class="card">
-      <div class="field">
-        <label>Awareness</label>
-        <div class="toggle-group">
-          <div class="toggle-btn" id="aware-c" onclick="setAwareness('Conscious')">Conscious</div>
-          <div class="toggle-btn" id="aware-s" onclick="setAwareness('Subconscious')">Subconscious</div>
-        </div>
-      </div>
-      <div class="field">
-        <label>Location</label>
-        <!-- Category buttons -->
-        <div class="tag-group">
-          <div class="tag cat-tag" onclick="toggleCat(this,'loc-home')"><span>Home</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'loc-study')"><span>Study &amp; Work</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'loc-out')"><span>Out &amp; About</span><span class="cat-arrow"></span></div>
-        </div>
-        <!-- Home sub-panel -->
-        <div class="sub-panel" id="loc-home">
-          <div class="sub-panel-label">Home</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Couch</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Desk</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Bed</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Bathroom mirror</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Kitchen</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Shower</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Dining table</div>
-          </div>
-        </div>
-        <!-- Study & Work sub-panel -->
-        <div class="sub-panel" id="loc-study">
-          <div class="sub-panel-label">Study &amp; Work</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'location','blue')">School / campus</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Library</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Clinical placement</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Office / work</div>
-          </div>
-        </div>
-        <!-- Out & About sub-panel -->
-        <div class="sub-panel" id="loc-out">
-          <div class="sub-panel-label">Out &amp; About</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Car</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Public transport</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Gym</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Outdoors / park</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Shop / store</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Waiting room</div>
-            <div class="tag" onclick="toggleTag(this,'location','blue')">Friend's place</div>
-          </div>
-        </div>
-        <!-- Custom saved locations -->
-        <div class="custom-tags-section" id="location-custom-section">
-          <div class="custom-tags-label">My saved locations</div>
-          <div class="tag-group" id="location-custom-tags"></div>
-        </div>
-        <div class="tag-group" style="margin-top:8px">
-          <div class="tag other-tag" onclick="toggleOther(this,'location')">+ Other</div>
-        </div>
-        <input type="text" class="other-input" id="location-other" placeholder="Where were you?">
-      </div>
-      <div class="field">
-        <label>Activity</label>
-        <div class="tag-group">
-          <div class="tag cat-tag" onclick="toggleCat(this,'act-study')"><span>Studying</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'act-screen')"><span>Screen &amp; Media</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'act-daily')"><span>Daily Life</span><span class="cat-arrow"></span></div>
-        </div>
-        <div class="sub-panel" id="act-study">
-          <div class="sub-panel-label">Studying</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Studying</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Practice questions</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Reading</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">In a lecture</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching lecture</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">On the computer</div>
-          </div>
-        </div>
-        <div class="sub-panel" id="act-screen">
-          <div class="sub-panel-label">Screen &amp; Media</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Phone</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Watching TV</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Gaming</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Scrolling</div>
-          </div>
-        </div>
-        <div class="sub-panel" id="act-daily">
-          <div class="sub-panel-label">Daily Life</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Driving / commuting</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Getting ready</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">In bed</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Talking</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Eating</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Nothing / zoning out</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Exercise</div>
-            <div class="tag" onclick="toggleTag(this,'activity','teal')">Cooking</div>
-          </div>
-        </div>
-        <!-- Custom saved activities -->
-        <div class="custom-tags-section" id="activity-custom-section">
-          <div class="custom-tags-label">My saved activities</div>
-          <div class="tag-group" id="activity-custom-tags"></div>
-        </div>
-        <div class="tag-group" style="margin-top:8px">
-          <div class="tag other-tag" onclick="toggleOther(this,'activity')">+ Other</div>
-        </div>
-        <input type="text" class="other-input" id="activity-other" placeholder="What were you doing?">
+      <div class="bt both" id="bt-both" onclick="setBfrb('both')">
+        <div class="bt-icon">&#128260;</div><span class="bt-lbl">Both</span><span class="bt-sub">Happened together</span>
       </div>
     </div>
-
-    <div class="section-label">Trigger &amp; mood</div>
-    <div class="card">
-      <div class="field">
-        <label>Trigger</label>
-        <div class="tag-group">
-          <div class="tag cat-tag" onclick="toggleCat(this,'trig-emotion')"><span>Emotional</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'trig-physical')"><span>Physical / Sensory</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'trig-situational')"><span>Situational</span><span class="cat-arrow"></span></div>
-        </div>
-        <div class="sub-panel" id="trig-emotion">
-          <div class="sub-panel-label">Emotional</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Stressed</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Anxious</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Frustrated</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Bored</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Tired</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Socially anxious</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Overwhelmed</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Sad</div>
-          </div>
-        </div>
-        <div class="sub-panel" id="trig-physical">
-          <div class="sub-panel-label">Physical / Sensory</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Felt a texture</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Saw in mirror</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Idle hands</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Skin felt rough</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Itching</div>
-          </div>
-        </div>
-        <div class="sub-panel" id="trig-situational">
-          <div class="sub-panel-label">Situational</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">In the zone</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Waiting</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Winding down</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Before an exam</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">After a stressful event</div>
-            <div class="tag" onclick="toggleTag(this,'trigger','purple')">Procrastinating</div>
-          </div>
-        </div>
-        <!-- Custom saved triggers -->
-        <div class="custom-tags-section" id="trigger-custom-section">
-          <div class="custom-tags-label">My saved triggers</div>
-          <div class="tag-group" id="trigger-custom-tags"></div>
-        </div>
-        <div class="tag-group" style="margin-top:8px">
-          <div class="tag other-tag" onclick="toggleOther(this,'trigger')">+ Other</div>
-        </div>
-        <input type="text" class="other-input" id="trigger-other" placeholder="Specify trigger...">
+  </div>
+  <div class="sh" id="sh-what">
+    <div class="sn">2</div>
+    <div><div class="st">What happened?</div><div class="ss">Resisted urges are worth logging too</div></div>
+  </div>
+  <div class="card" id="card-what">
+    <div class="et-grid">
+      <div class="et p on" id="et-picked" onclick="setEntry('picked')">
+        <div class="et-icon">&#128308;</div><span class="et-lbl">Picked</span><span class="et-sub">I picked or scratched</span>
       </div>
-      <div class="field">
-        <label>Mood before</label>
-        <div class="tag-group">
-          <div class="tag cat-tag" onclick="toggleCat(this,'mood-low')"><span>Low / Difficult</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'mood-high')"><span>Activated</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'mood-neutral')"><span>Neutral / Flat</span><span class="cat-arrow"></span></div>
-        </div>
-        <div class="sub-panel" id="mood-low">
-          <div class="sub-panel-label">Low / Difficult</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Sad</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Lonely</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Guilty</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Embarrassed</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Defeated</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Overwhelmed</div>
-          </div>
-        </div>
-        <div class="sub-panel" id="mood-high">
-          <div class="sub-panel-label">Activated</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Anxious</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Tense</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Irritable</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Restless</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Excited</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Hopeful</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Happy</div>
-          </div>
-        </div>
-        <div class="sub-panel" id="mood-neutral">
-          <div class="sub-panel-label">Neutral / Flat</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Calm</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Numb</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Focused</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Content</div>
-            <div class="tag" onclick="toggleTag(this,'mood','amber')">Dissociated</div>
-          </div>
-        </div>
-        <!-- Custom saved moods -->
-        <div class="custom-tags-section" id="mood-custom-section">
-          <div class="custom-tags-label">My saved moods</div>
-          <div class="tag-group" id="mood-custom-tags"></div>
-        </div>
-        <div class="tag-group" style="margin-top:8px">
-          <div class="tag other-tag" onclick="toggleOther(this,'mood')">+ Other</div>
-        </div>
-        <input type="text" class="other-input" id="mood-other" placeholder="How were you feeling?">
+      <div class="et r" id="et-resisted" onclick="setEntry('resisted')">
+        <div class="et-icon">&#128154;</div><span class="et-lbl">Resisted</span><span class="et-sub">Had urge, didn't pick</span>
+      </div>
+      <div class="et n" id="et-near" onclick="setEntry('near')">
+        <div class="et-icon">&#127865;</div><span class="et-lbl">Near miss</span><span class="et-sub">Started but stopped</span>
       </div>
     </div>
-
-    <div class="section-label">Physical target</div>
-    <div class="card">
-      <div class="field">
-        <label>Body area</label>
-        <div class="tag-group" id="area-tags">
-          <div class="tag cat-tag" onclick="toggleCat(this,'area-face')"><span>Face &amp; Head</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'area-upper')"><span>Upper body</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'area-arms')"><span>Arms &amp; Hands</span><span class="cat-arrow"></span></div>
-          <div class="tag cat-tag" onclick="toggleCat(this,'area-lower')"><span>Lower body</span><span class="cat-arrow"></span></div>
-        </div>
-        <!-- Face & Head sub-panel -->
-        <div class="sub-panel" id="area-face">
-          <div class="sub-panel-label">Face &amp; Head</div>
-          <div class="tag-group">
-            <div class="tag" id="face-tag" onclick="toggleFaceTag(this)">Face</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Scalp</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Neck</div>
-          </div>
-          <!-- Face specific sub-panel -->
-          <div id="face-sub" style="display:none;margin-top:10px;padding:12px;background:var(--rose-light);border-radius:var(--radius-sm);border:1px solid rgba(176,68,104,0.2)">
-            <div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--rose);margin-bottom:8px">Specific area of face</div>
-            <div class="tag-group" id="face-sub-tags">
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Forehead</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Cheeks</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Chin</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Nose</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Around mouth</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Lips</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Ears</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Temples</div>
-              <div class="tag" onclick="toggleTag(this,'area','rose')">Jawline</div>
-            </div>
-          </div>
-        </div>
-        <!-- Upper body sub-panel -->
-        <div class="sub-panel" id="area-upper">
-          <div class="sub-panel-label">Upper body</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Chest</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Shoulders</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Upper back</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Lower back</div>
-          </div>
-        </div>
-        <!-- Arms & Hands sub-panel -->
-        <div class="sub-panel" id="area-arms">
-          <div class="sub-panel-label">Arms &amp; Hands</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Upper arms</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Forearms</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Hands / fingers</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Knuckles</div>
-          </div>
-        </div>
-        <!-- Lower body sub-panel -->
-        <div class="sub-panel" id="area-lower">
-          <div class="sub-panel-label">Lower body</div>
-          <div class="tag-group">
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Thighs</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Shins</div>
-            <div class="tag" onclick="toggleTag(this,'area','rose')">Feet / toes</div>
-          </div>
-        </div>
-        <div class="custom-tags-section" id="area-custom-section">
-          <div class="custom-tags-label">My saved areas</div>
-          <div class="tag-group" id="area-custom-tags"></div>
-        </div>
-        <div class="tag-group" style="margin-top:8px">
-          <div class="tag other-tag" onclick="toggleOther(this,'area')">+ Other</div>
-        </div>
-        <input type="text" class="other-input" id="area-other" placeholder="Which area?">
-      </div>
-      <div class="field">
-          <label>What you picked</label>
-          <div class="tag-group" id="physical-tags">
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Scab</div>
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Uneven skin</div>
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Pimple</div>
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Dry skin</div>
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Ingrown hair</div>
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Cuticle</div>
-            <div class="tag" onclick="toggleTag(this,'physical','green')">Nothing specific</div>
-          </div>
-          <div class="custom-tags-section" id="physical-custom-section">
-            <div class="custom-tags-label">My saved items</div>
-            <div class="tag-group" id="physical-custom-tags"></div>
-          </div>
-          <div class="tag-group" style="margin-top:8px">
-            <div class="tag other-tag" onclick="toggleOther(this,'physical')">+ Other</div>
-          </div>
-          <input type="text" class="other-input" id="physical-other" placeholder="What was it?">
-        </div>
+    <div id="win-msg" class="win hidden">
+      <div style="font-size:17px;flex-shrink:0">&#127807;</div>
+      <div class="win-tx">That's a win. Log the context &#8212; it shows which situations and strategies are working.</div>
     </div>
-
-    <div class="section-label">Intensity &amp; duration</div>
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-when">3</div>
+    <div><div class="st">When?</div></div>
+  </div>
+  <div class="card">
+    <div class="tg">
+      <div class="tb on" id="tim-now" onclick="setTiming('now')">Right now</div>
+      <div class="tb" id="tim-back" onclick="setTiming('back')">Earlier / backdated</div>
+    </div>
+    <div id="dt-fld" class="hidden" style="margin-top:14px">
+      <label>When did it happen?</label>
+      <input type="datetime-local" id="event-time">
+    </div>
+  </div>
+  <div id="pick-section">
+    <div class="sh">
+      <div class="sn" id="sn-pick">4</div>
+      <div><div class="st">The picking</div><div class="ss">Body area, what you picked, and what happened to it</div></div>
+    </div>
     <div class="card">
-      <div class="field">
-        <label>Urge strength</label>
-        <div class="slider-row">
-          <input type="range" min="1" max="10" value="5" id="urge-slider" oninput="updateSlider(this)">
-          <span class="slider-val" id="urge-val">5</span>
+      <div class="fld">
+        <label>Body area <span style="font-weight:400;text-transform:none;letter-spacing:0">(select all)</span></label>
+        <div class="acc-btns">
+          <div class="ab" onclick="toggleAcc(this,'area-face')">Face <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="ab" onclick="toggleAcc(this,'area-body')">Body <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="ab" onclick="toggleAcc(this,'area-limbs')">Arms &amp; legs <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
         </div>
-        <div class="slider-labels"><span>Mild</span><span>Intense</span></div>
+        <div class="ap" id="area-face"><div class="ap-lbl">Face</div><div class="tg-row">
+          <div class="tag" onclick="toggleTag(this,'area')">Forehead</div><div class="tag" onclick="toggleTag(this,'area')">Cheeks</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Chin</div><div class="tag" onclick="toggleTag(this,'area')">Nose</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Around mouth</div><div class="tag" onclick="toggleTag(this,'area')">Jawline</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Temples</div><div class="tag" onclick="toggleTag(this,'area')">Ears</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Lips</div>
+        </div></div>
+        <div class="ap" id="area-body"><div class="ap-lbl">Body</div><div class="tg-row">
+          <div class="tag" onclick="toggleTag(this,'area')">Scalp</div><div class="tag" onclick="toggleTag(this,'area')">Neck</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Shoulders</div><div class="tag" onclick="toggleTag(this,'area')">Chest</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Upper back</div><div class="tag" onclick="toggleTag(this,'area')">Lower back</div>
+        </div></div>
+        <div class="ap" id="area-limbs"><div class="ap-lbl">Arms &amp; legs</div><div class="tg-row">
+          <div class="tag" onclick="toggleTag(this,'area')">Upper arms</div><div class="tag" onclick="toggleTag(this,'area')">Forearms</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Hands / fingers</div><div class="tag" onclick="toggleTag(this,'area')">Knuckles</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Cuticles</div><div class="tag" onclick="toggleTag(this,'area')">Thighs</div>
+          <div class="tag" onclick="toggleTag(this,'area')">Shins</div>
+        </div></div>
       </div>
-      <div class="field">
+      <div class="fld">
+        <label>What did you pick?</label>
+        <div class="tg-row">
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Pimple</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Whitehead</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Scab</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Dry skin</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Uneven texture</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Ingrown hair</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Cuticle</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Blackhead</div>
+          <div class="tag" onclick="toggleTag(this,'picked_what')">Nothing specific</div>
+        </div>
+      </div>
+      <div class="fld">
+        <label>Mirror involved?</label>
+        <div class="fn" style="margin-bottom:9px">Mirror use is a major trigger &#8212; tracking it reveals your highest-risk situations</div>
+        <div data-single="mirror" class="tg-row">
+          <div class="tag" onclick="setSingle(this,'mirror')">No mirror</div>
+          <div class="tag" onclick="setSingle(this,'mirror')">Regular mirror</div>
+          <div class="tag" onclick="setSingle(this,'mirror')">Magnifying mirror</div>
+        </div>
+      </div>
+      <div class="fld">
+        <label>What happened to what you picked?</label>
+        <div class="fn" style="margin-bottom:10px">The full behavior chain &#8212; no judgment here</div>
+        <div class="cg">
+          <div class="cb" data-v="released" onclick="setCompletion(this)"><span class="cb-l">Put it down</span><span class="cb-s">Released or discarded</span></div>
+          <div class="cb" data-v="examined" onclick="setCompletion(this)"><span class="cb-l">Examined it</span><span class="cb-s">Looked, then discarded</span></div>
+          <div class="cb" data-v="tasted" onclick="setCompletion(this)"><span class="cb-l">Touched to lips / bit</span><span class="cb-s">Brief oral contact</span></div>
+          <div class="cb" data-v="ingested" onclick="setCompletion(this)"><span class="cb-l">Ingested / swallowed</span><span class="cb-s">Chewed or swallowed</span></div>
+        </div>
+        <div class="ing-note" id="ing-note">
+          &#128161; This is an oral sensory step &#8212; it's connected to the same urge that used to drive nail biting. The most effective competing response is chewing gum, sugar-free mints, or flavoured lip balm to redirect the oral stimulation.
+        </div>
+      </div>
+      <div class="fld">
+        <label>Skin impact</label>
+        <div class="sv">
+          <div class="svb" data-v="none" onclick="setSev(this)"><div class="sv-dot"></div><div class="sv-lbl">None</div></div>
+          <div class="svb" data-v="minor" onclick="setSev(this)"><div class="sv-dot"></div><div class="sv-lbl">Minor</div></div>
+          <div class="svb" data-v="moderate" onclick="setSev(this)"><div class="sv-dot"></div><div class="sv-lbl">Moderate</div></div>
+          <div class="svb" data-v="significant" onclick="setSev(this)"><div class="sv-dot"></div><div class="sv-lbl">Significant</div></div>
+        </div>
+        <div class="sl-lbls"><span>No mark</span><span>Redness</span><span>Broke skin</span><span>Bleeding</span></div>
+      </div>
+      <div class="fld" style="margin-bottom:0">
         <label>Duration</label>
-        <div class="tag-group" id="duration-tags">
-          <div class="tag" onclick="setSingle(this,'duration','blue')">Under 1 min</div>
-          <div class="tag" onclick="setSingle(this,'duration','blue')">1 - 3 min</div>
-          <div class="tag" onclick="setSingle(this,'duration','blue')">3 - 10 min</div>
-          <div class="tag" onclick="setSingle(this,'duration','blue')">10 - 30 min</div>
-          <div class="tag" onclick="setSingle(this,'duration','blue')">30+ min</div>
-        </div>
-      </div>
-      <div class="field">
-        <label>Outcome</label>
-        <div class="tag-group" id="outcome-tags">
-          <div class="tag" onclick="setSingle(this,'outcome','green')">Stopped early</div>
-          <div class="tag" onclick="setSingle(this,'outcome','green')">Completed urge</div>
-          <div class="tag" onclick="setSingle(this,'outcome','green')">Partial stop</div>
+        <div data-single="duration" class="tg-row">
+          <div class="tag" onclick="setSingle(this,'duration')">Under 1 min</div>
+          <div class="tag" onclick="setSingle(this,'duration')">1&#8211;5 min</div>
+          <div class="tag" onclick="setSingle(this,'duration')">5&#8211;15 min</div>
+          <div class="tag" onclick="setSingle(this,'duration')">15&#8211;30 min</div>
+          <div class="tag" onclick="setSingle(this,'duration')">30+ min</div>
         </div>
       </div>
     </div>
-
-    <div class="section-label">Intervention</div>
+  </div>
+  <div id="acr-section" class="hidden">
+    <div class="sh">
+      <div class="sn" id="sn-acr">5</div>
+      <div><div class="st">The acrylic chewing</div><div class="ss">Oral stimulation &#8212; tracked separately from picking</div></div>
+    </div>
     <div class="card">
-      <div class="field">
-        <div class="tag-group" id="intervention-tags">
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Nothing this time</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Barrier (gloves / bandage)</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Fidget tool</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Redirected urge</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Left the area</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Deep breathing</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Mindfulness</div>
-          <div class="tag" onclick="toggleTag(this,'intervention','teal')">Told someone</div>
+      <div class="fld">
+        <label>Duration</label>
+        <div data-single="acr_duration" class="tg-row">
+          <div class="tag" onclick="setSingle(this,'acr_duration')">Briefly (&lt;1 min)</div>
+          <div class="tag" onclick="setSingle(this,'acr_duration')">A few minutes</div>
+          <div class="tag" onclick="setSingle(this,'acr_duration')">Extended session</div>
         </div>
-        <div class="custom-tags-section" id="intervention-custom-section">
-          <div class="custom-tags-label">My saved interventions</div>
-          <div class="tag-group" id="intervention-custom-tags"></div>
-        </div>
-        <div class="tag-group" style="margin-top:8px">
-          <div class="tag other-tag" onclick="toggleOther(this,'intervention')">+ Other</div>
-        </div>
-        <input type="text" class="other-input" id="intervention-other" placeholder="Specify...">
       </div>
-      <div class="field">
-        <label>Notes</label>
-        <textarea id="notes" placeholder="Anything else worth logging..."></textarea>
+      <div class="fld">
+        <label>Intensity</label>
+        <div data-single="acr_intensity" class="tg-row">
+          <div class="tag" onclick="setSingle(this,'acr_intensity')">Light / gentle</div>
+          <div class="tag" onclick="setSingle(this,'acr_intensity')">Moderate</div>
+          <div class="tag" onclick="setSingle(this,'acr_intensity')">Heavy / hard</div>
+        </div>
+      </div>
+      <div class="fld">
+        <label>Which nails?</label>
+        <div class="tg-row">
+          <div class="nail-btn" onclick="toggleTag(this,'acr_nails')">Thumbs</div>
+          <div class="nail-btn" onclick="toggleTag(this,'acr_nails')">Index</div>
+          <div class="nail-btn" onclick="toggleTag(this,'acr_nails')">Middle</div>
+          <div class="nail-btn" onclick="toggleTag(this,'acr_nails')">Ring</div>
+          <div class="nail-btn" onclick="toggleTag(this,'acr_nails')">Pinkies</div>
+          <div class="nail-btn" onclick="toggleTag(this,'acr_nails')">Multiple</div>
+        </div>
+      </div>
+      <div class="fld" style="margin-bottom:0">
+        <label>Were you aware?</label>
+        <div class="tg">
+          <div class="tb" id="acr-con" onclick="setAcrAw('Conscious')">Yes &#8212; noticed while doing it</div>
+          <div class="tb" id="acr-sub" onclick="setAcrAw('Subconscious')">Not until after</div>
+        </div>
       </div>
     </div>
-
-    <button class="submit-btn" id="submit-btn" onclick="submitEntry()">Save entry</button>
-    <button class="clear-btn" onclick="resetForm()">Clear form</button>
-    <div class="db-status">
-      <span class="status-dot" id="status-dot"></span>
-      <span id="status-text">Connecting...</span>
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-ctx">6</div>
+    <div><div class="st">Context</div><div class="ss">Where you were and what you were doing</div></div>
+  </div>
+  <div class="card">
+    <div class="fld">
+      <label>Location</label>
+      <div class="acc-btns">
+        <div class="ab" onclick="toggleAcc(this,'loc-home')">Home <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+        <div class="ab" onclick="toggleAcc(this,'loc-study')">Study <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+        <div class="ab" onclick="toggleAcc(this,'loc-out')">Out <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+      </div>
+      <div class="ap" id="loc-home"><div data-single="location" class="tg-row">
+        <div class="tag" onclick="setSingle(this,'location')">Bathroom / mirror</div>
+        <div class="tag" onclick="setSingle(this,'location')">Bedroom</div>
+        <div class="tag" onclick="setSingle(this,'location')">Bed</div>
+        <div class="tag" onclick="setSingle(this,'location')">Couch</div>
+        <div class="tag" onclick="setSingle(this,'location')">Desk</div>
+        <div class="tag" onclick="setSingle(this,'location')">Dining table</div>
+        <div class="tag" onclick="setSingle(this,'location')">Kitchen</div>
+      </div></div>
+      <div class="ap" id="loc-study"><div data-single="location" class="tg-row">
+        <div class="tag" onclick="setSingle(this,'location')">Campus / school</div>
+        <div class="tag" onclick="setSingle(this,'location')">Library</div>
+        <div class="tag" onclick="setSingle(this,'location')">Cafe</div>
+        <div class="tag" onclick="setSingle(this,'location')">Clinical placement</div>
+      </div></div>
+      <div class="ap" id="loc-out"><div data-single="location" class="tg-row">
+        <div class="tag" onclick="setSingle(this,'location')">Car</div>
+        <div class="tag" onclick="setSingle(this,'location')">Public transport</div>
+        <div class="tag" onclick="setSingle(this,'location')">Gym</div>
+        <div class="tag" onclick="setSingle(this,'location')">Waiting room</div>
+        <div class="tag" onclick="setSingle(this,'location')">Friend's place</div>
+      </div></div>
+      <div class="tg-row" style="margin-top:8px">
+        <div class="tag dash" onclick="toggleOther(this,'location')">+ Other</div>
+      </div>
+      <input type="text" class="oi" id="location-other" placeholder="Where were you?">
     </div>
-  </main>
+    <div class="fld" style="margin-bottom:0">
+      <label>Activity</label>
+      <div class="acc-btns">
+        <div class="ab" onclick="toggleAcc(this,'act-study')">Study / work <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+        <div class="ab" onclick="toggleAcc(this,'act-screen')">Screens <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+        <div class="ab" onclick="toggleAcc(this,'act-life')">Daily life <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1,1 5,5 9,1"/></svg></div>
+      </div>
+      <div class="ap" id="act-study"><div class="tg-row">
+        <div class="tag" onclick="toggleTag(this,'activity')">Studying</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Practice questions</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Reading</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Watching lecture</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">In a lecture</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">On the computer</div>
+      </div></div>
+      <div class="ap" id="act-screen"><div class="tg-row">
+        <div class="tag" onclick="toggleTag(this,'activity')">Scrolling phone</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Watching TV</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Gaming</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Video call</div>
+      </div></div>
+      <div class="ap" id="act-life"><div class="tg-row">
+        <div class="tag" onclick="toggleTag(this,'activity')">Getting ready</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">In bed / winding down</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Eating</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Driving / commuting</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Nothing / zoning out</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Exercise</div>
+        <div class="tag" onclick="toggleTag(this,'activity')">Talking</div>
+      </div></div>
+      <div class="tg-row" style="margin-top:8px">
+        <div class="tag dash" onclick="toggleOther(this,'activity')">+ Other</div>
+      </div>
+      <input type="text" class="oi" id="activity-other" placeholder="What were you doing?">
+    </div>
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-trig">7</div>
+    <div><div class="st">What set it off?</div><div class="ss">Emotional and sensory &#8212; select all that apply</div></div>
+  </div>
+  <div class="card">
+    <div class="two">
+      <div>
+        <div class="col-lbl">&#128532; Emotional</div>
+        <div class="tg-row">
+          <div class="tag" onclick="toggleTag(this,'etrig')">Stressed</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Anxious</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Overwhelmed</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Frustrated</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Bored</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Tired</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Procrastinating</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Idle hands</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Zoning out</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Winding down</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Socially anxious</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Before exam / prac</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">After stressful class</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Sad</div>
+          <div class="tag" onclick="toggleTag(this,'etrig')">Restless</div>
+        </div>
+      </div>
+      <div>
+        <div class="col-lbl">&#128064; Sensory</div>
+        <div class="tg-row">
+          <div class="tag" onclick="toggleTag(this,'strig')">Felt a texture</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Saw in mirror</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Used magnifying mirror</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Itching</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Skin felt rough</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Noticed a bump</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Scanning skin</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Touching face</div>
+          <div class="tag" onclick="toggleTag(this,'strig')">Bright lighting</div>
+        </div>
+      </div>
+    </div>
+    <div class="tg-row" style="margin-top:10px">
+      <div class="tag dash" onclick="toggleOther(this,'trigger')">+ Other trigger</div>
+    </div>
+    <input type="text" class="oi" id="trigger-other" placeholder="Describe the trigger">
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-mood">8</div>
+    <div><div class="st">How did you feel?</div><div class="ss">Before and after &#8212; the contrast reveals what the behavior does for you</div></div>
+  </div>
+  <div class="card">
+    <div class="two">
+      <div>
+        <div class="fld">
+          <label>Mood before</label>
+          <div class="tg-row">
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Calm</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Tense</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Anxious</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Sad</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Numb</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Irritable</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Restless</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Focused</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Dissociated</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Bored</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Overwhelmed</div>
+            <div class="tag" onclick="toggleTag(this,'mood_before')">Content</div>
+          </div>
+        </div>
+        <div class="fld" style="margin-bottom:0">
+          <label>Urge strength &#8212; before</label>
+          <div class="sl-row">
+            <input type="range" id="urge-before" min="1" max="10" value="5" oninput="updSl(this,'ub-val','urge_before')">
+            <span class="sl-val" id="ub-val">5</span>
+          </div>
+          <div class="sl-lbls"><span>Mild</span><span>Intense</span></div>
+        </div>
+      </div>
+      <div id="after-col">
+        <div class="fld">
+          <label>Mood after</label>
+          <div class="tg-row">
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Relieved</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Calm</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Guilty</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Ashamed</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Numb</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Satisfied</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Regretful</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Frustrated</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Neutral</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Proud</div>
+            <div class="tag" onclick="toggleTag(this,'mood_after')">Defeated</div>
+          </div>
+        </div>
+        <div class="fld" style="margin-bottom:0">
+          <label>Urge strength &#8212; after</label>
+          <div class="sl-row">
+            <input type="range" id="urge-after" min="1" max="10" value="3" oninput="updSl(this,'ua-val','urge_after')">
+            <span class="sl-val" id="ua-val">3</span>
+          </div>
+          <div class="sl-lbls"><span>Gone</span><span>Still strong</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-aw">9</div>
+    <div><div class="st">Were you aware?</div></div>
+  </div>
+  <div class="card">
+    <div class="tg">
+      <div class="tb" id="aw-con" onclick="setAw('Conscious')">Conscious &#8212; I knew while doing it</div>
+      <div class="tb" id="aw-sub" onclick="setAw('Subconscious')">Subconscious &#8212; didn't notice until after</div>
+    </div>
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-int">10</div>
+    <div><div class="st">Did you try anything?</div><div class="ss">Competing responses and habit reversal</div></div>
+  </div>
+  <div class="card">
+    <div class="fld">
+      <label>Tried a competing response?</label>
+      <div class="tg">
+        <div class="tb" id="tried-y" onclick="setTried(true)">Yes &#8212; tried something</div>
+        <div class="tb" id="tried-n" onclick="setTried(false)">No &#8212; just noticed</div>
+      </div>
+    </div>
+    <div id="int-detail" class="fld hidden">
+      <label>What did you try?</label>
+      <div class="fn" style="margin-bottom:8px">For picking &#8212; hands &amp; barriers</div>
+      <div class="tg-row" style="margin-bottom:10px">
+        <div class="tag" onclick="toggleTag(this,'interventions')">Bandaid / barrier</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Gloves / finger cots</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Fidget tool</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Clenched fists</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Left the mirror</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Applied lotion</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Covered skin</div>
+      </div>
+      <div class="fn" style="margin-bottom:8px">For oral urges &#8212; substitutes</div>
+      <div class="tg-row" style="margin-bottom:10px">
+        <div class="tag" onclick="toggleTag(this,'interventions')">Chewing gum</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Mints / candy</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Flavoured lip balm</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Drink of water</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Safe chew item</div>
+      </div>
+      <div class="fn" style="margin-bottom:8px">Regulation &amp; awareness</div>
+      <div class="tg-row">
+        <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Movement / walk</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Distracted myself</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Mindful awareness</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Told someone</div>
+        <div class="tag" onclick="toggleTag(this,'interventions')">Set a timer</div>
+      </div>
+    </div>
+    <div id="int-eff" class="fld hidden" style="margin-bottom:0">
+      <label>How well did it work?</label>
+      <div class="eff-row">
+        <div class="eff-btn" data-v="1" onclick="setEff(this)">&#128542;</div>
+        <div class="eff-btn" data-v="2" onclick="setEff(this)">&#128533;</div>
+        <div class="eff-btn" data-v="3" onclick="setEff(this)">&#128528;</div>
+        <div class="eff-btn" data-v="4" onclick="setEff(this)">&#128578;</div>
+        <div class="eff-btn" data-v="5" onclick="setEff(this)">&#128516;</div>
+        <div class="eff-lbl" id="eff-lbl">Tap to rate</div>
+      </div>
+    </div>
+  </div>
+  <div class="sh">
+    <div class="sn" id="sn-notes">11</div>
+    <div><div class="st">Notes</div></div>
+  </div>
+  <div class="card">
+    <textarea id="notes" placeholder="Anything else &#8212; what you noticed, how the urge felt, what you were thinking before it started&#8230;"></textarea>
+  </div>
+  <button class="sub-btn" id="sub-btn" onclick="submitEntry()">Save entry</button>
+  <button class="clr-btn" onclick="resetForm()">Clear form</button>
+  <div class="dbs"><div class="sd" id="sd"></div><span id="st-txt">Connecting&#8230;</span></div>
+</main>
 </div>
-
-<div class="toast" id="toast"></div>
-
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp }
-    from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
-    from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-    authDomain: "skin-picking-log.firebaseapp.com",
-    projectId: "skin-picking-log",
-    storageBucket: "skin-picking-log.firebasestorage.app",
-    messagingSenderId: "162906566118",
-    appId: "1:162906566118:web:a89abbd383fc847ba97a27"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-  window._db = db; window._collection = collection;
-  window._addDoc = addDoc; window._serverTimestamp = serverTimestamp;
-
-  window.signInWithGoogle = async function() {
-    try { await signInWithPopup(auth, provider); } catch(err) { console.error(err.message); }
-  };
-  window.signOutUser = async function() { await signOut(auth); };
-
-  onAuthStateChanged(auth, async user => {
-    const loginScreen = document.getElementById('login-screen');
-    const appContent = document.getElementById('app-content');
-    const navRight = document.getElementById('nav-right');
-    if (user) {
-      loginScreen.classList.remove('visible');
-      appContent.classList.add('visible');
-      window._currentUser = user;
-      navRight.innerHTML = `<div class="user-info">${user.photoURL?`<img class="user-avatar" src="${user.photoURL}" alt="">`:''}<a href="tracker.html" class="nav-link">View data</a><button class="signout-btn" onclick="signOutUser()">Sign out</button></div>`;
-      document.getElementById('status-dot').classList.add('connected');
-      document.getElementById('status-text').textContent = 'Connected';
-      // Load user's custom tags from Firestore
-      if (window._loadCustomTagsForUser) window._loadCustomTagsForUser(user.uid);
-    } else {
-      loginScreen.classList.add('visible');
-      appContent.classList.remove('visible');
-      window._currentUser = null;
-      navRight.innerHTML = `<a href="tracker.html" class="nav-link">View data</a>`;
-    }
-  });
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,collection,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const FB={apiKey:"AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",authDomain:"skin-picking-log.firebaseapp.com",projectId:"skin-picking-log",storageBucket:"skin-picking-log.firebasestorage.app",messagingSenderId:"162906566118",appId:"1:162906566118:web:a89abbd383fc847ba97a27"};
+const app=initializeApp(FB);const auth=getAuth(app);const db=getFirestore(app);const gp=new GoogleAuthProvider();
+window._addEntry=(uid,data)=>addDoc(collection(db,'users',uid,'events'),{...data,created_at:serverTimestamp()});
+document.getElementById('sign-in-btn').addEventListener('click',()=>signInWithPopup(auth,gp).catch(e=>window.toast(e.message,true)));
+window.doSignOut=()=>signOut(auth);
+onAuthStateChanged(auth,u=>{
+  const ls=document.getElementById('login-screen'),ap=document.getElementById('app');
+  if(u){ls.classList.remove('on');ap.classList.add('on');document.getElementById('sd').classList.add('on');
+    document.getElementById('st-txt').textContent=u.displayName||u.email;
+    document.getElementById('nav-r').innerHTML=`<a href="tracker.html" class="nav-lk">My data &rarr;</a><div class="ui"><img src="${u.photoURL||''}" class="av" alt=""><button class="so-btn" onclick="doSignOut()">Sign out</button></div>`;
+    window._uid=u.uid;
+  }else{ls.classList.add('on');ap.classList.remove('on');window._uid=null;}
+});
 </script>
-
 <script>
-  const state = {
-    type:'realtime', awareness:null, duration:null, outcome:null,
-    selections:{location:[],trigger:[],activity:[],area:[],physical:[],intervention:[],mood:[]}
-  };
-  const qState = { awareness:null, triggers:[], outcome:null };
-
-  function openQuickModal() {
-    document.getElementById('quick-modal').classList.add('visible');
-    qState.awareness=null; qState.triggers=[]; qState.outcome=null;
-    document.querySelectorAll('#q-triggers .modal-tag,#q-outcomes .modal-tag').forEach(t=>t.classList.remove('sel'));
-    document.getElementById('q-aware-c').classList.remove('sel');
-    document.getElementById('q-aware-s').classList.remove('sel');
-    const sl=document.getElementById('q-urge-slider'); sl.value=5; updateQuickSlider(sl);
-    document.getElementById('q-urge-val').textContent='5';
-  }
-  function closeQuickModal(){document.getElementById('quick-modal').classList.remove('visible');}
-  function qSetAwareness(val){
-    qState.awareness=val;
-    document.getElementById('q-aware-c').classList.toggle('sel',val==='Conscious');
-    document.getElementById('q-aware-s').classList.toggle('sel',val==='Subconscious');
-  }
-  function qToggle(el){
-    el.classList.toggle('sel');
-    const v=el.textContent.trim(), i=qState.triggers.indexOf(v);
-    if(i>-1)qState.triggers.splice(i,1);else qState.triggers.push(v);
-  }
-  function qSingle(el,group){
-    el.closest('.modal-row-3,.modal-row').querySelectorAll('.modal-tag').forEach(t=>t.classList.remove('sel'));
-    el.classList.add('sel'); qState[group]=el.textContent.trim();
-  }
-  function updateQuickSlider(el){
-    const pct=((el.value-1)/9)*100;
-    el.style.background=`linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;
-  }
-  async function saveQuickEntry(){
-    if(!window._db){showToast('Not connected yet',true);return;}
-    const btn=document.querySelector('#quick-modal .modal-save-btn');
-    if(btn){btn.disabled=true;btn.textContent='Saving...';}
-    const entry={timestamp:localISOString(),entry_type:'quick',awareness:qState.awareness||'',trigger:qState.triggers.join(', '),urge_strength:parseInt(document.getElementById('q-urge-slider').value),outcome:qState.outcome||'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
-    try{await window._addDoc(window._collection(window._db,'events'),entry);closeQuickModal();showToast('Saved',false,true);}
-    catch(err){showToast('Could not save: '+err.message,true);}
-    if(btn){btn.disabled=false;btn.textContent='Save entry';}
-  }
-  async function saveUrgeOnly(level){
-    if(!window._db){showToast('Not connected yet',true);return;}
-    const entry={timestamp:localISOString(),entry_type:'quick',urge_strength:level,awareness:'',trigger:'',outcome:'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
-    try{await window._addDoc(window._collection(window._db,'events'),entry);showToast('Logged - urge '+level+'/10',false,true);}
-    catch(err){showToast('Could not save',true);}
-  }
-
-  function setType(t){state.type=t;document.getElementById('type-realtime').classList.toggle('selected',t==='realtime');document.getElementById('type-backdated').classList.toggle('selected',t==='backdated');document.getElementById('datetime-field').style.display=t==='backdated'?'block':'none';}
-  function setAwareness(val){state.awareness=val;document.getElementById('aware-c').classList.toggle('selected',val==='Conscious');document.getElementById('aware-s').classList.toggle('selected',val==='Subconscious');}
-
-  // ── Category accordion toggle ───────────────────────────────────────────
-  function toggleCat(el, panelId) {
-    const panel = document.getElementById(panelId);
-    const isOpen = panel.classList.contains('open');
-    panel.classList.toggle('open', !isOpen);
-    el.classList.toggle('cat-open', !isOpen);
-  }
-
-  // ── Custom tag persistence (Firebase-backed, localStorage fallback) ──────
-  const TAG_CONFIG = {
-    location:     { customSection: 'location-custom-section',     customContainer: 'location-custom-tags',     color: 'blue',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-    trigger:      { customSection: 'trigger-custom-section',      customContainer: 'trigger-custom-tags',      color: 'purple', onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-    activity:     { customSection: 'activity-custom-section',     customContainer: 'activity-custom-tags',     color: 'teal',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-    area:         { customSection: 'area-custom-section',         customContainer: 'area-custom-tags',         color: 'rose',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-    physical:     { customSection: 'physical-custom-section',     customContainer: 'physical-custom-tags',     color: 'green',  onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-    intervention: { customSection: 'intervention-custom-section', customContainer: 'intervention-custom-tags', color: 'teal',   onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-    mood:         { customSection: 'mood-custom-section',         customContainer: 'mood-custom-tags',         color: 'amber',  onclick: (g,c) => `toggleTag(this,'${g}','${c}')` },
-  };
-
-  // In-memory store of all custom tags (loaded from Firebase/localStorage)
-  const _customTagStore = {};
-
-  function _getLocalCustomTags(group) {
-    try { return JSON.parse(localStorage.getItem('bfrb_custom_' + group) || '[]'); } catch(e) { return []; }
-  }
-  function _setLocalCustomTags(group, arr) {
-    try { localStorage.setItem('bfrb_custom_' + group, JSON.stringify(arr)); } catch(e) {}
-  }
-
-  function renderCustomTag(group, value) {
-    const cfg = TAG_CONFIG[group]; if (!cfg) return;
-    const container = document.getElementById(cfg.customContainer);
-    const section   = document.getElementById(cfg.customSection);
-    if (!container || !section) return;
-    // Deduplicate
-    if (Array.from(container.querySelectorAll('.tag')).some(t => t.textContent.trim() === value)) return;
-    const tag = document.createElement('div');
-    tag.className = 'tag';
-    tag.textContent = value;
-    tag.addEventListener('click', function(){ toggleTag(this, group, cfg.color); });
-    container.appendChild(tag);
-    section.classList.add('has-tags');
-  }
-
-  function loadAllCustomTags(allCustom) {
-    // allCustom: { location: [...], trigger: [...], ... }
-    Object.keys(TAG_CONFIG).forEach(group => {
-      const vals = (allCustom && allCustom[group]) ? allCustom[group] : _getLocalCustomTags(group);
-      _customTagStore[group] = vals;
-      vals.forEach(v => renderCustomTag(group, v));
-    });
-  }
-
-  async function saveCustomTag(group, value) {
-    if (!value) return;
-    if (!_customTagStore[group]) _customTagStore[group] = [];
-    if (_customTagStore[group].includes(value)) return; // already exists
-    _customTagStore[group].push(value);
-    renderCustomTag(group, value);
-    // Persist locally
-    _setLocalCustomTags(group, _customTagStore[group]);
-    // Persist to Firebase if logged in
-    if (window._db && window._currentUser) {
-      try {
-        const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js");
-        const ref = doc(window._db, 'users', window._currentUser.uid);
-        await setDoc(ref, { customTags: _customTagStore }, { merge: true });
-      } catch(e) { console.warn('Could not save custom tags to Firebase', e); }
-    }
-  }
-
-  // Called from Firebase auth handler once user is known
-  window._loadCustomTagsForUser = async function(uid) {
-    if (!window._db) { loadAllCustomTags(null); return; }
-    try {
-      const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js");
-      const ref = doc(window._db, 'users', uid);
-      const snap = await getDoc(ref);
-      const data = snap.exists() ? snap.data() : {};
-      // Merge Firebase data over localStorage
-      const merged = {};
-      Object.keys(TAG_CONFIG).forEach(g => {
-        const local = _getLocalCustomTags(g);
-        const remote = (data.customTags && data.customTags[g]) || [];
-        merged[g] = [...new Set([...remote, ...local])];
-        _setLocalCustomTags(g, merged[g]);
-      });
-      loadAllCustomTags(merged);
-    } catch(e) {
-      console.warn('Could not load custom tags from Firebase, using localStorage', e);
-      loadAllCustomTags(null);
-    }
-  };
-
-  // Load from localStorage on startup (before Firebase auth resolves)
-  loadAllCustomTags(null);
-  function toggleFaceTag(el) {
-    const isSelected = el.classList.contains('sel-rose');
-    if (isSelected) {
-      el.classList.remove('sel-rose');
-      const idx = state.selections.area.indexOf('Face');
-      if (idx > -1) state.selections.area.splice(idx, 1);
-      document.getElementById('face-sub').style.display = 'none';
-      // deselect all face sub-tags
-      document.querySelectorAll('#face-sub-tags .tag').forEach(t => {
-        const v = t.textContent.trim();
-        t.classList.remove('sel-rose');
-        const i = state.selections.area.indexOf(v);
-        if (i > -1) state.selections.area.splice(i, 1);
-      });
-    } else {
-      el.classList.add('sel-rose');
-      state.selections.area.push('Face');
-      document.getElementById('face-sub').style.display = 'block';
-    }
-  }
-
-  function toggleTag(el,group,color){const val=el.textContent.trim(),arr=state.selections[group],idx=arr.indexOf(val);if(idx>-1){arr.splice(idx,1);el.classList.remove('sel-'+color);}else{arr.push(val);el.classList.add('sel-'+color);}}
-  function setSingle(el,group,color){el.closest('.tag-group').querySelectorAll('.tag').forEach(t=>{t.className=t.className.replace(/sel-\w+/g,'').trim();});el.classList.add('sel-'+color);state[group]=el.textContent.trim();}
-  function toggleOther(el,group){
-    const color=(TAG_CONFIG[group]&&TAG_CONFIG[group].color)||'blue';
-    const selClass='sel-'+color;
-    el.classList.toggle(selClass);
-    const input=document.getElementById(group+'-other');
-    if(el.classList.contains(selClass)){input.classList.add('visible');input.focus();}
-    else{input.classList.remove('visible');input.value='';}
-  }  function updateSlider(el){document.getElementById('urge-val').textContent=el.value;const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;}
-  function getOtherVal(group){const input=document.getElementById(group+'-other');return(input&&input.classList.contains('visible')&&input.value.trim())?input.value.trim():null;}
-  function localISOString(d=new Date()){
-    const pad=n=>String(n).padStart(2,'0');
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
-  function getTimestamp(){if(state.type==='backdated'){const v=document.getElementById('event-time').value;if(v){return v.length===16?v+':00':v;}return localISOString();}return localISOString();}
-  function showToast(msg,isError=false,isSuccess=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isError?' error':'')+(isSuccess?' success':'');void t.offsetWidth;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-  async function submitEntry(){
-    if(!window._db){showToast('Not connected yet - try again',true);return;}
-    const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Saving...';
-    // Persist any "Other" values typed so they become permanent tags
-    const savePromises = ['location','trigger','activity','area','physical','intervention','mood'].map(g=>{
-      const val=getOtherVal(g); return val ? saveCustomTag(g,val) : Promise.resolve();
-    });
-    await Promise.all(savePromises);
-    const extras=['location','trigger','activity','area','physical','intervention','mood'].reduce((acc,g)=>{const other=getOtherVal(g);acc[g]=[...state.selections[g],...(other?[other]:[])];return acc;},{});
-    const entry={timestamp:getTimestamp(),entry_type:state.type,awareness:state.awareness||'',location:extras.location.join(', '),trigger:extras.trigger.join(', '),activity:extras.activity.join(', '),body_area:extras.area.join(', '),physical_target:extras.physical.join(', '),urge_strength:parseInt(document.getElementById('urge-slider').value),duration:state.duration||'',outcome:state.outcome||'',intervention:extras.intervention.join(', '),mood:extras.mood.join(', '),notes:document.getElementById('notes').value.trim(),created_at:window._serverTimestamp()};
-    try{await window._addDoc(window._collection(window._db,'events'),entry);showToast('Entry saved',false,true);resetForm();}
-    catch(err){showToast('Could not save: '+err.message,true);console.error(err);}
-    btn.disabled=false;btn.textContent='Save entry';
-  }
-  function resetForm(){
-    state.type='realtime';state.awareness=null;state.duration=null;state.outcome=null;
-    state.selections={location:[],trigger:[],activity:[],area:[],physical:[],intervention:[],mood:[]};
-    document.querySelectorAll('.tag').forEach(t=>{t.className=t.className.replace(/sel-\w+/g,'').trim();});
-    document.querySelectorAll('.toggle-btn').forEach(t=>t.classList.remove('selected'));
-    document.getElementById('type-realtime').classList.add('selected');
-    document.getElementById('datetime-field').style.display='none';
-    // Close all accordion sub-panels and reset their cat-tag buttons
-    document.querySelectorAll('.sub-panel.open').forEach(p=>p.classList.remove('open'));
-    document.querySelectorAll('.cat-tag.cat-open').forEach(b=>b.classList.remove('cat-open'));
-    document.getElementById('face-sub').style.display='none';
-    const sl=document.getElementById('urge-slider');sl.value=5;updateSlider(sl);
-    document.getElementById('urge-val').textContent='5';
-    document.getElementById('notes').value='';
-    document.querySelectorAll('.other-input').forEach(i=>{i.classList.remove('visible');i.value='';});
-  }
-  document.getElementById('quick-modal').addEventListener('click',function(e){if(e.target===this)closeQuickModal();});
-  updateSlider(document.getElementById('urge-slider'));
-  updateQuickSlider(document.getElementById('q-urge-slider'));
+const S={bfrbType:'picking',entryType:'picked',timing:'now',area:[],picked_what:[],mirror:null,completion:null,severity:null,duration:null,acr_duration:null,acr_intensity:null,acr_nails:[],acr_awareness:null,location:null,activity:[],etrig:[],strig:[],mood_before:[],urge_before:5,mood_after:[],urge_after:3,awareness:null,tried:null,interventions:[],eff:null};
+window.setBfrb=type=>{S.bfrbType=type;['pick','acr','both'].forEach(t=>{document.getElementById('bt-'+t).classList.toggle('on',(t==='pick'&&type==='picking')||(t==='acr'&&type==='acrylic')||(t==='both'&&type==='both'));});const sp=type!=='acrylic',sa=type!=='picking';document.getElementById('pick-section').classList.toggle('hidden',!sp||S.entryType==='resisted');document.getElementById('acr-section').classList.toggle('hidden',!sa);document.getElementById('sh-what').classList.toggle('hidden',!sp);document.getElementById('card-what').classList.toggle('hidden',!sp);};
+window.setEntry=type=>{S.entryType=type;['picked','resisted','near'].forEach(t=>document.getElementById('et-'+t).classList.remove('on'));document.getElementById('et-'+type).classList.add('on');const ip=type!=='resisted';document.getElementById('pick-section').classList.toggle('hidden',!ip||S.bfrbType==='acrylic');document.getElementById('win-msg').classList.toggle('hidden',ip);document.getElementById('after-col').style.opacity=type==='resisted'?'0.5':'1';};
+window.setTiming=t=>{S.timing=t;document.getElementById('tim-now').classList.toggle('on',t==='now');document.getElementById('tim-back').classList.toggle('on',t==='back');document.getElementById('dt-fld').classList.toggle('hidden',t!=='back');};
+window.toggleAcc=(btn,id)=>{const p=document.getElementById(id),o=!p.classList.contains('on');p.classList.toggle('on',o);btn.classList.toggle('on',o);};
+window.toggleTag=(el,group)=>{if(!Array.isArray(S[group]))S[group]=[];const v=el.textContent.trim(),i=S[group].indexOf(v);if(i>-1){S[group].splice(i,1);el.classList.remove('on');}else{S[group].push(v);el.classList.add('on');}};
+window.setSingle=(el,group)=>{const w=el.closest('[data-single="'+group+'"]');if(w)w.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');S[group]=el.textContent.trim();};
+window.setAw=val=>{S.awareness=val;document.getElementById('aw-con').classList.toggle('on',val==='Conscious');document.getElementById('aw-sub').classList.toggle('on',val==='Subconscious');};
+window.setAcrAw=val=>{S.acr_awareness=val;document.getElementById('acr-con').classList.toggle('on',val==='Conscious');document.getElementById('acr-sub').classList.toggle('on',val==='Subconscious');};
+window.setCompletion=btn=>{document.querySelectorAll('.cb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');S.completion=btn.dataset.v;document.getElementById('ing-note').classList.toggle('on',S.completion==='tasted'||S.completion==='ingested');};
+window.setSev=btn=>{document.querySelectorAll('.svb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');S.severity=btn.dataset.v;};
+window.setTried=tried=>{S.tried=tried;document.getElementById('tried-y').classList.toggle('on',tried===true);document.getElementById('tried-n').classList.toggle('on',tried===false);document.getElementById('int-detail').classList.toggle('hidden',!tried);document.getElementById('int-eff').classList.toggle('hidden',!tried);};
+const EL=['Did not help','Helped a little','Somewhat helpful','Helped a lot','Stopped it completely'];
+window.setEff=el=>{const v=parseInt(el.dataset.v);S.eff=v;document.querySelectorAll('.eff-btn').forEach(b=>b.classList.toggle('on',parseInt(b.dataset.v)<=v));document.getElementById('eff-lbl').textContent=EL[v-1];};
+window.toggleOther=(el,group)=>{const inp=document.getElementById(group+'-other'),open=!el.classList.contains('on');el.classList.toggle('on',open);inp.classList.toggle('on',open);if(open)inp.focus();else inp.value='';};
+window.updSl=(el,vid,prop)=>{const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right,var(--ac) ${pct}%,var(--bdr) ${pct}%)`;document.getElementById(vid).textContent=el.value;if(prop)S[prop]=parseInt(el.value);};
+function lISO(d=new Date()){const p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;}
+function getT(){if(S.timing==='back'){const v=document.getElementById('event-time').value;return v?(v.length===16?v+':00':v):lISO();}return lISO();}
+function getO(g){const i=document.getElementById(g+'-other');return i&&i.classList.contains('on')&&i.value.trim()?i.value.trim():null;}
+window.submitEntry=async()=>{if(!window._uid){toast('Not signed in',true);return;}const btn=document.getElementById('sub-btn');btn.disabled=true;btn.textContent='Saving\u2026';
+const oLoc=getO('location'),oAct=getO('activity'),oTrig=getO('trigger');
+const entry={timestamp:getT(),bfrb_type:S.bfrbType,entry_type:S.entryType,awareness:S.awareness||'',body_areas:S.area.join(', '),picked_what:S.picked_what.join(', '),mirror:S.mirror||'',completion:S.completion||'',severity:S.severity||'',duration:S.duration||'',acr_duration:S.acr_duration||'',acr_intensity:S.acr_intensity||'',acr_nails:S.acr_nails.join(', '),acr_awareness:S.acr_awareness||'',location:oLoc||S.location||'',activity:[oAct,...S.activity].filter(Boolean).join(', '),emotional_triggers:S.etrig.join(', '),sensory_triggers:S.strig.join(', '),other_trigger:oTrig||'',mood_before:S.mood_before.join(', '),urge_before:S.urge_before,mood_after:S.mood_after.join(', '),urge_after:S.urge_after,tried_intervention:S.tried===true,interventions:S.interventions.join(', '),intervention_effectiveness:S.eff,notes:document.getElementById('notes').value.trim()};
+try{await window._addEntry(window._uid,entry);toast('Saved \u2713',false,true);resetForm();}catch(e){toast('Error: '+e.message,true);btn.disabled=false;btn.textContent='Save entry';}};
+window.resetForm=()=>{Object.assign(S,{bfrbType:'picking',entryType:'picked',timing:'now',area:[],picked_what:[],mirror:null,completion:null,severity:null,duration:null,acr_duration:null,acr_intensity:null,acr_nails:[],acr_awareness:null,location:null,activity:[],etrig:[],strig:[],mood_before:[],urge_before:5,mood_after:[],urge_after:3,awareness:null,tried:null,interventions:[],eff:null});
+document.querySelectorAll('.tag,.nail-btn,.q-tag').forEach(t=>t.classList.remove('on','am'));
+document.querySelectorAll('.tb,.cb,.svb,.eff-btn').forEach(b=>b.classList.remove('on'));
+document.querySelectorAll('.ap').forEach(p=>p.classList.remove('on'));
+document.querySelectorAll('.ab').forEach(b=>b.classList.remove('on'));
+document.querySelectorAll('.oi').forEach(i=>{i.classList.remove('on');i.value='';});
+document.querySelectorAll('.tag.dash').forEach(t=>t.classList.remove('on'));
+document.getElementById('win-msg').classList.add('hidden');
+document.getElementById('ing-note').classList.remove('on');
+document.getElementById('int-detail').classList.add('hidden');
+document.getElementById('int-eff').classList.add('hidden');
+document.getElementById('dt-fld').classList.add('hidden');
+document.getElementById('acr-section').classList.add('hidden');
+document.getElementById('pick-section').classList.remove('hidden');
+document.getElementById('sh-what').classList.remove('hidden');
+document.getElementById('card-what').classList.remove('hidden');
+document.getElementById('notes').value='';
+document.getElementById('eff-lbl').textContent='Tap to rate';
+document.getElementById('after-col').style.opacity='1';
+document.getElementById('bt-pick').classList.add('on');
+document.getElementById('et-picked').classList.add('on');
+document.getElementById('tim-now').classList.add('on');
+document.getElementById('sub-btn').disabled=false;document.getElementById('sub-btn').textContent='Save entry';
+updSl(document.getElementById('urge-before'),'ub-val','urge_before');
+updSl(document.getElementById('urge-after'),'ua-val','urge_after');
+window.scrollTo({top:0,behavior:'smooth'});};
+const QS={bfrb:'picking',type:'picked',qArea:[],qCompletion:null,qTrigger:null,urge:5};
+window.openQuick=()=>{QS.bfrb='picking';QS.type='picked';QS.qArea=[];QS.qCompletion=null;QS.qTrigger=null;QS.urge=5;document.querySelectorAll('#quick-modal .q-tag').forEach(t=>t.classList.remove('on','am'));document.getElementById('q-bfrb').querySelector('[data-v="picking"]').classList.add('on');document.getElementById('q-type').querySelector('[data-v="picked"]').classList.add('on');document.getElementById('q-pick-block').style.display='block';document.getElementById('q-area-block').style.display='block';const sl=document.getElementById('q-urge');sl.value=5;qSlider(sl);document.getElementById('quick-modal').classList.add('on');};
+window.closeQuick=()=>document.getElementById('quick-modal').classList.remove('on');
+window.qBfrb=el=>{document.querySelectorAll('#q-bfrb .q-tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');QS.bfrb=el.dataset.v;document.getElementById('q-pick-block').style.display=QS.bfrb==='acrylic'?'none':'block';};
+window.qType=el=>{document.querySelectorAll('#q-type .q-tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');QS.type=el.dataset.v;document.getElementById('q-area-block').style.display=QS.type==='resisted'?'none':'block';};
+window.qToggle=(el,group)=>{if(!Array.isArray(QS[group]))QS[group]=[];const v=el.textContent.trim(),i=QS[group].indexOf(v);if(i>-1){QS[group].splice(i,1);el.classList.remove('on');}else{QS[group].push(v);el.classList.add('on');}};
+window.qSingle=(el,group)=>{el.closest('.tg-row').querySelectorAll('.q-tag').forEach(t=>t.classList.remove('on','am'));el.classList.add('on');QS[group]=el.dataset.v||el.textContent.trim();};
+window.qSingleAmber=(el,group)=>{el.closest('.tg-row').querySelectorAll('.q-tag').forEach(t=>t.classList.remove('on','am'));el.classList.add('am');QS[group]=el.dataset.v||el.textContent.trim();};
+window.qSlider=el=>{const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right,var(--ac) ${pct}%,var(--bdr) ${pct}%)`;document.getElementById('q-urge-val').textContent=el.value;QS.urge=parseInt(el.value);};
+document.getElementById('q-save-btn').addEventListener('click',async()=>{if(!window._uid){toast('Not signed in',true);return;}
+const entry={timestamp:lISO(),bfrb_type:QS.bfrb,entry_type:QS.type,awareness:'',body_areas:(QS.qArea||[]).join(', '),picked_what:'',mirror:'',completion:QS.qCompletion||'',severity:'',duration:'',acr_duration:'',acr_intensity:'',acr_nails:'',acr_awareness:'',location:'',activity:'',emotional_triggers:typeof QS.qTrigger==='string'?QS.qTrigger:'',sensory_triggers:'',other_trigger:'',mood_before:'',urge_before:QS.urge,mood_after:'',urge_after:null,tried_intervention:false,interventions:'',intervention_effectiveness:null,notes:'(quick log)'};
+try{await window._addEntry(window._uid,entry);toast('Saved \u2713',false,true);closeQuick();}catch(e){toast('Error: '+e.message,true);}});
+document.getElementById('quick-modal').addEventListener('click',e=>{if(e.target===document.getElementById('quick-modal'))closeQuick();});
+window.toast=(msg,isErr=false,isOk=false)=>{const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isErr?' err':'')+(isOk?' ok':'');void t.offsetWidth;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);};
+document.addEventListener('DOMContentLoaded',()=>{updSl(document.getElementById('urge-before'),'ub-val','urge_before');updSl(document.getElementById('urge-after'),'ua-val','urge_after');qSlider(document.getElementById('q-urge'));document.getElementById('et-picked').classList.add('on');document.getElementById('tim-now').classList.add('on');document.getElementById('bt-pick').classList.add('on');});
 </script>
 </body>
 </html>
