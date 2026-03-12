@@ -5,795 +5,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Groundwork — Log</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <style>
-/* ─── TOKENS ─── */
 :root {
-  --bg: #F4EDE3;
-  --sur: #FAF6F1;
-  --card: #FFFFFF;
-  --bdr: #E2D8CE;
-  --bdr2: #D4C8BC;
-  --tx: #2C1F14;
-  --tx2: #5C4A38;
-  --mu: #9C8878;
-  --ac: #C1694F;
-  --ac-hover: #A8573E;
-  --ac-light: rgba(193,105,79,0.10);
-  --ac-light2: rgba(193,105,79,0.18);
-  --warm: #D4956A;
-  --warm-light: rgba(212,149,106,0.12);
-  --neutral: #7A8C85;
-  --neutral-light: rgba(122,140,133,0.10);
-  --neutral-mid: rgba(122,140,133,0.22);
-  --r-sm: 10px;
-  --r: 16px;
-  --r-lg: 24px;
-  --r-pill: 100px;
-  --shadow-sm: 0 1px 3px rgba(44,31,20,0.06);
-  --shadow: 0 2px 12px rgba(44,31,20,0.08);
-  --shadow-lg: 0 8px 32px rgba(44,31,20,0.12);
-  --transition: all 0.18s ease;
+  --bg:#F4EDE3; --sur:#FAF6F1; --card:#FFFFFF; --bdr:#E2D8CE; --bdr2:#C8BAA8;
+  --tx:#2C1F14; --tx2:#5C4A38; --mu:#9C8878;
+  --ac:#C1694F; --ac-h:#A8573E; --acl:rgba(193,105,79,.10); --acl2:rgba(193,105,79,.18);
+  --sage:#7A8C85; --sagel:rgba(122,140,133,.10); --sagem:rgba(122,140,133,.22);
+  --warm:#D4956A; --warml:rgba(212,149,106,.13);
+  --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
+  --s1:0 1px 3px rgba(44,31,20,.06); --s2:0 2px 12px rgba(44,31,20,.08); --s3:0 8px 32px rgba(44,31,20,.12);
+  --tr:all .18s ease;
 }
 [data-theme="dark"] {
-  --bg: #1E1710;
-  --sur: #261D14;
-  --card: #2E231A;
-  --bdr: #3D3028;
-  --bdr2: #4A3A2E;
-  --tx: #F0E8DF;
-  --tx2: #C8B8A8;
-  --mu: #8C7868;
-  --ac: #C97860;
-  --ac-hover: #D48870;
-  --ac-light: rgba(201,120,96,0.12);
-  --ac-light2: rgba(201,120,96,0.20);
-  --warm: #C4855A;
-  --warm-light: rgba(196,133,90,0.14);
-  --neutral: #8A9E96;
-  --neutral-light: rgba(138,158,150,0.12);
-  --neutral-mid: rgba(138,158,150,0.24);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
-  --shadow: 0 2px 12px rgba(0,0,0,0.25);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.35);
+  --bg:#1E1710; --sur:#261D14; --card:#2E231A; --bdr:#3D3028; --bdr2:#5A4538;
+  --tx:#F0E8DF; --tx2:#C8B8A8; --mu:#8C7868;
+  --ac:#C97860; --ac-h:#D48870; --acl:rgba(201,120,96,.12); --acl2:rgba(201,120,96,.22);
+  --sage:#8A9E96; --sagel:rgba(138,158,150,.12); --sagem:rgba(138,158,150,.24);
+  --warm:#C4855A; --warml:rgba(196,133,90,.14);
+  --s1:0 1px 3px rgba(0,0,0,.2); --s2:0 2px 12px rgba(0,0,0,.25); --s3:0 8px 32px rgba(0,0,0,.35);
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:100px;transition:background .3s,color .3s}
 
-/* ─── RESET ─── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--tx);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 100vh;
-  padding-bottom: 80px;
-  transition: background 0.3s ease, color 0.3s ease;
-}
+/* NAV */
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(244,237,227,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100;transition:background .3s}
+[data-theme="dark"] nav{background:rgba(30,23,16,.96)}
+.nav-brand{font-family:'Lora',serif;font-size:19px;font-weight:400;color:var(--tx);letter-spacing:-.02em;text-decoration:none}
+.nav-brand span{color:var(--ac)}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 13px;border-radius:var(--pill);transition:var(--tr)}
+.nav-link:hover{background:var(--acl);color:var(--ac)}
+.nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
+.nav-right{display:flex;align-items:center;gap:8px}
+.theme-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bdr);background:var(--card);color:var(--mu);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:var(--tr);box-shadow:var(--s1);font-family:'DM Sans',sans-serif}
+.theme-btn:hover{border-color:var(--ac);color:var(--ac)}
+.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--card);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 14px;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.sign-btn:hover{border-color:var(--ac);color:var(--ac)}
+.user-info{display:flex;align-items:center;gap:8px}
+.user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
 
-/* ─── NAV ─── */
-nav {
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  background: rgba(244,237,227,0.95);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--bdr);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  transition: background 0.3s ease;
-}
-[data-theme="dark"] nav { background: rgba(30,23,16,0.95); }
-.nav-brand {
-  font-family: 'Lora', serif;
-  font-size: 19px;
-  font-weight: 400;
-  color: var(--tx);
-  letter-spacing: -0.02em;
-  text-decoration: none;
-}
-.nav-brand span { color: var(--ac); }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--tx2);
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: var(--r-pill);
-  transition: var(--transition);
-}
-.nav-link:hover { background: var(--ac-light); color: var(--ac); }
-.nav-link.active { background: var(--ac-light); color: var(--ac); font-weight: 600; }
-.nav-right { display: flex; align-items: center; gap: 8px; }
-.theme-btn {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--bdr);
-  background: var(--card);
-  color: var(--mu);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-.theme-btn:hover { border-color: var(--ac); color: var(--ac); }
-.sign-btn {
-  font-size: 12px; font-weight: 600;
-  color: var(--tx2);
-  background: var(--card);
-  border: 1px solid var(--bdr);
-  border-radius: var(--r-pill);
-  padding: 6px 14px;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-.sign-btn:hover { border-color: var(--ac); color: var(--ac); }
-.user-info { display: flex; align-items: center; gap: 8px; }
-.user-avatar {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  border: 1.5px solid var(--bdr);
-  object-fit: cover;
-}
+/* AUTH */
+.auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
+.auth-screen.on{display:flex}
+.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;box-shadow:var(--s3);text-align:center;max-width:320px;width:92%}
+.auth-logo{width:44px;height:44px;background:var(--acl2);border-radius:var(--r);margin:0 auto 22px;display:flex;align-items:center;justify-content:center}
+.auth-logo svg{width:22px;height:22px;fill:var(--ac)}
+.auth-title{font-family:'Lora',serif;font-size:22px;font-weight:400;color:var(--tx);margin-bottom:8px;letter-spacing:-.02em}
+.auth-sub{font-size:13px;color:var(--mu);margin-bottom:28px;line-height:1.6}
+.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
+.google-btn:hover{border-color:var(--ac);box-shadow:var(--s2)}
 
-/* ─── AUTH SCREEN ─── */
-.auth-screen {
-  display: none;
-  position: fixed; inset: 0;
-  background: var(--bg);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-}
-.auth-screen.on { display: flex; }
-.auth-card {
-  background: var(--card);
-  border: 1px solid var(--bdr);
-  border-radius: var(--r-lg);
-  padding: 44px 36px;
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-  max-width: 320px;
-  width: 92%;
-}
-.auth-mark {
-  width: 48px; height: 48px;
-  background: var(--ac-light2);
-  border-radius: var(--r);
-  margin: 0 auto 22px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-}
-.auth-title {
-  font-family: 'Lora', serif;
-  font-size: 22px;
-  font-weight: 400;
-  color: var(--tx);
-  margin-bottom: 8px;
-  letter-spacing: -0.02em;
-}
-.auth-sub {
-  font-size: 13px;
-  color: var(--mu);
-  margin-bottom: 28px;
-  line-height: 1.6;
-}
-.google-btn {
-  display: flex; align-items: center; justify-content: center;
-  gap: 10px;
-  width: 100%;
-  background: var(--card);
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-pill);
-  padding: 13px 20px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--tx);
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: var(--shadow-sm);
-}
-.google-btn:hover { border-color: var(--ac); box-shadow: var(--shadow); }
-.google-logo { width: 18px; height: 18px; }
+/* LAYOUT */
+#app{display:none}
+#app.on{display:block}
+main{max-width:560px;margin:0 auto;padding:24px 16px}
 
-/* ─── MAIN LAYOUT ─── */
-#app { display: none; }
-#app.on { display: block; }
-main { max-width: 560px; margin: 0 auto; padding: 24px 16px; }
+/* QUICK CARD */
+.quick-card{background:var(--ac);border-radius:var(--rlg);padding:18px 20px;margin-bottom:28px;box-shadow:0 4px 20px rgba(193,105,79,.28)}
+.quick-eyebrow{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px}
+.quick-title{font-family:'Lora',serif;font-size:16px;font-weight:400;color:#fff;margin-bottom:12px}
+.quick-btns{display:flex;gap:8px;flex-wrap:wrap}
+.qbtn{background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:var(--pill);padding:9px 18px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:#fff;cursor:pointer;transition:var(--tr)}
+.qbtn:hover{background:rgba(255,255,255,.28)}
 
-/* ─── QUICK LOG CARD ─── */
-.quick-card {
-  background: var(--ac);
-  border-radius: var(--r-lg);
-  padding: 18px 20px;
-  margin-bottom: 28px;
-  box-shadow: 0 4px 20px rgba(193,105,79,0.30);
-}
-.quick-card-top {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-}
-.quick-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
-}
-.quick-title {
-  font-family: 'Lora', serif;
-  font-size: 16px;
-  font-weight: 400;
-  color: #fff;
-  margin-bottom: 12px;
-}
-.quick-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.qbtn {
-  background: rgba(255,255,255,0.18);
-  border: 1.5px solid rgba(255,255,255,0.28);
-  border-radius: var(--r-pill);
-  padding: 9px 18px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  transition: var(--transition);
-}
-.qbtn:hover { background: rgba(255,255,255,0.28); }
+/* STEP HEADERS */
+.step-hd{margin:28px 0 10px}
+.step-hd:first-of-type{margin-top:0}
+.step-title{font-family:'Lora',serif;font-size:17px;font-weight:400;color:var(--tx);letter-spacing:-.01em}
+.step-sub{font-size:12px;color:var(--mu);margin-top:2px}
 
-/* ─── SECTION HEADERS ─── */
-.section-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin: 32px 0 10px;
-}
-.section-header:first-of-type { margin-top: 0; }
-.step-num {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  background: var(--ac-light2);
-  color: var(--ac);
-  font-size: 11px;
-  font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.section-title-wrap { flex: 1; }
-.section-title {
-  font-family: 'Lora', serif;
-  font-size: 17px;
-  font-weight: 400;
-  color: var(--tx);
-  letter-spacing: -0.01em;
-}
-.section-context {
-  font-size: 12px;
-  color: var(--mu);
-  margin-top: 3px;
-  line-height: 1.55;
-  font-style: italic;
-}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:8px;box-shadow:var(--s1)}
+.field{margin-bottom:20px}
+.field:last-child{margin-bottom:0}
+.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
 
-/* ─── CARDS ─── */
-.card {
-  background: var(--card);
-  border: 1px solid var(--bdr);
-  border-radius: var(--r);
-  padding: 20px;
-  margin-bottom: 8px;
-  box-shadow: var(--shadow-sm);
-}
-.field { margin-bottom: 20px; }
-.field:last-child { margin-bottom: 0; }
-.field-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--mu);
-  margin-bottom: 4px;
-}
-.field-context {
-  font-size: 11px;
-  color: var(--mu);
-  margin-bottom: 10px;
-  line-height: 1.55;
-}
-.field-note {
-  font-size: 11px;
-  color: var(--mu);
-  margin-top: 6px;
-  font-style: italic;
-}
+/* LARGE CHOICE BUTTONS — behavior & entry type */
+.choice-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.choice-btn{padding:18px 12px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
+.choice-btn:hover{border-color:var(--bdr2);background:var(--bg)}
+.choice-btn.on{background:var(--acl);border-color:var(--ac)}
+.choice-name{font-size:13px;font-weight:600;color:var(--tx2);display:block;margin-bottom:3px}
+.choice-btn.on .choice-name{color:var(--ac)}
+.choice-sub{font-size:11px;color:var(--mu);display:block;line-height:1.4}
 
-/* ─── BEHAVIOR BUTTONS ─── */
-.bfrb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.bfrb-btn {
-  padding: 16px 12px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r);
-  background: var(--sur);
-  cursor: pointer;
-  text-align: center;
-  transition: var(--transition);
-  user-select: none;
-}
-.bfrb-btn:hover { border-color: var(--bdr2); background: var(--bg); }
-.bfrb-btn.on {
-  background: var(--ac-light);
-  border-color: var(--ac);
-}
-.bfrb-icon { font-size: 20px; margin-bottom: 5px; }
-.bfrb-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--tx2);
-  display: block;
-}
-.bfrb-btn.on .bfrb-name { color: var(--ac); }
-.bfrb-sub {
-  font-size: 11px;
-  color: var(--mu);
-  display: block;
-  margin-top: 2px;
-  line-height: 1.4;
-}
+/* TIMING */
+.two-btn{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.flat-btn{padding:12px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
+.flat-btn:hover{border-color:var(--bdr2)}
+.flat-btn.on{background:var(--acl);border-color:var(--ac);color:var(--ac)}
 
-/* ─── ENTRY TYPE GRID ─── */
-.entry-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.entry-btn {
-  padding: 14px 8px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r);
-  background: var(--sur);
-  cursor: pointer;
-  text-align: center;
-  transition: var(--transition);
-  user-select: none;
-}
-.entry-btn:hover { border-color: var(--bdr2); }
-.entry-icon { font-size: 16px; margin-bottom: 4px; }
-.entry-name {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--tx2);
-  display: block;
-}
-.entry-sub {
-  font-size: 10px;
-  color: var(--mu);
-  display: block;
-  margin-top: 2px;
-}
-.entry-btn.on {
-  background: var(--neutral-light);
-  border-color: var(--neutral);
-}
-.entry-btn.on .entry-name { color: var(--neutral); }
+/* TAGS */
+.tag-row{display:flex;flex-wrap:wrap;gap:7px}
+.tag{padding:8px 14px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;line-height:1}
+.tag:hover{border-color:var(--bdr2);background:var(--bg)}
+.tag.on{background:var(--acl);border-color:var(--ac);color:var(--ac);font-weight:600}
+.tag.dashed{border-style:dashed;color:var(--mu)}
+.tag.dashed.on{border-style:solid}
 
-/* ─── WIN MESSAGE ─── */
-.win-msg {
-  background: var(--neutral-light);
-  border: 1px solid var(--neutral-mid);
-  border-radius: var(--r-sm);
-  padding: 12px 14px;
-  margin-top: 12px;
-  font-size: 12px;
-  color: var(--neutral);
-  line-height: 1.6;
-  font-weight: 500;
-}
+/* ACCORDION */
+.acc-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.acc-btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none}
+.acc-btn:hover{border-color:var(--bdr2)}
+.acc-btn.on{background:var(--acl);border-color:var(--ac);color:var(--ac)}
+.acc-btn svg{width:10px;height:10px;flex-shrink:0;transition:transform .2s;stroke:currentColor}
+.acc-btn.on svg{transform:rotate(180deg)}
+.acc-panel{display:none;padding:14px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);margin-bottom:6px;animation:fi .15s ease}
+.acc-panel.on{display:block}
+.acc-panel-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:9px}
 
-/* ─── TIMING BUTTONS ─── */
-.timing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.timing-btn {
-  padding: 12px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r);
-  background: var(--sur);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--tx2);
-  cursor: pointer;
-  text-align: center;
-  transition: var(--transition);
-  user-select: none;
-}
-.timing-btn:hover { border-color: var(--bdr2); }
-.timing-btn.on { background: var(--ac-light); border-color: var(--ac); color: var(--ac); }
+/* COMPLETION */
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.comp-btn{padding:13px 10px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);cursor:pointer;text-align:left;transition:var(--tr);user-select:none}
+.comp-btn:hover{border-color:var(--bdr2)}
+.comp-btn.on{background:var(--acl);border-color:var(--ac)}
+.comp-lbl{font-size:12px;font-weight:700;color:var(--tx2);display:block;margin-bottom:2px}
+.comp-btn.on .comp-lbl{color:var(--ac)}
+.comp-sub{font-size:10px;color:var(--mu);display:block}
 
-/* ─── TAG ROW ─── */
-.tag-row { display: flex; flex-wrap: wrap; gap: 7px; }
-.tag {
-  padding: 8px 14px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-pill);
-  background: var(--sur);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--tx2);
-  cursor: pointer;
-  transition: var(--transition);
-  user-select: none;
-  line-height: 1;
-}
-.tag:hover { border-color: var(--bdr2); background: var(--bg); }
-.tag.on { background: var(--ac-light); border-color: var(--ac); color: var(--ac); font-weight: 600; }
-.tag.dashed { border-style: dashed; color: var(--mu); }
-.tag.dashed.on { border-style: solid; }
+/* SEVERITY */
+.sev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sev-btn{padding:10px 4px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none}
+.sev-btn:hover{border-color:var(--bdr2)}
+.sev-dot{width:8px;height:8px;border-radius:50%;background:var(--bdr2);margin:0 auto 5px;transition:background .15s}
+.sev-lbl{font-size:10px;font-weight:600;color:var(--tx2)}
+.sev-btn.on{border-color:var(--ac);background:var(--acl)}
+.sev-btn.on .sev-dot{background:var(--ac)}
+.sev-btn.on .sev-lbl{color:var(--ac)}
 
-/* ─── ACCORDION BUTTONS ─── */
-.acc-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-.acc-btn {
-  display: flex; align-items: center; gap: 6px;
-  padding: 7px 14px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-pill);
-  background: var(--sur);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--tx2);
-  cursor: pointer;
-  transition: var(--transition);
-  user-select: none;
-}
-.acc-btn:hover { border-color: var(--bdr2); }
-.acc-btn.on { background: var(--ac-light); border-color: var(--ac); color: var(--ac); }
-.acc-btn svg { width: 9px; height: 9px; flex-shrink: 0; transition: transform 0.2s ease; }
-.acc-btn.on svg { transform: rotate(180deg); }
-.acc-panel {
-  display: none;
-  padding: 12px;
-  background: var(--sur);
-  border: 1px solid var(--bdr);
-  border-radius: var(--r-sm);
-  margin-bottom: 6px;
-  animation: fadeIn 0.15s ease;
-}
-.acc-panel.on { display: block; }
-.acc-panel-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--mu);
-  margin-bottom: 8px;
-}
+/* AWARENESS */
+.aw-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.aw-btn{padding:14px 12px;border:1.5px solid var(--bdr);border-radius:var(--r);background:var(--sur);cursor:pointer;text-align:center;transition:var(--tr);user-select:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--tx2);line-height:1.4}
+.aw-btn:hover{border-color:var(--bdr2)}
+.aw-btn.on{background:var(--sagel);border-color:var(--sage);color:var(--sage)}
 
-/* ─── SEVERITY GRID ─── */
-.severity-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.sev-btn {
-  padding: 10px 4px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-sm);
-  background: var(--sur);
-  cursor: pointer;
-  text-align: center;
-  transition: var(--transition);
-  user-select: none;
-}
-.sev-btn:hover { border-color: var(--bdr2); }
-.sev-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--bdr2);
-  margin: 0 auto 5px;
-  transition: var(--transition);
-}
-.sev-label { font-size: 10px; font-weight: 600; color: var(--tx2); }
-.sev-btn.on { border-color: var(--ac); background: var(--ac-light); }
-.sev-btn.on .sev-dot { background: var(--ac); }
-.sev-btn.on .sev-label { color: var(--ac); }
+/* EMOTIONS */
+.emotion-grid{display:flex;flex-wrap:wrap;gap:6px}
+.etag{padding:7px 13px;border:1.5px solid var(--bdr);border-radius:var(--pill);background:var(--sur);font-size:12px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;line-height:1}
+.etag:hover{border-color:var(--bdr2);background:var(--bg)}
+.etag.on{background:var(--acl);border-color:var(--ac);color:var(--ac);font-weight:600}
+.emotion-group-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);width:100%;margin-top:10px;margin-bottom:2px}
+.emotion-group-lbl:first-child{margin-top:0}
 
-/* ─── SLIDER ─── */
-.slider-row { display: flex; align-items: center; gap: 14px; }
-input[type=range] {
-  -webkit-appearance: none;
-  flex: 1;
-  height: 6px;
-  background: var(--bdr);
-  border-radius: 10px;
-  outline: none;
-  cursor: pointer;
-  padding: 0;
-  border: none;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  background: var(--ac);
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(193,105,79,0.4);
-  border: 3px solid var(--card);
-  transition: transform 0.12s;
-}
-input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-input[type=range]::-moz-range-thumb {
-  width: 24px; height: 24px;
-  border-radius: 50%;
-  background: var(--ac);
-  cursor: pointer;
-  border: 3px solid var(--card);
-}
-.slider-val {
-  font-family: 'Lora', serif;
-  font-size: 28px;
-  font-weight: 400;
-  color: var(--ac);
-  width: 32px;
-  text-align: right;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--mu); margin-top: 6px; font-weight: 500; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-@media(max-width:420px) { .two-col { grid-template-columns: 1fr; } }
-.col-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--mu);
-  margin-bottom: 8px;
-}
+/* SLIDER */
+.slider-row{display:flex;align-items:center;gap:14px}
+input[type=range]{-webkit-appearance:none;flex:1;height:6px;background:var(--bdr);border-radius:10px;outline:none;cursor:pointer;padding:0;border:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--ac);cursor:pointer;box-shadow:0 2px 8px rgba(193,105,79,.4);border:3px solid var(--card);transition:transform .12s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--ac);cursor:pointer;border:3px solid var(--card)}
+.slider-val{font-family:'Lora',serif;font-size:28px;font-weight:400;color:var(--ac);width:32px;text-align:right;line-height:1;flex-shrink:0}
+.slider-lbls{display:flex;justify-content:space-between;font-size:10px;color:var(--mu);margin-top:6px;font-weight:500}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:420px){.two-col{grid-template-columns:1fr}}
+.col-lbl{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
 
-/* ─── TEXT INPUTS ─── */
-input[type=text], input[type=datetime-local], textarea {
-  width: 100%;
-  background: var(--sur);
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-sm);
-  padding: 10px 14px;
-  color: var(--tx);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  outline: none;
-  transition: var(--transition);
-  -webkit-appearance: none;
-}
-input:focus, textarea:focus { border-color: var(--ac); box-shadow: 0 0 0 3px var(--ac-light); }
-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
-.other-input { margin-top: 8px; display: none; }
-.other-input.on { display: block; }
+/* EFFECTIVENESS */
+.eff-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.eff-btn{width:38px;height:38px;border:1.5px solid var(--bdr);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);user-select:none;background:var(--sur)}
+.eff-btn:hover{border-color:var(--bdr2)}
+.eff-btn.on{background:var(--warml);border-color:var(--warm);color:var(--tx2)}
+.eff-lbl{font-size:11px;color:var(--mu);margin-left:4px}
 
-/* ─── COMPLETION GRID ─── */
-.completion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.comp-btn {
-  padding: 12px 10px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r);
-  background: var(--sur);
-  cursor: pointer;
-  text-align: left;
-  transition: var(--transition);
-  user-select: none;
-}
-.comp-btn:hover { border-color: var(--bdr2); }
-.comp-btn.on { background: var(--ac-light); border-color: var(--ac); }
-.comp-label { font-size: 12px; font-weight: 700; color: var(--tx2); display: block; margin-bottom: 2px; }
-.comp-btn.on .comp-label { color: var(--ac); }
-.comp-sub { font-size: 10px; color: var(--mu); display: block; }
+/* TEXT INPUT */
+input[type=text],input[type=datetime-local],textarea{width:100%;background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:var(--tr);-webkit-appearance:none}
+input:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acl)}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.other-input{margin-top:8px;display:none}
+.other-input.on{display:block}
 
-/* ─── AWARENESS GRID ─── */
-.awareness-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.aw-btn {
-  padding: 12px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r);
-  background: var(--sur);
-  cursor: pointer;
-  text-align: center;
-  transition: var(--transition);
-  user-select: none;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--tx2);
-}
-.aw-btn:hover { border-color: var(--bdr2); }
-.aw-btn.on { background: var(--neutral-light); border-color: var(--neutral); color: var(--neutral); }
+/* DIVIDER */
+.divider{height:1px;background:var(--bdr);margin:20px 0}
 
-/* ─── EFFECTIVENESS ─── */
-.eff-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.eff-btn {
-  width: 36px; height: 36px;
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: var(--transition);
-  user-select: none;
-  background: var(--sur);
-}
-.eff-btn:hover { border-color: var(--bdr2); }
-.eff-btn.on { background: var(--warm-light); border-color: var(--warm); }
-.eff-label { font-size: 11px; color: var(--mu); margin-left: 4px; }
+/* SUBMIT */
+.submit-btn{width:100%;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);box-shadow:0 4px 18px rgba(193,105,79,.35);margin-top:12px}
+.submit-btn:hover{background:var(--ac-h)}
+.submit-btn:active{transform:scale(.99)}
+.submit-btn:disabled{opacity:.45;cursor:not-allowed}
+.reset-btn{width:100%;background:transparent;color:var(--mu);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:11px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px;transition:var(--tr)}
+.reset-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
 
-/* ─── SUBMIT ─── */
-.submit-btn {
-  width: 100%;
-  background: var(--ac);
-  color: #fff;
-  border: none;
-  border-radius: var(--r-pill);
-  padding: 16px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  box-shadow: 0 4px 18px rgba(193,105,79,0.35);
-  margin-top: 12px;
-}
-.submit-btn:hover { background: var(--ac-hover); }
-.submit-btn:active { transform: scale(0.99); }
-.submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-.reset-btn {
-  width: 100%;
-  background: transparent;
-  color: var(--mu);
-  border: 1.5px solid var(--bdr);
-  border-radius: var(--r-pill);
-  padding: 11px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 8px;
-  transition: var(--transition);
-}
-.reset-btn:hover { border-color: var(--mu); color: var(--tx2); }
+/* STATUS */
+.status-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;font-size:11px;color:var(--mu)}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--bdr);flex-shrink:0}
+.status-dot.on{background:var(--sage)}.status-dot.err{background:var(--ac)}
 
-/* ─── DIVIDER ─── */
-.divider {
-  height: 1px;
-  background: var(--bdr);
-  margin: 20px 0;
-}
+/* HIDDEN / UTIL */
+.hidden{display:none!important}
+.section-block{animation:fi .2s ease}
 
-/* ─── HIDDEN ─── */
-.hidden { display: none !important; }
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:13px;font-weight:600;color:#fff;box-shadow:var(--s3);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--sage)}.toast.err{background:var(--ac)}
 
-/* ─── TOAST ─── */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: var(--tx);
-  border-radius: var(--r-pill);
-  padding: 12px 24px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--card);
-  box-shadow: var(--shadow-lg);
-  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  z-index: 999;
-  white-space: nowrap;
-  pointer-events: none;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-.toast.ok { background: var(--neutral); }
-.toast.err { background: var(--ac); }
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,18,10,.52);backdrop-filter:blur(4px);z-index:300;align-items:flex-end;justify-content:center}
+.modal-overlay.on{display:flex}
+.modal-sheet{background:var(--card);border-radius:var(--rlg) var(--rlg) 0 0;padding:20px 20px 52px;width:100%;max-width:560px;box-shadow:var(--s3);animation:su .25s cubic-bezier(.34,1.2,.64,1);max-height:90vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--bdr);border-radius:10px;margin:0 auto 20px}
+.modal-title{font-family:'Lora',serif;font-size:20px;font-weight:400;color:var(--tx);margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--mu);margin-bottom:18px}
+.modal-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:16px 0 8px}
+.modal-lbl:first-of-type{margin-top:0}
+.modal-save{width:100%;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:14px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:18px;box-shadow:0 4px 14px rgba(193,105,79,.35);transition:var(--tr)}
+.modal-save:hover{background:var(--ac-h)}
+.modal-cancel{width:100%;background:none;color:var(--mu);border:none;padding:10px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-top:4px}
 
-/* ─── QUICK MODAL ─── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(28,18,10,0.50);
-  backdrop-filter: blur(4px);
-  z-index: 300;
-  align-items: flex-end;
-  justify-content: center;
-}
-.modal-overlay.on { display: flex; }
-.modal-sheet {
-  background: var(--card);
-  border-radius: var(--r-lg) var(--r-lg) 0 0;
-  padding: 20px 20px 48px;
-  width: 100%;
-  max-width: 560px;
-  box-shadow: var(--shadow-lg);
-  animation: slideUp 0.25s cubic-bezier(0.34,1.2,0.64,1);
-  max-height: 88vh;
-  overflow-y: auto;
-}
-.modal-handle {
-  width: 36px; height: 4px;
-  background: var(--bdr);
-  border-radius: 10px;
-  margin: 0 auto 20px;
-}
-.modal-title {
-  font-family: 'Lora', serif;
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--tx);
-  margin-bottom: 4px;
-}
-.modal-sub { font-size: 12px; color: var(--mu); margin-bottom: 18px; }
-.modal-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--mu);
-  margin: 16px 0 8px;
-}
-.modal-label:first-of-type { margin-top: 0; }
-.modal-save {
-  width: 100%;
-  background: var(--ac);
-  color: #fff;
-  border: none;
-  border-radius: var(--r-pill);
-  padding: 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 18px;
-  box-shadow: 0 4px 14px rgba(193,105,79,0.35);
-  transition: var(--transition);
-}
-.modal-save:hover { background: var(--ac-hover); }
-.modal-cancel {
-  width: 100%;
-  background: none;
-  color: var(--mu);
-  border: none;
-  padding: 10px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 4px;
-}
+/* RESISTED NOTE */
+.resist-note{background:var(--sagel);border:1px solid var(--sagem);border-radius:var(--rsm);padding:13px 16px;font-size:12px;color:var(--sage);line-height:1.65;font-weight:500;margin-top:10px}
 
-/* ─── STATUS DOT ─── */
-.status-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; font-size: 11px; color: var(--mu); }
-.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--bdr); }
-.status-dot.on { background: var(--neutral); }
-.status-dot.err { background: var(--ac); }
+/* INTERVENTION TIMING NOTE */
+.int-note{font-size:12px;color:var(--mu);margin-bottom:12px;font-style:italic}
 
-/* ─── ANIMATIONS ─── */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes su{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
 
-<!-- ─── AUTH SCREEN ─── -->
+<!-- AUTH -->
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
-    <div class="auth-mark">&#9632;</div>
+    <div class="auth-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+    </div>
     <div class="auth-title">Groundwork</div>
-    <div class="auth-sub">A private behavioral log for tracking BFRBs and building awareness with your therapist.</div>
+    <div class="auth-sub">A private behavioral log for working with your therapist on BFRBs.</div>
     <button class="google-btn" onclick="signInWithGoogle()">
-      <svg class="google-logo" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Continue with Google
     </button>
   </div>
 </div>
 
-<!-- ─── NAV ─── -->
+<!-- NAV -->
 <nav>
   <a class="nav-brand" href="index.html">Ground<span>work</span></a>
   <div class="nav-links">
@@ -802,7 +250,7 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
     <a class="nav-link" href="context.html">Context</a>
   </div>
   <div class="nav-right">
-    <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">&#9680;</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle dark mode">◐</button>
     <div class="user-info" id="user-info" style="display:none">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <button class="sign-btn" onclick="signOut()">Sign out</button>
@@ -811,152 +259,134 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
   </div>
 </nav>
 
-<!-- ─── APP ─── -->
+<!-- APP -->
 <div id="app">
 <main>
 
-  <!-- Quick log -->
+  <!-- QUICK LOG -->
   <div class="quick-card">
-    <div class="quick-card-top">
-      <span class="quick-label">Quick log</span>
-    </div>
+    <div class="quick-eyebrow">Quick log</div>
     <div class="quick-title">In a hurry? Log the essentials now.</div>
-    <div class="quick-actions">
+    <div class="quick-btns">
       <button class="qbtn" onclick="openQuick('picking')">Skin picking</button>
       <button class="qbtn" onclick="openQuick('biting')">Nail / skin biting</button>
       <button class="qbtn" onclick="openQuick('resisted')">Resisted an urge</button>
     </div>
   </div>
 
-  <!-- ─── STEP 1: BEHAVIOR ─── -->
-  <div class="section-header">
-    <div class="step-num">1</div>
-    <div class="section-title-wrap">
-      <div class="section-title">Which behavior?</div>
-      <div class="section-context">Tracking these separately matters — they have different sensory drivers and your therapist may approach them with different strategies.</div>
-    </div>
+  <!-- STEP 1: BEHAVIOR -->
+  <div class="step-hd">
+    <div class="step-title">Which behavior?</div>
   </div>
   <div class="card">
-    <div class="bfrb-grid">
-      <div class="bfrb-btn on" id="bfrb-picking" onclick="setBfrb('picking')">
-        <div class="bfrb-icon">&#9632;</div>
-        <span class="bfrb-name">Skin picking</span>
-        <span class="bfrb-sub">Excoriation — face, scalp, body</span>
+    <div class="choice-grid-2">
+      <div class="choice-btn" id="bfrb-picking" onclick="setBfrb('picking')">
+        <span class="choice-name">Skin picking</span>
+        <span class="choice-sub">Face, scalp, body, arms, legs</span>
       </div>
-      <div class="bfrb-btn" id="bfrb-biting" onclick="setBfrb('biting')">
-        <div class="bfrb-icon">&#9633;</div>
-        <span class="bfrb-name">Nail / skin biting</span>
-        <span class="bfrb-sub">Cuticles, nail edges, surrounding skin</span>
+      <div class="choice-btn" id="bfrb-biting" onclick="setBfrb('biting')">
+        <span class="choice-name">Nail / skin biting</span>
+        <span class="choice-sub">Cuticles, nail edges, surrounding skin</span>
       </div>
     </div>
   </div>
 
-  <!-- ─── STEP 2: WHAT HAPPENED ─── -->
-  <div class="section-header">
-    <div class="step-num">2</div>
-    <div class="section-title-wrap">
-      <div class="section-title">What happened?</div>
-      <div class="section-context">Logging resistance is as important as logging episodes. HRT works by widening the gap between urge and behavior — your therapist needs to see both sides to track that progress.</div>
+  <!-- STEP 2: WHAT HAPPENED — shown after behavior chosen -->
+  <div id="step2-block" class="hidden">
+    <div class="step-hd">
+      <div class="step-title">What happened?</div>
     </div>
-  </div>
-  <div class="card">
-    <div class="entry-grid">
-      <div class="entry-btn on" id="et-did" onclick="setEntry('did')">
-        <div class="entry-icon">&#9632;</div>
-        <span class="entry-name">Did it</span>
-        <span class="entry-sub">Engaged in the behavior</span>
-      </div>
-      <div class="entry-btn" id="et-resisted" onclick="setEntry('resisted')">
-        <div class="entry-icon">&#9651;</div>
-        <span class="entry-name">Resisted</span>
-        <span class="entry-sub">Had urge, didn't engage</span>
-      </div>
-      <div class="entry-btn" id="et-near" onclick="setEntry('near')">
-        <div class="entry-icon">&#9671;</div>
-        <span class="entry-name">Near miss</span>
-        <span class="entry-sub">Started, then stopped</span>
-      </div>
-    </div>
-    <div class="win-msg hidden" id="win-msg">
-      A resistance or near miss is a real data point. Log the context around it — over time this shows which situations and strategies are starting to work.
-    </div>
-  </div>
-
-  <!-- ─── STEP 3: WHEN ─── -->
-  <div class="section-header">
-    <div class="step-num">3</div>
-    <div class="section-title-wrap">
-      <div class="section-title">When?</div>
-      <div class="section-context">Accurate timing helps identify patterns across the day and week.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="timing-grid">
-      <div class="timing-btn on" id="tim-now" onclick="setTiming('now')">Right now</div>
-      <div class="timing-btn" id="tim-back" onclick="setTiming('back')">Earlier</div>
-    </div>
-    <div id="datetime-field" class="hidden" style="margin-top:14px">
-      <label class="field-label">When did it happen?</label>
-      <input type="datetime-local" id="event-time">
-    </div>
-  </div>
-
-  <!-- ─── STEP 4: BEHAVIOR DETAIL ─── -->
-  <div id="behavior-detail-section">
-
-    <!-- Picking detail -->
-    <div id="picking-detail">
-      <div class="section-header">
-        <div class="step-num" id="sn-detail">4</div>
-        <div class="section-title-wrap">
-          <div class="section-title">The picking</div>
-          <div class="section-context">Granular behavior data lets your therapist identify stimulus patterns — what you're picking, where, and for how long gives a fuller picture than just frequency.</div>
+    <div class="card">
+      <div class="choice-grid-3">
+        <div class="choice-btn" id="et-did" onclick="setEntry('did')">
+          <span class="choice-name">Did it</span>
+          <span class="choice-sub">Engaged in the behavior</span>
+        </div>
+        <div class="choice-btn" id="et-resisted" onclick="setEntry('resisted')">
+          <span class="choice-name">Resisted</span>
+          <span class="choice-sub">Had the urge, didn't engage</span>
+        </div>
+        <div class="choice-btn" id="et-near" onclick="setEntry('near')">
+          <span class="choice-name">Near miss</span>
+          <span class="choice-sub">Started, then stopped</span>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PATHWAY A — EPISODE (did it / near miss)
+       ═══════════════════════════════════════════ -->
+  <div id="pathway-episode" class="hidden">
+
+    <!-- STEP 3: WHEN -->
+    <div class="step-hd"><div class="step-title">When?</div></div>
+    <div class="card">
+      <div class="two-btn">
+        <div class="flat-btn on" id="tim-now" onclick="setTiming('now')">Right now</div>
+        <div class="flat-btn" id="tim-back" onclick="setTiming('back')">Earlier</div>
+      </div>
+      <div id="datetime-field" class="hidden" style="margin-top:14px">
+        <label class="field-label">When did it happen?</label>
+        <input type="datetime-local" id="event-time">
+      </div>
+    </div>
+
+    <!-- STEP 4: BEHAVIOR DETAIL -->
+
+    <!-- PICKING DETAIL -->
+    <div id="picking-detail">
+      <div class="step-hd"><div class="step-title">The picking</div></div>
       <div class="card">
+
         <div class="field">
-          <label class="field-label">Body area <span style="font-weight:400;text-transform:none;letter-spacing:0">(all that apply)</span></label>
+          <label class="field-label">Body area — select all that apply</label>
           <div class="acc-row">
-            <div class="acc-btn" onclick="toggleAcc(this,'area-face')">Face <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-            <div class="acc-btn" onclick="toggleAcc(this,'area-body')">Body / scalp <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-            <div class="acc-btn" onclick="toggleAcc(this,'area-limbs')">Arms &amp; legs <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'area-face')">Face <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'area-scalp')">Scalp &amp; head <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'area-body')">Body <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'area-arms')">Arms &amp; hands <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'area-legs')">Legs <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           </div>
-          <div class="acc-panel" id="area-face">
-            <div class="acc-panel-label">Face</div>
-            <div class="tag-row">
-              <div class="tag" onclick="toggleTag(this,'area')">Forehead</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Cheeks</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Chin</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Nose</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Around mouth</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Jawline</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Temples</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Ears</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Lips</div>
-            </div>
-          </div>
-          <div class="acc-panel" id="area-body">
-            <div class="acc-panel-label">Body &amp; scalp</div>
-            <div class="tag-row">
-              <div class="tag" onclick="toggleTag(this,'area')">Scalp</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Neck</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Shoulders</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Chest</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Upper back</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Lower back</div>
-            </div>
-          </div>
-          <div class="acc-panel" id="area-limbs">
-            <div class="acc-panel-label">Arms &amp; legs</div>
-            <div class="tag-row">
-              <div class="tag" onclick="toggleTag(this,'area')">Upper arms</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Forearms</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Hands</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Knuckles</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Thighs</div>
-              <div class="tag" onclick="toggleTag(this,'area')">Shins</div>
-            </div>
-          </div>
+          <div class="acc-panel" id="area-face"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'area')">Forehead</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Cheeks</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Chin</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Nose</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Around mouth</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Jawline</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Temples</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Ears</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Lips</div>
+          </div></div>
+          <div class="acc-panel" id="area-scalp"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'area')">Scalp — front</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Scalp — top</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Scalp — back</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Behind ears</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Neck</div>
+          </div></div>
+          <div class="acc-panel" id="area-body"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'area')">Shoulders</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Chest</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Upper back</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Lower back</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Abdomen</div>
+          </div></div>
+          <div class="acc-panel" id="area-arms"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'area')">Upper arms</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Forearms</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Hands</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Knuckles</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Cuticles / fingers</div>
+          </div></div>
+          <div class="acc-panel" id="area-legs"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'area')">Thighs</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Knees</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Shins</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Calves</div>
+            <div class="tag" onclick="toggleTag(this,'area')">Feet / toes</div>
+          </div></div>
         </div>
 
         <div class="field">
@@ -964,43 +394,43 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
           <div class="tag-row">
             <div class="tag" onclick="toggleTag(this,'picked_what')">Pimple</div>
             <div class="tag" onclick="toggleTag(this,'picked_what')">Whitehead</div>
+            <div class="tag" onclick="toggleTag(this,'picked_what')">Blackhead</div>
             <div class="tag" onclick="toggleTag(this,'picked_what')">Scab</div>
             <div class="tag" onclick="toggleTag(this,'picked_what')">Dry skin</div>
             <div class="tag" onclick="toggleTag(this,'picked_what')">Uneven texture</div>
             <div class="tag" onclick="toggleTag(this,'picked_what')">Ingrown hair</div>
-            <div class="tag" onclick="toggleTag(this,'picked_what')">Blackhead</div>
-            <div class="tag" onclick="toggleTag(this,'picked_what')">Nothing specific</div>
+            <div class="tag" onclick="toggleTag(this,'picked_what')">Flaky patch</div>
+            <div class="tag" onclick="toggleTag(this,'picked_what')">No specific target — just picked</div>
           </div>
         </div>
 
         <div class="field">
           <label class="field-label">Mirror involved?</label>
-          <div class="field-context">Mirror use is one of the most consistent environmental antecedents in skin picking. Tracking it reveals your highest-risk setup.</div>
           <div class="tag-row">
-            <div class="tag" onclick="setSingle(this,'mirror')">No mirror</div>
-            <div class="tag" onclick="setSingle(this,'mirror')">Regular mirror</div>
-            <div class="tag" onclick="setSingle(this,'mirror')">Magnifying mirror</div>
+            <div class="tag" onclick="setSingle(this,'mirror','mirror-row')">No mirror</div>
+            <div class="tag" onclick="setSingle(this,'mirror','mirror-row')">Regular mirror</div>
+            <div class="tag" onclick="setSingle(this,'mirror','mirror-row')">Magnifying mirror</div>
+            <div class="tag" onclick="setSingle(this,'mirror','mirror-row')">Phone camera</div>
           </div>
         </div>
 
         <div class="field">
-          <label class="field-label">What happened after?</label>
-          <div class="field-context">The full behavior chain — including examination and oral contact — is part of the reinforcement loop, not a separate issue. Tracking it completely gives your therapist a more accurate picture.</div>
-          <div class="completion-grid">
+          <label class="field-label">What happened after — complete the chain</label>
+          <div class="comp-grid">
             <div class="comp-btn" data-v="released" onclick="setCompletion(this)">
-              <span class="comp-label">Released / discarded</span>
+              <span class="comp-lbl">Released / discarded</span>
               <span class="comp-sub">Put it down</span>
             </div>
             <div class="comp-btn" data-v="examined" onclick="setCompletion(this)">
-              <span class="comp-label">Examined it</span>
+              <span class="comp-lbl">Examined it</span>
               <span class="comp-sub">Looked, then discarded</span>
             </div>
             <div class="comp-btn" data-v="oral" onclick="setCompletion(this)">
-              <span class="comp-label">Oral contact</span>
+              <span class="comp-lbl">Oral contact</span>
               <span class="comp-sub">Touched to lips or bit</span>
             </div>
             <div class="comp-btn" data-v="ingested" onclick="setCompletion(this)">
-              <span class="comp-label">Ingested / swallowed</span>
+              <span class="comp-lbl">Ingested / swallowed</span>
               <span class="comp-sub">Chewed or swallowed</span>
             </div>
           </div>
@@ -1008,475 +438,882 @@ textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
 
         <div class="field">
           <label class="field-label">Skin impact</label>
-          <div class="severity-grid">
-            <div class="sev-btn" data-v="none" onclick="setSev(this)">
-              <div class="sev-dot"></div>
-              <div class="sev-label">None</div>
-            </div>
-            <div class="sev-btn" data-v="minor" onclick="setSev(this)">
-              <div class="sev-dot"></div>
-              <div class="sev-label">Minor</div>
-            </div>
-            <div class="sev-btn" data-v="moderate" onclick="setSev(this)">
-              <div class="sev-dot"></div>
-              <div class="sev-label">Moderate</div>
-            </div>
-            <div class="sev-btn" data-v="significant" onclick="setSev(this)">
-              <div class="sev-dot"></div>
-              <div class="sev-label">Significant</div>
-            </div>
+          <div class="sev-grid">
+            <div class="sev-btn" data-v="none" onclick="setSev(this)"><div class="sev-dot"></div><div class="sev-lbl">None</div></div>
+            <div class="sev-btn" data-v="minor" onclick="setSev(this)"><div class="sev-dot"></div><div class="sev-lbl">Minor</div></div>
+            <div class="sev-btn" data-v="moderate" onclick="setSev(this)"><div class="sev-dot"></div><div class="sev-lbl">Moderate</div></div>
+            <div class="sev-btn" data-v="significant" onclick="setSev(this)"><div class="sev-dot"></div><div class="sev-lbl">Significant</div></div>
           </div>
-          <div class="slider-labels"><span>No mark</span><span>Redness</span><span>Broke skin</span><span>Bleeding</span></div>
+          <div class="slider-lbls"><span>No mark</span><span>Redness</span><span>Broke skin</span><span>Bleeding</span></div>
         </div>
 
         <div class="field" style="margin-bottom:0">
           <label class="field-label">Duration</label>
           <div class="tag-row">
-            <div class="tag" onclick="setSingle(this,'duration')">Under 1 min</div>
-            <div class="tag" onclick="setSingle(this,'duration')">1 – 5 min</div>
-            <div class="tag" onclick="setSingle(this,'duration')">5 – 15 min</div>
-            <div class="tag" onclick="setSingle(this,'duration')">15 – 30 min</div>
-            <div class="tag" onclick="setSingle(this,'duration')">30+ min</div>
+            <div class="tag" onclick="setSingle(this,'duration','pick-dur-row')">Under 1 min</div>
+            <div class="tag" onclick="setSingle(this,'duration','pick-dur-row')">1 – 5 min</div>
+            <div class="tag" onclick="setSingle(this,'duration','pick-dur-row')">5 – 15 min</div>
+            <div class="tag" onclick="setSingle(this,'duration','pick-dur-row')">15 – 30 min</div>
+            <div class="tag" onclick="setSingle(this,'duration','pick-dur-row')">30+ min</div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Biting detail -->
+      </div>
+    </div><!-- /picking-detail -->
+
+    <!-- BITING DETAIL -->
     <div id="biting-detail" class="hidden">
-      <div class="section-header">
-        <div class="step-num">4</div>
-        <div class="section-title-wrap">
-          <div class="section-title">The biting</div>
-          <div class="section-context">Nail and skin biting tends to be more oral and tactile in its sensory driver than picking. Tracking exactly what you're engaging with helps distinguish the stimulation pattern.</div>
-        </div>
-      </div>
+      <div class="step-hd"><div class="step-title">The biting</div></div>
       <div class="card">
+
         <div class="field">
-          <label class="field-label">What you were biting / chewing</label>
+          <label class="field-label">What specifically</label>
           <div class="tag-row">
-            <div class="tag" onclick="toggleTag(this,'bite_what')">Cuticles</div>
-            <div class="tag" onclick="toggleTag(this,'bite_what')">Skin around nails</div>
-            <div class="tag" onclick="toggleTag(this,'bite_what')">Nail edges</div>
-            <div class="tag" onclick="toggleTag(this,'bite_what')">Hangnails</div>
+            <div class="tag" onclick="toggleTag(this,'bite_what')">Cuticle skin</div>
+            <div class="tag" onclick="toggleTag(this,'bite_what')">Loose / hanging skin around nail</div>
+            <div class="tag" onclick="toggleTag(this,'bite_what')">Hangnail</div>
             <div class="tag" onclick="toggleTag(this,'bite_what')">Dry skin on fingers</div>
-            <div class="tag" onclick="toggleTag(this,'bite_what')">Chewing / gnawing without breaking</div>
+            <div class="tag" onclick="toggleTag(this,'bite_what')">Nail edge — without breaking</div>
+            <div class="tag" onclick="toggleTag(this,'bite_what')">Gnawing / chewing nail surface</div>
           </div>
         </div>
 
         <div class="field">
-          <label class="field-label">Which hand / fingers?</label>
+          <label class="field-label">Which hand / fingers</label>
           <div class="acc-row">
-            <div class="acc-btn" onclick="toggleAcc(this,'bite-left')">Left hand <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-            <div class="acc-btn" onclick="toggleAcc(this,'bite-right')">Right hand <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'bite-left')">Left hand <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+            <div class="acc-btn" onclick="toggleAcc(this,'bite-right')">Right hand <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
           </div>
-          <div class="acc-panel" id="bite-left">
-            <div class="acc-panel-label">Left hand</div>
-            <div class="tag-row">
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Thumb</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Index</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Middle</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Ring</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Pinky</div>
-            </div>
-          </div>
-          <div class="acc-panel" id="bite-right">
-            <div class="acc-panel-label">Right hand</div>
-            <div class="tag-row">
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Thumb</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Index</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Middle</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Ring</div>
-              <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Pinky</div>
-            </div>
-          </div>
+          <div class="acc-panel" id="bite-left"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Thumb</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Index</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Middle</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Ring</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">L — Pinky</div>
+          </div></div>
+          <div class="acc-panel" id="bite-right"><div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Thumb</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Index</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Middle</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Ring</div>
+            <div class="tag" onclick="toggleTag(this,'bite_fingers')">R — Pinky</div>
+          </div></div>
         </div>
 
         <div class="field">
           <label class="field-label">Intensity</label>
           <div class="tag-row">
-            <div class="tag" onclick="setSingle(this,'bite_intensity')">Light / mindless</div>
-            <div class="tag" onclick="setSingle(this,'bite_intensity')">Moderate</div>
-            <div class="tag" onclick="setSingle(this,'bite_intensity')">Heavy / focused</div>
+            <div class="tag" onclick="setSingle(this,'bite_intensity','bite-int-row')">Light / mindless</div>
+            <div class="tag" onclick="setSingle(this,'bite_intensity','bite-int-row')">Moderate</div>
+            <div class="tag" onclick="setSingle(this,'bite_intensity','bite-int-row')">Heavy / deliberate</div>
           </div>
         </div>
 
         <div class="field" style="margin-bottom:0">
           <label class="field-label">Duration</label>
           <div class="tag-row">
-            <div class="tag" onclick="setSingle(this,'bite_duration')">Under 1 min</div>
-            <div class="tag" onclick="setSingle(this,'bite_duration')">1 – 5 min</div>
-            <div class="tag" onclick="setSingle(this,'bite_duration')">5 – 15 min</div>
-            <div class="tag" onclick="setSingle(this,'bite_duration')">15 – 30 min</div>
-            <div class="tag" onclick="setSingle(this,'bite_duration')">30+ min</div>
+            <div class="tag" onclick="setSingle(this,'bite_duration','bite-dur-row')">Under 1 min</div>
+            <div class="tag" onclick="setSingle(this,'bite_duration','bite-dur-row')">1 – 5 min</div>
+            <div class="tag" onclick="setSingle(this,'bite_duration','bite-dur-row')">5 – 15 min</div>
+            <div class="tag" onclick="setSingle(this,'bite_duration','bite-dur-row')">15 – 30 min</div>
+            <div class="tag" onclick="setSingle(this,'bite_duration','bite-dur-row')">30+ min</div>
           </div>
         </div>
-      </div>
-    </div>
 
-  </div><!-- /behavior-detail-section -->
-
-  <!-- ─── STEP 5: AWARENESS ─── -->
-  <div id="awareness-section">
-    <div class="section-header">
-      <div class="step-num">5</div>
-      <div class="section-title-wrap">
-        <div class="section-title">Awareness</div>
-        <div class="section-context">This is one of the most clinically important variables in HRT. Automatic behaviors require stimulus control work; conscious ones respond more directly to competing response training. Your therapist will look at this consistently.</div>
       </div>
-    </div>
+    </div><!-- /biting-detail -->
+
+    <!-- STEP 5: AWARENESS -->
+    <div class="step-hd"><div class="step-title">Awareness</div></div>
     <div class="card">
-      <div class="awareness-grid">
-        <div class="aw-btn" id="aw-conscious" onclick="setAwareness('conscious')">I noticed while doing it</div>
-        <div class="aw-btn" id="aw-auto" onclick="setAwareness('automatic')">Not until it was over</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── STEP 6: CONTEXT ─── -->
-  <div class="section-header">
-    <div class="step-num">6</div>
-    <div class="section-title-wrap">
-      <div class="section-title">Context</div>
-      <div class="section-context">Situational antecedents — where you were and what you were doing — often cluster in predictable ways. Identifying high-risk environments is a core part of stimulus control planning.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="field">
-      <label class="field-label">Location</label>
-      <div class="acc-row">
-        <div class="acc-btn" onclick="toggleAcc(this,'loc-home')">Home <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-        <div class="acc-btn" onclick="toggleAcc(this,'loc-school')">School / clinical <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-        <div class="acc-btn" onclick="toggleAcc(this,'loc-out')">Out <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-      </div>
-      <div class="acc-panel" id="loc-home">
-        <div class="tag-row">
-          <div class="tag" onclick="setSingle(this,'location')">Bathroom / mirror</div>
-          <div class="tag" onclick="setSingle(this,'location')">Bedroom</div>
-          <div class="tag" onclick="setSingle(this,'location')">Bed</div>
-          <div class="tag" onclick="setSingle(this,'location')">Couch</div>
-          <div class="tag" onclick="setSingle(this,'location')">Desk</div>
-          <div class="tag" onclick="setSingle(this,'location')">Dining table</div>
-          <div class="tag" onclick="setSingle(this,'location')">Kitchen</div>
-        </div>
-      </div>
-      <div class="acc-panel" id="loc-school">
-        <div class="tag-row">
-          <div class="tag" onclick="setSingle(this,'location')">Lecture hall</div>
-          <div class="tag" onclick="setSingle(this,'location')">Library</div>
-          <div class="tag" onclick="setSingle(this,'location')">Simulation lab</div>
-          <div class="tag" onclick="setSingle(this,'location')">Clinical placement</div>
-          <div class="tag" onclick="setSingle(this,'location')">Cafe / study space</div>
-        </div>
-      </div>
-      <div class="acc-panel" id="loc-out">
-        <div class="tag-row">
-          <div class="tag" onclick="setSingle(this,'location')">Car</div>
-          <div class="tag" onclick="setSingle(this,'location')">Public transport</div>
-          <div class="tag" onclick="setSingle(this,'location')">Gym</div>
-          <div class="tag" onclick="setSingle(this,'location')">Waiting room</div>
-          <div class="tag" onclick="setSingle(this,'location')">Friend's place</div>
-        </div>
-      </div>
-      <div class="tag-row" style="margin-top:8px">
-        <div class="tag dashed" onclick="toggleOther(this,'location')">+ Other</div>
-      </div>
-      <input type="text" class="other-input" id="location-other" placeholder="Where were you?">
-    </div>
-
-    <div class="field" style="margin-bottom:0">
-      <label class="field-label">Activity</label>
-      <div class="acc-row">
-        <div class="acc-btn" onclick="toggleAcc(this,'act-study')">Study / work <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-        <div class="acc-btn" onclick="toggleAcc(this,'act-screen')">Screens <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-        <div class="acc-btn" onclick="toggleAcc(this,'act-life')">Daily life <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="1,1 5,5 9,1"/></svg></div>
-      </div>
-      <div class="acc-panel" id="act-study">
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'activity')">Studying / reading</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Practice questions</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Watching a lecture</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">In a lecture</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">On the computer</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Clinical skills / sim</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">On placement</div>
-        </div>
-      </div>
-      <div class="acc-panel" id="act-screen">
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'activity')">Scrolling phone</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Watching TV / video</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Gaming</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Video call</div>
-        </div>
-      </div>
-      <div class="acc-panel" id="act-life">
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'activity')">Getting ready</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Winding down / in bed</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Eating</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Driving / commuting</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Nothing / zoning out</div>
-          <div class="tag" onclick="toggleTag(this,'activity')">Talking / socializing</div>
-        </div>
-      </div>
-      <div class="tag-row" style="margin-top:8px">
-        <div class="tag dashed" onclick="toggleOther(this,'activity')">+ Other</div>
-      </div>
-      <input type="text" class="other-input" id="activity-other" placeholder="What were you doing?">
-    </div>
-  </div>
-
-  <!-- ─── STEP 7: TRIGGERS ─── -->
-  <div class="section-header">
-    <div class="step-num">7</div>
-    <div class="section-title-wrap">
-      <div class="section-title">What set it off?</div>
-      <div class="section-context">The emotional/sensory distinction matters therapeutically. Sensory-driven BFRBs often respond best to competing sensory stimulation; emotion-driven ones to affect regulation. Your trigger profile informs which approach your therapist leans on.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="two-col">
-      <div>
-        <div class="col-label">Emotional</div>
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'etrig')">Stressed</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Anxious</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Overwhelmed</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Frustrated</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Bored</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Tired</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Restless</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Procrastinating</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Zoning out</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Winding down</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Socially anxious</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Before exam / prac</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">After hard session</div>
-          <div class="tag" onclick="toggleTag(this,'etrig')">Sad</div>
-        </div>
-      </div>
-      <div>
-        <div class="col-label">Sensory</div>
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'strig')">Felt a texture</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Saw in mirror</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Magnifying mirror</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Itching</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Rough skin</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Noticed a bump</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Scanning skin</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Touching face</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Rough nail edge</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Loose skin / hangnail</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Bright lighting</div>
-          <div class="tag" onclick="toggleTag(this,'strig')">Idle hands</div>
-        </div>
-      </div>
-    </div>
-    <div class="tag-row" style="margin-top:12px">
-      <div class="tag dashed" onclick="toggleOther(this,'trigger')">+ Other</div>
-    </div>
-    <input type="text" class="other-input" id="trigger-other" placeholder="Describe the trigger">
-  </div>
-
-  <!-- ─── STEP 8: MOOD & URGE ─── -->
-  <div class="section-header">
-    <div class="step-num">8</div>
-    <div class="section-title-wrap">
-      <div class="section-title">Before &amp; after</div>
-      <div class="section-context">The contrast between your emotional state and urge level before and after reveals the reinforcement function of the behavior — what it's doing for you. This is the core data your therapist uses to understand the maintaining cycle.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="two-col">
-      <div>
-        <div class="col-label">Mood before</div>
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Calm</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Tense</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Anxious</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Stressed</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Bored</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Frustrated</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Sad</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Numb / zoned out</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Tired</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Overwhelmed</div>
-          <div class="tag" onclick="toggleTag(this,'mood_before')">Focused</div>
-        </div>
-      </div>
-      <div id="after-col">
-        <div class="col-label">Mood after</div>
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Relieved</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Calm</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Satisfied</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Disgusted</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Ashamed</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Frustrated</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Numb</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Unchanged</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Tense still</div>
-          <div class="tag" onclick="toggleTag(this,'mood_after')">Proud</div>
-        </div>
+      <div class="aw-grid">
+        <div class="aw-btn" id="aw-conscious" onclick="setAwareness('conscious')">I noticed while it was happening</div>
+        <div class="aw-btn" id="aw-auto" onclick="setAwareness('automatic')">I didn't notice until it was over</div>
       </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="two-col">
+    <!-- STEP 6: LOCATION -->
+    <div class="step-hd"><div class="step-title">Location</div></div>
+    <div class="card">
       <div class="field" style="margin-bottom:0">
-        <label class="field-label">Urge before</label>
-        <div class="slider-row">
-          <input type="range" min="1" max="10" value="5" id="urge-before" oninput="updSlider(this,'ub-val','urge_before')">
-          <div class="slider-val" id="ub-val">5</div>
+        <div class="acc-row">
+          <div class="acc-btn" onclick="toggleAcc(this,'loc-home')">At home <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'loc-study')">Studying <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'loc-clinical')">Clinical / hospital <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'loc-out')">Out &amp; about <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'loc-transit')">In transit <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
         </div>
-        <div class="slider-labels"><span>1 — barely there</span><span>10 — unbearable</span></div>
-      </div>
-      <div class="field" style="margin-bottom:0" id="urge-after-col">
-        <label class="field-label">Urge after</label>
-        <div class="slider-row">
-          <input type="range" min="1" max="10" value="3" id="urge-after" oninput="updSlider(this,'ua-val','urge_after')">
-          <div class="slider-val" id="ua-val">3</div>
+        <div class="acc-panel" id="loc-home">
+          <div class="acc-panel-lbl">At home</div>
+          <div class="tag-row">
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Bathroom — at the mirror</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Bathroom — shower / getting ready</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Bedroom — in bed</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Bedroom — at my desk</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Living room — on the couch</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Living room — watching TV</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Kitchen</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Dining table</div>
+          </div>
         </div>
-        <div class="slider-labels"><span>1 — gone</span><span>10 — still high</span></div>
+        <div class="acc-panel" id="loc-study">
+          <div class="acc-panel-lbl">Studying</div>
+          <div class="tag-row">
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Bedroom desk — studying</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Library — silent section</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Library — open area</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Lecture hall</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Seminar room</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Cafe or coffee shop</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Campus common area</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="loc-clinical">
+          <div class="acc-panel-lbl">Clinical / hospital</div>
+          <div class="tag-row">
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Hospital ward</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Simulation lab</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Skills lab</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Clinic waiting area</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Locker room / changing area</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Break room</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="loc-out">
+          <div class="acc-panel-lbl">Out &amp; about</div>
+          <div class="tag-row">
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Friend's place</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Restaurant or bar</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Gym</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Waiting room</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Public bathroom</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Shopping</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="loc-transit">
+          <div class="acc-panel-lbl">In transit</div>
+          <div class="tag-row">
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Car — driving</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Car — passenger</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Public transport</div>
+            <div class="tag" onclick="setSingle(this,'location','loc-all')">Walking</div>
+          </div>
+        </div>
+        <div class="tag-row" style="margin-top:8px">
+          <div class="tag dashed" onclick="toggleOther(this,'ep-location')">+ Other</div>
+        </div>
+        <input type="text" class="other-input" id="ep-location-other" placeholder="Where were you?">
       </div>
     </div>
-  </div>
 
-  <!-- ─── STEP 9: INTERVENTIONS ─── -->
-  <div class="section-header">
-    <div class="step-num">9</div>
-    <div class="section-title-wrap">
-      <div class="section-title">Did you try anything?</div>
-      <div class="section-context">Whether you did the behavior or not — tracking which strategies you attempted and how effective they were tells your therapist which tools are beginning to translate to real life.</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="field">
-      <label class="field-label">Tried an intervention?</label>
-      <div class="timing-grid">
-        <div class="timing-btn" id="tried-yes" onclick="setTried(true)">Yes</div>
-        <div class="timing-btn" id="tried-no" onclick="setTried(false)">Not this time</div>
+    <!-- STEP 7: ACTIVITY -->
+    <div class="step-hd"><div class="step-title">Activity</div></div>
+    <div class="card">
+      <div class="field" style="margin-bottom:0">
+        <div class="acc-row">
+          <div class="acc-btn" onclick="toggleAcc(this,'act-study')">Studying / academic <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'act-clinical')">Clinical <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'act-screen')">Screens <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'act-social')">Social <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'act-life')">Daily life <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'act-idle')">Idle / transitional <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+        </div>
+        <div class="acc-panel" id="act-study">
+          <div class="acc-panel-lbl">Studying / academic</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'activity')">Doing practice questions (Anki, Amboss, UWorld)</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Reading a textbook or notes</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Watching a recorded lecture</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Sitting in a live lecture</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Writing notes or an essay</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Studying before an exam</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Reviewing after a hard session</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="act-clinical">
+          <div class="acc-panel-lbl">Clinical</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'activity')">On placement / in hospital</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Skills or simulation session</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Presenting to a supervisor</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Waiting between patients / tasks</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Writing up notes or documentation</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="act-screen">
+          <div class="acc-panel-lbl">Screens</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'activity')">Scrolling social media</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Watching TV or a show</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Watching YouTube</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Gaming</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">On a video call</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Browsing / reading online</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="act-social">
+          <div class="acc-panel-lbl">Social</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'activity')">Talking in person</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">At a social event or party</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">With family</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">On the phone</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="act-life">
+          <div class="acc-panel-lbl">Daily life</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'activity')">Getting ready in the morning</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Winding down before bed</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Eating a meal</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Exercising</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Doing chores or errands</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">In the shower or bath</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="act-idle">
+          <div class="acc-panel-lbl">Idle / transitional</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'activity')">Doing nothing / zoning out</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Between tasks</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Just woke up</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Waiting for something</div>
+            <div class="tag" onclick="toggleTag(this,'activity')">Commuting</div>
+          </div>
+        </div>
+        <div class="tag-row" style="margin-top:8px">
+          <div class="tag dashed" onclick="toggleOther(this,'ep-activity')">+ Other</div>
+        </div>
+        <input type="text" class="other-input" id="ep-activity-other" placeholder="What were you doing?">
       </div>
     </div>
 
-    <div id="intervention-detail" class="hidden">
+    <!-- STEP 8: TRIGGERS -->
+    <div class="step-hd"><div class="step-title">What set it off?</div></div>
+    <div class="card">
       <div class="field">
-        <label class="field-label">What did you try? <span style="font-weight:400;text-transform:none;letter-spacing:0">(all that apply)</span></label>
-        <div class="tag-row">
-          <div class="tag" onclick="toggleTag(this,'interventions')">Competing response (hands)</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Urge surfing — waited it out</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Left the situation</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Covered / barrier on hands</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Noticed and labeled the urge</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Put on gloves / bandage</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Fidget tool / textured object</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Moved away from mirror</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Removed mirror access</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Changed lighting</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Called / texted someone</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Used an oral substitute (gum, mint)</div>
-          <div class="tag" onclick="toggleTag(this,'interventions')">Moisturized / treated skin</div>
+        <div class="acc-row">
+          <div class="acc-btn" onclick="toggleAcc(this,'trig-emotional')">Emotional <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'trig-sensory')">Sensory <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+        </div>
+        <div class="acc-panel" id="trig-emotional">
+          <div class="acc-panel-lbl">Emotional</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'etrig')">Anxious</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Nervous</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Apprehensive</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Stressed</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Overwhelmed</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Pressured</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Panicked</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Frustrated</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Irritable</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Angry</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Annoyed</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Sad</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Low</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Hopeless</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Lonely</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Defeated</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Guilty</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Ashamed</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Embarrassed</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Bored</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Restless</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Antsy</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Stuck</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Tired</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Exhausted</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Drained</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Numb</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Disconnected</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Zoned out</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Procrastinating</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Avoidant</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Anticipating something</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Excited</div>
+            <div class="tag" onclick="toggleTag(this,'etrig')">Nothing I can name</div>
+          </div>
+        </div>
+        <div class="acc-panel" id="trig-sensory">
+          <div class="acc-panel-lbl">Sensory</div>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'strig')">Felt a rough texture on skin</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Felt a loose piece of skin or hangnail</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Noticed a bump or imperfection</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Felt an itch</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Saw something in a regular mirror</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Saw something in a magnifying mirror</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Used phone camera to examine skin</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Scanning skin with fingers</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Touching face or hands absentmindedly</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Felt a rough nail edge</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Bright or harsh lighting</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Hands were idle</div>
+            <div class="tag" onclick="toggleTag(this,'strig')">Post-shower skin sensitivity</div>
+          </div>
+        </div>
+        <div class="tag-row" style="margin-top:8px">
+          <div class="tag dashed" onclick="toggleOther(this,'ep-trigger')">+ Other trigger</div>
+        </div>
+        <input type="text" class="other-input" id="ep-trigger-other" placeholder="Describe the trigger">
+      </div>
+    </div>
+
+    <!-- STEP 9: MOOD + URGE -->
+    <div class="step-hd"><div class="step-title">How were you feeling?</div></div>
+    <div class="card">
+      <div class="field">
+        <label class="field-label">Before</label>
+        <div class="emotion-grid" id="mood-before-grid">
+          <div class="emotion-group-lbl">Calm / positive</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Calm</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Content</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Relaxed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">At ease</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Focused</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Engaged</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Motivated</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Satisfied</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Hopeful</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Proud</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Grateful</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Excited</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Energized</div>
+          <div class="emotion-group-lbl">Tense / anxious</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Anxious</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Nervous</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Apprehensive</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Stressed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Overwhelmed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Pressured</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Tense</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Panicked</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">On edge</div>
+          <div class="emotion-group-lbl">Frustrated / angry</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Frustrated</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Irritable</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Angry</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Annoyed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Resentful</div>
+          <div class="emotion-group-lbl">Low / sad</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Sad</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Low</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Hopeless</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Lonely</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Defeated</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Disappointed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Grieving</div>
+          <div class="emotion-group-lbl">Self-conscious</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Guilty</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Ashamed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Embarrassed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Regretful</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Insecure</div>
+          <div class="emotion-group-lbl">Restless / flat</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Bored</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Restless</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Antsy</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Stuck</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Tired</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Exhausted</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Drained</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Numb</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Disconnected</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Zoned out</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Empty</div>
+          <div class="emotion-group-lbl">Uncertain / scattered</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Confused</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Uncertain</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Scattered</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Overwhelmed by decisions</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_before')">Nothing in particular</div>
         </div>
       </div>
 
-      <div class="field" style="margin-bottom:0" id="eff-section">
-        <label class="field-label">How effective?</label>
-        <div class="eff-row">
-          <div class="eff-btn" data-v="1" onclick="setEff(this)">1</div>
-          <div class="eff-btn" data-v="2" onclick="setEff(this)">2</div>
-          <div class="eff-btn" data-v="3" onclick="setEff(this)">3</div>
-          <div class="eff-btn" data-v="4" onclick="setEff(this)">4</div>
-          <div class="eff-btn" data-v="5" onclick="setEff(this)">5</div>
-          <div class="eff-label" id="eff-label">Tap to rate</div>
+      <div class="divider"></div>
+
+      <div class="field">
+        <label class="field-label">After</label>
+        <div class="emotion-grid">
+          <div class="emotion-group-lbl">Calm / relieved</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Relieved</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Calm</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Satisfied</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">At ease</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Settled</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Grounded</div>
+          <div class="emotion-group-lbl">Negative / self-critical</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Disgusted</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Ashamed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Guilty</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Regretful</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Frustrated with myself</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Disappointed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Embarrassed</div>
+          <div class="emotion-group-lbl">Still activated</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Still anxious</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Still stressed</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Still frustrated</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Worse than before</div>
+          <div class="emotion-group-lbl">Neutral / flat</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Unchanged</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Numb</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Disconnected</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Zoned out</div>
+          <div class="emotion-group-lbl">Positive</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Proud</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Accomplished</div>
+          <div class="etag" onclick="toggleEtag(this,'mood_after')">Good</div>
         </div>
-        <div class="slider-labels" style="width:192px"><span>Didn't help</span><span style="text-align:right;display:block;margin-left:auto">Stopped it</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="two-col">
+        <div>
+          <label class="field-label">Urge level before</label>
+          <div class="slider-row">
+            <input type="range" min="1" max="10" value="5" id="urge-before" oninput="updSlider(this,'ub-val','urge_before')">
+            <div class="slider-val" id="ub-val">5</div>
+          </div>
+          <div class="slider-lbls"><span>1 — barely noticeable</span><span>10 — unmanageable</span></div>
+        </div>
+        <div>
+          <label class="field-label">Urge level after</label>
+          <div class="slider-row">
+            <input type="range" min="1" max="10" value="3" id="urge-after" oninput="updSlider(this,'ua-val','urge_after')">
+            <div class="slider-val" id="ua-val">3</div>
+          </div>
+          <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
+        </div>
+      </div>
+
+    </div><!-- /mood card -->
+
+    <!-- STEP 10: INTERVENTIONS (episode) -->
+    <div class="step-hd"><div class="step-title">Did you try anything?</div></div>
+    <div class="card">
+      <p class="int-note">Anything you tried at the moment — before, during, or right as it was happening — to interrupt or redirect. Not general self-care.</p>
+      <div class="field">
+        <div class="two-btn">
+          <div class="flat-btn" id="ep-tried-yes" onclick="setTried('ep',true)">Yes</div>
+          <div class="flat-btn" id="ep-tried-no" onclick="setTried('ep',false)">Not this time</div>
+        </div>
+      </div>
+      <div id="ep-int-detail" class="hidden">
+        <div class="field">
+          <label class="field-label">What did you try?</label>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'interventions')">Competing response — did something with my hands</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Urge surfed — waited and observed without acting</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Left the room or situation</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Moved away from the mirror</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Covered hands (gloves, bandage, sleeves)</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Used a fidget or textured object</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Labeled the urge out loud or mentally</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Called or texted someone</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Used an oral substitute (gum, mint)</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Deep breathing or grounding</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Applied lotion or treated the skin</div>
+            <div class="tag" onclick="toggleTag(this,'interventions')">Distracted with a task</div>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label class="field-label">How effective was it?</label>
+          <div class="eff-row">
+            <div class="eff-btn" data-v="1" onclick="setEff(this)">1</div>
+            <div class="eff-btn" data-v="2" onclick="setEff(this)">2</div>
+            <div class="eff-btn" data-v="3" onclick="setEff(this)">3</div>
+            <div class="eff-btn" data-v="4" onclick="setEff(this)">4</div>
+            <div class="eff-btn" data-v="5" onclick="setEff(this)">5</div>
+            <div class="eff-lbl" id="eff-label">Tap to rate</div>
+          </div>
+          <div class="slider-lbls" style="max-width:228px"><span>1 — did not help</span><span>5 — interrupted it</span></div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ─── STEP 10: NOTES ─── -->
-  <div class="section-header">
-    <div class="step-num">10</div>
-    <div class="section-title-wrap">
-      <div class="section-title">Notes</div>
-      <div class="section-context">Anything the fields above didn't capture. Optional.</div>
+    <!-- STEP 11: NOTES -->
+    <div class="step-hd"><div class="step-title">Notes</div></div>
+    <div class="card">
+      <textarea id="ep-notes" placeholder="Anything the form didn't capture..."></textarea>
     </div>
-  </div>
-  <div class="card">
-    <textarea id="notes" placeholder="Anything worth noting..."></textarea>
-  </div>
 
-  <!-- Submit -->
-  <button class="submit-btn" id="sub-btn" onclick="submitEntry()">Save entry</button>
-  <button class="reset-btn" onclick="resetForm()">Clear form</button>
+    <button class="submit-btn" id="ep-sub-btn" onclick="submitEpisode()">Save entry</button>
+    <button class="reset-btn" onclick="resetForm()">Clear form</button>
+    <div class="status-row">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text">Not signed in</span>
+    </div>
 
-  <div class="status-row">
-    <div class="status-dot" id="status-dot"></div>
-    <span id="status-text">Not signed in</span>
-  </div>
+  </div><!-- /pathway-episode -->
+
+
+  <!-- ═══════════════════════════════════════════
+       PATHWAY B — RESISTED / NEAR MISS
+       ═══════════════════════════════════════════ -->
+  <div id="pathway-resist" class="hidden">
+
+    <div class="resist-note">Logging what was happening when you had the urge — and what you did instead — is the most useful data your therapist will see.</div>
+
+    <!-- WHEN -->
+    <div class="step-hd"><div class="step-title">When?</div></div>
+    <div class="card">
+      <div class="two-btn">
+        <div class="flat-btn on" id="r-tim-now" onclick="setTimingR('now')">Right now</div>
+        <div class="flat-btn" id="r-tim-back" onclick="setTimingR('back')">Earlier</div>
+      </div>
+      <div id="r-datetime-field" class="hidden" style="margin-top:14px">
+        <label class="field-label">When?</label>
+        <input type="datetime-local" id="r-event-time">
+      </div>
+    </div>
+
+    <!-- LOCATION -->
+    <div class="step-hd"><div class="step-title">Location</div></div>
+    <div class="card">
+      <div class="field" style="margin-bottom:0">
+        <div class="acc-row">
+          <div class="acc-btn" onclick="toggleAcc(this,'r-loc-home')">At home <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-loc-study')">Studying <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-loc-clinical')">Clinical / hospital <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-loc-out')">Out &amp; about <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-loc-transit')">In transit <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+        </div>
+        <div class="acc-panel" id="r-loc-home"><div class="tag-row">
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Bathroom — at the mirror</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Bathroom — shower / getting ready</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Bedroom — in bed</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Bedroom — at my desk</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Living room — on the couch</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Living room — watching TV</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Kitchen</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Dining table</div>
+        </div></div>
+        <div class="acc-panel" id="r-loc-study"><div class="tag-row">
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Bedroom desk — studying</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Library — silent section</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Library — open area</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Lecture hall</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Seminar room</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Cafe or coffee shop</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Campus common area</div>
+        </div></div>
+        <div class="acc-panel" id="r-loc-clinical"><div class="tag-row">
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Hospital ward</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Simulation lab</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Skills lab</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Clinic waiting area</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Locker room / changing area</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Break room</div>
+        </div></div>
+        <div class="acc-panel" id="r-loc-out"><div class="tag-row">
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Friend's place</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Restaurant or bar</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Gym</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Waiting room</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Public bathroom</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Shopping</div>
+        </div></div>
+        <div class="acc-panel" id="r-loc-transit"><div class="tag-row">
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Car — driving</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Car — passenger</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Public transport</div>
+          <div class="tag" onclick="setSingle(this,'r_location','r-loc-all')">Walking</div>
+        </div></div>
+        <div class="tag-row" style="margin-top:8px">
+          <div class="tag dashed" onclick="toggleOther(this,'r-location')">+ Other</div>
+        </div>
+        <input type="text" class="other-input" id="r-location-other" placeholder="Where were you?">
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="step-hd"><div class="step-title">Activity</div></div>
+    <div class="card">
+      <div class="field" style="margin-bottom:0">
+        <div class="acc-row">
+          <div class="acc-btn" onclick="toggleAcc(this,'r-act-study')">Studying / academic <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-act-clinical')">Clinical <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-act-screen')">Screens <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-act-social')">Social <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-act-life')">Daily life <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-act-idle')">Idle / transitional <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+        </div>
+        <div class="acc-panel" id="r-act-study"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Doing practice questions (Anki, Amboss, UWorld)</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Reading a textbook or notes</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Watching a recorded lecture</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Sitting in a live lecture</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Writing notes or an essay</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Studying before an exam</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Reviewing after a hard session</div>
+        </div></div>
+        <div class="acc-panel" id="r-act-clinical"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_activity')">On placement / in hospital</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Skills or simulation session</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Presenting to a supervisor</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Waiting between patients / tasks</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Writing up notes or documentation</div>
+        </div></div>
+        <div class="acc-panel" id="r-act-screen"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Scrolling social media</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Watching TV or a show</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Watching YouTube</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Gaming</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">On a video call</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Browsing / reading online</div>
+        </div></div>
+        <div class="acc-panel" id="r-act-social"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Talking in person</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">At a social event or party</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">With family</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">On the phone</div>
+        </div></div>
+        <div class="acc-panel" id="r-act-life"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Getting ready in the morning</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Winding down before bed</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Eating a meal</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Exercising</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Doing chores or errands</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">In the shower or bath</div>
+        </div></div>
+        <div class="acc-panel" id="r-act-idle"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Doing nothing / zoning out</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Between tasks</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Just woke up</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Waiting for something</div>
+          <div class="tag" onclick="toggleTag(this,'r_activity')">Commuting</div>
+        </div></div>
+        <div class="tag-row" style="margin-top:8px">
+          <div class="tag dashed" onclick="toggleOther(this,'r-activity')">+ Other</div>
+        </div>
+        <input type="text" class="other-input" id="r-activity-other" placeholder="What were you doing?">
+      </div>
+    </div>
+
+    <!-- TRIGGERS (resist) -->
+    <div class="step-hd"><div class="step-title">What was pulling you toward it?</div></div>
+    <div class="card">
+      <div class="field" style="margin-bottom:0">
+        <div class="acc-row">
+          <div class="acc-btn" onclick="toggleAcc(this,'r-trig-em')">Emotional <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+          <div class="acc-btn" onclick="toggleAcc(this,'r-trig-se')">Sensory <svg viewBox="0 0 10 6" fill="none" stroke-width="2"><polyline points="1,1 5,5 9,1"/></svg></div>
+        </div>
+        <div class="acc-panel" id="r-trig-em"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Anxious</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Nervous</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Apprehensive</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Stressed</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Overwhelmed</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Pressured</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Panicked</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Frustrated</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Irritable</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Angry</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Sad</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Low</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Lonely</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Guilty</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Ashamed</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Bored</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Restless</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Antsy</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Tired</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Exhausted</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Numb</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Zoned out</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Procrastinating</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Avoidant</div>
+          <div class="tag" onclick="toggleTag(this,'r_etrig')">Nothing I can name</div>
+        </div></div>
+        <div class="acc-panel" id="r-trig-se"><div class="tag-row">
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Felt a rough texture on skin</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Felt a loose piece of skin or hangnail</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Noticed a bump or imperfection</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Felt an itch</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Saw something in a regular mirror</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Saw something in a magnifying mirror</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Scanning skin with fingers</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Touching face or hands absentmindedly</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Felt a rough nail edge</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Bright or harsh lighting</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Hands were idle</div>
+          <div class="tag" onclick="toggleTag(this,'r_strig')">Post-shower skin sensitivity</div>
+        </div></div>
+        <div class="tag-row" style="margin-top:8px">
+          <div class="tag dashed" onclick="toggleOther(this,'r-trigger')">+ Other</div>
+        </div>
+        <input type="text" class="other-input" id="r-trigger-other" placeholder="Describe it">
+      </div>
+    </div>
+
+    <!-- MOOD BEFORE (resist only) -->
+    <div class="step-hd"><div class="step-title">How were you feeling?</div></div>
+    <div class="card">
+      <div class="field">
+        <label class="field-label">In the moment of the urge</label>
+        <div class="emotion-grid">
+          <div class="emotion-group-lbl">Calm / positive</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Calm</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Content</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Relaxed</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Focused</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Engaged</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Hopeful</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Proud</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Excited</div>
+          <div class="emotion-group-lbl">Tense / anxious</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Anxious</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Nervous</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Stressed</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Overwhelmed</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Tense</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">On edge</div>
+          <div class="emotion-group-lbl">Frustrated / angry</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Frustrated</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Irritable</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Angry</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Annoyed</div>
+          <div class="emotion-group-lbl">Low / sad</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Sad</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Low</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Lonely</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Defeated</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Ashamed</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Guilty</div>
+          <div class="emotion-group-lbl">Restless / flat</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Bored</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Restless</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Antsy</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Tired</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Exhausted</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Numb</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Disconnected</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Zoned out</div>
+          <div class="etag" onclick="toggleEtag(this,'r_mood_before')">Nothing in particular</div>
+        </div>
+      </div>
+      <div>
+        <label class="field-label">Urge level</label>
+        <div class="slider-row">
+          <input type="range" min="1" max="10" value="5" id="r-urge" oninput="updSlider(this,'r-urge-val','r_urge')">
+          <div class="slider-val" id="r-urge-val">5</div>
+        </div>
+        <div class="slider-lbls"><span>1 — barely noticeable</span><span>10 — unmanageable</span></div>
+      </div>
+    </div>
+
+    <!-- INTERVENTIONS (resist) -->
+    <div class="step-hd"><div class="step-title">What did you do instead?</div></div>
+    <div class="card">
+      <p class="int-note">What you did at the moment of the urge — before, during, or right as it was happening.</p>
+      <div class="field">
+        <div class="two-btn">
+          <div class="flat-btn" id="r-tried-yes" onclick="setTried('r',true)">I tried something</div>
+          <div class="flat-btn" id="r-tried-no" onclick="setTried('r',false)">I didn't try anything</div>
+        </div>
+      </div>
+      <div id="r-int-detail" class="hidden">
+        <div class="field">
+          <label class="field-label">What did you try?</label>
+          <div class="tag-row">
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Competing response — did something with my hands</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Urge surfed — waited and observed without acting</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Left the room or situation</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Moved away from the mirror</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Covered hands (gloves, bandage, sleeves)</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Used a fidget or textured object</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Labeled the urge out loud or mentally</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Called or texted someone</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Used an oral substitute (gum, mint)</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Deep breathing or grounding</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Applied lotion or treated the skin</div>
+            <div class="tag" onclick="toggleTag(this,'r_interventions')">Distracted with a task</div>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label class="field-label">How effective?</label>
+          <div class="eff-row">
+            <div class="eff-btn" data-v="1" onclick="setEffR(this)">1</div>
+            <div class="eff-btn" data-v="2" onclick="setEffR(this)">2</div>
+            <div class="eff-btn" data-v="3" onclick="setEffR(this)">3</div>
+            <div class="eff-btn" data-v="4" onclick="setEffR(this)">4</div>
+            <div class="eff-btn" data-v="5" onclick="setEffR(this)">5</div>
+            <div class="eff-lbl" id="r-eff-label">Tap to rate</div>
+          </div>
+          <div class="slider-lbls" style="max-width:228px"><span>1 — did not help</span><span>5 — interrupted it</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES (resist) -->
+    <div class="step-hd"><div class="step-title">Notes</div></div>
+    <div class="card">
+      <textarea id="r-notes" placeholder="Anything the form didn't capture..."></textarea>
+    </div>
+
+    <button class="submit-btn" id="r-sub-btn" onclick="submitResist()">Save entry</button>
+    <button class="reset-btn" onclick="resetForm()">Clear form</button>
+    <div class="status-row">
+      <div class="status-dot" id="r-status-dot"></div>
+      <span id="r-status-text">Not signed in</span>
+    </div>
+
+  </div><!-- /pathway-resist -->
 
 </main>
 </div><!-- /app -->
 
-<!-- ─── QUICK MODAL ─── -->
+<!-- QUICK MODAL -->
 <div class="modal-overlay" id="quick-modal" onclick="if(event.target===this)closeQuick()">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
     <div class="modal-title">Quick log</div>
-    <div class="modal-sub" id="quick-modal-sub">Log the essentials now, add detail later.</div>
-
-    <div class="modal-label">Behavior</div>
+    <div class="modal-sub">Log the essentials now, fill in detail later.</div>
+    <div class="modal-lbl">Behavior</div>
     <div class="tag-row" id="q-bfrb">
       <div class="tag on" data-v="picking" onclick="qBfrb(this)">Skin picking</div>
       <div class="tag" data-v="biting" onclick="qBfrb(this)">Nail / skin biting</div>
     </div>
-
-    <div class="modal-label">What happened?</div>
+    <div class="modal-lbl">What happened?</div>
     <div class="tag-row" id="q-type">
       <div class="tag on" data-v="did" onclick="qType(this)">Did it</div>
       <div class="tag" data-v="resisted" onclick="qType(this)">Resisted</div>
       <div class="tag" data-v="near" onclick="qType(this)">Near miss</div>
     </div>
-
     <div id="q-area-block">
-      <div class="modal-label">Body area / what</div>
-      <div class="tag-row" id="q-area">
+      <div class="modal-lbl">Area / what</div>
+      <div class="tag-row">
         <div class="tag" onclick="qToggle(this,'qArea')">Face</div>
         <div class="tag" onclick="qToggle(this,'qArea')">Scalp</div>
-        <div class="tag" onclick="qToggle(this,'qArea')">Arms</div>
+        <div class="tag" onclick="qToggle(this,'qArea')">Arms / hands</div>
         <div class="tag" onclick="qToggle(this,'qArea')">Body</div>
         <div class="tag" onclick="qToggle(this,'qArea')">Cuticles</div>
         <div class="tag" onclick="qToggle(this,'qArea')">Nail edges</div>
         <div class="tag" onclick="qToggle(this,'qArea')">Finger skin</div>
       </div>
     </div>
-
-    <div class="modal-label">Urge level</div>
+    <div class="modal-lbl">Urge level</div>
     <div class="slider-row">
       <input type="range" min="1" max="10" value="5" id="q-urge" oninput="qSlider(this)">
       <div class="slider-val" id="q-urge-val">5</div>
     </div>
-    <div class="slider-labels"><span>1 — barely there</span><span>10 — unbearable</span></div>
-
+    <div class="slider-lbls"><span>1 — barely noticeable</span><span>10 — unmanageable</span></div>
     <button class="modal-save" id="q-save-btn">Save quick entry</button>
     <button class="modal-cancel" onclick="closeQuick()">Cancel</button>
   </div>
 </div>
 
-<!-- ─── TOAST ─── -->
 <div class="toast" id="toast"></div>
 
-<!-- ─── FIREBASE + LOGIC ─── -->
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── CONFIGURE YOUR FIREBASE PROJECT BELOW ──
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
   authDomain: "skin-picking-log.firebaseapp.com",
@@ -1490,126 +1327,111 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
 const provider = new GoogleAuthProvider();
 
 window._uid = null;
+window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { toast('Sign-in failed', true); } };
+window.signOut = async () => { await fbSignOut(auth); };
+window._addEntry = async (uid, entry) => addDoc(collection(db,'users',uid,'entries'), {...entry, created_at: serverTimestamp()});
 
-window.signInWithGoogle = async () => {
-  try { await signInWithPopup(auth, provider); }
-  catch(e) { toast('Sign-in failed', true); }
-};
-
-window.signOut = async () => {
-  await fbSignOut(auth);
-};
-
-window._addEntry = async (uid, entry) => {
-  return await addDoc(collection(db, 'users', uid, 'entries'), {
-    ...entry,
-    created_at: serverTimestamp()
+function updateAuthUI(user) {
+  const isIn = !!user;
+  window._uid = isIn ? user.uid : null;
+  document.getElementById('auth-screen').classList.toggle('on', !isIn);
+  document.getElementById('app').classList.toggle('on', isIn);
+  document.getElementById('sign-btn-nav').style.display = isIn ? 'none' : '';
+  document.getElementById('user-info').style.display = isIn ? 'flex' : 'none';
+  if (isIn && user.photoURL) document.getElementById('user-avatar').src = user.photoURL;
+  ['status-dot','r-status-dot'].forEach(id => {
+    const d = document.getElementById(id);
+    if(d){ d.className = 'status-dot' + (isIn ? ' on' : ' err'); }
   });
-};
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    window._uid = user.uid;
-    document.getElementById('auth-screen').classList.remove('on');
-    document.getElementById('app').classList.add('on');
-    document.getElementById('sign-btn-nav').style.display = 'none';
-    document.getElementById('user-info').style.display = 'flex';
-    const av = document.getElementById('user-avatar');
-    if (user.photoURL) av.src = user.photoURL;
-    const dot = document.getElementById('status-dot');
-    dot.classList.add('on');
-    dot.classList.remove('err');
-    document.getElementById('status-text').textContent = 'Signed in as ' + (user.displayName || user.email);
-  } else {
-    window._uid = null;
-    document.getElementById('auth-screen').classList.add('on');
-    document.getElementById('app').classList.remove('on');
-    document.getElementById('sign-btn-nav').style.display = '';
-    document.getElementById('user-info').style.display = 'none';
-    const dot = document.getElementById('status-dot');
-    dot.classList.remove('on');
-    dot.classList.add('err');
-    document.getElementById('status-text').textContent = 'Not signed in';
-  }
-});
+  ['status-text','r-status-text'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = isIn ? 'Signed in as ' + (user.displayName || user.email) : 'Not signed in';
+  });
+}
+onAuthStateChanged(auth, updateAuthUI);
 </script>
 
+<!-- LOGIC -->
 <script>
-// ─── THEME ───
+// THEME
 function toggleTheme() {
   const d = document.documentElement;
-  d.setAttribute('data-theme', d.getAttribute('data-theme') === 'dark' ? '' : 'dark');
-  localStorage.setItem('theme', d.getAttribute('data-theme'));
+  const next = d.getAttribute('data-theme') === 'dark' ? '' : 'dark';
+  d.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
 }
-(function() {
-  const t = localStorage.getItem('theme');
-  if (t) document.documentElement.setAttribute('data-theme', t);
-})();
+(()=>{ const t=localStorage.getItem('theme'); if(t) document.documentElement.setAttribute('data-theme',t); })();
 
-// ─── STATE ───
+// STATE — episode pathway
 const S = {
-  bfrb: 'picking',
-  entry: 'did',
-  timing: 'now',
-  area: [],
-  picked_what: [],
-  mirror: null,
-  completion: null,
-  severity: null,
-  duration: null,
-  bite_what: [],
-  bite_fingers: [],
-  bite_intensity: null,
-  bite_duration: null,
-  awareness: null,
-  location: null,
-  activity: [],
-  etrig: [],
-  strig: [],
-  mood_before: [],
-  mood_after: [],
-  urge_before: 5,
-  urge_after: 3,
-  tried: null,
-  interventions: [],
-  eff: null,
+  bfrb: null, entry: null, timing: 'now',
+  area:[], picked_what:[], mirror:null, completion:null, severity:null, duration:null,
+  bite_what:[], bite_fingers:[], bite_intensity:null, bite_duration:null,
+  awareness:null,
+  location:null, activity:[],
+  etrig:[], strig:[],
+  mood_before:[], mood_after:[],
+  urge_before:5, urge_after:3,
+  tried:null, interventions:[], eff:null,
+};
+// STATE — resist pathway (keys are plain; HTML passes 'r_x' prefix so toggleTag/setSingle strip it)
+const R = {
+  timing:'now', location:null, activity:[],
+  etrig:[], strig:[],
+  mood_before:[], urge:5,
+  tried:null, interventions:[], eff:null,
 };
 
-// ─── BEHAVIOR ───
+// STEP 1 — BEHAVIOR
 window.setBfrb = type => {
   S.bfrb = type;
-  document.getElementById('bfrb-picking').classList.toggle('on', type === 'picking');
-  document.getElementById('bfrb-biting').classList.toggle('on', type === 'biting');
-  document.getElementById('picking-detail').classList.toggle('hidden', type !== 'picking');
-  document.getElementById('biting-detail').classList.toggle('hidden', type !== 'biting');
+  document.getElementById('bfrb-picking').classList.toggle('on', type==='picking');
+  document.getElementById('bfrb-biting').classList.toggle('on', type==='biting');
+  document.getElementById('step2-block').classList.remove('hidden');
+  // Reset entry selection when behavior changes
+  if (S.entry) {
+    S.entry = null;
+    document.getElementById('pathway-episode').classList.add('hidden');
+    document.getElementById('pathway-resist').classList.add('hidden');
+    ['et-did','et-resisted','et-near'].forEach(id => document.getElementById(id).classList.remove('on'));
+  }
 };
 
-// ─── ENTRY TYPE ───
+// STEP 2 — ENTRY TYPE
 window.setEntry = type => {
   S.entry = type;
-  ['did','resisted','near'].forEach(t => document.getElementById('et-' + t).classList.remove('on'));
-  document.getElementById('et-' + type).classList.add('on');
-  const isEpisode = type !== 'resisted';
-  document.getElementById('behavior-detail-section').classList.toggle('hidden', !isEpisode);
-  document.getElementById('awareness-section').classList.toggle('hidden', !isEpisode);
-  document.getElementById('win-msg').classList.toggle('hidden', isEpisode);
-  document.getElementById('after-col').style.opacity = isEpisode ? '1' : '0.5';
-  document.getElementById('urge-after-col').style.opacity = isEpisode ? '1' : '0.5';
+  ['et-did','et-resisted','et-near'].forEach(id => document.getElementById(id).classList.remove('on'));
+  document.getElementById('et-'+type).classList.add('on');
+
+  const isEpisode = type === 'did' || type === 'near';
+  document.getElementById('pathway-episode').classList.toggle('hidden', !isEpisode);
+  document.getElementById('pathway-resist').classList.toggle('hidden', isEpisode);
+
+  if (isEpisode) {
+    document.getElementById('picking-detail').classList.toggle('hidden', S.bfrb !== 'picking');
+    document.getElementById('biting-detail').classList.toggle('hidden', S.bfrb !== 'biting');
+  }
 };
 
-// ─── TIMING ───
+// TIMING — episode
 window.setTiming = t => {
   S.timing = t;
-  document.getElementById('tim-now').classList.toggle('on', t === 'now');
-  document.getElementById('tim-back').classList.toggle('on', t === 'back');
-  document.getElementById('datetime-field').classList.toggle('hidden', t !== 'back');
+  document.getElementById('tim-now').classList.toggle('on', t==='now');
+  document.getElementById('tim-back').classList.toggle('on', t==='back');
+  document.getElementById('datetime-field').classList.toggle('hidden', t!=='back');
+};
+// TIMING — resist
+window.setTimingR = t => {
+  R.timing = t;
+  document.getElementById('r-tim-now').classList.toggle('on', t==='now');
+  document.getElementById('r-tim-back').classList.toggle('on', t==='back');
+  document.getElementById('r-datetime-field').classList.toggle('hidden', t!=='back');
 };
 
-// ─── ACCORDION ───
+// ACCORDION
 window.toggleAcc = (btn, id) => {
   const panel = document.getElementById(id);
   const open = !panel.classList.contains('on');
@@ -1617,274 +1439,268 @@ window.toggleAcc = (btn, id) => {
   btn.classList.toggle('on', open);
 };
 
-// ─── TAGS ───
+// MULTI-SELECT TAGS
 window.toggleTag = (el, group) => {
-  if (!Array.isArray(S[group])) S[group] = [];
+  const target = group.startsWith('r_') ? R : S;
+  const key = group.startsWith('r_') ? group.slice(2) : group;
+  if (!Array.isArray(target[key])) target[key] = [];
   const v = el.textContent.trim();
-  const i = S[group].indexOf(v);
-  if (i > -1) { S[group].splice(i, 1); el.classList.remove('on'); }
-  else { S[group].push(v); el.classList.add('on'); }
+  const i = target[key].indexOf(v);
+  if (i > -1) { target[key].splice(i,1); el.classList.remove('on'); }
+  else { target[key].push(v); el.classList.add('on'); }
 };
 
-window.setSingle = (el, group) => {
-  const row = el.closest('.tag-row') || el.closest('.acc-panel') || el.parentElement;
-  row.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+// SINGLE-SELECT TAGS — use data-group on parent or pass rowClass
+window.setSingle = (el, prop, rowClass) => {
+  // Deselect all tags with same rowClass across all acc-panels and tag-rows
+  document.querySelectorAll('.'+rowClass+' .tag, [data-rowclass="'+rowClass+'"] .tag').forEach(t=>t.classList.remove('on'));
+  // Fallback: deselect siblings in same tag-row
+  const row = el.closest('.tag-row');
+  if(row) row.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
-  S[group] = el.textContent.trim();
+  const target = prop.startsWith('r_') ? R : S;
+  const key = prop.startsWith('r_') ? prop.slice(2) : prop;
+  target[key] = el.textContent.trim();
 };
 
-// ─── COMPLETION ───
+// EMOTION TAGS (multi, same as toggleTag but separate for clarity)
+window.toggleEtag = (el, group) => {
+  const target = group.startsWith('r_') ? R : S;
+  const key = group.startsWith('r_') ? group.slice(2) : group;
+  if(!Array.isArray(target[key])) target[key]=[];
+  const v = el.textContent.trim();
+  const i = target[key].indexOf(v);
+  if(i>-1){target[key].splice(i,1);el.classList.remove('on');}
+  else{target[key].push(v);el.classList.add('on');}
+};
+
+// COMPLETION
 window.setCompletion = btn => {
-  document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.comp-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   S.completion = btn.dataset.v;
 };
 
-// ─── SEVERITY ───
+// SEVERITY
 window.setSev = btn => {
-  document.querySelectorAll('.sev-btn').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.sev-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   S.severity = btn.dataset.v;
 };
 
-// ─── AWARENESS ───
+// AWARENESS
 window.setAwareness = val => {
   S.awareness = val;
-  document.getElementById('aw-conscious').classList.toggle('on', val === 'conscious');
-  document.getElementById('aw-auto').classList.toggle('on', val === 'automatic');
+  document.getElementById('aw-conscious').classList.toggle('on', val==='conscious');
+  document.getElementById('aw-auto').classList.toggle('on', val==='automatic');
 };
 
-// ─── SLIDER ───
+// SLIDER
 window.updSlider = (el, valId, prop) => {
-  const pct = ((el.value - 1) / 9) * 100;
+  const pct = ((el.value-1)/9)*100;
   el.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
   document.getElementById(valId).textContent = el.value;
-  if (prop) S[prop] = parseInt(el.value);
+  if(prop) {
+    if(prop.startsWith('r_')) R[prop.slice(2)] = parseInt(el.value);
+    else S[prop] = parseInt(el.value);
+  }
 };
 
-// ─── TRIED ───
-window.setTried = tried => {
-  S.tried = tried;
-  document.getElementById('tried-yes').classList.toggle('on', tried === true);
-  document.getElementById('tried-no').classList.toggle('on', tried === false);
-  document.getElementById('intervention-detail').classList.toggle('hidden', !tried);
+// TRIED INTERVENTION
+window.setTried = (pathway, tried) => {
+  if(pathway==='ep') {
+    S.tried = tried;
+    document.getElementById('ep-tried-yes').classList.toggle('on', tried===true);
+    document.getElementById('ep-tried-no').classList.toggle('on', tried===false);
+    document.getElementById('ep-int-detail').classList.toggle('hidden', !tried);
+  } else {
+    R.tried = tried;
+    document.getElementById('r-tried-yes').classList.toggle('on', tried===true);
+    document.getElementById('r-tried-no').classList.toggle('on', tried===false);
+    document.getElementById('r-int-detail').classList.toggle('hidden', !tried);
+  }
 };
 
-// ─── EFFECTIVENESS ───
-const EFF_LABELS = ['Didn\'t help', 'Helped a little', 'Somewhat helpful', 'Helped a lot', 'Stopped it'];
+// EFFECTIVENESS
+const EFF_LABELS = ['Did not help','Helped a little','Somewhat helpful','Helped a lot','Interrupted it'];
 window.setEff = el => {
-  const v = parseInt(el.dataset.v);
-  S.eff = v;
-  document.querySelectorAll('.eff-btn').forEach(b => b.classList.toggle('on', parseInt(b.dataset.v) <= v));
-  document.getElementById('eff-label').textContent = EFF_LABELS[v - 1];
+  const v = parseInt(el.dataset.v); S.eff = v;
+  document.querySelectorAll('#ep-int-detail .eff-btn').forEach(b=>b.classList.toggle('on', parseInt(b.dataset.v)<=v));
+  document.getElementById('eff-label').textContent = EFF_LABELS[v-1];
+};
+window.setEffR = el => {
+  const v = parseInt(el.dataset.v); R.eff = v;
+  document.querySelectorAll('#r-int-detail .eff-btn').forEach(b=>b.classList.toggle('on', parseInt(b.dataset.v)<=v));
+  document.getElementById('r-eff-label').textContent = EFF_LABELS[v-1];
 };
 
-// ─── OTHER INPUT ───
+// OTHER INPUT
 window.toggleOther = (el, group) => {
-  const inp = document.getElementById(group + '-other');
+  const inp = document.getElementById(group+'-other');
+  if(!inp) return;
   const open = !el.classList.contains('on');
   el.classList.toggle('on', open);
   inp.classList.toggle('on', open);
-  if (open) inp.focus();
-  else inp.value = '';
+  if(open) inp.focus(); else inp.value='';
 };
 
-// ─── TIMESTAMP ───
-function localISO(d = new Date()) {
-  const p = n => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
-}
-function getTimestamp() {
-  if (S.timing === 'back') {
-    const v = document.getElementById('event-time').value;
-    return v ? (v.length === 16 ? v + ':00' : v) : localISO();
+// TIMESTAMP
+function localISO(d=new Date()){const p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;}
+function getTS(pathPrefix=''){
+  if((pathPrefix==='r'?R:S).timing==='back'){
+    const id = pathPrefix==='r'?'r-event-time':'event-time';
+    const v = document.getElementById(id).value;
+    return v?(v.length===16?v+':00':v):localISO();
   }
   return localISO();
 }
-function getOther(group) {
-  const i = document.getElementById(group + '-other');
-  return i && i.classList.contains('on') && i.value.trim() ? i.value.trim() : null;
-}
+function getOtherVal(id){const el=document.getElementById(id+'-other');return el&&el.classList.contains('on')&&el.value.trim()?el.value.trim():null;}
 
-// ─── SUBMIT ───
-window.submitEntry = async () => {
-  if (!window._uid) { toast('Not signed in', true); return; }
-  const btn = document.getElementById('sub-btn');
-  btn.disabled = true;
-  btn.textContent = 'Saving...';
-
+// SUBMIT EPISODE
+window.submitEpisode = async () => {
+  if(!window._uid){toast('Not signed in',true);return;}
+  const btn = document.getElementById('ep-sub-btn');
+  btn.disabled=true; btn.textContent='Saving...';
   const entry = {
-    timestamp: getTimestamp(),
-    bfrb_type: S.bfrb,
-    entry_type: S.entry,
-    awareness: S.awareness || '',
-    // Picking fields
+    timestamp: getTS(''),
+    bfrb_type: S.bfrb||'',
+    entry_type: S.entry||'',
+    awareness: S.awareness||'',
     body_areas: S.area.join(', '),
     picked_what: S.picked_what.join(', '),
-    mirror: S.mirror || '',
-    completion: S.completion || '',
-    severity: S.severity || '',
-    duration: S.duration || '',
-    // Biting fields
+    mirror: S.mirror||'',
+    completion: S.completion||'',
+    severity: S.severity||'',
+    duration: S.duration||'',
     bite_what: S.bite_what.join(', '),
     bite_fingers: S.bite_fingers.join(', '),
-    bite_intensity: S.bite_intensity || '',
-    bite_duration: S.bite_duration || '',
-    // Context
-    location: getOther('location') || S.location || '',
-    activity: [getOther('activity'), ...S.activity].filter(Boolean).join(', '),
-    // Triggers
+    bite_intensity: S.bite_intensity||'',
+    bite_duration: S.bite_duration||'',
+    location: getOtherVal('ep-location')||S.location||'',
+    activity: [getOtherVal('ep-activity'),...S.activity].filter(Boolean).join(', '),
     emotional_triggers: S.etrig.join(', '),
     sensory_triggers: S.strig.join(', '),
-    other_trigger: getOther('trigger') || '',
-    // Mood / urge
+    other_trigger: getOtherVal('ep-trigger')||'',
     mood_before: S.mood_before.join(', '),
     urge_before: S.urge_before,
     mood_after: S.mood_after.join(', '),
     urge_after: S.urge_after,
-    // Interventions
-    tried_intervention: S.tried === true,
+    tried_intervention: S.tried===true,
     interventions: S.interventions.join(', '),
     intervention_effectiveness: S.eff,
-    // Notes
-    notes: document.getElementById('notes').value.trim(),
+    notes: document.getElementById('ep-notes').value.trim(),
   };
-
   try {
     await window._addEntry(window._uid, entry);
-    toast('Saved', false, true);
+    toast('Saved',false,true);
     resetForm();
   } catch(e) {
-    toast('Error: ' + e.message, true);
-    btn.disabled = false;
-    btn.textContent = 'Save entry';
+    toast('Error: '+e.message,true);
+    btn.disabled=false; btn.textContent='Save entry';
   }
 };
 
-// ─── RESET ───
-window.resetForm = () => {
-  Object.assign(S, {
-    bfrb: 'picking', entry: 'did', timing: 'now',
-    area: [], picked_what: [], mirror: null, completion: null, severity: null, duration: null,
-    bite_what: [], bite_fingers: [], bite_intensity: null, bite_duration: null,
-    awareness: null, location: null, activity: [],
-    etrig: [], strig: [],
-    mood_before: [], mood_after: [],
-    urge_before: 5, urge_after: 3,
-    tried: null, interventions: [], eff: null,
-  });
-  document.querySelectorAll('.tag, .comp-btn, .sev-btn, .eff-btn').forEach(el => el.classList.remove('on'));
-  document.querySelectorAll('.bfrb-btn, .entry-btn, .timing-btn, .aw-btn').forEach(el => el.classList.remove('on'));
-  document.querySelectorAll('.acc-btn').forEach(b => b.classList.remove('on'));
-  document.querySelectorAll('.acc-panel').forEach(p => p.classList.remove('on'));
-  document.querySelectorAll('.other-input').forEach(i => { i.classList.remove('on'); i.value = ''; });
-  document.getElementById('bfrb-picking').classList.add('on');
-  document.getElementById('et-did').classList.add('on');
-  document.getElementById('tim-now').classList.add('on');
-  document.getElementById('win-msg').classList.add('hidden');
-  document.getElementById('behavior-detail-section').classList.remove('hidden');
-  document.getElementById('awareness-section').classList.remove('hidden');
-  document.getElementById('picking-detail').classList.remove('hidden');
-  document.getElementById('biting-detail').classList.add('hidden');
-  document.getElementById('datetime-field').classList.add('hidden');
-  document.getElementById('intervention-detail').classList.add('hidden');
-  document.getElementById('tried-yes').classList.remove('on');
-  document.getElementById('tried-no').classList.remove('on');
-  document.getElementById('after-col').style.opacity = '1';
-  document.getElementById('urge-after-col').style.opacity = '1';
-  document.getElementById('notes').value = '';
-  document.getElementById('eff-label').textContent = 'Tap to rate';
-  document.getElementById('sub-btn').disabled = false;
-  document.getElementById('sub-btn').textContent = 'Save entry';
-  const ub = document.getElementById('urge-before');
-  ub.value = 5; updSlider(ub, 'ub-val', 'urge_before');
-  const ua = document.getElementById('urge-after');
-  ua.value = 3; updSlider(ua, 'ua-val', 'urge_after');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-// ─── QUICK LOG ───
-const QS = { bfrb: 'picking', type: 'did', qArea: [], urge: 5 };
-
-window.openQuick = (preset) => {
-  QS.bfrb = preset === 'resisted' ? 'picking' : preset;
-  QS.type = preset === 'resisted' ? 'resisted' : 'did';
-  QS.qArea = [];
-  QS.urge = 5;
-  document.querySelectorAll('#quick-modal .tag').forEach(t => t.classList.remove('on'));
-  const bv = document.querySelector(`#q-bfrb [data-v="${QS.bfrb}"]`);
-  if (bv) bv.classList.add('on');
-  const tv = document.querySelector(`#q-type [data-v="${QS.type}"]`);
-  if (tv) tv.classList.add('on');
-  const sl = document.getElementById('q-urge');
-  sl.value = 5; qSlider(sl);
-  document.getElementById('quick-modal').classList.add('on');
-};
-window.closeQuick = () => document.getElementById('quick-modal').classList.remove('on');
-
-window.qBfrb = el => {
-  document.querySelectorAll('#q-bfrb .tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  QS.bfrb = el.dataset.v;
-};
-window.qType = el => {
-  document.querySelectorAll('#q-type .tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  QS.type = el.dataset.v;
-  document.getElementById('q-area-block').style.display = el.dataset.v === 'resisted' ? 'none' : 'block';
-};
-window.qToggle = (el, group) => {
-  if (!Array.isArray(QS[group])) QS[group] = [];
-  const v = el.textContent.trim();
-  const i = QS[group].indexOf(v);
-  if (i > -1) { QS[group].splice(i, 1); el.classList.remove('on'); }
-  else { QS[group].push(v); el.classList.add('on'); }
-};
-window.qSlider = el => {
-  const pct = ((el.value - 1) / 9) * 100;
-  el.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-  document.getElementById('q-urge-val').textContent = el.value;
-  QS.urge = parseInt(el.value);
-};
-
-document.getElementById('q-save-btn').addEventListener('click', async () => {
-  if (!window._uid) { toast('Not signed in', true); return; }
+// SUBMIT RESIST
+window.submitResist = async () => {
+  if(!window._uid){toast('Not signed in',true);return;}
+  const btn = document.getElementById('r-sub-btn');
+  btn.disabled=true; btn.textContent='Saving...';
   const entry = {
-    timestamp: localISO(),
-    bfrb_type: QS.bfrb,
-    entry_type: QS.type,
+    timestamp: getTS('r'),
+    bfrb_type: S.bfrb||'',
+    entry_type: S.entry||'',
     awareness: '',
-    body_areas: (QS.qArea || []).join(', '),
-    picked_what: '', mirror: '', completion: '', severity: '', duration: '',
-    bite_what: '', bite_fingers: '', bite_intensity: '', bite_duration: '',
-    location: '', activity: '',
-    emotional_triggers: '', sensory_triggers: '', other_trigger: '',
-    mood_before: '', urge_before: QS.urge,
-    mood_after: '', urge_after: null,
-    tried_intervention: false, interventions: '', intervention_effectiveness: null,
-    notes: '(quick log)',
+    body_areas:'', picked_what:'', mirror:'', completion:'', severity:'', duration:'',
+    bite_what:'', bite_fingers:'', bite_intensity:'', bite_duration:'',
+    location: getOtherVal('r-location')||R.location||'',
+    activity: [getOtherVal('r-activity'),...(R.activity||[])].filter(Boolean).join(', '),
+    emotional_triggers: (R.etrig||[]).join(', '),
+    sensory_triggers: (R.strig||[]).join(', '),
+    other_trigger: getOtherVal('r-trigger')||'',
+    mood_before: (R.mood_before||[]).join(', '),
+    urge_before: R.urge||5,
+    mood_after: '',
+    urge_after: null,
+    tried_intervention: R.tried===true,
+    interventions: (R.interventions||[]).join(', '),
+    intervention_effectiveness: R.eff||null,
+    notes: document.getElementById('r-notes').value.trim(),
   };
   try {
     await window._addEntry(window._uid, entry);
-    toast('Saved', false, true);
-    closeQuick();
-  } catch(e) { toast('Error: ' + e.message, true); }
-});
-
-// ─── TOAST ───
-window.toast = (msg, isErr = false, isOk = false) => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (isErr ? ' err' : '') + (isOk ? ' ok' : '');
-  void t.offsetWidth;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+    toast('Saved',false,true);
+    resetForm();
+  } catch(e) {
+    toast('Error: '+e.message,true);
+    btn.disabled=false; btn.textContent='Save entry';
+  }
 };
 
-// ─── INIT ───
-document.addEventListener('DOMContentLoaded', () => {
-  updSlider(document.getElementById('urge-before'), 'ub-val', 'urge_before');
-  updSlider(document.getElementById('urge-after'), 'ua-val', 'urge_after');
+// RESET
+window.resetForm = () => {
+  Object.assign(S,{bfrb:null,entry:null,timing:'now',area:[],picked_what:[],mirror:null,completion:null,severity:null,duration:null,bite_what:[],bite_fingers:[],bite_intensity:null,bite_duration:null,awareness:null,location:null,activity:[],etrig:[],strig:[],mood_before:[],mood_after:[],urge_before:5,urge_after:3,tried:null,interventions:[],eff:null});
+  Object.assign(R,{timing:'now',location:null,activity:[],etrig:[],strig:[],mood_before:[],urge:5,tried:null,interventions:[],eff:null});
+  document.querySelectorAll('.tag,.etag,.comp-btn,.sev-btn,.eff-btn,.choice-btn,.flat-btn,.aw-btn,.acc-btn').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.acc-panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.other-input').forEach(i=>{i.classList.remove('on');i.value='';});
+  document.querySelectorAll('textarea').forEach(t=>t.value='');
+  document.getElementById('step2-block').classList.add('hidden');
+  document.getElementById('pathway-episode').classList.add('hidden');
+  document.getElementById('pathway-resist').classList.add('hidden');
+  document.getElementById('ep-int-detail').classList.add('hidden');
+  document.getElementById('r-int-detail').classList.add('hidden');
+  document.getElementById('datetime-field').classList.add('hidden');
+  document.getElementById('r-datetime-field').classList.add('hidden');
+  document.getElementById('picking-detail').classList.remove('hidden');
+  document.getElementById('biting-detail').classList.add('hidden');
+  document.getElementById('eff-label').textContent='Tap to rate';
+  document.getElementById('r-eff-label').textContent='Tap to rate';
+  ['ep-sub-btn','r-sub-btn'].forEach(id=>{const b=document.getElementById(id);if(b){b.disabled=false;b.textContent='Save entry';}});
+  const ub=document.getElementById('urge-before'); ub.value=5; updSlider(ub,'ub-val','urge_before');
+  const ua=document.getElementById('urge-after'); ua.value=3; updSlider(ua,'ua-val','urge_after');
+  const ru=document.getElementById('r-urge'); ru.value=5; updSlider(ru,'r-urge-val','r_urge');
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+// QUICK LOG
+const QS = {bfrb:'picking',type:'did',qArea:[],urge:5};
+window.openQuick = preset => {
+  QS.bfrb = preset==='resisted'?'picking':preset;
+  QS.type = preset==='resisted'?'resisted':'did';
+  QS.qArea=[]; QS.urge=5;
+  document.querySelectorAll('#quick-modal .tag').forEach(t=>t.classList.remove('on'));
+  const bv=document.querySelector(`#q-bfrb [data-v="${QS.bfrb}"]`); if(bv)bv.classList.add('on');
+  const tv=document.querySelector(`#q-type [data-v="${QS.type}"]`); if(tv)tv.classList.add('on');
+  const sl=document.getElementById('q-urge'); sl.value=5; qSlider(sl);
+  document.getElementById('q-area-block').style.display=QS.type==='resisted'?'none':'block';
+  document.getElementById('quick-modal').classList.add('on');
+};
+window.closeQuick = ()=>document.getElementById('quick-modal').classList.remove('on');
+window.qBfrb = el=>{document.querySelectorAll('#q-bfrb .tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');QS.bfrb=el.dataset.v;};
+window.qType = el=>{document.querySelectorAll('#q-type .tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');QS.type=el.dataset.v;document.getElementById('q-area-block').style.display=el.dataset.v==='resisted'?'none':'block';};
+window.qToggle = (el,group)=>{if(!Array.isArray(QS[group]))QS[group]=[];const v=el.textContent.trim(),i=QS[group].indexOf(v);if(i>-1){QS[group].splice(i,1);el.classList.remove('on');}else{QS[group].push(v);el.classList.add('on');}};
+window.qSlider = el=>{const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;document.getElementById('q-urge-val').textContent=el.value;QS.urge=parseInt(el.value);};
+
+document.getElementById('q-save-btn').addEventListener('click', async()=>{
+  if(!window._uid){toast('Not signed in',true);return;}
+  const entry={timestamp:localISO(),bfrb_type:QS.bfrb,entry_type:QS.type,awareness:'',body_areas:(QS.qArea||[]).join(', '),picked_what:'',mirror:'',completion:'',severity:'',duration:'',bite_what:'',bite_fingers:'',bite_intensity:'',bite_duration:'',location:'',activity:'',emotional_triggers:'',sensory_triggers:'',other_trigger:'',mood_before:'',urge_before:QS.urge,mood_after:'',urge_after:null,tried_intervention:false,interventions:'',intervention_effectiveness:null,notes:'(quick log)'};
+  try{await window._addEntry(window._uid,entry);toast('Saved',false,true);closeQuick();}
+  catch(e){toast('Error: '+e.message,true);}
+});
+
+// TOAST
+window.toast = (msg,isErr=false,isOk=false)=>{
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast'+(isErr?' err':'')+(isOk?' ok':'');
+  void t.offsetWidth; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+};
+
+// INIT sliders
+document.addEventListener('DOMContentLoaded',()=>{
+  updSlider(document.getElementById('urge-before'),'ub-val','urge_before');
+  updSlider(document.getElementById('urge-after'),'ua-val','urge_after');
+  updSlider(document.getElementById('r-urge'),'r-urge-val','r_urge');
   qSlider(document.getElementById('q-urge'));
 });
 </script>
