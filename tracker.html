@@ -44,9 +44,7 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 
 .header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
 .page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx)}
-.controls{display:flex;gap:8px;align-items:center}
-.select-btn, .action-btn{padding:8px 14px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;outline:none;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
-.action-btn:hover{border-color:var(--ac);color:var(--ac)}
+.select-btn{padding:8px 14px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;outline:none;cursor:pointer;transition:var(--tr);box-shadow:var(--s1)}
 
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:12px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;text-align:center;box-shadow:var(--s1)}
@@ -61,8 +59,11 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 .chart-wrapper{position:relative;height:220px;width:100%}
 
 /* RAW LOG FEED */
-.feed-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.feed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:12px}
 .feed-title{font-family:'Lora',serif;font-size:20px;color:var(--tx)}
+.feed-controls{display:flex;gap:12px;align-items:center}
+.action-btn{padding:6px 14px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;outline:none;cursor:pointer;transition:var(--tr)}
+.action-btn:hover{border-color:var(--ac);color:var(--ac)}
 .feed-toggle{background:none;border:none;color:var(--mu);font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr)}
 .feed-toggle:hover{color:var(--tx)}
 
@@ -76,8 +77,27 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 .log-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mu);margin-bottom:8px}
 .log-meta span{background:var(--sur);padding:2px 8px;border-radius:var(--pill);border:1px solid var(--bdr)}
 .log-notes{font-size:13px;color:var(--tx);background:var(--bg);padding:10px;border-radius:var(--rsm);border:1px solid var(--bdr);margin-top:8px;line-height:1.5}
+.log-actions{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--bdr)}
+.log-act-btn{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
+.log-act-btn:hover{color:var(--tx)}
+.log-act-btn.del:hover{color:var(--ac)}
 
 .empty-state{text-align:center;padding:40px 20px;color:var(--mu);font-size:14px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);margin-top:20px}
+
+/* EDIT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(28,18,10,.6);backdrop-filter:blur(4px);z-index:900;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.on{display:flex}
+.modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:400px;box-shadow:var(--s2)}
+.modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:16px}
+.modal-field{margin-bottom:16px}
+.modal-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;transition:var(--tr)}
+.modal-input:focus,.modal-select:focus{border-color:var(--ac)}
+.modal-actions{display:flex;gap:12px;margin-top:24px}
+.modal-btn{flex:1;padding:12px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:var(--tr);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx)}
+.modal-btn:hover{border-color:var(--bdr2)}
+.modal-btn.primary{background:var(--ac);color:#fff;border-color:var(--ac)}
+.modal-btn.primary:hover{background:var(--ac-h)}
 </style>
 </head>
 <body>
@@ -96,14 +116,11 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 <main>
   <div class="header-row">
     <div class="page-title">Clinical Patterns</div>
-    <div class="controls">
-      <select class="select-btn" id="time-filter" onchange="loadData()">
-        <option value="7">Last 7 Days</option>
-        <option value="30" selected>Last 30 Days</option>
-        <option value="all">All Time</option>
-      </select>
-      <button class="action-btn" onclick="exportCSV()">Export CSV</button>
-    </div>
+    <select class="select-btn" id="time-filter" onchange="loadData()">
+      <option value="7">Last 7 Days</option>
+      <option value="30" selected>Last 30 Days</option>
+      <option value="all">All Time</option>
+    </select>
   </div>
 
   <div id="loading" style="text-align:center;color:var(--mu);padding:40px">Analyzing logs...</div>
@@ -145,7 +162,10 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 
     <div class="feed-header">
       <div class="feed-title">Raw Log Feed</div>
-      <button class="feed-toggle" id="feed-toggle" onclick="toggleFeed()">View All</button>
+      <div class="feed-controls">
+        <button class="action-btn" onclick="exportCSV()">Export CSV</button>
+        <button class="feed-toggle" id="feed-toggle" onclick="toggleFeed()">View All</button>
+      </div>
     </div>
     <div id="log-feed"></div>
 
@@ -158,10 +178,36 @@ main{max-width:800px;margin:0 auto;padding:24px 14px}
 </main>
 </div>
 
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-card">
+    <div class="modal-title">Edit Log</div>
+    <div class="modal-field">
+      <label class="modal-label">Outcome</label>
+      <select class="modal-select" id="edit-outcome">
+        <option value="did">Did it</option>
+        <option value="near_miss">Near Miss</option>
+        <option value="resisted">Resisted</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Urge Level (1-10)</label>
+      <input type="number" class="modal-input" id="edit-urge" min="1" max="10">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Notes</label>
+      <textarea class="modal-input" id="edit-notes" rows="3"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeEdit()">Cancel</button>
+      <button class="modal-btn primary" id="edit-save-btn" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, query, where, getDocs, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
@@ -181,6 +227,7 @@ window._uid = null;
 window._currentEntries = [];
 let chartInstances = {};
 let feedExpanded = false;
+let editingId = null;
 
 window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
 window.signOut = async () => { await fbSignOut(auth); };
@@ -215,7 +262,9 @@ window.loadData = async () => {
   try {
     const snap = await getDocs(q);
     const entries = [];
-    snap.forEach(doc => entries.push(doc.data()));
+    snap.forEach(document => {
+      entries.push({ id: document.id, ...document.data() });
+    });
     
     window._currentEntries = entries;
 
@@ -249,7 +298,7 @@ function processData(entries) {
 
   entries.forEach(e => {
     if (e.entry_type === 'resisted' || e.entry_type === 'near_miss') resisted++;
-    if (e.urge_before) totalUrge += e.urge_before;
+    if (e.urge_before) totalUrge += parseInt(e.urge_before);
     if (e.entry_type) outcomes[e.entry_type]++;
 
     if (e.created_at) {
@@ -312,7 +361,7 @@ function renderFeed() {
     const outClass = e.entry_type || 'did';
     const outLabel = labels[e.entry_type] || e.entry_type;
     
-    let metaHTML = `<span>Urge: ${e.urge_before}/10</span>`;
+    let metaHTML = `<span>Urge: ${e.urge_before || 0}/10</span>`;
     if (e.bfrb_type) metaHTML += `<span>${e.bfrb_type}</span>`;
     if (e.duration) metaHTML += `<span>${e.duration}</span>`;
     if (e.primary_trigger) metaHTML += `<span>Trig: ${e.primary_trigger.split('/')[0]}</span>`;
@@ -328,6 +377,10 @@ function renderFeed() {
         </div>
         <div class="log-meta">${metaHTML}</div>
         ${notesHTML}
+        <div class="log-actions">
+          <button class="log-act-btn" onclick="editLog('${e.id}')">Edit</button>
+          <button class="log-act-btn del" onclick="deleteLog('${e.id}')">Delete</button>
+        </div>
       </div>
     `;
   }).join('');
@@ -337,6 +390,63 @@ window.toggleFeed = () => {
   feedExpanded = !feedExpanded;
   document.getElementById('feed-toggle').textContent = feedExpanded ? 'Show Less' : 'View All';
   renderFeed();
+};
+
+window.deleteLog = async (id) => {
+  if (!confirm("Are you sure you want to permanently delete this log?")) return;
+  try {
+    await deleteDoc(doc(db, 'users', window._uid, 'entries', id));
+    window._currentEntries = window._currentEntries.filter(e => e.id !== id);
+    processData(window._currentEntries);
+    renderFeed();
+  } catch(e) {
+    alert("Failed to delete entry. Check console.");
+    console.error(e);
+  }
+};
+
+window.editLog = (id) => {
+  const entry = window._currentEntries.find(e => e.id === id);
+  if (!entry) return;
+  editingId = id;
+  document.getElementById('edit-outcome').value = entry.entry_type || 'did';
+  document.getElementById('edit-urge').value = entry.urge_before || 5;
+  document.getElementById('edit-notes').value = entry.notes || '';
+  document.getElementById('edit-modal').classList.add('on');
+};
+
+window.closeEdit = () => {
+  editingId = null;
+  document.getElementById('edit-modal').classList.remove('on');
+};
+
+window.saveEdit = async () => {
+  if (!editingId) return;
+  const btn = document.getElementById('edit-save-btn');
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  const updates = {
+    entry_type: document.getElementById('edit-outcome').value,
+    urge_before: parseInt(document.getElementById('edit-urge').value),
+    notes: document.getElementById('edit-notes').value.trim()
+  };
+
+  try {
+    await updateDoc(doc(db, 'users', window._uid, 'entries', editingId), updates);
+    const idx = window._currentEntries.findIndex(e => e.id === editingId);
+    if (idx > -1) {
+      window._currentEntries[idx] = { ...window._currentEntries[idx], ...updates };
+    }
+    processData(window._currentEntries);
+    renderFeed();
+    closeEdit();
+  } catch(e) {
+    alert("Failed to update entry.");
+    console.error(e);
+  }
+  btn.disabled = false;
+  btn.textContent = "Save Changes";
 };
 
 window.exportCSV = () => {
@@ -377,7 +487,7 @@ window.exportCSV = () => {
       e.post_feeling || '',
       e.interventions || '',
       e.intervention_effectiveness || '',
-      e.notes ? e.notes.replace(/"/g, '""').replace(/\n/g, ' ') : '' // sanitize notes for CSV
+      e.notes ? e.notes.replace(/"/g, '""').replace(/\n/g, ' ') : ''
     ];
 
     csvContent += row.map(v => `"${v}"`).join(",") + "\n";
@@ -393,7 +503,6 @@ window.exportCSV = () => {
   document.body.removeChild(link);
 };
 
-// CHART LOGIC
 function destroyChart(id) {
   if (chartInstances[id]) chartInstances[id].destroy();
 }
