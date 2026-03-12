@@ -26,7 +26,6 @@
     const path = window.location.pathname;
     const isPage = (p) => path.includes(p) || (p === 'index.html' && path.endsWith('/'));
 
-    // SVG User Icon
     const avatarSvg = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
 
     return `
@@ -64,37 +63,85 @@
     if (menu) menu.classList.toggle('on');
   };
 
-  // 5. INJECT STYLES & LAYOUT FIXES
+  // 5. INJECT ALL NAV STYLES
   function injectNavStyles() {
     if (document.getElementById('gw-nav-styles')) return;
     const style = document.createElement('style');
     style.id = 'gw-nav-styles';
     style.textContent = `
-      /* Perfect Desktop Centering */
+      /* Base Nav Layout */
       .gw-nav-container {
+        height: 52px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
+        padding: 0 16px;
+        background: rgba(244,237,227,.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid var(--bdr);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-sizing: border-box;
       }
-      .nav-left {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+      [data-theme="dark"] .gw-nav-container {
+        background: rgba(30,23,16,.96);
       }
+
+      /* Brand & Left */
+      .nav-left { display: flex; align-items: center; justify-content: flex-start; }
+      .nav-brand { font-family: 'Lora', serif; font-size: 18px; color: var(--tx); text-decoration: none; font-weight: 400; }
+      .nav-brand span { color: var(--ac); }
+
+      /* Links & Center */
+      .nav-links { display: flex; align-items: center; gap: 2px; justify-content: center; }
+      .nav-link { 
+        font-family: 'DM Sans', sans-serif; 
+        font-size: 13px; 
+        font-weight: 500; 
+        color: var(--tx2); 
+        text-decoration: none; 
+        padding: 6px 12px; 
+        border-radius: var(--pill); 
+        transition: var(--tr); 
+        white-space: nowrap; 
+      }
+      .nav-link:hover { background: var(--acl); color: var(--ac); }
+      .nav-link.active { background: var(--acl); color: var(--ac); font-weight: 600; }
+
+      /* Buttons & Right */
+      .nav-right { display: flex; align-items: center; gap: 8px; justify-content: flex-end; position: relative; }
+      .sign-btn {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--tx2);
+        background: var(--sur);
+        border: 1px solid var(--bdr);
+        border-radius: var(--pill);
+        padding: 6px 12px;
+        cursor: pointer;
+        transition: var(--tr);
+      }
+      .sign-btn:hover { border-color: var(--ac); color: var(--ac); }
+      .avatar-btn { background: none; border: none; padding: 0; cursor: pointer; display: flex; border-radius: 50%; }
+
+      /* Desktop Centering Magic */
       @media (min-width: 700px) {
         .nav-left, .nav-right { flex: 1 !important; }
         .nav-links { flex: 0 0 auto !important; }
       }
-      
-      /* iOS Safari: Prevent auto-zoom on input focus */
+
+      /* iOS Safari Fix */
       @media (max-width: 768px) {
         input[type="text"], input[type="datetime-local"], input[type="number"], textarea, select {
           font-size: 16px !important;
         }
+        .nav-link { padding: 6px 8px; } /* Slightly tighter links on small screens */
       }
       
-      /* Avatar & Menu Styles */
+      /* Avatar & Menu */
       .user-avatar-placeholder {
         width: 32px;
         height: 32px;
@@ -107,10 +154,8 @@
         justify-content: center;
         transition: var(--tr);
       }
-      .avatar-btn:hover .user-avatar-placeholder {
-        border-color: var(--ac);
-        color: var(--ac);
-      }
+      .avatar-btn:hover .user-avatar-placeholder { border-color: var(--ac); color: var(--ac); }
+      
       .profile-menu {
         position: absolute;
         top: calc(100% + 8px);
@@ -141,26 +186,16 @@
         text-align: left;
         transition: var(--tr);
       }
-      .profile-menu-item:hover {
-        background: var(--bg);
-        color: var(--tx);
-      }
-      .profile-menu-item + .profile-menu-item {
-        border-top: 1px solid var(--bdr);
-      }
-      .profile-menu-icon {
-        font-size: 14px;
-        width: 16px;
-        text-align: center;
-      }
+      .profile-menu-item:hover { background: var(--bg); color: var(--tx); }
+      .profile-menu-item + .profile-menu-item { border-top: 1px solid var(--bdr); }
+      .profile-menu-icon { font-size: 14px; width: 16px; text-align: center; }
     `;
     document.head.appendChild(style);
   }
 
-  // 6. RESILIENT AUTH UI SYNC
+  // 6. SYNC UI WITH FIREBASE
   function syncAuthUI() {
     const app = document.getElementById('app');
-    // If the #app div has the 'on' class, Firebase has authenticated the user
     const isLoggedIn = app && app.classList.contains('on');
     
     const signBtn = document.getElementById('sign-btn-nav');
@@ -169,23 +204,17 @@
     if (signBtn && avatarBtn) {
       const wantSign = isLoggedIn ? 'none' : 'block';
       const wantAvatar = isLoggedIn ? 'flex' : 'none';
-      
-      // Update DOM only if changed
       if (signBtn.style.display !== wantSign) signBtn.style.display = wantSign;
       if (avatarBtn.style.display !== wantAvatar) avatarBtn.style.display = wantAvatar;
     }
   }
 
-  // 7. INJECT NAV INTO DOM
+  // 7. INJECT
   function injectNav() {
     injectNavStyles();
     const placeholder = document.getElementById('gw-nav');
-    
-    if (placeholder) {
-      placeholder.innerHTML = buildNav();
-    }
+    if (placeholder) placeholder.innerHTML = buildNav();
 
-    // Close menu on outside click
     document.addEventListener('click', function (e) {
       const menu = document.getElementById('profile-menu');
       const btn = document.getElementById('avatar-btn');
@@ -194,9 +223,8 @@
       }
     });
 
-    // Start UI Sync Loop (Runs every 300ms, completely independent of JS execution order)
     setInterval(syncAuthUI, 300);
-    syncAuthUI(); // Initial check
+    syncAuthUI();
   }
 
   if (document.readyState === 'loading') {
