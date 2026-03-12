@@ -201,6 +201,11 @@
     border: 3px solid #fff; transition: transform 0.12s;
   }
   input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); cursor: pointer; box-shadow: 0 2px 6px rgba(184,92,64,0.35);
+    border: 3px solid #fff; transition: transform 0.12s;
+  }
   .slider-val { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--accent); width: 32px; text-align: right; line-height: 1; }
   .slider-labels { display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 6px; }
 
@@ -771,7 +776,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp }
+  import { getFirestore, collection, addDoc, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
@@ -811,11 +816,6 @@
       document.getElementById('status-text').textContent = 'Connected';
       // Load user's custom tags from Firestore
       if (window._loadCustomTagsForUser) window._loadCustomTagsForUser(user.uid);
-      try {
-        const q = query(collection(db,'events'), orderBy('timestamp','desc'));
-        const snap = await getDocs(q);
-        window._computeStreak(snap.docs.map(d => d.data()));
-      } catch(e) { console.error(e); }
     } else {
       loginScreen.classList.add('visible');
       appContent.classList.remove('visible');
@@ -831,18 +831,6 @@
     selections:{location:[],trigger:[],activity:[],area:[],physical:[],intervention:[],mood:[]}
   };
   const qState = { awareness:null, triggers:[], outcome:null };
-
-  window._computeStreak = function(events) {
-    const today = new Date(); today.setHours(0,0,0,0);
-    const eventDays = new Set();
-    events.forEach(e => { if(e.timestamp){const d=new Date(e.timestamp);d.setHours(0,0,0,0);eventDays.add(d.getTime());} });
-    let streak=0, cursor=new Date(today);
-    while(true){if(eventDays.has(cursor.getTime()))break;streak++;cursor.setDate(cursor.getDate()-1);if(streak>365)break;}
-    const numEl = document.getElementById('streak-link-num');
-    const textEl = document.getElementById('streak-link-text');
-    if(numEl) numEl.textContent = streak > 0 ? streak + (streak===1?' day streak':' day streak') : '';
-    if(textEl) textEl.textContent = streak > 0 ? 'Pick-free streak' : 'View your data';
-  };
 
   function openQuickModal() {
     document.getElementById('quick-modal').classList.add('visible');
@@ -874,9 +862,12 @@
   }
   async function saveQuickEntry(){
     if(!window._db){showToast('Not connected yet',true);return;}
+    const btn=document.querySelector('#quick-modal .modal-save-btn');
+    if(btn){btn.disabled=true;btn.textContent='Saving...';}
     const entry={timestamp:localISOString(),entry_type:'quick',awareness:qState.awareness||'',trigger:qState.triggers.join(', '),urge_strength:parseInt(document.getElementById('q-urge-slider').value),outcome:qState.outcome||'',location:'',activity:'',body_area:'',physical_target:'',duration:'',intervention:'',mood:'',notes:'',created_at:window._serverTimestamp()};
     try{await window._addDoc(window._collection(window._db,'events'),entry);closeQuickModal();showToast('Saved',false,true);}
     catch(err){showToast('Could not save: '+err.message,true);}
+    if(btn){btn.disabled=false;btn.textContent='Save entry';}
   }
   async function saveUrgeOnly(level){
     if(!window._db){showToast('Not connected yet',true);return;}
@@ -1007,8 +998,14 @@
 
   function toggleTag(el,group,color){const val=el.textContent.trim(),arr=state.selections[group],idx=arr.indexOf(val);if(idx>-1){arr.splice(idx,1);el.classList.remove('sel-'+color);}else{arr.push(val);el.classList.add('sel-'+color);}}
   function setSingle(el,group,color){el.closest('.tag-group').querySelectorAll('.tag').forEach(t=>{t.className=t.className.replace(/sel-\w+/g,'').trim();});el.classList.add('sel-'+color);state[group]=el.textContent.trim();}
-  function toggleOther(el,group){el.classList.toggle('sel-blue');const input=document.getElementById(group+'-other');if(el.classList.contains('sel-blue')){input.classList.add('visible');input.focus();}else{input.classList.remove('visible');input.value='';}}
-  function updateSlider(el){document.getElementById('urge-val').textContent=el.value;const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;}
+  function toggleOther(el,group){
+    const color=(TAG_CONFIG[group]&&TAG_CONFIG[group].color)||'blue';
+    const selClass='sel-'+color;
+    el.classList.toggle(selClass);
+    const input=document.getElementById(group+'-other');
+    if(el.classList.contains(selClass)){input.classList.add('visible');input.focus();}
+    else{input.classList.remove('visible');input.value='';}
+  }  function updateSlider(el){document.getElementById('urge-val').textContent=el.value;const pct=((el.value-1)/9)*100;el.style.background=`linear-gradient(to right,var(--accent) 0%,var(--accent) ${pct}%,var(--border) ${pct}%,var(--border) 100%)`;}
   function getOtherVal(group){const input=document.getElementById(group+'-other');return(input&&input.classList.contains('visible')&&input.value.trim())?input.value.trim():null;}
   function localISOString(d=new Date()){
     const pad=n=>String(n).padStart(2,'0');
