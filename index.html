@@ -174,7 +174,8 @@ textarea{resize:vertical;min-height:80px}
           <div class="grid-auto" id="where-tags-picking" style="display:none">
             <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
             <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Body</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</div>
+            <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
             <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms / Hands</div>
             <div class="tag" onclick="toggleMultiTag('core','where',this)">Legs</div>
           </div>
@@ -200,6 +201,18 @@ textarea{resize:vertical;min-height:80px}
             <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
             <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
             <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
+            <div class="tag" onclick="toggleMultiTag('core','what',this)">Lip Tissue</div>
+          </div>
+        </div>
+
+        <div class="field" id="ritual-field" style="display:none">
+          <label class="field-label">Aftermath / Ritual</label>
+          <div class="grid-2">
+            <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
+            <div class="tag" onclick="selectTag('core','ritual',this)">Examined</div>
+            <div class="tag" onclick="selectTag('core','ritual',this)">Chewed / Bit</div>
+            <div class="tag" onclick="selectTag('core','ritual',this)">Ingested</div>
           </div>
         </div>
 
@@ -221,9 +234,9 @@ textarea{resize:vertical;min-height:80px}
           <label class="field-label">Duration</label>
           <div class="grid-2">
             <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
-            <div class="tag" onclick="selectTag('core','duration',this)">1-5 min</div>
-            <div class="tag" onclick="selectTag('core','duration',this)">5-15 min</div>
-            <div class="tag" onclick="selectTag('core','duration',this)">15+ min</div>
+            <div class="tag" onclick="selectTag('core','duration',this)">1-10 min</div>
+            <div class="tag" onclick="selectTag('core','duration',this)">10-30 min</div>
+            <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
           </div>
         </div>
       </div>
@@ -250,18 +263,32 @@ textarea{resize:vertical;min-height:80px}
 
   <div id="screen-context" class="hidden">
     <div class="card">
-      <div class="card-title">Context</div>
+      <div class="card-title">Context Analysis</div>
+
+      <div class="field">
+        <label class="field-label">Pre-Action (Motor Precursor)</label>
+        <div class="grid-2">
+          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling</div>
+          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting Posture</div>
+          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror Checking</div>
+          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / Nothing</div>
+        </div>
+      </div>
 
       <div class="field">
         <label class="field-label">Primary Trigger</label>
         <div class="grid-auto">
           <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / Stress</div>
           <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / Idle</div>
+          <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / Depleted</div>
           <div class="tag" onclick="selectTag('ctx','trigger',this)">
             <div>Sensory</div><div class="tag-sub">Felt a bump/edge</div>
           </div>
           <div class="tag" onclick="selectTag('ctx','trigger',this)">
             <div>Visual</div><div class="tag-sub">Saw it in mirror</div>
+          </div>
+          <div class="tag" onclick="selectTag('ctx','trigger',this)">
+            <div>Perfectionism</div><div class="tag-sub">Must be smooth</div>
           </div>
           <div class="tag" onclick="selectTag('ctx','trigger',this)">
             <div>Cognitive</div><div class="tag-sub">Permission thought</div>
@@ -278,6 +305,16 @@ textarea{resize:vertical;min-height:80px}
           <div class="tag" onclick="selectTag('ctx','environment',this)">Clinical / Work</div>
           <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
           <div class="tag" onclick="selectTag('ctx','environment',this)">Social / Out</div>
+        </div>
+      </div>
+
+      <div class="field" id="post-feeling-field" style="display:none">
+        <label class="field-label">Post-Event Feeling</label>
+        <div class="grid-2">
+          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Relief / Zoned Out</div>
+          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Shame / Guilt</div>
+          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated</div>
+          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral</div>
         </div>
       </div>
 
@@ -372,8 +409,8 @@ onAuthStateChanged(auth, user => {
 
 // STATE
 const state = {
-  core: { timing: 'now', bfrb: null, outcome: null, where: [], what: [], awareness: null, duration: null, urge: 5 },
-  ctx: { trigger: null, environment: null, tried_tool: null, tools: [], eff: null }
+  core: { timing: 'now', bfrb: null, outcome: null, where: [], what: [], ritual: null, awareness: null, duration: null, urge: 5 },
+  ctx: { pre_action: null, trigger: null, environment: null, post_feeling: null, tried_tool: null, tools: [], eff: null }
 };
 
 // UI HELPERS
@@ -410,15 +447,25 @@ window.selectOutcome = (val, el) => {
   
   state.core.outcome = val;
   
-  const showDetails = val === 'Near Miss' || val === 'Did it';
+  const isDidIt = val === 'Did it';
+  const isNearMiss = val === 'Near Miss';
+  const showDetails = isDidIt || isNearMiss;
+  
   document.getElementById('core-details').classList.toggle('hidden', !showDetails);
+  
+  const ritualField = document.getElementById('ritual-field');
+  if (ritualField) ritualField.style.display = isDidIt ? 'block' : 'none';
   
   if (!showDetails) {
     state.core.where = [];
     state.core.what = [];
     state.core.awareness = null;
     state.core.duration = null;
+    state.core.ritual = null;
     document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
+  } else if (isNearMiss) {
+    state.core.ritual = null;
+    document.querySelectorAll('#ritual-field .tag').forEach(t => t.classList.remove('on'));
   }
 };
 
@@ -494,12 +541,18 @@ window.submitCore = async () => {
     docData.target = state.core.what.join(', ');
     docData.awareness = state.core.awareness || '';
     docData.duration = state.core.duration || '';
+    if (outcomeKey === 'did') {
+      docData.post_ritual = state.core.ritual || '';
+    }
   }
 
   try {
     const docRef = await addDoc(collection(db, 'users', window._uid, 'entries'), docData);
     window._currentDocId = docRef.id;
     
+    // Toggle Post-Feeling field visibility based on outcome
+    document.getElementById('post-feeling-field').style.display = outcomeKey === 'did' ? 'block' : 'none';
+
     document.getElementById('screen-core').classList.add('hidden');
     document.getElementById('bar-core').classList.add('hidden');
     document.getElementById('screen-context').classList.remove('hidden');
@@ -515,8 +568,10 @@ window.submitContext = async () => {
   btn.disabled = true; btn.textContent = 'Saving...';
 
   const updateData = {
+    pre_action: state.ctx.pre_action || '',
     primary_trigger: state.ctx.trigger || '',
     environment: state.ctx.environment || '',
+    post_feeling: state.ctx.post_feeling || '',
     tried_intervention: state.ctx.tried_tool === true,
     interventions: state.ctx.tools.join(', '),
     intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
@@ -536,8 +591,8 @@ window.submitContext = async () => {
 };
 
 window.resetForm = () => {
-  state.core = { timing: 'now', bfrb: null, outcome: null, where: [], what: [], awareness: null, duration: null, urge: 5 };
-  state.ctx = { trigger: null, environment: null, tried_tool: null, tools: [], eff: null };
+  state.core = { timing: 'now', bfrb: null, outcome: null, where: [], what: [], ritual: null, awareness: null, duration: null, urge: 5 };
+  state.ctx = { pre_action: null, trigger: null, environment: null, post_feeling: null, tried_tool: null, tools: [], eff: null };
   window._currentDocId = null;
 
   document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
@@ -546,6 +601,8 @@ window.resetForm = () => {
   document.getElementById('core-time').value = '';
   document.getElementById('core-time-wrap').classList.add('hidden');
   document.getElementById('core-details').classList.add('hidden');
+  document.getElementById('ritual-field').style.display = 'none';
+  document.getElementById('post-feeling-field').style.display = 'none';
   document.getElementById('ctx-notes').value = '';
   
   const slider = document.getElementById('core-urge');
