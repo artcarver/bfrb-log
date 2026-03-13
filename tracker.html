@@ -34,9 +34,9 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 14px;box-shadow:var(--s1);position:relative;overflow:hidden}
 
-.stat-val{font-size:30px;font-weight:300;color:var(--tx);line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.stat-lbl{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--mu);margin-top:5px;line-height:1.3}
-.stat-sub{font-size:11px;color:var(--mu);margin-top:2px}
+.stat-val{font-size:32px;font-weight:300;color:var(--tx);line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;font-family:'DM Sans',sans-serif}
+.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:6px;line-height:1.3;font-family:'DM Sans',sans-serif}
+.stat-sub{font-size:13px;color:var(--mu);margin-top:3px;font-family:'DM Sans',sans-serif}
 
 /* ── SECTION HEADERS ── */
 /* section-head / section-title / section-note — from base.css */
@@ -103,7 +103,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 
 /* Filter tabs */
 .feed-tabs{display:flex;gap:2px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:3px}
-.feed-tab{border:none;background:none;padding:5px 14px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);white-space:nowrap}
+.feed-tab{border:none;background:none;padding:5px 14px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);white-space:nowrap}
 .feed-tab.active{background:var(--card);color:var(--tx);box-shadow:var(--s1)}
 
 .log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:0;margin-bottom:10px;box-shadow:var(--s1);overflow:hidden;display:grid;grid-template-columns:4px 1fr}
@@ -113,19 +113,19 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .log-card-accent.near_miss{background:var(--o-near)}
 .log-card-body{padding:14px 16px}
 .log-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
-.log-date{font-size:12px;font-weight:500;color:var(--tx2)}
-.log-badge{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--rsm);flex-shrink:0}
+.log-date{font-size:13px;font-weight:500;color:var(--tx2)}
+.log-badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--rsm);flex-shrink:0}
 .log-badge.did{background:rgba(91,107,138,.12);color:var(--o-episode)}
 .log-badge.resisted{background:rgba(58,158,111,.12);color:var(--o-resisted)}
 .log-badge.near_miss{background:rgba(212,132,26,.12);color:var(--o-near)}
 
 .log-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.chip{font-size:11px;padding:3px 9px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap}
-.chip strong{color:var(--tx);font-weight:600;margin-right:3px}
+.chip{font-size:13px;padding:4px 10px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap;font-family:'DM Sans',sans-serif}
+.chip strong{color:var(--tx);font-weight:600;margin-right:4px}
 
 .log-notes{font-size:12px;color:var(--tx2);background:var(--bg);padding:10px 12px;border-radius:var(--rsm);border:1px solid var(--bdr);line-height:1.5;margin-bottom:10px}
 .log-actions{display:flex;gap:14px;padding-top:10px;border-top:1px solid var(--bdr)}
-.log-act-btn{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
+.log-act-btn{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
 .log-act-btn:hover{color:var(--tx)}
 .log-act-btn.del:hover{color:var(--ac)}
 
@@ -900,9 +900,25 @@ function renderFeed() {
     if (e.urge_before) chips.push(`<span class="chip"><strong>Urge</strong>${e.urge_before}/10${e.urge_after ? ' → ' + e.urge_after : ''}</span>`);
     if (e.bfrb_type) chips.push(`<span class="chip"><strong>Type</strong>${e.bfrb_type}</span>`);
     if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${Array.isArray(e.body_areas) ? e.body_areas.join(', ') : e.body_areas}</span>`);
+    if (e.target) chips.push(`<span class="chip"><strong>Target</strong>${Array.isArray(e.target) ? e.target.join(', ') : e.target}</span>`);
+    if (e.awareness) chips.push(`<span class="chip"><strong>Awareness</strong>${e.awareness}</span>`);
+    if (e.duration) chips.push(`<span class="chip"><strong>Duration</strong>${e.duration}</span>`);
+    if (e.mirror) chips.push(`<span class="chip"><strong>Mirror</strong>${e.mirror}</span>`);
+    if (e.pre_feeling) chips.push(`<span class="chip"><strong>Before</strong>${e.pre_feeling}</span>`);
+    if (e.post_feeling) chips.push(`<span class="chip"><strong>After</strong>${e.post_feeling}</span>`);
     if (e.emotional_triggers || e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${e.emotional_triggers || e.primary_trigger}</span>`);
+    if (e.pre_action) chips.push(`<span class="chip"><strong>Pre-action</strong>${e.pre_action}</span>`);
+    if (e.environment) chips.push(`<span class="chip"><strong>Environment</strong>${e.environment}</span>`);
     if (e.activity) chips.push(`<span class="chip"><strong>Activity</strong>${e.activity}</span>`);
+    if (e.escalation) chips.push(`<span class="chip"><strong>Escalation</strong>${e.escalation}</span>`);
+    if (e.aftercare) chips.push(`<span class="chip"><strong>Aftercare</strong>${e.aftercare}</span>`);
+    if (e.skin_impact) chips.push(`<span class="chip"><strong>Skin impact</strong>${e.skin_impact}</span>`);
+    if (e.post_ritual) chips.push(`<span class="chip"><strong>Ritual</strong>${e.post_ritual}</span>`);
     if (e.tried_intervention && e.interventions) chips.push(`<span class="chip"><strong>Tried</strong>${Array.isArray(e.interventions) ? e.interventions.join(', ') : e.interventions}</span>`);
+    if (e.specific_cr) chips.push(`<span class="chip"><strong>CR</strong>${escapeHtml(e.specific_cr)}</span>`);
+    if (e.intervention_effectiveness) chips.push(`<span class="chip"><strong>Tool eff.</strong>${e.intervention_effectiveness}/10</span>`);
+
+    const narrative = e.narrative_notes || e.notes;
 
     return `
       <div class="log-card" data-id="${e.id}">
@@ -913,7 +929,7 @@ function renderFeed() {
             <div class="log-badge ${type}">${labels[type] || type}</div>
           </div>
           ${chips.length ? `<div class="log-chips">${chips.join('')}</div>` : ''}
-          ${e.notes ? `<div class="log-notes">${escapeHtml(e.notes)}</div>` : ''}
+          ${narrative ? `<div class="log-notes">${escapeHtml(narrative)}</div>` : ''}
           <div class="log-actions">
             <button class="log-act-btn" onclick="editLog('${e.id}')">Edit</button>
             <button class="log-act-btn del" onclick="deleteLog('${e.id}')">Delete</button>
