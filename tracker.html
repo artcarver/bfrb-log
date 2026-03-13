@@ -1084,7 +1084,7 @@ function renderFeed() {
           <div class="log-top">
             <div class="log-date">${dateStr}</div>
             <div class="log-top-right">
-              ${isDiscussed ? '<span class="discussed-badge">✓ Discussed</span>' : ''}
+              ${isDiscussed ? '<span class="discussed-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Discussed</span>' : ''}
               <div class="log-badge ${type}">${labels[type] || type}</div>
             </div>
           </div>
@@ -1280,7 +1280,7 @@ async function loadDailyStateCorrelation(entries) {
           </div>
         </div>
       </div>
-      <div class="corr-hint">Requires daily baseline logs. Log via the 📋 button on the Log page.</div>
+      <div class="corr-hint">Requires daily baseline logs. Log via the clipboard button on the Log page.</div>
     </div>
   `;
   // Insert after the interventions chart-solo

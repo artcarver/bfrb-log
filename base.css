@@ -406,3 +406,12 @@ textarea{resize:vertical;min-height:80px}
 .breath-container{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px}
 .breath-ring{color:var(--warm)}
 .breath-label{color:var(--warm)}
+
+/*
+ * ── DESIGN RULE: NO EMOJIS ───────────────────────────────────────────────
+ * Emojis are not used anywhere in this UI. Use inline SVG icons instead.
+ * Rationale: emojis render inconsistently across platforms/OS versions,
+ * cannot be styled with CSS (color, stroke, size), and break visual cohesion.
+ * All icons should use stroke-based SVGs matching the app's line weight (2px).
+ * ────────────────────────────────────────────────────────────────────────
+ */

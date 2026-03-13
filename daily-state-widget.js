@@ -148,7 +148,7 @@
           ${[1,2,3,4,5].map(i =>
             `<span class="ds-star" data-v="${i}" onclick="dsSetSleep(${i})"
               role="button" tabindex="0" aria-label="${i} star${i>1?'s':''}"
-              onkeydown="if(event.key==='Enter'||event.key===' ')dsSetSleep(${i})">★</span>`
+              onkeydown="if(event.key==='Enter'||event.key===' ')dsSetSleep(${i})"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>`
           ).join('')}
         </div>
 
@@ -167,12 +167,12 @@
           maxlength="120" rows="2"></textarea>
 
         <button class="ds-save" id="ds-save-btn" onclick="dsSave()">Save today's state</button>
-        <div class="ds-saved-note" id="ds-saved-note">✓ Saved</div>
+        <div class="ds-saved-note" id="ds-saved-note"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><polyline points="20 6 9 17 4 12"/></svg>Saved</div>
       </div>
 
       <button class="ds-fab" id="ds-fab" onclick="dsToggle()"
         aria-label="Log daily state" aria-haspopup="dialog" aria-expanded="false">
-        <span aria-hidden="true">📋</span>
+        <span aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg></span>
       </button>
     `;
     document.body.appendChild(el);
@@ -236,7 +236,7 @@
       }
       const savedNote = document.getElementById('ds-saved-note');
       if (savedNote) savedNote.style.display = 'block';
-      if (btn) btn.textContent = 'Saved ✓';
+      if (btn) btn.textContent = 'Saved';
 
       setTimeout(() => {
         const panel = document.getElementById('ds-panel');
