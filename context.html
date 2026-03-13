@@ -10,117 +10,10 @@
     <meta name="apple-mobile-web-app-title" content="Groundwork">
     <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork — Profile</title>
-<meta name="theme-color" content="#F5F5F3" id="theme-color-meta">
+<meta name="theme-color" content="#F2EEE8" id="theme-color-meta">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-<style>
-main{max-width:720px;margin:0 auto;padding:20px 16px}
-
-.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.page-title{font-family:'Inter',sans-serif;font-size:24px;color:var(--tx);line-height:1.2}
-.export-btn{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:10px 16px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--s1);min-height:44px}
-@media(max-width:480px){.export-btn{width:100%}}
-.export-btn:hover{border-color:var(--ac);color:var(--ac)}
-
-.tab-nav{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--bdr);padding-bottom:12px;flex-wrap:wrap}
-.tab-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:8px 16px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);min-height:44px;display:flex;align-items:center;flex-direction:column;gap:1px}
-.tab-btn.active{background:var(--ac);border-color:var(--ac);color:#fff}
-.tab-desc{font-size:10px;font-weight:400;opacity:.75;letter-spacing:.01em}
-.tab-pane{display:none}
-.tab-pane.active{display:block}
-
-.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-bottom:20px;box-shadow:var(--s1)}
-@media(max-width:480px){.card{padding:16px}}
-.card-header{margin-bottom:16px}
-.card-title{font-family:'Inter',sans-serif;font-size:18px;color:var(--tx)}
-.card-desc{font-size:14px;color:var(--mu);margin-top:4px}
-
-.scamp-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px}
-@media(max-width:599px){.scamp-grid{grid-template-columns:1fr}}
-.scamp-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px}
-.scamp-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.scamp-label span.badge{background:var(--sur);padding:2px 6px;border-radius:var(--rsm);font-size:10px}
-.scamp-save-badge{font-size:11px;color:var(--sage);font-weight:600;opacity:0;transition:opacity .3s ease;margin-left:auto;padding-left:8px}
-/* scamp-row has NO border — only scamp-block has one, preventing double borders */
-.scamp-row{display:flex;flex-direction:column}
-textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:80px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
-textarea.scamp-input::placeholder{color:var(--bdr2)}
-textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
-
-/* Onboarding banner — first-time use */
-.onboarding-banner{
-  display:none;
-  align-items:flex-start;gap:14px;
-  background:var(--acl);border:1.5px solid var(--ac);border-radius:var(--r);
-  padding:16px 18px;margin-bottom:20px;
-}
-.onboarding-banner-body{flex:1}
-.onboarding-banner-title{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
-.onboarding-banner-sub{font-size:12px;color:var(--tx2);line-height:1.5}
-.onboarding-banner-dismiss{background:none;border:none;color:var(--mu);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;flex-shrink:0;transition:color .15s}
-.onboarding-banner-dismiss:hover{color:var(--tx)}
-
-.rule-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
-.rule-item{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 16px;transition:var(--tr);min-height:48px}
-.rule-item.done{opacity:0.6;background:transparent;border-color:transparent}
-.rule-checkbox{width:22px;height:22px;border:2px solid var(--mu);border-radius:4px;cursor:pointer;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:var(--tr)}
-.rule-item.done .rule-checkbox{background:var(--sage);border-color:var(--sage)}
-.rule-tick{display:none;width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.rule-item.done .rule-tick{display:block}
-.rule-text{flex:1;font-size:16px;color:var(--tx);outline:none;min-height:24px}
-.rule-item.done .rule-text{text-decoration:line-through;color:var(--mu)}
-.rule-del{background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:20px;line-height:1;padding:0 8px;transition:var(--tr);display:flex;align-items:center;min-height:44px}
-.rule-del:hover{color:var(--ac)}
-.add-rule-form{display:flex;gap:8px}
-.add-rule-input{flex:1;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:12px 14px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
-.add-rule-input:focus{border-color:var(--ac)}
-.add-rule-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:0 16px;font-weight:600;font-size:14px;color:var(--tx2);cursor:pointer;transition:var(--tr);min-height:48px}
-.add-rule-btn:hover{border-color:var(--tx2);color:var(--tx)}
-
-.reflection-form textarea{width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;resize:vertical;min-height:100px;margin-bottom:16px;transition:var(--tr)}
-.reflection-form textarea:focus{border-color:var(--ac)}
-.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
-.btn-primary{background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);min-height:48px;width:100%}
-.btn-primary:hover{background:var(--ac-h);transform:translateY(-1px)}
-.btn-primary:active{transform:translateY(1px)}
-.btn-primary:disabled{opacity:0.5;cursor:not-allowed}
-
-.past-reflections{margin-top:32px}
-.ref-item{border-left:2px solid var(--bdr);padding-left:16px;margin-bottom:24px;position:relative}
-.ref-item::before{content:'';position:absolute;left:-5px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--bdr2)}
-.ref-date{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
-.ref-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;margin-bottom:8px;font-size:14px;color:var(--tx2);line-height:1.6}
-.ref-block strong{color:var(--tx);display:block;margin-bottom:4px;font-size:13px}
-
-.fw-h2{font-family:'Inter',sans-serif;font-size:20px;color:var(--tx);margin:0 0 12px 0}
-.fw-p{font-size:15px;color:var(--tx2);margin-bottom:20px;line-height:1.6}
-.fw-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:24px;border:1px solid var(--bdr);border-radius:var(--rsm);background:var(--card)}
-.fw-table{width:100%;border-collapse:collapse;font-size:14px;min-width:500px}
-.fw-table th{background:var(--sur);text-align:left;padding:14px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--bdr)}
-.fw-table td{padding:16px 14px;border-bottom:1px solid var(--bdr);color:var(--tx2);vertical-align:top}
-.fw-table td:first-child{font-weight:600;color:var(--tx);width:25%}
-.fw-table tr:last-child td{border-bottom:none}
-
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:14px;font-weight:600;color:#fff;transition:all .3s ease;z-index:999;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-
-/* REPORT MODAL */
-.report-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
-.report-modal.on{opacity:1;visibility:visible;pointer-events:auto}
-.report-modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:500px;box-shadow:0 8px 32px rgba(0,0,0,.15)}
-.report-modal-title{font-family:'Inter',sans-serif;font-size:18px;color:var(--tx);margin-bottom:6px}
-.report-modal-hint{font-size:13px;color:var(--mu);margin-bottom:14px}
-.report-modal-body{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'Instrument Sans',monospace;font-size:13px;color:var(--tx2);resize:none;outline:none;min-height:280px;line-height:1.6}
-.report-copy-btn{flex:1;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:13px 20px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s ease}
-.report-copy-btn:hover{background:var(--ac-h)}
-.report-close-btn{flex:1;background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s ease}
-.report-close-btn:hover{border-color:var(--bdr2);color:var(--tx)}
-
-/* REFLECTION DELETE */
-.ref-del{background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:16px;line-height:1;padding:4px 6px;transition:all .15s ease;float:right;margin-left:8px}
-.ref-del:hover{color:var(--ac)}
-</style>
 
     <script>
       // Keep theme-color meta in sync with colour scheme
@@ -129,7 +22,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
         if (stored === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
           const m = document.getElementById('theme-color-meta');
-          if (m) m.setAttribute('content', '#161618');
+          if (m) m.setAttribute('content', '#181C20');
         }
       })();
     </script>
@@ -147,7 +40,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
 <div id="gw-nav"></div>
 
 <div id="app">
-<main>
+<main class="profile-main">
   
   <div class="header-row">
     <div class="page-title">My Profile</div>
@@ -593,14 +486,21 @@ const provider = new GoogleAuthProvider();
 window._uid = null;
 let currentRules = [];
 
-const isStandalone =
+const _isStandalone =
   window.navigator.standalone === true ||
   window.matchMedia('(display-mode: standalone)').matches;
 
+getRedirectResult(auth).catch(() => {});
+
 window.signInWithGoogle = async () => {
   try {
-    await signInWithPopup(auth, provider);
-  } catch(e) { console.error(e); }
+    if (_isStandalone) { await signInWithRedirect(auth, provider); }
+    else { await signInWithPopup(auth, provider); }
+  } catch(e) {
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
+      try { await signInWithRedirect(auth, provider); } catch(e2) { console.error('Redirect sign in error:', e2); }
+    } else { console.error('Sign in error:', e); }
+  }
 };
 window.signOut = async () => { await fbSignOut(auth); };
 
@@ -721,12 +621,13 @@ function renderRules() {
     list.innerHTML = `<div class="no-data-msg">None added yet.</div>`;
     return;
   }
+  function esc(s) { return (s || '').toString().replace(/[&<"']/g, m => ({'&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;'}[m])); }
   list.innerHTML = currentRules.map(r => `
     <div class="rule-item ${r.active ? 'done' : ''}">
       <div class="rule-checkbox" onclick="toggleRule('${r.id}', ${!r.active})">
         <svg class="rule-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg>
       </div>
-      <div class="rule-text" contenteditable="true" onblur="updateRuleText('${r.id}', this.innerText)">${r.text}</div>
+      <div class="rule-text" contenteditable="true" onblur="updateRuleText('${r.id}', this.innerText)">${esc(r.text)}</div>
       <button class="rule-del" onclick="deleteRule('${r.id}')">&times;</button>
     </div>
   `).join('');
@@ -783,6 +684,8 @@ async function loadReflections() {
     return;
   }
   
+  function esc(s) { return (s || '').toString().replace(/[&<"']/g, m => ({'&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;'}[m])); }
+
   let html = '';
   snap.forEach(docSnap => {
     const d = docSnap.data();
@@ -790,8 +693,8 @@ async function loadReflections() {
     html += `
       <div class="ref-item" id="ref-${docSnap.id}">
         <div class="ref-date">${dateStr}<button class="ref-del" onclick="deleteReflection('${docSnap.id}')" title="Delete">&times;</button></div>
-        ${d.worked ? `<div class="ref-block"><strong>What worked:</strong> ${d.worked}</div>` : ''}
-        ${d.failed ? `<div class="ref-block"><strong>What didn't:</strong> ${d.failed}</div>` : ''}
+        ${d.worked ? `<div class="ref-block"><strong>What worked:</strong> ${esc(d.worked)}</div>` : ''}
+        ${d.failed ? `<div class="ref-block"><strong>What didn't:</strong> ${esc(d.failed)}</div>` : ''}
       </div>
     `;
   });
@@ -1013,14 +916,47 @@ window.generateReport = async () => {
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const logsQ = query(collection(db, 'users', window._uid, 'entries'), where('created_at', '>=', thirtyDaysAgo));
     const logsSnap = await getDocs(logsQ);
-    let logsTotal = 0, logsDid = 0, logsNear = 0, logsResist = 0;
+    let logsTotal = 0, logsDid = 0, logsNear = 0, logsResist = 0, logsCaught = 0;
+    let totalUrge = 0, urgeCount = 0, totalUrgeAfter = 0, urgeAfterCount = 0;
+    const triggerCounts = {};
+    const toolCounts = {};
+    const toolWins = {};
     logsSnap.forEach(d => {
       logsTotal++;
-      const t = d.data().entry_type;
+      const data = d.data();
+      const t = data.entry_type;
       if (t === 'did') logsDid++;
       if (t === 'near_miss') logsNear++;
       if (t === 'resisted') logsResist++;
+      if (t === 'caught') logsCaught++;
+      if (data.urge_before) { totalUrge += Number(data.urge_before); urgeCount++; }
+      if (data.urge_after) { totalUrgeAfter += Number(data.urge_after); urgeAfterCount++; }
+      const trigger = data.primary_trigger || data.emotional_triggers;
+      if (trigger && trigger.toLowerCase() !== 'nan') triggerCounts[trigger] = (triggerCounts[trigger] || 0) + 1;
+      if (data.tried_intervention && data.interventions) {
+        const tools = data.interventions.split(',').map(s => s.trim()).filter(Boolean);
+        const isWin = t === 'resisted' || t === 'near_miss';
+        tools.forEach(tool => {
+          if (tool.toLowerCase() === 'nan') return;
+          toolCounts[tool] = (toolCounts[tool] || 0) + 1;
+          if (isWin) toolWins[tool] = (toolWins[tool] || 0) + 1;
+        });
+      }
     });
+
+    const managed = logsResist + logsNear + logsCaught;
+    const managedPct = logsTotal ? Math.round((managed / logsTotal) * 100) : 0;
+    const avgUrge = urgeCount ? (totalUrge / urgeCount).toFixed(1) : 'N/A';
+    const avgUrgeAfter = urgeAfterCount ? (totalUrgeAfter / urgeAfterCount).toFixed(1) : 'N/A';
+
+    const topTriggers = Object.entries(triggerCounts).sort((a,b) => b[1]-a[1]).slice(0,5)
+      .map(([k,v]) => `  ${k}: ${v}`).join('\n') || '  No trigger data logged.';
+    const topTools = Object.entries(toolCounts).sort((a,b) => b[1]-a[1]).slice(0,5)
+      .map(([k,v]) => {
+        const wins = toolWins[k] || 0;
+        const rate = Math.round((wins / v) * 100);
+        return `  ${k}: ${v} uses, ${rate}% managed outcome`;
+      }).join('\n') || '  No intervention data logged.';
 
     const s = document.getElementById('scamp-s').value || 'Not defined';
     const c = document.getElementById('scamp-c').value || 'Not defined';
@@ -1037,8 +973,16 @@ Generated: ${new Date().toLocaleDateString('en-US')}
 
 --- 30-DAY SUMMARY ---
 Total Entries: ${logsTotal}
-Episodes: ${logsDid}
+Episodes: ${logsDid}  |  Caught mid-act: ${logsCaught}
 Resisted: ${logsResist}  |  Near Miss: ${logsNear}
+Managed rate: ${managedPct}% (${managed}/${logsTotal})
+Avg urge before: ${avgUrge}/10  |  Avg urge after: ${avgUrgeAfter}/10
+
+--- TOP TRIGGERS ---
+${topTriggers}
+
+--- INTERVENTION EFFECTIVENESS ---
+${topTools}
 
 --- SCAMP BASELINE PROFILE ---
 SENSORY: ${s}
@@ -1083,7 +1027,9 @@ ${rulesText}
     }
   } catch (e) {
     console.error(e);
-    showToast('Error generating report');
+    showToast(e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))
+      ? 'Daily read limit reached — try again tomorrow'
+      : 'Error generating report — check your connection');
   }
   
   const svgIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
