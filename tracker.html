@@ -353,6 +353,22 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
       </div>
     </div>
 
+    <!-- CONTEXT PATTERNS -->
+    <div class="section-head">
+      <div class="section-title">Context patterns</div>
+      <div class="section-note">activity &amp; escalation</div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-label">Activity at time of episode</div>
+        <div class="bar-rows" id="bar-activity"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Session escalation pattern</div>
+        <div class="bar-rows" id="bar-escalation"></div>
+      </div>
+    </div>
+
     <!-- LOG -->
     <div class="section-head" style="margin-top:36px">
       <div class="section-title">Log history</div>
@@ -525,7 +541,7 @@ function processData(entries) {
   let outcomes = { resisted: 0, near_miss: 0, did: 0 };
   let times = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
   let hourMap = {};
-  let emotional = {}, sensory = {}, areas = {}, targets = {}, tools = {};
+  let emotional = {}, sensory = {}, areas = {}, targets = {}, tools = {}, activities = {}, escalations = {};
   let totalUrge = 0, urgeCount = 0, totalMoodBefore = 0, totalMoodAfter = 0, moodCount = 0;
   let urgeAfterTotal = 0, urgeAfterCount = 0;
 
@@ -581,6 +597,9 @@ function processData(entries) {
         if (isWin) tools[tool].wins++;
       });
     }
+
+    if (e.activity) activities[e.activity] = (activities[e.activity] || 0) + 1;
+    if (e.escalation) escalations[e.escalation] = (escalations[e.escalation] || 0) + 1;
   });
 
   const total = entries.length;
@@ -627,7 +646,7 @@ function processData(entries) {
   document.getElementById('stat-interval').textContent = avgInterval !== null ? avgInterval + 'd' : '—';
 
   // Insight
-  buildInsight(entries, outcomes, emotional, times, tools, managed, total);
+  buildInsight(entries, outcomes, emotional, times, tools, managed, total, escalations);
 
   // Render charts
   renderOutcomesDonut(outcomes, total);
@@ -640,12 +659,14 @@ function processData(entries) {
   renderAreaMap(areas, c);
   renderBarRows('bar-targets', targets, c.mu, 6);
   renderToolBars(tools);
+  renderBarRows('bar-activity', activities, c.ac, 8);
+  renderBarRows('bar-escalation', escalations, c.oNear, 4);
 
   document.getElementById('loading').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
 }
 
-function buildInsight(entries, outcomes, emotional, times, tools, managed, total) {
+function buildInsight(entries, outcomes, emotional, times, tools, managed, total, escalations) {
   const bar = document.getElementById('insight-bar');
   const txt = document.getElementById('insight-text');
   const parts = [];
@@ -670,6 +691,21 @@ function buildInsight(entries, outcomes, emotional, times, tools, managed, total
     .sort((a,b) => b[1]-a[1]);
   if (toolList.length > 0 && toolList[0][1] > 0) {
     parts.push(`Your most effective intervention is <strong>${toolList[0][0]}</strong> (${toolList[0][1]}% success rate).`);
+  }
+
+  // Escalation pattern
+  if (escalations && Object.keys(escalations).length >= 2) {
+    const severeCount = (escalations['Escalated'] || 0) + (escalations["Couldn't stop"] || 0);
+    const escTotal = Object.values(escalations).reduce((a, b) => a + b, 0);
+    if (escTotal >= 3) {
+      const pct = Math.round((severeCount / escTotal) * 100);
+      if (pct >= 50) {
+        parts.push(`<strong>${pct}% of sessions escalated</strong> or became hard to stop — a key pattern to bring to your therapist.`);
+      } else if (escalations['Single pick']) {
+        const singlePct = Math.round((escalations['Single pick'] / escTotal) * 100);
+        if (singlePct >= 50) parts.push(`<strong>${singlePct}% of episodes were single picks</strong> — your containment is improving.`);
+      }
+    }
   }
 
   if (parts.length > 0) {
@@ -1072,11 +1108,11 @@ window.handleImport = async (event) => {
 window.exportCSV = () => {
   const entries = window._allEntries;
   if (!entries.length) { showToast('No data to export'); return; }
-  const headers = ['Date','Time','Behavior','Outcome','Urge_Level','Area','Target','Awareness','Duration','Post_Ritual','Pre_Action','Trigger','Environment','Post_Feeling','Interventions_Tried','Effectiveness','Notes'];
+  const headers = ['Date','Time','Behavior','Outcome','Urge_Before','Urge_After','Area','Target','Awareness','Duration','Post_Ritual','Pre_Action','Trigger','Environment','Activity','Escalation','Post_Feeling','Aftercare','Interventions_Tried','Specific_CR','Effectiveness','Narrative','Notes'];
   let csv = headers.join(',') + '\n';
   entries.forEach(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.bfrb_type||'', e.entry_type||'', e.urge_before||'', e.body_areas||'', e.target||'', e.awareness||'', e.duration||'', e.post_ritual||'', e.pre_action||'', e.primary_trigger||'', e.environment||'', e.post_feeling||'', e.interventions||'', e.intervention_effectiveness||'', (e.notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
+    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.bfrb_type||'', e.entry_type||'', e.urge_before||'', e.urge_after||'', e.body_areas||'', e.target||'', e.awareness||'', e.duration||'', e.post_ritual||'', e.pre_action||'', e.primary_trigger||'', e.environment||'', e.activity||'', e.escalation||'', e.post_feeling||'', e.aftercare||'', e.interventions||'', e.specific_cr||'', e.intervention_effectiveness||'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' '), (e.notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
     csv += row.map(v => `"${v}"`).join(',') + '\n';
   });
   const a = document.createElement('a');
