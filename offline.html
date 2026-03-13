@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F5F5F3" id="theme-color-meta">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Groundwork">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<title>Groundwork — Offline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<script>
+  const t = localStorage.getItem('gw-theme') || localStorage.getItem('theme');
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('theme-color-meta')?.setAttribute('content', '#161618');
+  }
+</script>
+<style>
+  :root{--bg:#F5F5F3;--card:#fff;--bdr:#E4E4E0;--tx:#1C1C1E;--tx2:#48484A;--mu:#98989E;--ac:#5B6B8A;--ac-h:#4A5A78;--acl:rgba(91,107,138,.10);--sur:#FAFAF9;--sage:#4A8C78;--sagel:rgba(74,140,120,.10);--r:16px;--rlg:24px;--rsm:10px;--pill:100px;--s2:0 2px 12px rgba(0,0,0,.08);--tr:all .15s ease}
+  [data-theme="dark"]{--bg:#161618;--card:#252527;--bdr:#2E2E32;--tx:#F2F2F7;--tx2:#AEAEB2;--mu:#636366;--ac:#7B90B0;--acl:rgba(123,144,176,.12);--sur:#1E1E20;--sage:#62A892;--sagel:rgba(98,168,146,.12)}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));transition:background .3s,color .3s}
+  a,button{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:48px 36px;text-align:center;max-width:360px;width:100%;box-shadow:var(--s2)}
+  @media(max-width:400px){.card{padding:36px 24px}}
+  .icon{width:64px;height:64px;border-radius:50%;background:var(--acl);color:var(--ac);display:flex;align-items:center;justify-content:center;margin:0 auto 24px}
+  h1{font-family:'Lora',serif;font-size:22px;color:var(--tx);margin-bottom:12px}
+  p{font-size:14px;color:var(--mu);line-height:1.7;margin-bottom:20px}
+  .tip{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 16px;font-size:12px;color:var(--tx2);text-align:left;line-height:1.6;margin-bottom:24px}
+  .tip strong{color:var(--tx)}
+  .btn{display:inline-block;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:13px 28px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:var(--tr);text-decoration:none;margin-bottom:10px;min-height:48px;display:flex;align-items:center;justify-content:center}
+  .btn:hover{background:var(--ac-h)}
+  .btn-ghost{display:flex;align-items:center;justify-content:center;background:transparent;color:var(--tx2);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:var(--tr);text-decoration:none;min-height:48px}
+  .btn-ghost:hover{border-color:var(--ac);color:var(--ac)}
+  .btns{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon" aria-hidden="true">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="1" y1="1" x2="23" y2="23"/>
+      <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+      <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+      <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+      <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+      <circle cx="12" cy="20" r="1" fill="currentColor"/>
+    </svg>
+  </div>
+  <h1>You're offline</h1>
+  <p>Groundwork needs a connection to load your data and sync entries.</p>
+  <div class="tip">
+    <strong>If you're managing an urge right now:</strong> the Tools page may still be
+    available from cache — try navigating there directly.
+  </div>
+  <div class="btns">
+    <button class="btn" onclick="location.reload()">Try again</button>
+    <a class="btn-ghost" href="interventions.html">Open Tools</a>
+  </div>
+</div>
+</body>
+</html>

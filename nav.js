@@ -74,11 +74,13 @@
     style.textContent = `
       /* Base Nav Layout */
       .gw-nav-container {
-        height: 52px;
+        height: calc(52px + env(safe-area-inset-top));
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         justify-content: space-between;
         padding: 0 16px;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: 0;
         background: rgba(245,245,243,.96);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
@@ -87,6 +89,7 @@
         top: 0;
         z-index: 100;
         box-sizing: border-box;
+        min-height: 52px;
       }
       [data-theme="dark"] .gw-nav-container {
         background: rgba(22,22,24,.96);
@@ -239,5 +242,14 @@
     document.addEventListener('DOMContentLoaded', injectNav);
   } else {
     injectNav();
+  }
+
+  // Register service worker (handles offline + home screen caching)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(err => {
+        console.warn('SW registration failed:', err);
+      });
+    });
   }
 })();

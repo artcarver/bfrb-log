@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link rel="stylesheet" href="base.css">
 <style>
 :root {
   --bg:#F5F5F3; --sur:#FAFAF9; --card:#FFFFFF; --bdr:#E4E4E0; --bdr2:#C8C8C2;
@@ -57,7 +58,7 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 .page-title{font-family:'Lora',serif;font-size:26px;color:var(--tx)}
 .controls{display:flex;gap:8px;align-items:center}
 
-.select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
+.select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
 .select-btn:hover{border-color:var(--bdr2)}
 [data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23AEAEB2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
 
@@ -71,8 +72,7 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 .insight-text strong{font-weight:600;color:var(--ac)}
 
 /* ── STATS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
-@media(min-width:520px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 14px;box-shadow:var(--s1);position:relative;overflow:hidden}
 
 .stat-val{font-size:30px;font-weight:300;color:var(--tx);line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
@@ -191,7 +191,7 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 .modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:18px}
 .modal-field{margin-bottom:14px}
 .modal-label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
-.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;transition:var(--tr)}
+.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
 .modal-input:focus,.modal-select:focus{border-color:var(--ac)}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
 .modal-btn{flex:1;padding:11px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx)}
@@ -261,6 +261,10 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
       <div class="stat-card sage" id="stat-since-card">
         <div class="stat-val" id="stat-since">—</div>
         <div class="stat-lbl" id="stat-since-lbl">Days since episode</div>
+      </div>
+      <div class="stat-card" id="stat-interval-card">
+        <div class="stat-val" id="stat-interval">—</div>
+        <div class="stat-lbl">Avg days between episodes</div>
       </div>
     </div>
 
@@ -420,6 +424,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+window._db = db;
 const provider = new GoogleAuthProvider();
 
 window._uid = null;
@@ -605,6 +610,22 @@ function processData(entries) {
     document.getElementById('stat-since-card').className = 'stat-card sage';
   }
 
+  // Avg days between episodes
+  const episodeDates = entries
+    .filter(e => e.entry_type === 'did')
+    .map(e => e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at))
+    .sort((a, b) => a - b);
+
+  let avgInterval = null;
+  if (episodeDates.length >= 2) {
+    const gaps = [];
+    for (let i = 1; i < episodeDates.length; i++) {
+      gaps.push((episodeDates[i] - episodeDates[i-1]) / 86400000);
+    }
+    avgInterval = (gaps.reduce((a, b) => a + b, 0) / gaps.length).toFixed(1);
+  }
+  document.getElementById('stat-interval').textContent = avgInterval !== null ? avgInterval + 'd' : '—';
+
   // Insight
   buildInsight(entries, outcomes, emotional, times, tools, managed, total);
 
@@ -633,7 +654,7 @@ function buildInsight(entries, outcomes, emotional, times, tools, managed, total
   const topTrigger = Object.entries(emotional).sort((a,b)=>b[1]-a[1])[0];
   if (topTrigger && total >= 3) {
     const pct = Math.round((topTrigger[1] / total) * 100);
-    parts.push(`<strong>${topTrigger[0]}</strong> is your most common trigger (${pct}% of entries).`);
+    parts.push(`<strong>${topTrigger[0]}</strong> is your most common trigger (${pct}% of entries). <a href="context.html" style="color:var(--sage);font-weight:600">Review your stimulus plan →</a>`);
   }
 
   // Peak time
@@ -1064,12 +1085,176 @@ window.exportCSV = () => {
   a.click();
 };
 
-// Theme observer
+// Theme observer — re-renders charts and syncs status-bar colour
 new MutationObserver(() => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const m = document.getElementById('theme-color-meta');
+  if (m) m.setAttribute('content', isDark ? '#161618' : '#F5F5F3');
   if (window._allEntries?.length) { processData(window._allEntries); renderFeed(); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 </script>
 <script src="nav.js"></script>
+<script>
+(function () {
+
+  /* ── 1. LOADING SKELETON ─────────────────────────────────────────────── */
+  function injectSkeleton() {
+    const el = document.getElementById('loading');
+    if (!el) return;
+    el.innerHTML = `
+      <div style="max-width:900px;margin:0 auto;padding:0 14px">
+        <div class="skeleton-stat-grid">
+          ${Array(4).fill(`<div class="skeleton-stat"><div class="sk-line" style="height:30px;width:50%;margin-bottom:8px"></div><div class="sk-line sk-short"></div></div>`).join('')}
+        </div>
+        ${Array(2).fill(`<div class="skeleton-card" style="height:200px;margin-bottom:12px"></div>`).join('')}
+        ${Array(3).fill(`<div class="skeleton-card"><div class="sk-line sk-title"></div><div class="sk-line sk-med"></div><div class="sk-line sk-short"></div></div>`).join('')}
+      </div>`;
+    el.style.cssText = 'padding:20px 0;color:inherit;text-align:inherit';
+  }
+
+  /* ── 2. EMPTY STATE ──────────────────────────────────────────────────── */
+  function patchEmptyState() {
+    const el = document.getElementById('empty-state');
+    if (!el) return;
+    el.className = 'empty-state';
+    el.innerHTML = `
+      <div class="empty-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <div class="empty-title">Nothing logged in this period</div>
+      <div class="empty-body">Even one resistance or near miss tells you something useful — the picture builds quickly.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-block;min-width:140px;text-align:center">Log an entry</a>
+        <button class="btn-ghost" onclick="document.getElementById('import-file-empty').click()" style="min-width:120px">Import CSV</button>
+      </div>
+      <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">`;
+  }
+
+  /* ── 3. DAYS-SINCE CONDITIONAL COLOR ────────────────────────────────── */
+  function patchDaysSince() {
+    const observer = new MutationObserver(() => {
+      const card = document.getElementById('stat-since-card');
+      const val  = document.getElementById('stat-since');
+      if (!card || !val) return;
+      const days = parseInt(val.textContent, 10);
+      if (isNaN(days)) return;
+      if (days === 0)      card.className = 'stat-card ac';
+      else if (days < 7)   card.className = 'stat-card warm';
+      else                 card.className = 'stat-card sage';
+    });
+    const el = document.getElementById('stat-since');
+    if (el) observer.observe(el, { childList: true, characterData: true, subtree: true });
+  }
+
+  /* ── 4. RESPONSIVE HEATMAP ───────────────────────────────────────────── */
+  const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const HOUR_LABELS = ['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
+
+  function cv(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  function renderHeatmapMobile(hourMap) {
+    const container = document.getElementById('heatmap-container');
+    if (!container) return;
+    const entries = window._allEntries || [];
+    const dayMap = {};
+    for (let i = 0; i < 7; i++) dayMap[i] = { did: 0, resisted: 0, near_miss: 0 };
+    entries.forEach(e => {
+      const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+      if (isNaN(d)) return;
+      const type = e.entry_type || 'did';
+      if (dayMap[d.getDay()]) dayMap[d.getDay()][type] = (dayMap[d.getDay()][type] || 0) + 1;
+    });
+    const maxVal = Math.max(...Object.values(dayMap).map(d => d.did + d.resisted + d.near_miss), 1);
+    const rows = [
+      { label: 'Episode',   key: 'did',      color: cv('--o-episode')  },
+      { label: 'Resisted',  key: 'resisted',  color: cv('--o-resisted') },
+      { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
+    ];
+    const mu = cv('--mu');
+    let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:64px repeat(7,1fr);gap:4px;min-width:260px">
+      <div></div>${DOW.map(d => `<div style="font-size:11px;color:${mu};text-align:center;font-weight:500">${d}</div>`).join('')}`;
+    rows.forEach(row => {
+      html += `<div style="font-size:11px;color:${mu};display:flex;align-items:center">${row.label}</div>`;
+      for (let i = 0; i < 7; i++) {
+        const v = dayMap[i][row.key] || 0;
+        const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
+        html += `<div style="height:24px;border-radius:4px;background:${row.color};opacity:${op.toFixed(2)}" title="${DOW[i]}: ${v} ${row.label.toLowerCase()}"></div>`;
+      }
+    });
+    html += `</div></div>` + heatmapLegend(rows);
+    container.innerHTML = html;
+  }
+
+  function renderHeatmapDesktop(hourMap) {
+    const container = document.getElementById('heatmap-container');
+    if (!container) return;
+    const maxVal = Math.max(...Object.values(hourMap).map(h => h.did + h.resisted + h.near_miss), 1);
+    const rows = [
+      { label: 'Episode',   key: 'did',      color: cv('--o-episode')  },
+      { label: 'Resisted',  key: 'resisted',  color: cv('--o-resisted') },
+      { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
+    ];
+    const mu = cv('--mu');
+    let html = `<div style="overflow-x:auto"><div style="min-width:440px">
+      <div style="display:grid;grid-template-columns:64px repeat(24,1fr);gap:2px;margin-bottom:3px">
+        <div></div>
+        ${HOUR_LABELS.map((l, i) => `<div style="font-size:11px;color:${mu};text-align:center">${i % 3 === 0 ? l : ''}</div>`).join('')}
+      </div>`;
+    rows.forEach(row => {
+      html += `<div style="display:grid;grid-template-columns:64px repeat(24,1fr);gap:2px;margin-bottom:3px">
+        <div style="font-size:11px;color:${mu};display:flex;align-items:center;justify-content:flex-end;padding-right:6px">${row.label}</div>`;
+      for (let h = 0; h < 24; h++) {
+        const v = (hourMap[h] || {})[row.key] || 0;
+        const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
+        html += `<div style="height:18px;border-radius:2px;background:${row.color};opacity:${op.toFixed(2)}" title="${v} at ${HOUR_LABELS[h]}"></div>`;
+      }
+      html += '</div>';
+    });
+    html += `</div></div>` + heatmapLegend(rows);
+    container.innerHTML = html;
+  }
+
+  function heatmapLegend(rows) {
+    return `<div style="display:flex;gap:12px;font-size:11px;color:${cv('--mu')};flex-wrap:wrap;margin-top:8px">
+      ${rows.map(r => `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${r.color};display:inline-block"></span>${r.label}</span>`).join('')}
+    </div>`;
+  }
+
+  window.renderHeatmap = function (hourMap) {
+    window.innerWidth < 600 ? renderHeatmapMobile(hourMap) : renderHeatmapDesktop(hourMap);
+  };
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (!window._allEntries || !window._allEntries.length) return;
+      const hourMap = {};
+      for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0 };
+      window._allEntries.forEach(e => {
+        const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+        if (isNaN(d)) return;
+        const h = d.getHours(), type = e.entry_type || 'did';
+        if (hourMap[h] && hourMap[h][type] !== undefined) hourMap[h][type]++;
+      });
+      window.renderHeatmap(hourMap);
+    }, 250);
+  });
+
+  /* ── INIT ────────────────────────────────────────────────────────────── */
+  function init() {
+    injectSkeleton();
+    patchEmptyState();
+    patchDaysSince();
+  }
+
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', init)
+    : init();
+
+})();
+</script>
+<script src="daily-state-widget.js"></script>
 </body>
 </html>
