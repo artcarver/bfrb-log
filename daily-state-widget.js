@@ -100,13 +100,21 @@
       .ds-stress-track{
         flex:1;height:6px;border-radius:10px;
         background:var(--bdr);outline:none;
-        -webkit-appearance:none;cursor:pointer;
+        -webkit-appearance:none;appearance:none;cursor:pointer;border:none;
       }
       .ds-stress-track::-webkit-slider-thumb{
         -webkit-appearance:none;
         width:22px;height:22px;border-radius:50%;
         background:var(--ac);border:2px solid var(--card);
         box-shadow:var(--s1);cursor:pointer;
+      }
+      .ds-stress-track::-moz-range-thumb{
+        width:18px;height:18px;border-radius:50%;
+        background:var(--ac);border:2px solid var(--card);
+        box-shadow:var(--s1);cursor:pointer;
+      }
+      .ds-stress-track::-moz-range-track{
+        height:6px;background:var(--bdr);border-radius:10px;border:none;
       }
       .ds-note{
         width:100%;background:var(--sur);
@@ -301,6 +309,18 @@
         if (fab)   fab.setAttribute('aria-expanded', 'false');
       }
     });
+
+    // Hide FAB when virtual keyboard is open (prevents overlap with action bar)
+    if (window.visualViewport) {
+      let lastHeight = window.visualViewport.height;
+      window.visualViewport.addEventListener('resize', () => {
+        const widget = document.getElementById('ds-widget');
+        if (!widget) return;
+        const keyboardOpen = window.visualViewport.height < lastHeight * 0.75;
+        widget.style.display = keyboardOpen ? 'none' : '';
+        if (!keyboardOpen) lastHeight = window.visualViewport.height;
+      });
+    }
   };
 
   /* ── AUTO-DETECT AUTH VIA MutationObserver ──────────────────────────────
