@@ -15,103 +15,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
 <style>
-:root {
-  --bg:#F5F5F3; --sur:#FAFAF9; --card:#FFFFFF; --bdr:#E4E4E0; --bdr2:#C8C8C2;
-  --tx:#1C1C1E; --tx2:#48484A; --mu:#98989E;
-  --ac:#5B6B8A; --ac-h:#4A5A78; --acl:rgba(91,107,138,.10); --acl2:rgba(91,107,138,.18);
-  --sage:#4A8C78; --sagel:rgba(74,140,120,.10); --sagem:rgba(74,140,120,.18);
-  --warm:#7A6B8A; --warml:rgba(122,107,138,.12);
-  --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
-  --s1:0 1px 3px rgba(0,0,0,.06); --s2:0 2px 12px rgba(0,0,0,.08); --s3:0 8px 32px rgba(0,0,0,.12);
-  --tr:all .15s ease;
-}
-[data-theme="dark"] {
-  --bg:#161618; --sur:#1E1E20; --card:#252527; --bdr:#2E2E32; --bdr2:#3E3E44;
-  --tx:#F2F2F7; --tx2:#AEAEB2; --mu:#636366;
-  --ac:#7B90B0; --ac-h:#8FA4C4; --acl:rgba(123,144,176,.12); --acl2:rgba(123,144,176,.20);
-  --sage:#62A892; --sagel:rgba(98,168,146,.12); --sagem:rgba(98,168,146,.22);
-  --warm:#9A88AC; --warml:rgba(154,136,172,.13);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:100px;transition:background .3s,color .3s}
-
-/* NAV */
-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(245,245,243,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
-[data-theme="dark"] nav{background:rgba(22,22,24,.96)}
-.nav-brand{font-family:'Lora',serif;font-size:18px;color:var(--tx);text-decoration:none;flex-shrink:0}
-.nav-brand span{color:var(--ac)}
-.nav-links{display:flex;gap:1px;flex:1;justify-content:center}
-.nav-link{font-size:13px;font-weight:500;color:var(--tx2);text-decoration:none;padding:6px 12px;border-radius:var(--pill);transition:var(--tr)}
-.nav-link.active{background:var(--acl);color:var(--ac);font-weight:600}
-.nav-right{display:flex;align-items:center;gap:6px;position:relative}
-
-/* AUTH & AVATAR */
-.sign-btn{font-size:12px;font-weight:600;color:var(--tx2);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:6px 12px;cursor:pointer;transition:var(--tr)}
-.avatar-btn{background:none;border:none;padding:0;cursor:pointer;display:flex;border-radius:50%}
-.user-avatar{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);object-fit:cover}
-
-/* AUTH SCREEN */
-.auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
-.auth-screen.on{display:flex}
-.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;text-align:center;max-width:320px;width:92%}
-.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;margin-top:20px}
-
-/* APP LAYOUT */
-#app{display:none}
-#app.on{display:block}
-main{max-width:540px;margin:0 auto;padding:20px 14px}
-.hidden{display:none !important}
-
-/* CARDS & FIELDS */
-.page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx);line-height:1.2;margin-bottom:20px}
-.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;margin-bottom:16px;box-shadow:var(--s1)}
-@media (max-width: 480px) { .card { padding: 16px; } }
-.card-title{font-family:'Lora',serif;font-size:16px;font-weight:500;margin-bottom:20px;color:var(--tx2)}
-.field{margin-bottom:24px}
-.field:last-child{margin-bottom:0}
-.field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
-
-/* GRID & TAGS */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.grid-3{display:grid;grid-template-columns:repeat(auto-fit, minmax(100px, 1fr));gap:8px}
-.grid-auto{display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:8px}
-
-.tag{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:48px;padding:8px 12px;border:1.5px solid var(--bdr);border-radius:var(--rsm);background:var(--card);font-size:14px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr);user-select:none;text-align:center;line-height:1.3}
-.tag:hover{border-color:var(--bdr2)}
-.tag.on{background:var(--acl);border-color:var(--ac);color:var(--ac);font-weight:600;transform:scale(0.98)}
-.tag.sage-on.on{background:var(--sagel);border-color:var(--sage);color:var(--sage)}
-.tag-sub{font-size:11px;font-weight:400;opacity:0.8;margin-top:4px}
-
-/* SLIDER */
-.slider-row{display:flex;align-items:center;gap:16px}
-input[type=range]{-webkit-appearance:none;flex:1;height:8px;background:var(--bdr);border-radius:10px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;border-radius:50%;background:var(--ac);cursor:pointer;border:3px solid var(--card);box-shadow:var(--s1)}
-.slider-val{font-family:'Lora',serif;font-size:24px;color:var(--ac);width:32px;text-align:right;line-height:1}
-.slider-lbls{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-top:12px}
-
-/* INPUTS — handled by base.css; just add page-specific overrides below */
-input[type=datetime-local], textarea{color:var(--tx)}
-input:focus, textarea:focus{border-color:var(--ac)}
-
-/* STICKY ACTION BAR */
-.action-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(250,246,241,0.95);border-top:1px solid var(--bdr);padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:100;backdrop-filter:blur(10px)}
-[data-theme="dark"] .action-bar{background:rgba(38,29,20,0.95)}
-
-/* STEP INDICATOR */
-.step-indicator{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 0 4px;margin-bottom:4px}
-.step-pip{width:28px;height:4px;border-radius:2px;background:var(--bdr);transition:background .3s}
-.step-pip.active{background:var(--ac)}
-.step-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}
-.action-inner{width:100%;max-width:540px;display:flex;gap:12px}
-
-.btn-primary{flex:1;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);box-shadow:var(--s2)}
-.btn-primary:hover{background:var(--ac-h);transform:translateY(-1px)}
-.btn-primary:active{transform:translateY(1px)}
-.btn-primary:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-
-.btn-ghost{background:transparent;color:var(--tx2);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:16px 24px;font-size:14px;font-weight:600;cursor:pointer;transition:var(--tr)}
-.btn-ghost:hover{border-color:var(--bdr2);color:var(--tx)}
+/* ── PAGE LAYOUT ── */
+main{max-width:540px;margin:0 auto;padding:20px 16px}
 
 /* AREA GROUPS */
 .area-group{margin-bottom:6px}
@@ -158,13 +63,8 @@ input:focus, textarea:focus{border-color:var(--ac)}
 <div id="app">
 <main>
 
-  <div id="screen-core">
-    <div class="step-indicator">
-      <div class="step-pip active" id="pip-1"></div>
-      <div class="step-pip" id="pip-2"></div>
-      <div class="step-label" id="step-label">Step 1 of 2 — Event</div>
-    </div>
-    <div class="page-title">Log Event</div>
+  <div id="log-form">
+    <div class="page-title">Log</div>
     <div class="card">
       
       <div class="field">
@@ -376,16 +276,6 @@ input:focus, textarea:focus{border-color:var(--ac)}
       </div>
     </div>
     
-    <div class="action-bar" id="bar-core">
-      <div class="action-inner">
-        <button class="btn-primary" id="btn-save-core" onclick="submitCore()">Save Log</button>
-      </div>
-    </div>
-  </div>
-
-
-  <div id="screen-context" class="hidden">
-    <div class="page-title">Context</div>
     <div class="card">
 
       <div class="field">
@@ -522,13 +412,13 @@ input:focus, textarea:focus{border-color:var(--ac)}
       </div>
     </div>
 
-    <div class="action-bar" id="bar-ctx">
+    <!-- single save bar -->
+    <div class="action-bar" id="bar-save">
       <div class="action-inner">
-        <button class="btn-ghost" onclick="resetForm()">Skip</button>
-        <button class="btn-primary" id="btn-save-ctx" onclick="submitContext()">Save Context</button>
+        <button class="btn-primary" id="btn-save-all" onclick="saveAll()">Save</button>
       </div>
     </div>
-  </div>
+  </div><!-- /log-form -->
 
   <div id="screen-success" class="hidden">
     <div class="success-msg">
@@ -608,11 +498,11 @@ function handleArrivalParams() {
     const outcome = params.get('outcome');
     if (outcome === 'held') {
       // Pre-select Resisted
-      const resistedTag = document.querySelector('#screen-core .grid-3 .tag.sage-on');
+      const resistedTag = document.querySelector('#log-form .grid-3 .tag.sage-on');
       if (resistedTag) { resistedTag.click(); }
     } else if (outcome === 'failed') {
       // Pre-select Episode
-      const episodeTag = [...document.querySelectorAll('#screen-core .grid-3 .tag')].find(t => t.textContent.trim().startsWith('Episode'));
+      const episodeTag = [...document.querySelectorAll('#log-form .grid-3 .tag')].find(t => t.textContent.trim().startsWith('Episode'));
       if (episodeTag) { episodeTag.click(); }
     }
     // Clean URL
@@ -695,6 +585,11 @@ window.selectOutcome = (val, el) => {
     state.core.ritual = null;
     document.querySelectorAll('#ritual-field .tag').forEach(t => t.classList.remove('on'));
   }
+
+  // Show/hide context fields that depend on outcome — live as user selects
+  document.getElementById('post-feeling-field').style.display = showDetails ? 'block' : 'none';
+  document.getElementById('aftercare-field').style.display = isDidIt ? 'block' : 'none';
+  document.getElementById('escalation-field').style.display = showDetails ? 'block' : 'none';
 };
 
 window.selectTag = (level, key, el) => {
@@ -756,21 +651,21 @@ window.showToast = (msg, isErr=false) => {
 };
 
 // SUBMIT LOGIC
-window.submitCore = async () => {
-  if(!state.core.bfrb || !state.core.outcome) {
-    showToast('Behavior and Outcome are required', true);
-    return;
-  }
-  
-  let finalTime = serverTimestamp();
-  if (state.core.timing === 'earlier') {
-    const timeVal = document.getElementById('core-time').value;
-    if (timeVal) finalTime = new Date(timeVal).toISOString();
+window.saveAll = async () => {
+  if (!state.core.bfrb) { showToast('Choose a behaviour first'); return; }
+  if (!state.core.outcome) { showToast('Choose an outcome first'); return; }
+
+  const btn = document.getElementById('btn-save-all');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  let finalTime;
+  if (state.core.timing === 'now') {
+    finalTime = new Date();
+  } else {
+    const v = document.getElementById('core-time').value;
+    finalTime = v ? new Date(v) : new Date();
   }
 
-  const btn = document.getElementById('btn-save-core');
-  btn.disabled = true; btn.textContent = 'Saving...';
-  
   let outcomeKey = 'resisted';
   if (state.core.outcome === 'Near Miss') outcomeKey = 'near_miss';
   if (state.core.outcome === 'Episode') outcomeKey = 'did';
@@ -781,9 +676,23 @@ window.submitCore = async () => {
     urge_before: state.core.urge,
     urge_after: state.core.urge_after,
     pre_feeling: state.core.pre_feeling || '',
-    created_at: finalTime
+    created_at: finalTime,
+    // context
+    pre_action: state.ctx.pre_action || '',
+    primary_trigger: state.ctx.trigger || '',
+    environment: state.ctx.environment || '',
+    activity: state.ctx.activity || '',
+    escalation: state.ctx.escalation || '',
+    aftercare: state.ctx.aftercare || '',
+    post_feeling: state.ctx.post_feeling || '',
+    tried_intervention: state.ctx.tried_tool === true,
+    interventions: state.ctx.tools.join(', '),
+    specific_cr: document.getElementById('specific-cr')?.value.trim() || '',
+    intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
+    narrative_notes: document.getElementById('narrative-notes')?.value.trim() || '',
+    notes: document.getElementById('ctx-notes').value.trim()
   };
-  
+
   if (outcomeKey !== 'resisted') {
     docData.body_areas = state.core.where.join(', ');
     docData.target = state.core.what.join(', ');
@@ -803,15 +712,7 @@ window.submitCore = async () => {
   try {
     const docRef = await addDoc(collection(db, 'users', window._uid, 'entries'), docData);
     window._currentDocId = docRef.id;
-    
-    // Toggle Post-Feeling field visibility based on outcome
-    document.getElementById('post-feeling-field').style.display = (outcomeKey === 'did' || outcomeKey === 'near_miss') ? 'block' : 'none';
-    // Aftercare only relevant after an episode
-    document.getElementById('aftercare-field').style.display = outcomeKey === 'did' ? 'block' : 'none';
-    // Escalation only relevant when something happened
-    document.getElementById('escalation-field').style.display = outcomeKey !== 'resisted' ? 'block' : 'none';
 
-    // Outcome-specific success screen
     const successMessages = {
       resisted: { title: 'Logged.', body: 'Resistance entries are the most clinically useful data point. Your therapist will want to see these.' },
       near_miss: { title: 'Logged.', body: 'Near misses show active friction in the urge-response chain — useful for pattern analysis.' },
@@ -821,56 +722,13 @@ window.submitCore = async () => {
     document.getElementById('success-title').textContent = msg.title;
     document.getElementById('success-body').textContent = msg.body;
 
-    document.getElementById('screen-core').classList.add('hidden');
-    document.getElementById('bar-core').classList.add('hidden');
-    document.getElementById('screen-context').classList.remove('hidden');
-    document.getElementById('pip-1').classList.remove('active');
-    document.getElementById('pip-2').classList.add('active');
-    document.getElementById('step-label').textContent = 'Step 2 of 2 — Context';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-
-    if (outcomeKey === 'did') {
-      const narrative = document.getElementById('narrative-notes');
-      if (narrative && !narrative.value) {
-        narrative.placeholder = 'What would you do differently next time? What was the trigger you didn\'t catch?';
-        narrative.focus();
-      }
-    }
-  } catch(e) {
-    showToast('Error saving log', true);
-    btn.disabled = false; btn.textContent = 'Save Log';
-  }
-};
-
-window.submitContext = async () => {
-  const btn = document.getElementById('btn-save-ctx');
-  btn.disabled = true; btn.textContent = 'Saving...';
-
-  const updateData = {
-    pre_action: state.ctx.pre_action || '',
-    primary_trigger: state.ctx.trigger || '',
-    environment: state.ctx.environment || '',
-    activity: state.ctx.activity || '',
-    escalation: state.ctx.escalation || '',
-    aftercare: state.ctx.aftercare || '',
-    post_feeling: state.ctx.post_feeling || '',
-    tried_intervention: state.ctx.tried_tool === true,
-    interventions: state.ctx.tools.join(', '),
-    specific_cr: document.getElementById('specific-cr')?.value.trim() || '',
-    intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
-    narrative_notes: document.getElementById('narrative-notes')?.value.trim() || '',
-    notes: document.getElementById('ctx-notes').value.trim()
-  };
-
-  try {
-    await updateDoc(doc(db, 'users', window._uid, 'entries', window._currentDocId), updateData);
-    document.getElementById('screen-context').classList.add('hidden');
-    document.getElementById('bar-ctx').classList.add('hidden');
+    document.getElementById('log-form').classList.add('hidden');
+    document.getElementById('bar-save').classList.add('hidden');
     document.getElementById('screen-success').classList.remove('hidden');
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch(e) {
-    showToast('Error updating log', true);
-    btn.disabled = false; btn.textContent = 'Save Context';
+    showToast('Error saving — try again', true);
+    btn.disabled = false; btn.textContent = 'Save';
   }
 };
 
@@ -885,7 +743,7 @@ window.resetForm = () => {
   document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
   document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
-  const firstTag = document.querySelector('#screen-core .grid-2 .tag');
+  const firstTag = document.querySelector('#log-form .grid-2 .tag');
   if (firstTag) firstTag.classList.add('on');
   
   document.getElementById('core-time').value = '';
@@ -910,34 +768,21 @@ window.resetForm = () => {
   sliderAfter.value = 3;
   updateSlider(sliderAfter, 'core-urge-after-val', 'urge_after');
   
-  const coreBtn = document.getElementById('btn-save-core');
-  coreBtn.disabled = false; coreBtn.textContent = 'Save Log';
-  const ctxBtn = document.getElementById('btn-save-ctx');
-  ctxBtn.disabled = false; ctxBtn.textContent = 'Save Context';
+  const saveBtn = document.getElementById('btn-save-all');
+  if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
 
-  document.getElementById('pip-1').classList.add('active');
-  document.getElementById('pip-2').classList.remove('active');
-  document.getElementById('step-label').textContent = 'Step 1 of 2 — Event';
-
-  document.getElementById('screen-core').classList.remove('hidden');
-  document.getElementById('bar-core').classList.remove('hidden');
-  document.getElementById('screen-context').classList.add('hidden');
-  document.getElementById('bar-ctx').classList.add('hidden');
+  document.getElementById('log-form').classList.remove('hidden');
+  document.getElementById('bar-save').classList.remove('hidden');
   document.getElementById('screen-success').classList.add('hidden');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// Desktop: Enter key advances the active step (but not when user is typing in a textarea)
+// Desktop: Enter saves when form is visible
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
-  const screenCore = document.getElementById('screen-core');
-  const screenCtx  = document.getElementById('screen-context');
-  if (!screenCore.classList.contains('hidden') && !document.getElementById('screen-success').classList.contains('hidden') === false) {
+  if (!document.getElementById('log-form').classList.contains('hidden')) {
     e.preventDefault();
-    document.getElementById('btn-save-core').click();
-  } else if (!screenCtx.classList.contains('hidden')) {
-    e.preventDefault();
-    document.getElementById('btn-save-ctx').click();
+    document.getElementById('btn-save-all').click();
   }
 });
 </script>
