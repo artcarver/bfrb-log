@@ -21,6 +21,7 @@
   --ac:#5B6B8A; --ac-h:#4A5A78; --acl:rgba(91,107,138,.10); --acl2:rgba(91,107,138,.18);
   --sage:#4A8C78; --sagel:rgba(74,140,120,.10); --sagem:rgba(74,140,120,.18);
   --warm:#7A6B8A; --warml:rgba(122,107,138,.12);
+  --o-resisted:#3A9E6F; --o-near:#D4841A; --o-episode:#5B6B8A;
   --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
   --s1:0 1px 3px rgba(0,0,0,.06); --s2:0 2px 12px rgba(0,0,0,.08);
   --tr:all .15s ease;
@@ -31,6 +32,7 @@
   --ac:#7B90B0; --ac-h:#8FA4C4; --acl:rgba(123,144,176,.12); --acl2:rgba(123,144,176,.20);
   --sage:#62A892; --sagel:rgba(98,168,146,.12); --sagem:rgba(98,168,146,.22);
   --warm:#9A88AC; --warml:rgba(154,136,172,.13);
+  --o-resisted:#4DBF88; --o-near:#E8A040; --o-episode:#7B90B0;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
@@ -107,9 +109,9 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 .streak-days{display:flex;gap:3px;flex-wrap:wrap}
 .streak-cell{width:12px;height:12px;border-radius:3px;background:var(--bdr);flex-shrink:0;cursor:default;transition:opacity .15s}
 .streak-cell:hover{opacity:.75}
-.streak-cell.episode{background:var(--ac)}
-.streak-cell.resisted{background:var(--sage)}
-.streak-cell.near-miss{background:var(--warm)}
+.streak-cell.episode{background:var(--o-episode)}
+.streak-cell.resisted{background:var(--o-resisted)}
+.streak-cell.near-miss{background:var(--o-near)}
 .streak-cell.empty{background:var(--bdr);opacity:.4}
 
 /* Hourly heatmap */
@@ -149,16 +151,16 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 
 .log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:0;margin-bottom:10px;box-shadow:var(--s1);overflow:hidden;display:grid;grid-template-columns:4px 1fr}
 .log-card-accent{background:var(--bdr)}
-.log-card-accent.did{background:var(--ac)}
-.log-card-accent.resisted{background:var(--sage)}
-.log-card-accent.near_miss{background:var(--warm)}
+.log-card-accent.did{background:var(--o-episode)}
+.log-card-accent.resisted{background:var(--o-resisted)}
+.log-card-accent.near_miss{background:var(--o-near)}
 .log-card-body{padding:14px 16px}
 .log-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
 .log-date{font-size:12px;font-weight:500;color:var(--tx2)}
 .log-badge{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--rsm);flex-shrink:0}
-.log-badge.did{background:var(--acl);color:var(--ac)}
-.log-badge.resisted{background:var(--sagel);color:var(--sage)}
-.log-badge.near_miss{background:var(--warml);color:var(--warm)}
+.log-badge.did{background:rgba(91,107,138,.12);color:var(--o-episode)}
+.log-badge.resisted{background:rgba(58,158,111,.12);color:var(--o-resisted)}
+.log-badge.near_miss{background:rgba(212,132,26,.12);color:var(--o-near)}
 
 .log-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
 .chip{font-size:11px;padding:3px 9px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap}
@@ -459,7 +461,8 @@ function getCSSVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 function getC() {
-  return { ac: getCSSVar('--ac'), sage: getCSSVar('--sage'), warm: getCSSVar('--warm'), mu: getCSSVar('--mu'), bdr: getCSSVar('--bdr'), tx: getCSSVar('--tx'), tx2: getCSSVar('--tx2') };
+  return { ac: getCSSVar('--ac'), sage: getCSSVar('--sage'), warm: getCSSVar('--warm'), mu: getCSSVar('--mu'), bdr: getCSSVar('--bdr'), tx: getCSSVar('--tx'), tx2: getCSSVar('--tx2'),
+    oResisted: getCSSVar('--o-resisted'), oNear: getCSSVar('--o-near'), oEpisode: getCSSVar('--o-episode') };
 }
 
 function showToast(msg, isErr=false) {
@@ -662,7 +665,7 @@ function renderOutcomesDonut(outcomes, total) {
   const ctx = document.getElementById('chart-outcomes').getContext('2d');
 
   const data = [outcomes.resisted, outcomes.near_miss, outcomes.did];
-  const colors = [c.sage, c.warm, c.ac];
+  const colors = [c.oResisted, c.oNear, c.oEpisode];
   const labels = ['Resisted', 'Near miss', 'Episode'];
 
   chartInstances['outcomes'] = new Chart(ctx, {
@@ -723,9 +726,9 @@ function renderStreakCalendar(entries) {
   container.innerHTML = `
     <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px">${cells.join('')}</div>
     <div style="display:flex;gap:12px;font-size:11px;color:var(--mu);flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.sage};display:inline-block"></span>Resisted</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.warm};display:inline-block"></span>Near miss</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.ac};display:inline-block"></span>Episode</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oResisted};display:inline-block"></span>Resisted</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oNear};display:inline-block"></span>Near miss</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oEpisode};display:inline-block"></span>Episode</span>
     </div>
   `;
 }
@@ -769,9 +772,9 @@ function renderHeatmap(hourMap) {
   headerRow += '</div>';
 
   const rows = [
-    { label: 'Episode', key: 'did', color: c.ac },
-    { label: 'Resisted', key: 'resisted', color: c.sage },
-    { label: 'Near miss', key: 'near_miss', color: c.warm },
+    { label: 'Episode', key: 'did', color: c.oEpisode },
+    { label: 'Resisted', key: 'resisted', color: c.oResisted },
+    { label: 'Near miss', key: 'near_miss', color: c.oNear },
   ];
 
   let html = headerRow;
