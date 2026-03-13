@@ -96,13 +96,13 @@
 
       /* Brand & Left */
       .nav-left { display: flex; align-items: center; justify-content: flex-start; }
-      .nav-brand { font-family: 'Lora', serif; font-size: 18px; color: var(--tx); text-decoration: none; font-weight: 400; }
+      .nav-brand { font-family: 'Instrument Serif', serif; font-size: 18px; color: var(--tx); text-decoration: none; font-weight: 400; }
       .nav-brand span { color: var(--ac); }
 
       /* Links & Center */
       .nav-links { display: flex; align-items: center; gap: 2px; justify-content: center; }
       .nav-link { 
-        font-family: 'DM Sans', sans-serif; 
+        font-family: 'Instrument Sans', sans-serif; 
         font-size: 13px; 
         font-weight: 500; 
         color: var(--tx2); 
@@ -118,7 +118,7 @@
       /* Buttons & Right */
       .nav-right { display: flex; align-items: center; gap: 8px; justify-content: flex-end; position: relative; }
       .sign-btn {
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Instrument Sans', sans-serif;
         font-size: 12px;
         font-weight: 600;
         color: var(--tx2);
@@ -180,7 +180,7 @@
         align-items: center;
         gap: 10px;
         padding: 12px 16px;
-        font-family: 'DM Sans', sans-serif;
+        font-family: 'Instrument Sans', sans-serif;
         font-size: 13px;
         font-weight: 500;
         color: var(--tx2);

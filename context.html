@@ -12,19 +12,19 @@
 <title>Groundwork — Profile</title>
 <meta name="theme-color" content="#F5F5F3" id="theme-color-meta">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
 <style>
 main{max-width:720px;margin:0 auto;padding:20px 16px}
 
 .header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px}
-.page-title{font-family:'Lora',serif;font-size:24px;color:var(--tx);line-height:1.2}
-.export-btn{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:10px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--s1);min-height:44px}
+.page-title{font-family:'Inter',sans-serif;font-size:24px;color:var(--tx);line-height:1.2}
+.export-btn{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:10px 16px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--s1);min-height:44px}
 @media(max-width:480px){.export-btn{width:100%}}
 .export-btn:hover{border-color:var(--ac);color:var(--ac)}
 
 .tab-nav{display:flex;gap:8px;margin-bottom:24px;border-bottom:1px solid var(--bdr);padding-bottom:12px;flex-wrap:wrap}
-.tab-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);min-height:44px;display:flex;align-items:center;flex-direction:column;gap:1px}
+.tab-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:8px 16px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:var(--tr);min-height:44px;display:flex;align-items:center;flex-direction:column;gap:1px}
 .tab-btn.active{background:var(--ac);border-color:var(--ac);color:#fff}
 .tab-desc{font-size:10px;font-weight:400;opacity:.75;letter-spacing:.01em}
 .tab-pane{display:none}
@@ -33,7 +33,7 @@ main{max-width:720px;margin:0 auto;padding:20px 16px}
 .card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;margin-bottom:20px;box-shadow:var(--s1)}
 @media(max-width:480px){.card{padding:16px}}
 .card-header{margin-bottom:16px}
-.card-title{font-family:'Lora',serif;font-size:18px;color:var(--tx)}
+.card-title{font-family:'Inter',sans-serif;font-size:18px;color:var(--tx)}
 .card-desc{font-size:14px;color:var(--mu);margin-top:4px}
 
 .scamp-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px}
@@ -44,7 +44,7 @@ main{max-width:720px;margin:0 auto;padding:20px 16px}
 .scamp-save-badge{font-size:11px;color:var(--sage);font-weight:600;opacity:0;transition:opacity .3s ease;margin-left:auto;padding-left:8px}
 /* scamp-row has NO border — only scamp-block has one, preventing double borders */
 .scamp-row{display:flex;flex-direction:column}
-textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:80px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
+textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:80px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
 textarea.scamp-input::placeholder{color:var(--bdr2)}
 textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
 
@@ -73,12 +73,12 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
 .rule-del{background:none;border:none;color:var(--bdr2);cursor:pointer;font-size:20px;line-height:1;padding:0 8px;transition:var(--tr);display:flex;align-items:center;min-height:44px}
 .rule-del:hover{color:var(--ac)}
 .add-rule-form{display:flex;gap:8px}
-.add-rule-input{flex:1;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
+.add-rule-input{flex:1;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:12px 14px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
 .add-rule-input:focus{border-color:var(--ac)}
 .add-rule-btn{background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:0 16px;font-weight:600;font-size:14px;color:var(--tx2);cursor:pointer;transition:var(--tr);min-height:48px}
 .add-rule-btn:hover{border-color:var(--tx2);color:var(--tx)}
 
-.reflection-form textarea{width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;resize:vertical;min-height:100px;margin-bottom:16px;transition:var(--tr)}
+.reflection-form textarea{width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;resize:vertical;min-height:100px;margin-bottom:16px;transition:var(--tr)}
 .reflection-form textarea:focus{border-color:var(--ac)}
 .field-label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
 .btn-primary{background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:16px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);min-height:48px;width:100%}
@@ -93,7 +93,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
 .ref-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;margin-bottom:8px;font-size:14px;color:var(--tx2);line-height:1.6}
 .ref-block strong{color:var(--tx);display:block;margin-bottom:4px;font-size:13px}
 
-.fw-h2{font-family:'Lora',serif;font-size:20px;color:var(--tx);margin:0 0 12px 0}
+.fw-h2{font-family:'Inter',sans-serif;font-size:20px;color:var(--tx);margin:0 0 12px 0}
 .fw-p{font-size:15px;color:var(--tx2);margin-bottom:20px;line-height:1.6}
 .fw-table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:24px;border:1px solid var(--bdr);border-radius:var(--rsm);background:var(--card)}
 .fw-table{width:100%;border-collapse:collapse;font-size:14px;min-width:500px}
@@ -109,12 +109,12 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
 .report-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;pointer-events:none}
 .report-modal.on{opacity:1;visibility:visible;pointer-events:auto}
 .report-modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:500px;box-shadow:0 8px 32px rgba(0,0,0,.15)}
-.report-modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:6px}
+.report-modal-title{font-family:'Inter',sans-serif;font-size:18px;color:var(--tx);margin-bottom:6px}
 .report-modal-hint{font-size:13px;color:var(--mu);margin-bottom:14px}
-.report-modal-body{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'DM Sans',monospace;font-size:13px;color:var(--tx2);resize:none;outline:none;min-height:280px;line-height:1.6}
-.report-copy-btn{flex:1;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s ease}
+.report-modal-body{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:14px;font-family:'Instrument Sans',monospace;font-size:13px;color:var(--tx2);resize:none;outline:none;min-height:280px;line-height:1.6}
+.report-copy-btn{flex:1;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:13px 20px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s ease}
 .report-copy-btn:hover{background:var(--ac-h)}
-.report-close-btn{flex:1;background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s ease}
+.report-close-btn{flex:1;background:var(--sur);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-family:'Instrument Sans',sans-serif;font-size:14px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s ease}
 .report-close-btn:hover{border-color:var(--bdr2);color:var(--tx)}
 
 /* REFLECTION DELETE */
@@ -169,7 +169,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
       <div class="onboarding-banner-body">
         <div class="onboarding-banner-title">New here? Start with "How it works"</div>
         <div class="onboarding-banner-sub">The BFRB neuroscience and tool rationale tab explains the framework behind this app — worth reading before your first log entry.</div>
-        <button onclick="switchTab('framework', document.querySelectorAll('.tab-btn')[1]);dismissOnboarding()" style="margin-top:10px;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">Read the framework →</button>
+        <button onclick="switchTab('framework', document.querySelectorAll('.tab-btn')[1]);dismissOnboarding()" class="onboarding-btn">Read the framework →</button>
       </div>
       <button class="onboarding-banner-dismiss" onclick="dismissOnboarding()" aria-label="Dismiss">×</button>
     </div>
@@ -204,7 +204,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
           <textarea class="scamp-input" id="scamp-m" placeholder="e.g., Resting chin on left hand..." onblur="saveBaseline('motor', this.value, this)"></textarea>
           </div>
         </div>
-        <div class="scamp-block" style="grid-column: 1 / -1;">
+        <div class="scamp-block scamp-block--full">
           <div class="scamp-row">
           <div class="scamp-label">Place <span class="badge">Environment</span><span class="scamp-save-badge"></span></div>
           <textarea class="scamp-input" id="scamp-p" placeholder="e.g., Bathroom mirror at night..." onblur="saveBaseline('place', this.value, this)"></textarea>
@@ -231,14 +231,14 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
         <div class="card-desc">Notes for your next appointment.</div>
       </div>
       <div class="reflection-form">
-        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
-          <div style="flex:1;min-width:140px">
-            <label class="field-label" style="margin-bottom:6px;display:block">Period from</label>
-            <input type="date" id="refl-from" style="width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;outline:none">
+        <div class="date-range-row">
+          <div class="date-range-col">
+            <label class="field-label">Period from</label>
+            <input type="date" id="refl-from" class="date-input">
           </div>
-          <div style="flex:1;min-width:140px">
-            <label class="field-label" style="margin-bottom:6px;display:block">Period to</label>
-            <input type="date" id="refl-to" style="width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;outline:none">
+          <div class="date-range-col">
+            <label class="field-label">Period to</label>
+            <input type="date" id="refl-to" class="date-input">
           </div>
         </div>
         <label class="field-label">What worked?</label>
@@ -271,62 +271,62 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
           <thead><tr><th>Field</th><th>What it captures</th><th>Clinical purpose</th></tr></thead>
           <tbody>
             <tr>
-              <td>Behavior type<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking vs. Biting</span></td>
+              <td>Behavior type<br><span class="td-sub">Picking vs. Biting</span></td>
               <td>Motor pathway classification</td>
               <td>Picking and nail/skin biting recruit distinct motor programs and are triggered by different sensory signals. Treating them as one behavior conflates two separate intervention targets. Your data shows they have different trigger profiles (sensory/postural for biting; anxiety+visual scan for picking), which means different CRs are needed for each.</td>
             </tr>
             <tr>
-              <td>When<br><span style="font-weight:400;color:var(--mu);font-size:12px">Right now vs. Earlier</span></td>
+              <td>When<br><span class="td-sub">Right now vs. Earlier</span></td>
               <td>Temporal accuracy</td>
               <td>Real-time logging improves data validity significantly. "Earlier" entries are reconstructions subject to mood-congruent recall bias — you're more likely to remember and log episodes when still in a negative post-behavior state, which skews frequency counts upward. Both are still worth logging; just weight real-time data more heavily in pattern analysis.</td>
             </tr>
             <tr>
-              <td>Outcome<br><span style="font-weight:400;color:var(--mu);font-size:12px">Resisted / Near Miss / Caught / Episode</span></td>
+              <td>Outcome<br><span class="td-sub">Resisted / Near Miss / Caught / Episode</span></td>
               <td>Behavioral outcome classification</td>
               <td><strong>Resisted</strong>: urge present, behavior absent — the highest-value data point; confirms active inhibition. <strong>Near Miss</strong>: partial motor sequence initiated but stopped — signals the interception window is working. <strong>Caught mid-act</strong>: automatic behavior interrupted by delayed awareness — tracks improving interoceptive awareness. <strong>Episode</strong>: full behavioral sequence completed. Near misses and caught entries are often more clinically useful than episodes because they prove the inhibition circuit is activating.</td>
             </tr>
             <tr>
-              <td>Pre-feeling<br><span style="font-weight:400;color:var(--mu);font-size:12px">Emotional state before</span></td>
+              <td>Pre-feeling<br><span class="td-sub">Emotional state before</span></td>
               <td>Antecedent arousal state</td>
               <td>Determines the <em>functional class</em> of the behavior. If the antecedent is anxiety/stress, the behavior functions as a downregulation strategy (anxiolytic). If fatigue/depleted, it's a stimulation-seeking behavior (self-arousal). If boredom/restless, it's filling an attentional void. Each functional class requires a different counter-strategy — anxiolytic BFRBs respond to vagal/grounding tools; stimulation-seeking BFRBs respond to sensory substitutes.</td>
             </tr>
             <tr>
-              <td>Urge before &amp; after<br><span style="font-weight:400;color:var(--mu);font-size:12px">1–10 scale</span></td>
+              <td>Urge before &amp; after<br><span class="td-sub">1–10 scale</span></td>
               <td>Reinforcement gradient measurement</td>
               <td>The before/after delta is the most direct measure of negative reinforcement strength. A large drop (e.g., 9 → 3) indicates strong physiological relief — the behavior is powerfully maintained by its consequence. A small drop or no drop suggests the behavior is more automatic/habitual than driven by relief. This informs how much ERP-style extinction work is needed vs. simple habit interruption.</td>
             </tr>
             <tr>
-              <td>Where &amp; What<br><span style="font-weight:400;color:var(--mu);font-size:12px">Body area and target type</span></td>
+              <td>Where &amp; What<br><span class="td-sub">Body area and target type</span></td>
               <td>Motor chain specificity</td>
               <td>The Competing Response (CR) in HRT must be <em>physically incompatible</em> with the specific hand/body position used for that target. A CR for scalp picking (hands clasped behind head) is different from one for facial picking (hands pressed flat on thighs). Logging area+target identifies which motor sub-programs need dedicated CRs.</td>
             </tr>
             <tr>
-              <td>Awareness<br><span style="font-weight:400;color:var(--mu);font-size:12px">Automatic / Mid-action / Urge first</span></td>
+              <td>Awareness<br><span class="td-sub">Automatic / Mid-action / Urge first</span></td>
               <td>Interception window identification</td>
               <td><strong>Automatic</strong>: behavior completes before conscious awareness — the behavioral chain must be interrupted at the antecedent (pre-action/environment) level rather than at the urge level. <strong>Urge first</strong>: conscious urge precedes behavior — ERP and urge surfing can directly target this window. <strong>Mid-action</strong>: awareness arrives during execution — Decoupling Redirect is specifically designed for this state.</td>
             </tr>
             <tr>
-              <td>Duration<br><span style="font-weight:400;color:var(--mu);font-size:12px">&lt;1 min to 30+ min</span></td>
+              <td>Duration<br><span class="td-sub">&lt;1 min to 30+ min</span></td>
               <td>Severity and dissociation index</td>
               <td>Your data shows a bimodal distribution: most episodes are under 1 minute (brief, reactive) but a significant portion are 30+ minutes. Long-duration episodes typically involve dissociation — the PFC has effectively gone offline, and the behavior runs on autopilot. These episodes require upstream prevention (stimulus control, environmental barriers) because by the time they start, acute intervention capacity is compromised.</td>
             </tr>
             <tr>
-              <td>Mirror / camera<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking only</span></td>
+              <td>Mirror / camera<br><span class="td-sub">Picking only</span></td>
               <td>Visual cue dependency</td>
               <td>Mirror use during picking is a strong predictor of session duration and severity. The mirror converts a tactile drive into a visual-tactile feedback loop — you can see what you're doing, which maintains engagement far longer than tactile sensation alone. Mirror-initiated episodes (your data shows bathroom mirror + "Visual" trigger co-occurring) are a distinct behavioral subtype that responds specifically to mirror removal as a stimulus control intervention.</td>
             </tr>
             <tr>
-              <td>Skin impact<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking only</span></td>
+              <td>Skin impact<br><span class="td-sub">Picking only</span></td>
               <td>Tissue damage severity tracking</td>
               <td>Tracks medical severity over time and informs wound care needs. Significant or repeated moderate impact at the same site increases scarring and hyperpigmentation risk, which can itself become a visual trigger ("I need to fix it") — creating a positive feedback loop. Documenting this is useful for dermatology referral and for identifying specific body sites that need physical barriers (bandages).</td>
             </tr>
             <tr>
-              <td>Post-ritual<br><span style="font-weight:400;color:var(--mu);font-size:12px">Ingested / Examined / Discarded</span></td>
+              <td>Post-ritual<br><span class="td-sub">Ingested / Examined / Discarded</span></td>
               <td>Secondary reinforcement mapping</td>
               <td>Post-behavior rituals are often the most stigmatized and least discussed aspect of BFRBs, but they're clinically significant. Ingesting or closely examining the material provides a secondary sensory reward that strengthens the reinforcement loop. These rituals also indicate that the behavior is serving a sensory need beyond mere skin irregularity removal — often a proprioceptive or oral stimulation need that can be addressed with a substitute.</td>
             </tr>
             <tr>
-              <td>Escalation<br><span style="font-weight:400;color:var(--mu);font-size:12px">Single pick → Couldn't stop</span></td>
+              <td>Escalation<br><span class="td-sub">Single pick → Couldn't stop</span></td>
               <td>Session progression tracking</td>
               <td>The transition from "single pick" to "escalated" or "couldn't stop" reflects the point at which PFC inhibition is overwhelmed. Identifying this threshold is clinically useful: if most of your sessions are "single pick," short acute interventions are sufficient. If most are "escalated," the focus shifts to upstream prevention — stopping before the first contact rather than trying to interrupt mid-session.</td>
             </tr>
@@ -345,47 +345,47 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
           <thead><tr><th>Field</th><th>What it captures</th><th>Clinical purpose</th></tr></thead>
           <tbody>
             <tr>
-              <td>Pre-event activity<br><span style="font-weight:400;color:var(--mu);font-size:12px">Scanning / Mirror / Posture</span></td>
+              <td>Pre-event activity<br><span class="td-sub">Scanning / Mirror / Posture</span></td>
               <td>Motor chain entry point</td>
               <td><strong>Scanning / Feeling skin</strong>: a tactile search behavior that precedes picking — this is the discriminative stimulus, not the pick itself. Interrupting scanning is more effective than interrupting the pick. <strong>Mirror checking</strong>: visual search behavior that activates the visual-tactile loop. <strong>Resting posture</strong>: for biting, the hand-near-face resting position is the proximal antecedent — the bite is almost a reflex given the position. <strong>Oral fixation</strong>: signals an unmet stimulation need, often addressed better by a substitute (gum, textured food) than a CR.</td>
             </tr>
             <tr>
-              <td>Trigger<br><span style="font-weight:400;color:var(--mu);font-size:12px">Anxiety / Fatigue / Sensory / Visual / Boredom</span></td>
+              <td>Trigger<br><span class="td-sub">Anxiety / Fatigue / Sensory / Visual / Boredom</span></td>
               <td>Functional analysis — the "why"</td>
               <td>This is the most important contextual variable. <strong>Anxiety/Stress</strong> → behavior is anxiolytic; counter with vagal regulation or grounding. <strong>Fatigue/Depleted</strong> → PFC is offline; behavior is automatic; focus on barriers not willpower. <strong>Sensory</strong> → specific irregularity drove the behavior; tactile substitutes and competing sensory input are most effective. <strong>Visual</strong> → mirror or skin inspection initiated the chain; mirror barriers and removing magnifying mirrors are high-yield. <strong>Boredom</strong> → attentional void; environmental enrichment and hand occupation are the targets.</td>
             </tr>
             <tr>
-              <td>Environment<br><span style="font-weight:400;color:var(--mu);font-size:12px">Desk / Couch / Bathroom etc.</span></td>
+              <td>Environment<br><span class="td-sub">Desk / Couch / Bathroom etc.</span></td>
               <td>Discriminative stimulus mapping</td>
               <td>Environments become conditioned stimuli through repeated co-occurrence with the behavior. Your data shows Desk/Study is your highest-risk environment (anxiety + cognitive load), followed by Couch/Bed (fatigue + passive activity). The bathroom is highest risk specifically for mirror-initiated episodes. Each environment may need different stimulus control modifications — e.g., mirror removal/covering in bathroom, fidget tools at desk, nail barriers when resting on couch.</td>
             </tr>
             <tr>
-              <td>Activity<br><span style="font-weight:400;color:var(--mu);font-size:12px">Studying / TV / Phone etc.</span></td>
+              <td>Activity<br><span class="td-sub">Studying / TV / Phone etc.</span></td>
               <td>Attentional load assessment</td>
               <td>BFRBs cluster around activities that split attention — cognitively demanding tasks (studying) that leave the hands unoccupied, or low-demand tasks (watching TV) that leave the attention system understimulated. "Studying / Lecture" is particularly high-risk because it combines cognitive stress with relative hand freedom. Interventions: fidget tools that are hand-occupying but low-distraction; barrier gloves during lectures; phone-position rules during TV.</td>
             </tr>
             <tr>
-              <td>Post-feeling<br><span style="font-weight:400;color:var(--mu);font-size:12px">Frustrated / Neutral / Relief / Shame</span></td>
+              <td>Post-feeling<br><span class="td-sub">Frustrated / Neutral / Relief / Shame</span></td>
               <td>Reinforcement and secondary distress</td>
               <td><strong>Relief / Zoned out</strong>: strong negative reinforcement — this is the most treatment-resistant pattern because the behavior is working physiologically. ERP (urge surfing) is the primary tool. <strong>Frustrated</strong>: the behavior is not achieving the intended relief — suggests the reinforcement is more automatic/habitual than relief-driven; HRT habit interruption is more relevant. <strong>Shame / self-critical</strong>: secondary emotional consequence requiring cognitive defusion work to prevent the shame → distress → BFRB → shame loop.</td>
             </tr>
             <tr>
-              <td>Aftercare<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking only</span></td>
+              <td>Aftercare<br><span class="td-sub">Picking only</span></td>
               <td>Wound care adherence</td>
               <td>Tracks whether wound care is being applied after episodes — relevant both for physical healing and as a behavioral intervention. Applying lotion or treating skin immediately post-episode can serve as a brief mindfulness anchor that interrupts the urge to continue. Some clinicians prescribe aftercare as a structured response prevention tool, not just wound care.</td>
             </tr>
             <tr>
-              <td>Intervention attempted &amp; tool<br><span style="font-weight:400;color:var(--mu);font-size:12px">Yes/No + which tool</span></td>
+              <td>Intervention attempted &amp; tool<br><span class="td-sub">Yes/No + which tool</span></td>
               <td>Effectiveness tracking</td>
               <td>This is how the Patterns page calculates outcome rates per tool. A tool's "outcome rate" is: (entries where tool was used AND outcome was Resisted or Near Miss) ÷ (total entries where tool was used). Logging this consistently over 3–4 weeks generates a personal effectiveness ranking — which tool actually works for you, under which conditions, rather than relying on general population data.</td>
             </tr>
             <tr>
-              <td>Effectiveness rating<br><span style="font-weight:400;color:var(--mu);font-size:12px">1–5 scale</span></td>
+              <td>Effectiveness rating<br><span class="td-sub">1–5 scale</span></td>
               <td>Subjective efficacy vs. objective outcome</td>
               <td>Separate from the binary outcome rate. A tool rated 4/5 by you but with a 40% outcome rate might still be worth using if it reduces distress even when it doesn't fully prevent the episode. Comparing subjective rating vs. objective outcome rate across tools can reveal discrepancies — e.g., tools that feel helpful but don't change behavior, or tools you rate low but that objectively improve outcomes.</td>
             </tr>
             <tr>
-              <td>Reflection / Narrative<br><span style="font-weight:400;color:var(--mu);font-size:12px">Free text</span></td>
+              <td>Reflection / Narrative<br><span class="td-sub">Free text</span></td>
               <td>Qualitative chain analysis</td>
               <td>The most clinically rich field. Free-text narratives often reveal antecedents and maintaining factors that don't fit the structured options — e.g., your note about "coding this app" while watching TV and feeling bumps, or the press-on nail glue as a novel sensory target. These entries are the primary source for updating your SCAMP profile and identifying emerging behavioral variants.</td>
             </tr>
@@ -404,32 +404,32 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
           <thead><tr><th>Tool</th><th>Protocol basis</th><th>Mechanism &amp; when to use</th></tr></thead>
           <tbody>
             <tr>
-              <td>Motor Block<br><span style="font-weight:400;color:var(--mu);font-size:12px">Competing Response</span></td>
+              <td>Motor Block<br><span class="td-sub">Competing Response</span></td>
               <td>Habit Reversal Training (HRT)</td>
               <td>Uses motoric incompatibility — the CR occupies the exact muscle groups needed for the BFRB, making simultaneous execution physically impossible. Effective when awareness precedes or accompanies the urge (Urge first / Mid-action awareness). Requires the CR to be position-specific: a CR for arm picking (hands flat on table, palms down) will not work for scalp picking. HRT has the strongest RCT evidence base of any BFRB intervention.</td>
             </tr>
             <tr>
-              <td>Decoupling Redirect<br><span style="font-weight:400;color:var(--mu);font-size:12px">Movement redirect</span></td>
+              <td>Decoupling Redirect<br><span class="td-sub">Movement redirect</span></td>
               <td>Decoupling (Tic-adjacent)</td>
               <td>Designed specifically for <strong>mid-action</strong> awareness — when you notice you're already doing it. Rather than stopping dead (which feels aversive and increases the urge), you complete the motor movement but redirect it away from the skin target. Counts and tracks redirections, building awareness of the movement pattern. Clinically, this is a variant of function-based intervention adapted from Comprehensive Behavioral Treatment for Tourette's.</td>
             </tr>
             <tr>
-              <td>Urge Surf<br><span style="font-weight:400;color:var(--mu);font-size:12px">ERP / ACT</span></td>
+              <td>Urge Surf<br><span class="td-sub">ERP / ACT</span></td>
               <td>Exposure &amp; Response Prevention (ERP)</td>
               <td>Based on the extinction model: urges are time-limited autonomic events. If not acted on, they peak and subside within 10–20 minutes. Each time you surf an urge without responding, you reduce the conditioned association between the urge signal and the motor response (extinction). Over many trials, the urge loses its command value. This is the most evidence-based tool for behaviors driven by strong physiological relief (your "zoned out" post-feeling entries).</td>
             </tr>
             <tr>
-              <td>Cognitive Defusion<br><span style="font-weight:400;color:var(--mu);font-size:12px">ACT reframes</span></td>
+              <td>Cognitive Defusion<br><span class="td-sub">ACT reframes</span></td>
               <td>Acceptance &amp; Commitment Therapy (ACT)</td>
               <td>Targets the <em>cognitive</em> dimension of the urge — the thoughts that give the urge permission or urgency ("just one," "I need to fix this," "it'll bother me all day"). Defusion techniques create psychological distance between the thought and the response: observing thoughts as events rather than commands. Particularly useful when the trigger is <strong>Perfectionism</strong> or <strong>Cognitive/overthinking</strong>, and when the pre-feeling is self-conscious or anxiety-driven.</td>
             </tr>
             <tr>
-              <td>Tactile Substitute<br><span style="font-weight:400;color:var(--mu);font-size:12px">Sensory redirect</span></td>
+              <td>Tactile Substitute<br><span class="td-sub">Sensory redirect</span></td>
               <td>Sensory substitution / ComB</td>
               <td>Addresses the sensory function directly by providing an alternative sensory input that satisfies the same tactile need without causing damage. The three fidget categories map to specific sensory needs: <strong>Destruction/Peeling</strong> substitutes for the satisfaction of removing or disrupting a surface; <strong>Deep Pressure/Sensation</strong> substitutes for proprioceptive and pain-adjacent sensory input; <strong>Smoothing/Evenness</strong> substitutes for the need to resolve a tactile irregularity. Matching the category to your dominant sensory function increases efficacy significantly.</td>
             </tr>
             <tr>
-              <td>Grounding Reset<br><span style="font-weight:400;color:var(--mu);font-size:12px">4-7-8 breathing</span></td>
+              <td>Grounding Reset<br><span class="td-sub">4-7-8 breathing</span></td>
               <td>Vagal Nerve Stimulation</td>
               <td>The extended exhale (longer than inhale) activates the cardiac vagal brake via the nucleus tractus solitarius in the brainstem, increasing HRV and reducing sympathetic tone within 1–2 breath cycles. This directly downregulates amygdala activation and cortisol. Most effective when the trigger is <strong>Anxiety/Stress</strong> (hyperarousal state) — less effective for fatigue-driven or sensory-driven behaviors because those involve hypo-arousal or a specific sensory need, not sympathetic overdrive.</td>
             </tr>
@@ -437,7 +437,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
         </table>
       </div>
 
-      <h2 class="fw-h2" style="margin-top:28px">Fidget tools — sensory category rationale</h2>
+      <h2 class="fw-h2 fw-h2--spaced">Fidget tools — sensory category rationale</h2>
       <p class="fw-p">Sensory substitutes work because they compete for the same sensory processing channels. A substitute that engages the same cortical map as the BFRB is more effective than a generic fidget.</p>
       <div class="fw-table-wrap">
         <table class="fw-table">
@@ -472,22 +472,22 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
           <thead><tr><th>Section</th><th>Framework basis</th><th>How to use it</th></tr></thead>
           <tbody>
             <tr>
-              <td>SCAMP Baseline<br><span style="font-weight:400;color:var(--mu);font-size:12px">Sensory / Cognitive / Affective / Motor / Place</span></td>
+              <td>SCAMP Baseline<br><span class="td-sub">Sensory / Cognitive / Affective / Motor / Place</span></td>
               <td>ComB treatment model (Mansueto et al.)</td>
               <td>SCAMP is a functional assessment framework that maps the five dimensions along which BFRBs can be driven. The goal is to identify your <em>dominant</em> drivers so that the intervention portfolio is targeted. If your dominant function is Sensory, motor blocks matter less than tactile substitutes. If it's Affective, grounding and urge surfing are higher priority than stimulus control. Write these as observations about your specific patterns, not generic descriptions — "Seeking scabs and rough skin bumps on arms and scalp while sitting at desk" is more actionable than "sensory seeking."</td>
             </tr>
             <tr>
-              <td>Stimulus Control Rules<br><span style="font-weight:400;color:var(--mu);font-size:12px">Checklist</span></td>
+              <td>Stimulus Control Rules<br><span class="td-sub">Checklist</span></td>
               <td>Environmental Modification (ComB / CBT-E)</td>
               <td>These are physical changes to your environment that reduce exposure to discriminative stimuli before the urge can activate. They work by breaking the antecedent-behavior chain at the environment level, which requires no willpower in the moment. The checkbox is a daily check-in: are your barriers actually in place? Barriers that are consistently unchecked are either ineffective or not being implemented — worth discussing in session. Examples from your data: mirrors covered in bathroom, tweezers inaccessible, barriers/bandages on high-target areas before high-risk activities (studying, TV).</td>
             </tr>
             <tr>
-              <td>Session Prep<br><span style="font-weight:400;color:var(--mu);font-size:12px">Reflections</span></td>
+              <td>Session Prep<br><span class="td-sub">Reflections</span></td>
               <td>Behavioral review / therapy preparation</td>
               <td>Structured weekly or bi-weekly review of what worked and what didn't. The "Generate Report" button compiles this alongside your 30-day log summary and SCAMP profile into a copy-pasteable text for your therapist — removes the cognitive load of reconstructing the past two weeks from memory at the start of a session. Consistent reflection entries also give you a longitudinal view of which interventions are becoming more effective over time as conditioning takes hold.</td>
             </tr>
             <tr>
-              <td>Daily Baseline Log<br><span style="font-weight:400;color:var(--mu);font-size:12px">📋 button on Log &amp; Patterns pages</span></td>
+              <td>Daily Baseline Log<br><span class="td-sub">📋 button on Log &amp; Patterns pages</span></td>
               <td>Upstream variable tracking</td>
               <td>Captures sleep quality and stress level once per day. The Patterns page correlates these against episode data to show whether your BFRB frequency tracks sleep quality or stress — this is the most direct personal evidence of the PFC depletion model: on worse-sleep days, does episode count increase? If yes, this is both predictive (sleep as early warning) and actionable (sleep hygiene becomes a BFRB intervention, not just general health advice).</td>
             </tr>
@@ -525,7 +525,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
               <td>A large negative delta (high before, low after) confirms strong negative reinforcement — the behavior works physiologically to reduce distress. This is the ERP treatment target. If the delta is small, the behavior may be more automatic/habitual than reinforced, and HRT habit interruption may be more relevant than extinction work.</td>
             </tr>
             <tr>
-              <td>Baseline correlation<br><span style="font-weight:400;color:var(--mu);font-size:12px">Sleep &amp; stress vs. episodes</span></td>
+              <td>Baseline correlation<br><span class="td-sub">Sleep &amp; stress vs. episodes</span></td>
               <td>Upstream variable correlation</td>
               <td>Compares average sleep and stress on episode days vs. managed days. If episode-day stress is consistently 2+ points higher than managed-day stress, stress management is a direct treatment target, not just a co-morbid concern. Requires consistent daily baseline logging to generate meaningful data — even 2 weeks of daily logs produces a useful signal.</td>
             </tr>
@@ -544,7 +544,7 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
     <div class="report-modal-title">Session Report</div>
     <div class="report-modal-hint">Copy the text below and paste it into an email or notes app.</div>
     <textarea class="report-modal-body" id="report-text" readonly></textarea>
-    <div style="display:flex;gap:10px;margin-top:16px">
+    <div class="report-modal-actions">
       <button class="report-copy-btn" onclick="copyReportText()">Copy text</button>
       <button class="report-close-btn" onclick="closeReportModal()">Done</button>
     </div>
@@ -700,7 +700,7 @@ window.saveBaseline = async (field, value, el) => {
 function renderRules() {
   const list = document.getElementById('rule-list');
   if (currentRules.length === 0) {
-    list.innerHTML = `<div style="font-size:14px;color:var(--mu);padding:8px 0">None added yet.</div>`;
+    list.innerHTML = `<div class="no-data-msg">None added yet.</div>`;
     return;
   }
   list.innerHTML = currentRules.map(r => `
@@ -761,7 +761,7 @@ async function loadReflections() {
   const snap = await getDocs(q);
   
   if (snap.empty) {
-    list.innerHTML = `<div style="font-size:14px;color:var(--mu)">No entries yet.</div>`;
+    list.innerHTML = `<div class="no-data-msg">No entries yet.</div>`;
     return;
   }
   

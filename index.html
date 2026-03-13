@@ -12,7 +12,7 @@
 <title>Groundwork — Log</title>
 <meta name="theme-color" id="theme-color-meta" content="#F5F5F3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
 <style>
 
@@ -48,7 +48,7 @@ main {
   font-size: 13px; font-weight: 600;
   color: var(--mu);
   cursor: pointer; transition: var(--tr);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Instrument Sans', sans-serif;
   touch-action: manipulation;
 }
 .mode-btn.on {
@@ -109,7 +109,7 @@ main {
   display: flex; align-items: center; justify-content: center;
   font-size: 28px; margin-bottom: 20px;
 }
-.success-title { font-family: 'Lora', serif; font-size: 22px; color: var(--tx); margin-bottom: 8px; }
+.success-title { font-family: 'Inter', sans-serif; font-size: 22px; color: var(--tx); margin-bottom: 8px; }
 .success-body  { font-size: 14px; color: var(--mu); max-width: 320px; line-height: 1.55; }
 
 /* ── TOAST (uses nav-h token for positioning) ── */
@@ -163,8 +163,8 @@ main {
 
   <div id="log-form">
     <!-- Header row: title + mode toggle -->
-    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:16px" class="anim d1">
-      <div class="page-title" style="margin-bottom:0">Log</div>
+    <div class="log-header-row anim d1">
+      <div class="page-title page-title--flush">Log</div>
       <div class="mode-toggle" role="group" aria-label="Log mode">
         <button class="mode-btn on" id="mode-quick" onclick="setMode('quick')" aria-pressed="true">Quick</button>
         <button class="mode-btn"   id="mode-full"  onclick="setMode('full')"  aria-pressed="false">Full</button>
@@ -180,7 +180,7 @@ main {
           <div class="tag on" onclick="selectTiming('now', this)">Right now</div>
           <div class="tag"    onclick="selectTiming('earlier', this)">Earlier</div>
         </div>
-        <div id="core-time-wrap" class="hidden" style="margin-top:12px">
+        <div id="core-time-wrap" class="hidden time-wrap">
           <input type="datetime-local" id="core-time">
         </div>
       </div>
@@ -224,7 +224,7 @@ main {
         </div>
 
         <!-- URGE BEFORE (quick + full) -->
-        <div class="field" style="margin-bottom:0">
+        <div class="field field--flush">
           <label class="field-label">Urge level</label>
           <div class="slider-row">
             <input type="range" min="1" max="10" value="5" id="core-urge"
@@ -235,7 +235,7 @@ main {
         </div>
 
         <!-- URGE AFTER (quick + full) — label changes by outcome -->
-        <div class="field" style="margin-bottom:0">
+        <div class="field field--flush">
           <label class="field-label" id="urge-after-label">Urge level after</label>
           <div class="slider-row">
             <input type="range" min="1" max="10" value="3" id="core-urge-after"
@@ -249,7 +249,7 @@ main {
         <div class="full-section" id="full-core">
 
           <!-- Divider -->
-          <div class="divider" style="margin-top:20px;margin-bottom:18px"></div>
+          <div class="divider full-divider"></div>
 
           <!-- Where / What (episode & near miss only) -->
           <div id="core-details" class="hidden">
@@ -258,7 +258,7 @@ main {
               <label class="field-label">Where</label>
               <div id="where-tags-picking" style="display:none">
                 <!-- Top-level quick picks (most common from data) -->
-                <div class="grid-auto" style="margin-bottom:8px">
+                <div class="grid-auto grid-auto--mb">
                   <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
                   <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
                   <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
@@ -400,7 +400,7 @@ main {
     </div><!-- /card 1 -->
 
     <!-- CONTEXT CARD — full mode only -->
-    <div class="full-section" id="full-ctx" style="margin-top:12px">
+    <div class="full-section full-section--mt" id="full-ctx">
       <div class="card" id="full-ctx-inner" style="display:none">
 
       <div id="ctx-gated" style="display:none">
@@ -528,7 +528,7 @@ main {
           </div>
           <div class="field">
             <label class="field-label">Effectiveness (1–5)</label>
-            <div class="grid-auto" style="grid-template-columns:repeat(5,1fr)">
+            <div class="grid-5">
               <div class="tag" onclick="selectTag('ctx','eff',this)">1</div>
               <div class="tag" onclick="selectTag('ctx','eff',this)">2</div>
               <div class="tag" onclick="selectTag('ctx','eff',this)">3</div>
@@ -538,13 +538,13 @@ main {
           </div>
         </div>
 
-        <div class="field" style="margin-bottom:0">
-          <label class="field-label">Reflection <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--mu)">(optional)</span></label>
+        <div class="field field--flush">
+          <label class="field-label">Reflection <span class="field-label__opt">(optional)</span></label>
           <textarea id="narrative-notes" placeholder="Write freely — what were you feeling, what was the situation? This stays private." rows="4"></textarea>
         </div>
 
-        <div class="field" style="margin-bottom:0">
-          <label class="field-label">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--mu)">(optional)</span></label>
+        <div class="field field--flush">
+          <label class="field-label">Notes <span class="field-label__opt">(optional)</span></label>
           <textarea id="ctx-notes" placeholder="Specific details or context…"></textarea>
         </div>
 
@@ -572,14 +572,14 @@ main {
       </div>
       <div class="success-title" id="success-title">Logged.</div>
       <div class="success-body"  id="success-body"></div>
-      <button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="resetForm()">Log another</button>
+      <button class="btn-primary success-actions" onclick="resetForm()">Log another</button>
       <div id="success-cta" style="display:none;margin-top:12px">
-        <a href="interventions.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sage);text-decoration:none;padding:10px 18px;border:1.5px solid var(--sage);border-radius:var(--pill)">
+        <a href="interventions.html" class="success-cta-link">
           Want to try a tool? Open interventions →
         </a>
       </div>
-      <div style="margin-top:14px">
-        <a href="tracker.html" id="edit-entry-link" style="font-size:13px;color:var(--mu);text-decoration:none;border-bottom:1px solid var(--bdr2)">Edit this entry in Patterns</a>
+      <div class="success-edit-wrap">
+        <a href="tracker.html" id="edit-entry-link" class="success-edit-link">Edit this entry in Patterns</a>
       </div>
     </div>
   </div>

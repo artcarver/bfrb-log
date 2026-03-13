@@ -12,7 +12,7 @@
 <meta name="theme-color" content="#F5F5F3" id="theme-color-meta">
 <title>Groundwork — Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="base.css">
 <style>
@@ -23,7 +23,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
 .controls{display:flex;gap:8px;align-items:center}
 
-.select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
+.select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:16px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
 .select-btn:hover{border-color:var(--bdr2)}
 [data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23AEAEB2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
 
@@ -34,9 +34,9 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
 .stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 14px;box-shadow:var(--s1);position:relative;overflow:hidden}
 
-.stat-val{font-size:32px;font-weight:300;color:var(--tx);line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums;font-family:'DM Sans',sans-serif}
-.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:6px;line-height:1.3;font-family:'DM Sans',sans-serif}
-.stat-sub{font-size:13px;color:var(--mu);margin-top:3px;font-family:'DM Sans',sans-serif}
+.stat-val{font-size:32px;font-weight:400;color:var(--tx);line-height:1.1;letter-spacing:-.01em;font-variant-numeric:tabular-nums;font-family:'Instrument Serif',serif}
+.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:6px;line-height:1.3;font-family:'Instrument Sans',sans-serif}
+.stat-sub{font-size:13px;color:var(--mu);margin-top:3px;font-family:'Instrument Sans',sans-serif}
 
 /* ── SECTION HEADERS ── */
 /* section-head / section-title / section-note — from base.css */
@@ -97,7 +97,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .mood-delta{display:flex;gap:12px;align-items:stretch}
 .mood-col{flex:1;text-align:center;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 10px}
 .mood-col-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
-.mood-col-val{font-size:28px;font-weight:300;letter-spacing:-.02em;color:var(--tx)}
+.mood-col-val{font-size:28px;font-weight:400;font-family:'Instrument Serif',serif;color:var(--tx)}
 .mood-col-sub{font-size:11px;color:var(--mu);margin-top:3px}
 .mood-arrow{display:flex;align-items:center;font-size:11px;color:var(--mu);padding-top:28px;flex-shrink:0}
 
@@ -107,7 +107,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 
 /* Filter tabs */
 .feed-tabs{display:flex;gap:2px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:3px}
-.feed-tab{border:none;background:none;padding:5px 14px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);white-space:nowrap}
+.feed-tab{border:none;background:none;padding:5px 14px;border-radius:var(--pill);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);white-space:nowrap}
 .feed-tab.active{background:var(--card);color:var(--tx);box-shadow:var(--s1)}
 
 .log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:0;margin-bottom:10px;box-shadow:var(--s1);overflow:hidden;display:grid;grid-template-columns:4px 1fr}
@@ -126,16 +126,16 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .log-badge.caught{background:rgba(74,120,180,.12);color:var(--ac)}
 
 .log-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.chip{font-size:13px;padding:4px 10px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap;font-family:'DM Sans',sans-serif}
+.chip{font-size:13px;padding:4px 10px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap;font-family:'Instrument Sans',sans-serif}
 .chip strong{color:var(--tx);font-weight:600;margin-right:4px}
 
 .log-notes{font-size:12px;color:var(--tx2);background:var(--bg);padding:10px 12px;border-radius:var(--rsm);border:1px solid var(--bdr);line-height:1.5;margin-bottom:10px}
 .log-actions{display:flex;gap:14px;padding-top:10px;border-top:1px solid var(--bdr)}
-.log-act-btn{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
+.log-act-btn{background:none;border:none;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
 .log-act-btn:hover{color:var(--tx)}
 .log-act-btn.del:hover{color:var(--ac)}
 
-.load-more-btn{width:100%;padding:12px;border:1.5px dashed var(--bdr);border-radius:var(--rsm);background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);margin-top:4px}
+.load-more-btn{width:100%;padding:12px;border:1.5px dashed var(--bdr);border-radius:var(--rsm);background:none;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);margin-top:4px}
 .load-more-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
 /* Discussed-in-session badge */
 .discussed-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--sage);background:var(--sagel);border:1px solid var(--sagem,rgba(74,140,120,.18));border-radius:var(--pill);padding:2px 8px;flex-shrink:0}
@@ -150,13 +150,13 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;pointer-events:none}
 .modal-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
 .modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:400px;box-shadow:var(--s2)}
-.modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:18px}
+.modal-title{font-family:'Inter',sans-serif;font-size:18px;color:var(--tx);margin-bottom:18px}
 .modal-field{margin-bottom:14px}
 .modal-label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
-.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
+.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
 .modal-input:focus,.modal-select:focus{border-color:var(--ac)}
 .modal-actions{display:flex;gap:10px;margin-top:20px}
-.modal-btn{flex:1;padding:11px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx)}
+.modal-btn{flex:1;padding:11px;border-radius:var(--pill);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx)}
 .modal-btn.primary{background:var(--ac);color:#fff;border-color:var(--ac)}
 .modal-btn.primary:hover{background:var(--ac-h)}
 </style>
@@ -171,8 +171,8 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
-    <div style="font-family:'Lora',serif;font-size:24px;margin-bottom:8px">Groundwork</div>
-    <div style="font-size:14px;color:var(--mu)">Sign in to view patterns.</div>
+    <div class="auth-card-title">Groundwork</div>
+    <div class="auth-sub">Sign in to view patterns.</div>
     <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
   </div>
 </div>
@@ -190,50 +190,43 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <option value="90">Last 90 days</option>
         <option value="all">All time</option>
       </select>
-      <div style="position:relative">
+      <div class="overflow-anchor">
         <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options" aria-haspopup="true" aria-expanded="false">⋯</button>
-        <div id="overflow-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);box-shadow:var(--s2);min-width:140px;z-index:200;overflow:hidden">
+        <div id="overflow-menu" class="overflow-menu">
           <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
-          <button style="display:block;width:100%;text-align:left;padding:11px 16px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr)" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
-          <button style="display:block;width:100%;text-align:left;padding:11px 16px;background:none;border:none;border-top:1px solid var(--bdr);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr)" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="exportCSV();toggleOverflow()">Export CSV</button>
+          <button class="overflow-menu-btn" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
+          <button class="overflow-menu-btn overflow-menu-btn--border" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="exportCSV();toggleOverflow()">Export CSV</button>
         </div>
       </div>
     </div>
   </div>
 
 
-  <div id="loading" style="text-align:center;color:var(--mu);padding:48px;font-size:14px">Loading your data…</div>
+  <div id="loading" class="loading-state">Loading your data…</div>
 
   <div id="dashboard" style="display:none">
 
     <!-- STATS -->
     <div class="stats-grid">
-      <div class="stat-card ac">
+      <div class="stat-card">
         <div class="stat-val" id="stat-total">—</div>
-        <div class="stat-lbl">Total entries</div>
-      </div>
-      <div class="stat-card sage">
-        <div class="stat-val" id="stat-resist">—</div>
-        <div class="stat-lbl">Managed</div>
-        <div class="stat-sub" id="stat-resist-sub"></div>
+        <div class="stat-lbl">Entries</div>
+        <div class="stat-sub" id="stat-entries-sub"></div>
       </div>
       <div class="stat-card">
         <div class="stat-val" id="stat-urge">—</div>
         <div class="stat-lbl">Avg urge before</div>
         <div class="stat-sub" id="stat-urge-after"></div>
       </div>
-      <div class="stat-card sage" id="stat-since-card">
-        <div class="stat-val" id="stat-since">—</div>
-        <div class="stat-lbl" id="stat-since-lbl">Days since episode</div>
-      </div>
-      <div class="stat-card sage" id="stat-streak-card">
+      <div class="stat-card" id="stat-streak-card">
         <div class="stat-val" id="stat-streak">—</div>
         <div class="stat-lbl">Resistance streak</div>
         <div class="stat-sub" id="stat-streak-sub">days in a row</div>
       </div>
-      <div class="stat-card" id="stat-interval-card">
-        <div class="stat-val" id="stat-interval">—</div>
-        <div class="stat-lbl">Avg days between episodes</div>
+      <div class="stat-card" id="stat-tool-card">
+        <div class="stat-val" id="stat-top-tool">—</div>
+        <div class="stat-lbl">Top intervention</div>
+        <div class="stat-sub" id="stat-top-tool-sub"></div>
       </div>
     </div>
 
@@ -258,7 +251,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
     <div class="chart-solo">
       <div class="chart-card">
         <div class="chart-label">Weekly episodes — trend over time</div>
-        <div class="chart-wrapper" style="height:150px"><canvas id="chart-weekly"></canvas></div>
+        <div class="chart-wrapper chart-h150"><canvas id="chart-weekly"></canvas></div>
       </div>
     </div>
 
@@ -270,11 +263,11 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
     <div class="chart-duo">
       <div class="chart-card">
         <div class="chart-label">Time of day</div>
-        <div class="chart-wrapper" style="height:160px"><canvas id="chart-time"></canvas></div>
+        <div class="chart-wrapper chart-h160"><canvas id="chart-time"></canvas></div>
       </div>
       <div class="chart-card">
         <div class="chart-label">Day of week</div>
-        <div class="chart-wrapper" style="height:160px"><canvas id="chart-dow"></canvas></div>
+        <div class="chart-wrapper chart-h160"><canvas id="chart-dow"></canvas></div>
       </div>
     </div>
     <div class="chart-solo">
@@ -355,7 +348,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
     </div>
 
     <!-- LOG -->
-    <div class="section-head" style="margin-top:36px">
+    <div class="section-head section-head--feed">
       <div class="section-title">Log history</div>
     </div>
     <div class="feed-header">
@@ -400,11 +393,11 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
     </div>
     <div class="modal-field">
       <label class="modal-label">Notes</label>
-      <textarea class="modal-input" id="edit-notes" rows="3" style="resize:vertical"></textarea>
+      <textarea class="modal-input modal-input--resize" id="edit-notes" rows="3"></textarea>
     </div>
     <div class="modal-field">
       <label class="modal-label">Reflection / Narrative</label>
-      <textarea class="modal-input" id="edit-narrative" rows="3" style="resize:vertical" placeholder="What were you feeling? What was the situation?"></textarea>
+      <textarea class="modal-input modal-input--resize" id="edit-narrative" rows="3" placeholder="What were you feeling? What was the situation?"></textarea>
     </div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeEdit()">Cancel</button>
@@ -515,7 +508,7 @@ window.loadData = async () => {
     console.error(e);
     const loadEl = document.getElementById('loading');
     if (e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))) {
-      loadEl.innerHTML = '<div style="font-size:14px;color:var(--warm,#c87941);line-height:1.55">Daily read limit reached.<br>Firestore free-tier quota resets at midnight Pacific. Try again tomorrow.</div>';
+      loadEl.innerHTML = '<div class="quota-error">Daily read limit reached.<br>Firestore free-tier quota resets at midnight Pacific. Try again tomorrow.</div>';
     } else {
       loadEl.textContent = 'Error loading data — check your connection and reload.';
     }
@@ -623,47 +616,31 @@ function processData(entries) {
   document.getElementById('stat-streak').textContent = resistStreak || '—';
   document.getElementById('stat-streak-sub').textContent = resistStreak === 1 ? 'day in a row' : 'days in a row';
   const streakCard = document.getElementById('stat-streak-card');
-  if (streakCard) streakCard.className = resistStreak >= 7 ? 'stat-card sage' : resistStreak >= 3 ? 'stat-card ac' : 'stat-card';
+  if (streakCard) streakCard.className = 'stat-card';
 
   // Stats
   document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-resist').textContent = Math.round((managed / total) * 100) + '%';
-  document.getElementById('stat-resist-sub').textContent = `${managed} of ${total} entries`;
+  document.getElementById('stat-entries-sub').textContent = `${Math.round((managed / total) * 100)}% managed`;
   document.getElementById('stat-urge').textContent = urgeCount ? (totalUrge / urgeCount).toFixed(1) : '—';
   document.getElementById('stat-urge-after').textContent = urgeAfterCount ? `↓ ${(urgeAfterTotal / urgeAfterCount).toFixed(1)} after` : '';
 
-  const lastEpisode = entries.filter(e => e.entry_type === 'did').map(e => {
-    return e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-  }).sort((a, b) => b - a)[0];
-
-  if (lastEpisode) {
-    const tod = new Date(); tod.setHours(0,0,0,0);
-    const episodeDay = new Date(lastEpisode); episodeDay.setHours(0,0,0,0);
-    const daysSince = Math.round((tod - episodeDay) / 86400000);
-    document.getElementById('stat-since').textContent = daysSince;
-    document.getElementById('stat-since-lbl').textContent = 'Days since episode';
-    document.getElementById('stat-since-card').className = 'stat-card sage';
-  } else {
-    document.getElementById('stat-since').textContent = '—';
-    document.getElementById('stat-since-lbl').textContent = 'Days since episode';
-    document.getElementById('stat-since-card').className = 'stat-card sage';
+  // Top intervention by outcome rate (min 2 uses)
+  const topTool = Object.entries(tools)
+    .filter(([k, v]) => v.attempts >= 2 && k)
+    .map(([k, v]) => [k, Math.round((v.wins / v.attempts) * 100), v.attempts])
+    .sort((a, b) => b[1] - a[1])[0];
+  const toolEl    = document.getElementById('stat-top-tool');
+  const toolSubEl = document.getElementById('stat-top-tool-sub');
+  if (topTool && toolEl) {
+    // Truncate long names for the stat card
+    const name = topTool[0].length > 14 ? topTool[0].slice(0, 13) + '…' : topTool[0];
+    toolEl.textContent    = name;
+    toolEl.style.fontSize = '18px';
+    if (toolSubEl) toolSubEl.textContent = `${topTool[1]}% outcome rate`;
+  } else if (toolEl) {
+    toolEl.textContent = '—';
+    if (toolSubEl) toolSubEl.textContent = 'no intervention data yet';
   }
-
-  // Avg days between episodes
-  const episodeDates = entries
-    .filter(e => e.entry_type === 'did')
-    .map(e => e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at))
-    .sort((a, b) => a - b);
-
-  let avgInterval = null;
-  if (episodeDates.length >= 2) {
-    const gaps = [];
-    for (let i = 1; i < episodeDates.length; i++) {
-      gaps.push((episodeDates[i] - episodeDates[i-1]) / 86400000);
-    }
-    avgInterval = (gaps.reduce((a, b) => a + b, 0) / gaps.length).toFixed(1);
-  }
-  document.getElementById('stat-interval').textContent = avgInterval !== null ? avgInterval + 'd' : '—';
 
   // Render charts
   renderOutcomesDonut(outcomes, total);
@@ -753,12 +730,12 @@ function renderStreakCalendar(entries) {
 
   const c = getC();
   container.innerHTML = `
-    <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px">${cells.join('')}</div>
-    <div style="display:flex;gap:12px;font-size:11px;color:var(--mu);flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oResisted};display:inline-block"></span>Resisted</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oNear};display:inline-block"></span>Near miss</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.ac};display:inline-block"></span>Caught mid-act</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oEpisode};display:inline-block"></span>Episode</span>
+    <div class="streak-cells">${cells.join('')}</div>
+    <div class="streak-legend">
+      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.oResisted}"></span>Resisted</span>
+      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.oNear}"></span>Near miss</span>
+      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.ac}"></span>Caught mid-act</span>
+      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.oEpisode}"></span>Episode</span>
     </div>
   `;
 }
@@ -827,7 +804,7 @@ function renderBarRows(containerId, data, color, limit) {
   const sorted = Object.entries(data).sort((a,b) => b[1]-a[1]).slice(0, limit || 8);
 
   if (sorted.length === 0) {
-    container.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No data logged yet</div>';
+    container.innerHTML = '<div class="no-data-msg">No data logged yet</div>';
     return;
   }
 
@@ -848,7 +825,7 @@ function renderMoodDelta(moodBefore, moodAfter, moodCount, urgeCount, urgeTotal,
   const hasUrge = urgeCount > 0 && urgeAfterCount > 0;
 
   if (!hasMood && !hasUrge) {
-    container.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:8px 0">Log mood before/after to see emotional impact patterns.</div>';
+    container.innerHTML = '<div class="no-data-msg--sm">Log mood before/after to see emotional impact patterns.</div>';
     return;
   }
 
@@ -919,7 +896,7 @@ function renderAreaMap(areas, c) {
 
 function renderToolBars(tools) {
   const c = getC();
-  const noDataMsg = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No intervention data yet.</div>';
+  const noDataMsg = '<div class="no-data-msg">No intervention data yet.</div>';
 
   // — Outcome rate chart —
   const outcomeSorted = Object.entries(tools)
@@ -949,7 +926,7 @@ function renderToolBars(tools) {
   const ratedContainer = document.getElementById('bar-tools-rated');
   if (!ratedContainer) return;
   if (ratedSorted.length === 0) {
-    ratedContainer.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No user ratings yet. Rate tools 1–5 when logging.</div>';
+    ratedContainer.innerHTML = '<div class="no-data-msg">No user ratings yet. Rate tools 1–5 when logging.</div>';
   } else {
     ratedContainer.innerHTML = ratedSorted.map(([label, avg, count]) => {
       const pct = Math.round((avg / 5) * 100);
@@ -1106,7 +1083,7 @@ function renderFeed() {
         <div class="log-card-body">
           <div class="log-top">
             <div class="log-date">${dateStr}</div>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <div class="log-top-right">
               ${isDiscussed ? '<span class="discussed-badge">✓ Discussed</span>' : ''}
               <div class="log-badge ${type}">${labels[type] || type}</div>
             </div>
@@ -1137,7 +1114,7 @@ window.deleteLog = (id) => {
   if (!card) return;
   const actions = card.querySelector('.log-actions');
   actions.innerHTML = `
-    <span style="font-size:12px;color:var(--tx2)">Delete this entry?</span>
+    <span class="delete-confirm-text">Delete this entry?</span>
     <button class="log-act-btn del" onclick="confirmDelete('${id}')">Yes</button>
     <button class="log-act-btn" onclick="renderFeed()">No</button>
   `;
@@ -1285,25 +1262,25 @@ async function loadDailyStateCorrelation(entries) {
   card.innerHTML = `
     <div class="chart-card">
       <div class="chart-label">Baseline correlation — sleep &amp; stress vs. episodes</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
-        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;text-align:center">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--o-episode);margin-bottom:8px">Episode days (${epDays.length})</div>
-          <div style="display:flex;gap:10px;justify-content:center">
-            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${epSleep}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Sleep /5</div></div>
-            <div style="width:1px;background:var(--bdr)"></div>
-            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${epStress}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Stress /10</div></div>
+      <div class="corr-grid">
+        <div class="corr-col">
+          <div class="corr-label corr-label--ep">Episode days (${epDays.length})</div>
+          <div class="corr-vals">
+            <div class="corr-val-block"><div class="corr-num">${epSleep}</div><div class="corr-num-lbl">Sleep /5</div></div>
+            <div class="corr-divider"></div>
+            <div class="corr-val-block"><div class="corr-num">${epStress}</div><div class="corr-num-lbl">Stress /10</div></div>
           </div>
         </div>
-        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;text-align:center">
-          <div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--o-resisted);margin-bottom:8px">Managed days (${nonEpDays.length})</div>
-          <div style="display:flex;gap:10px;justify-content:center">
-            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${neSleep}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Sleep /5</div></div>
-            <div style="width:1px;background:var(--bdr)"></div>
-            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${neStress}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Stress /10</div></div>
+        <div class="corr-col">
+          <div class="corr-label corr-label--mgd">Managed days (${nonEpDays.length})</div>
+          <div class="corr-vals">
+            <div class="corr-val-block"><div class="corr-num">${neSleep}</div><div class="corr-num-lbl">Sleep /5</div></div>
+            <div class="corr-divider"></div>
+            <div class="corr-val-block"><div class="corr-num">${neStress}</div><div class="corr-num-lbl">Stress /10</div></div>
           </div>
         </div>
       </div>
-      <div style="font-size:11px;color:var(--mu);margin-top:10px">Requires daily baseline logs. Log via the 📋 button on the Log page.</div>
+      <div class="corr-hint">Requires daily baseline logs. Log via the 📋 button on the Log page.</div>
     </div>
   `;
   // Insert after the interventions chart-solo
@@ -1347,7 +1324,7 @@ new MutationObserver(() => {
     const el = document.getElementById('loading');
     if (!el) return;
     el.innerHTML = `
-      <div style="max-width:900px;margin:0 auto;padding:0 14px">
+      <div class="skeleton-inner">
         <div class="skeleton-stat-grid">
           ${Array(4).fill(`<div class="skeleton-stat"><div class="sk-line" style="height:30px;width:50%;margin-bottom:8px"></div><div class="sk-line sk-short"></div></div>`).join('')}
         </div>
@@ -1368,30 +1345,14 @@ new MutationObserver(() => {
       </div>
       <div class="empty-title">Nothing logged in this period</div>
       <div class="empty-body">Even one resistance or near miss tells you something useful — the picture builds quickly.</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-        <a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-block;min-width:140px;text-align:center">Log an entry</a>
-        <button class="btn-ghost" onclick="document.getElementById('import-file-empty').click()" style="min-width:120px">Import CSV</button>
+      <div class="empty-btn-row">
+        <a href="index.html" class="btn-primary btn-primary--link">Log an entry</a>
+        <button class="btn-ghost" onclick="document.getElementById('import-file-empty').click()">Import CSV</button>
       </div>
       <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">`;
   }
 
-  /* ── 3. DAYS-SINCE CONDITIONAL COLOR ────────────────────────────────── */
-  function patchDaysSince() {
-    const observer = new MutationObserver(() => {
-      const card = document.getElementById('stat-since-card');
-      const val  = document.getElementById('stat-since');
-      if (!card || !val) return;
-      const days = parseInt(val.textContent, 10);
-      if (isNaN(days)) return;
-      if (days === 0)      card.className = 'stat-card ac';
-      else if (days < 7)   card.className = 'stat-card warm';
-      else                 card.className = 'stat-card sage';
-    });
-    const el = document.getElementById('stat-since');
-    if (el) observer.observe(el, { childList: true, characterData: true, subtree: true });
-  }
-
-  /* ── 4. RESPONSIVE HEATMAP ───────────────────────────────────────────── */
+  /* ── RESPONSIVE HEATMAP ───────────────────────────────────────────── */
   const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const HOUR_LABELS = ['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
 
@@ -1490,7 +1451,6 @@ new MutationObserver(() => {
   function init() {
     injectSkeleton();
     patchEmptyState();
-    patchDaysSince();
   }
 
   document.readyState === 'loading'
