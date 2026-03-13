@@ -9,7 +9,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Groundwork">
     <link rel="apple-touch-icon" href="icon-192.png">
-<title>Groundwork - Context</title>
+<title>Groundwork — Profile</title>
+<meta name="theme-color" content="#F5F5F3" id="theme-color-meta">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
@@ -36,13 +37,29 @@ main{max-width:720px;margin:0 auto;padding:20px 16px}
 .card-desc{font-size:14px;color:var(--mu);margin-top:4px}
 
 .scamp-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px}
+@media(max-width:599px){.scamp-grid{grid-template-columns:1fr}}
 .scamp-block{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px}
 .scamp-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .scamp-label span.badge{background:var(--sur);padding:2px 6px;border-radius:var(--rsm);font-size:10px}
 .scamp-save-badge{font-size:11px;color:var(--sage);font-weight:600;opacity:0;transition:opacity .3s ease;margin-left:auto;padding-left:8px}
-.scamp-row{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:16px;display:flex;flex-direction:column}
+/* scamp-row has NO border — only scamp-block has one, preventing double borders */
+.scamp-row{display:flex;flex-direction:column}
 textarea.scamp-input{width:100%;background:transparent;border:none;resize:vertical;min-height:80px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);line-height:1.5;outline:none;padding:0}
 textarea.scamp-input::placeholder{color:var(--bdr2)}
+textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
+
+/* Onboarding banner — first-time use */
+.onboarding-banner{
+  display:none;
+  align-items:flex-start;gap:14px;
+  background:var(--acl);border:1.5px solid var(--ac);border-radius:var(--r);
+  padding:16px 18px;margin-bottom:20px;
+}
+.onboarding-banner-body{flex:1}
+.onboarding-banner-title{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.onboarding-banner-sub{font-size:12px;color:var(--tx2);line-height:1.5}
+.onboarding-banner-dismiss{background:none;border:none;color:var(--mu);font-size:20px;cursor:pointer;line-height:1;padding:0 4px;flex-shrink:0;transition:color .15s}
+.onboarding-banner-dismiss:hover{color:var(--tx)}
 
 .rule-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
 .rule-item{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:12px 16px;transition:var(--tr);min-height:48px}
@@ -121,8 +138,8 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
-    <div style="font-family:'Lora',serif;font-size:24px;margin-bottom:8px">Groundwork</div>
-    <div style="font-size:14px;color:var(--mu)">Sign in to continue.</div>
+    <div class="auth-card-title">Groundwork</div>
+    <div class="auth-card-sub">Sign in to continue.</div>
     <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
   </div>
 </div>
@@ -146,6 +163,16 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
   </div>
 
   <div id="tab-personal" class="tab-pane active">
+
+    <!-- First-time onboarding banner — shown if no SCAMP data exists -->
+    <div class="onboarding-banner" id="onboarding-banner">
+      <div class="onboarding-banner-body">
+        <div class="onboarding-banner-title">New here? Start with "How it works"</div>
+        <div class="onboarding-banner-sub">The BFRB neuroscience and tool rationale tab explains the framework behind this app — worth reading before your first log entry.</div>
+        <button onclick="switchTab('framework', document.querySelectorAll('.tab-btn')[1]);dismissOnboarding()" style="margin-top:10px;background:var(--ac);color:#fff;border:none;border-radius:var(--pill);padding:8px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer">Read the framework →</button>
+      </div>
+      <button class="onboarding-banner-dismiss" onclick="dismissOnboarding()" aria-label="Dismiss">×</button>
+    </div>
     <div class="card">
       <div class="card-header">
         <div class="card-title">SCAMP Baseline Profile</div>
@@ -328,7 +355,7 @@ textarea.scamp-input::placeholder{color:var(--bdr2)}
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, query, orderBy, deleteDoc, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -348,14 +375,28 @@ const provider = new GoogleAuthProvider();
 window._uid = null;
 let currentRules = [];
 
-window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
+const isStandalone =
+  window.navigator.standalone === true ||
+  window.matchMedia('(display-mode: standalone)').matches;
+
+window.signInWithGoogle = async () => {
+  try {
+    isStandalone
+      ? await signInWithRedirect(auth, provider)
+      : await signInWithPopup(auth, provider);
+  } catch(e) { console.error(e); }
+};
 window.signOut = async () => { await fbSignOut(auth); };
+getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
 
 onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;
   document.getElementById('auth-screen').classList.toggle('on', !user);
   document.getElementById('app').classList.toggle('on', !!user);
-  if (user) loadContextData();
+  if (user) {
+    showScampSkeleton();
+    loadContextData();
+  }
 });
 
 window.switchTab = (tabId, btn) => {
@@ -365,6 +406,41 @@ window.switchTab = (tabId, btn) => {
   document.getElementById('tab-' + tabId).classList.add('active');
 };
 
+// Show skeleton placeholders while SCAMP data loads — prevents overwrite on late resolve
+function showScampSkeleton() {
+  const ids = ['scamp-s','scamp-c','scamp-a','scamp-m','scamp-p'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.disabled = true; el.placeholder = 'Loading…'; }
+  });
+}
+function hideSkeleton() {
+  const ids = ['scamp-s','scamp-c','scamp-a','scamp-m','scamp-p'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.disabled = false; }
+  });
+  // Restore original placeholders
+  const placeholders = {
+    's': 'e.g., Seeking irregular textures...',
+    'c': 'e.g., Perfectionism, permission giving...',
+    'a': 'e.g., Executive fatigue, anxiety...',
+    'm': 'e.g., Resting chin on left hand...',
+    'p': 'e.g., Bathroom mirror at night...'
+  };
+  Object.entries(placeholders).forEach(([k, v]) => {
+    const el = document.getElementById('scamp-' + k);
+    if (el) el.placeholder = v;
+  });
+}
+
+// Show first-time onboarding banner if no SCAMP data yet
+function maybeShowOnboarding() {
+  if (localStorage.getItem('gw-onboarding-seen')) return;
+  const banner = document.getElementById('onboarding-banner');
+  if (banner) banner.style.display = 'flex';
+}
+
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -373,24 +449,37 @@ function showToast(msg) {
 }
 
 async function loadContextData() {
-  const baselineSnap = await getDoc(doc(db, 'users', window._uid, 'context', 'baseline'));
-  if (baselineSnap.exists()) {
-    const data = baselineSnap.data();
-    document.getElementById('scamp-s').value = data.sensory || '';
-    document.getElementById('scamp-c').value = data.cognitive || '';
-    document.getElementById('scamp-a').value = data.affective || '';
-    document.getElementById('scamp-m').value = data.motor || '';
-    document.getElementById('scamp-p').value = data.place || '';
-  }
+  try {
+    const baselineSnap = await getDoc(doc(db, 'users', window._uid, 'context', 'baseline'));
+    if (baselineSnap.exists()) {
+      const data = baselineSnap.data();
+      document.getElementById('scamp-s').value = data.sensory || '';
+      document.getElementById('scamp-c').value = data.cognitive || '';
+      document.getElementById('scamp-a').value = data.affective || '';
+      document.getElementById('scamp-m').value = data.motor || '';
+      document.getElementById('scamp-p').value = data.place || '';
+    } else {
+      maybeShowOnboarding();
+    }
+  } catch(e) { console.error(e); }
+  hideSkeleton();
 
-  const rulesSnap = await getDocs(collection(db, 'users', window._uid, 'rules'));
-  currentRules = [];
-  rulesSnap.forEach(d => currentRules.push({ id: d.id, ...d.data() }));
-  currentRules.sort((a,b) => b.created_at - a.created_at);
-  renderRules();
+  try {
+    const rulesSnap = await getDocs(collection(db, 'users', window._uid, 'rules'));
+    currentRules = [];
+    rulesSnap.forEach(d => currentRules.push({ id: d.id, ...d.data() }));
+    currentRules.sort((a,b) => b.created_at - a.created_at);
+    renderRules();
+  } catch(e) { console.error(e); }
 
   loadReflections();
 }
+
+window.dismissOnboarding = () => {
+  localStorage.setItem('gw-onboarding-seen', '1');
+  const banner = document.getElementById('onboarding-banner');
+  if (banner) banner.style.display = 'none';
+};
 
 window.saveBaseline = async (field, value, el) => {
   if (!window._uid) return;

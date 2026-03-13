@@ -44,6 +44,9 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 /* ── CHART LAYOUT ── */
 .chart-duo{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
 @media(min-width:600px){.chart-duo{grid-template-columns:1fr 1fr}}
+/* .chart-grid — 2-col layout for Context patterns section */
+.chart-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
+@media(min-width:600px){.chart-grid{grid-template-columns:1fr 1fr}}
 .chart-solo{margin-bottom:16px}
 .chart-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1);position:relative}
 .chart-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
@@ -182,9 +185,14 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <option value="90">Last 90 days</option>
         <option value="all">All time</option>
       </select>
-      <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
-      <button class="action-btn" onclick="document.getElementById('import-file').click()">Import</button>
-      <button class="action-btn" onclick="exportCSV()">Export</button>
+      <div style="position:relative">
+        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options" aria-haspopup="true" aria-expanded="false">⋯</button>
+        <div id="overflow-menu" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);box-shadow:var(--s2);min-width:140px;z-index:200;overflow:hidden">
+          <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
+          <button style="display:block;width:100%;text-align:left;padding:11px 16px;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr)" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
+          <button style="display:block;width:100%;text-align:left;padding:11px 16px;background:none;border:none;border-top:1px solid var(--bdr);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--tx2);cursor:pointer;transition:var(--tr)" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="exportCSV();toggleOverflow()">Export CSV</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -367,6 +375,10 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
       <label class="modal-label">Notes</label>
       <textarea class="modal-input" id="edit-notes" rows="3" style="resize:vertical"></textarea>
     </div>
+    <div class="modal-field">
+      <label class="modal-label">Reflection / Narrative</label>
+      <textarea class="modal-input" id="edit-narrative" rows="3" style="resize:vertical" placeholder="What were you feeling? What was the situation?"></textarea>
+    </div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeEdit()">Cancel</button>
       <button class="modal-btn primary" id="edit-save-btn" onclick="saveEdit()">Save</button>
@@ -476,6 +488,9 @@ window.loadData = async () => {
       return;
     }
 
+    // Load daily state data for correlation (non-blocking)
+    loadDailyStateCorrelation(entries).catch(() => {});
+
     processData(entries);
     feedFilter = 'all';
     feedPage = 0;
@@ -506,7 +521,7 @@ function processData(entries) {
     if (e.urge_before) { totalUrge += parseInt(e.urge_before); urgeCount++; }
     if (e.urge_after) { urgeAfterTotal += parseInt(e.urge_after); urgeAfterCount++; }
     if (e.mood_before) { totalMoodBefore += parseInt(e.mood_before); moodCount++; }
-    if (e.mood_after) { totalMoodAfter += parseInt(e.mood_after); moodCount > 0 && moodCount--; moodCount++; }
+    if (e.mood_after)  { totalMoodAfter  += parseInt(e.mood_after); }
 
     if (e.created_at) {
       const d = e.created_at.toDate ? e.created_at.toDate() : new Date(e.created_at);
@@ -976,6 +991,7 @@ window.editLog = (id) => {
   document.getElementById('edit-outcome').value = entry.entry_type || 'did';
   document.getElementById('edit-urge').value = entry.urge_before || 5;
   document.getElementById('edit-notes').value = entry.notes || '';
+  document.getElementById('edit-narrative').value = entry.narrative_notes || '';
   document.getElementById('edit-modal').classList.add('on');
 };
 window.closeEdit = () => { editingId = null; document.getElementById('edit-modal').classList.remove('on'); };
@@ -983,7 +999,12 @@ window.saveEdit = async () => {
   if (!editingId) return;
   const btn = document.getElementById('edit-save-btn');
   btn.disabled = true; btn.textContent = 'Saving…';
-  const updates = { entry_type: document.getElementById('edit-outcome').value, urge_before: parseInt(document.getElementById('edit-urge').value), notes: document.getElementById('edit-notes').value.trim() };
+  const updates = {
+    entry_type: document.getElementById('edit-outcome').value,
+    urge_before: parseInt(document.getElementById('edit-urge').value),
+    notes: document.getElementById('edit-notes').value.trim(),
+    narrative_notes: document.getElementById('edit-narrative').value.trim()
+  };
   try {
     await updateDoc(doc(db, 'users', window._uid, 'entries', editingId), updates);
     const idx = window._allEntries.findIndex(e => e.id === editingId);
@@ -1038,6 +1059,79 @@ window.exportCSV = () => {
   a.click();
 };
 
+// ── DAILY STATE CORRELATION ──────────────────────────────────────
+async function loadDailyStateCorrelation(entries) {
+  const { collection: col2, getDocs: gd2, query: q2, orderBy: ob2 } = await import(
+    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'
+  );
+  const dsSnap = await gd2(q2(col2(db, 'users', window._uid, 'dailystate'), ob2('date')));
+  if (dsSnap.empty) return;
+
+  const dsMap = {};
+  dsSnap.forEach(d => { dsMap[d.id] = d.data(); });
+
+  // For each entry, find its date
+  const episodeDays = new Set();
+  const nonEpisodeDays = new Set();
+  entries.forEach(e => {
+    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    const key = d.toISOString().slice(0,10);
+    if (e.entry_type === 'did') episodeDays.add(key);
+    else nonEpisodeDays.add(key);
+  });
+
+  // Filter: days with daily state data
+  const epDays   = [...episodeDays].filter(k => dsMap[k]);
+  const nonEpDays = [...nonEpisodeDays].filter(k => dsMap[k] && !episodeDays.has(k));
+
+  if (epDays.length === 0 && nonEpDays.length === 0) return;
+
+  const avg = (arr, fn) => arr.length ? (arr.reduce((s,k) => s + (fn(dsMap[k]) || 0), 0) / arr.length).toFixed(1) : '—';
+  const epSleep   = avg(epDays,    d => d.sleep);
+  const epStress  = avg(epDays,    d => d.stress);
+  const neSleep   = avg(nonEpDays, d => d.sleep);
+  const neStress  = avg(nonEpDays, d => d.stress);
+
+  // Inject correlation card after the interventions section
+  const anchor = document.querySelector('.section-head .section-title');
+  let target = null;
+  document.querySelectorAll('.section-head').forEach(el => {
+    if (el.querySelector('.section-title')?.textContent === 'Interventions') target = el;
+  });
+  if (!target) return;
+
+  const card = document.createElement('div');
+  card.className = 'chart-solo';
+  card.id = 'ds-correlation-card';
+  card.innerHTML = `
+    <div class="chart-card">
+      <div class="chart-label">Baseline correlation — sleep &amp; stress vs. episodes</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;text-align:center">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--o-episode);margin-bottom:8px">Episode days (${epDays.length})</div>
+          <div style="display:flex;gap:10px;justify-content:center">
+            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${epSleep}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Sleep /5</div></div>
+            <div style="width:1px;background:var(--bdr)"></div>
+            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${epStress}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Stress /10</div></div>
+          </div>
+        </div>
+        <div style="background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:14px;text-align:center">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--o-resisted);margin-bottom:8px">Managed days (${nonEpDays.length})</div>
+          <div style="display:flex;gap:10px;justify-content:center">
+            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${neSleep}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Sleep /5</div></div>
+            <div style="width:1px;background:var(--bdr)"></div>
+            <div><div style="font-size:22px;font-weight:300;color:var(--tx)">${neStress}</div><div style="font-size:10px;color:var(--mu);margin-top:2px">Stress /10</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--mu);margin-top:10px">Requires daily baseline logs. Log via the 📋 button on the Log page.</div>
+    </div>
+  `;
+  // Insert after the interventions chart-solo
+  const intSection = target.nextElementSibling;
+  if (intSection) intSection.after(card);
+}
+
 // Theme observer — re-renders charts and syncs status-bar colour
 new MutationObserver(() => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -1050,6 +1144,24 @@ new MutationObserver(() => {
 <script src="nav.js"></script>
 <script>
 (function () {
+
+  /* ── OVERFLOW MENU ───────────────────────────────────────────────────── */
+  window.toggleOverflow = function () {
+    const menu = document.getElementById('overflow-menu');
+    const btn  = document.getElementById('overflow-btn');
+    if (!menu) return;
+    const isOpen = menu.style.display !== 'none';
+    menu.style.display = isOpen ? 'none' : 'block';
+    if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
+  };
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('overflow-menu');
+    const btn  = document.getElementById('overflow-btn');
+    if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+      menu.style.display = 'none';
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   /* ── 1. LOADING SKELETON ─────────────────────────────────────────────── */
   function injectSkeleton() {
