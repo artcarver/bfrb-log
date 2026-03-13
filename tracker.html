@@ -9,161 +9,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#F5F5F3" id="theme-color-meta">
+<meta name="theme-color" content="#F2EEE8" id="theme-color-meta">
 <title>Groundwork — Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="base.css">
-<style>
-/* ── PAGE LAYOUT ── */
-main{max-width:900px;margin:0 auto;padding:20px 16px}
-
-/* ── HEADER ── */
-.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-.controls{display:flex;gap:8px;align-items:center}
-
-.select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'Instrument Sans',sans-serif;font-size:16px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
-.select-btn:hover{border-color:var(--bdr2)}
-[data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23AEAEB2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
-
-/* .action-btn — from base.css */
-
-
-/* ── STATS ── */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
-.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 14px;box-shadow:var(--s1);position:relative;overflow:hidden}
-
-.stat-val{font-size:32px;font-weight:400;color:var(--tx);line-height:1.1;letter-spacing:-.01em;font-variant-numeric:tabular-nums;font-family:'Instrument Serif',serif}
-.stat-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-top:6px;line-height:1.3;font-family:'Instrument Sans',sans-serif}
-.stat-sub{font-size:13px;color:var(--mu);margin-top:3px;font-family:'Instrument Sans',sans-serif}
-
-/* ── SECTION HEADERS ── */
-/* section-head / section-title / section-note — from base.css */
-
-/* ── CHART LAYOUT ── */
-.chart-duo{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
-@media(min-width:600px){.chart-duo{grid-template-columns:1fr 1fr}}
-/* .chart-grid — 2-col layout for Context patterns section */
-.chart-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
-@media(min-width:600px){.chart-grid{grid-template-columns:1fr 1fr}}
-.chart-solo{margin-bottom:16px}
-.chart-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1);position:relative}
-.chart-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
-.chart-wrapper{position:relative;width:100%}
-
-/* Outcomes donut legend */
-.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
-.donut-canvas-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
-.donut-legend{display:flex;flex-direction:column;gap:8px;width:100%}
-@media(min-width:400px){.donut-wrap{flex-direction:row;align-items:center}.donut-legend{width:auto;flex:1}}
-.legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)}
-.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.legend-count{font-weight:600;color:var(--tx);margin-left:auto;font-variant-numeric:tabular-nums}
-.legend-pct{font-size:11px;color:var(--mu);min-width:32px;text-align:right}
-
-/* Streak calendar */
-.streak-wrap{display:flex;flex-direction:column;gap:10px}
-.streak-row{display:flex;gap:4px;align-items:center}
-.streak-label{font-size:10px;color:var(--mu);width:28px;flex-shrink:0;text-align:right}
-.streak-days{display:flex;gap:3px;flex-wrap:wrap}
-.streak-cell{width:12px;height:12px;border-radius:3px;background:var(--bdr);flex-shrink:0;cursor:default;transition:opacity .15s}
-.streak-cell:hover{opacity:.75}
-.streak-cell.episode{background:var(--o-episode)}
-.streak-cell.resisted{background:var(--o-resisted)}
-.streak-cell.near-miss{background:var(--o-near)}
-.streak-cell.caught{background:var(--ac)}
-.streak-cell.empty{background:var(--bdr);opacity:.4}
-
-/* Hourly heatmap */
-.heatmap-grid{display:grid;grid-template-columns:28px repeat(24,1fr);gap:2px}
-.hm-cell{height:18px;border-radius:2px;background:var(--bdr);transition:opacity .15s}
-.hm-cell:hover{opacity:.7}
-.hm-label{font-size:9px;color:var(--mu);display:flex;align-items:center;justify-content:flex-end;padding-right:4px}
-.hm-hour{font-size:8px;color:var(--mu);text-align:center;padding-top:2px;grid-row:1}
-.hm-legend{display:flex;gap:3px;align-items:center;margin-top:6px;justify-content:flex-end}
-.hm-legend-cell{width:10px;height:10px;border-radius:2px}
-.hm-legend-label{font-size:10px;color:var(--mu);margin:0 4px}
-
-/* Horizontal bar rows */
-.bar-rows{display:flex;flex-direction:column;gap:10px}
-.bar-row{display:grid;grid-template-columns:110px 1fr 28px;gap:8px;align-items:center}
-.bar-row-label{font-size:12px;color:var(--tx2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar-track{height:8px;background:var(--bdr);border-radius:var(--pill);overflow:hidden}
-.bar-fill{height:100%;border-radius:var(--pill);transition:width .5s cubic-bezier(.25,.46,.45,.94)}
-.bar-count{font-size:12px;color:var(--mu);text-align:left;font-variant-numeric:tabular-nums}
-
-/* Mood delta */
-.mood-delta{display:flex;gap:12px;align-items:stretch}
-.mood-col{flex:1;text-align:center;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 10px}
-.mood-col-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
-.mood-col-val{font-size:28px;font-weight:400;font-family:'Instrument Serif',serif;color:var(--tx)}
-.mood-col-sub{font-size:11px;color:var(--mu);margin-top:3px}
-.mood-arrow{display:flex;align-items:center;font-size:11px;color:var(--mu);padding-top:28px;flex-shrink:0}
-
-/* ── LOG FEED ── */
-.feed-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-.feed-right{display:flex;gap:8px;align-items:center}
-
-/* Filter tabs */
-.feed-tabs{display:flex;gap:2px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:3px}
-.feed-tab{border:none;background:none;padding:5px 14px;border-radius:var(--pill);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);white-space:nowrap}
-.feed-tab.active{background:var(--card);color:var(--tx);box-shadow:var(--s1)}
-
-.log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:0;margin-bottom:10px;box-shadow:var(--s1);overflow:hidden;display:grid;grid-template-columns:4px 1fr}
-.log-card-accent{background:var(--bdr)}
-.log-card-accent.did{background:var(--o-episode)}
-.log-card-accent.resisted{background:var(--o-resisted)}
-.log-card-accent.near_miss{background:var(--o-near)}
-.log-card-accent.caught{background:var(--ac)}
-.log-card-body{padding:14px 16px}
-.log-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
-.log-date{font-size:13px;font-weight:500;color:var(--tx2)}
-.log-badge{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--rsm);flex-shrink:0}
-.log-badge.did{background:rgba(91,107,138,.12);color:var(--o-episode)}
-.log-badge.resisted{background:rgba(58,158,111,.12);color:var(--o-resisted)}
-.log-badge.near_miss{background:rgba(212,132,26,.12);color:var(--o-near)}
-.log-badge.caught{background:rgba(74,120,180,.12);color:var(--ac)}
-
-.log-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.chip{font-size:13px;padding:4px 10px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap;font-family:'Instrument Sans',sans-serif}
-.chip strong{color:var(--tx);font-weight:600;margin-right:4px}
-
-.log-notes{font-size:12px;color:var(--tx2);background:var(--bg);padding:10px 12px;border-radius:var(--rsm);border:1px solid var(--bdr);line-height:1.5;margin-bottom:10px}
-.log-actions{display:flex;gap:14px;padding-top:10px;border-top:1px solid var(--bdr)}
-.log-act-btn{background:none;border:none;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
-.log-act-btn:hover{color:var(--tx)}
-.log-act-btn.del:hover{color:var(--ac)}
-
-.load-more-btn{width:100%;padding:12px;border:1.5px dashed var(--bdr);border-radius:var(--rsm);background:none;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);margin-top:4px}
-.load-more-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
-/* Discussed-in-session badge */
-.discussed-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--sage);background:var(--sagel);border:1px solid var(--sagem,rgba(74,140,120,.18));border-radius:var(--pill);padding:2px 8px;flex-shrink:0}
-
-/* ── EMPTY + LOADING ── */
-/* .empty-state — from base.css */
-
-/* ── TOAST ── */
-/* .toast — from base.css */
-
-/* ── EDIT MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;pointer-events:none}
-.modal-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
-.modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:400px;box-shadow:var(--s2)}
-.modal-title{font-family:'Inter',sans-serif;font-size:18px;color:var(--tx);margin-bottom:18px}
-.modal-field{margin-bottom:14px}
-.modal-label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
-.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'Instrument Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
-.modal-input:focus,.modal-select:focus{border-color:var(--ac)}
-.modal-actions{display:flex;gap:10px;margin-top:20px}
-.modal-btn{flex:1;padding:11px;border-radius:var(--pill);font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx)}
-.modal-btn.primary{background:var(--ac);color:#fff;border-color:var(--ac)}
-.modal-btn.primary:hover{background:var(--ac-h)}
-</style>
 <script>
 (function(){
   const stored=localStorage.getItem('gw-theme');
-  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#161618');}
+  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#181C20');}
 })();
 </script>
 </head>
@@ -180,7 +35,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 <div id="gw-nav"></div>
 
 <div id="app">
-<main>
+<main class="tracker-main">
   <div class="header-row">
     <div class="page-title">Patterns</div>
     <div class="controls">
@@ -191,7 +46,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <option value="all">All time</option>
       </select>
       <div class="overflow-anchor">
-        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options" aria-haspopup="true" aria-expanded="false">⋯</button>
+        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options" aria-haspopup="true" aria-expanded="false">Import / Export</button>
         <div id="overflow-menu" class="overflow-menu">
           <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
           <button class="overflow-menu-btn" onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background=''" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
@@ -383,13 +238,22 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
       <label class="modal-label">Outcome</label>
       <select class="modal-select" id="edit-outcome">
         <option value="did">Episode</option>
+        <option value="caught">Caught mid-act</option>
         <option value="near_miss">Near Miss</option>
         <option value="resisted">Resisted</option>
       </select>
     </div>
     <div class="modal-field">
-      <label class="modal-label">Urge level (1–10)</label>
+      <label class="modal-label">Urge before (1–10)</label>
       <input type="number" class="modal-input" id="edit-urge" min="1" max="10">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Urge after (1–10)</label>
+      <input type="number" class="modal-input" id="edit-urge-after" min="1" max="10">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Pre-feeling</label>
+      <input type="text" class="modal-input" id="edit-pre-feeling" placeholder="e.g., Anxious / stressed">
     </div>
     <div class="modal-field">
       <label class="modal-label">Notes</label>
@@ -435,10 +299,20 @@ const FEED_PAGE_SIZE = 10;
 let chartInstances = {};
 let editingId = null;
 
+const _isStandalone = window.navigator.standalone === true ||
+  window.matchMedia('(display-mode: standalone)').matches;
+
+getRedirectResult(auth).catch(() => {});
+
 window.signInWithGoogle = async () => {
   try {
-    await signInWithPopup(auth, provider);
-  } catch(e) { console.error('Sign in error:', e); }
+    if (_isStandalone) { await signInWithRedirect(auth, provider); }
+    else { await signInWithPopup(auth, provider); }
+  } catch(e) {
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
+      try { await signInWithRedirect(auth, provider); } catch(e2) { console.error('Redirect sign in error:', e2); }
+    } else { console.error('Sign in error:', e); }
+  }
 };
 window.signOut = async () => { await fbSignOut(auth); };
 
@@ -528,7 +402,7 @@ function processData(entries) {
   const weeklyEpisodes = {};
 
   // Build hourly data
-  for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0 };
+  for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0, caught: 0 };
 
   entries.forEach(e => {
     const type = e.entry_type || 'did';
@@ -725,7 +599,7 @@ function renderStreakCalendar(entries) {
       else cls = 'streak-cell resisted';
       title = `${key}: ${data.did} ep · ${data.caught} caught · ${data.near_miss} near miss · ${data.resisted} resisted`;
     }
-    cells.push(`<div class="${cls}" title="${title}"></div>`);
+    cells.push(`<div class="${cls}" title="${title}" aria-label="${title}" data-tip="${title}" onclick="this.classList.toggle('tapped')"></div>`);
   }
 
   const c = getC();
@@ -821,7 +695,7 @@ function renderBarRows(containerId, data, color, limit) {
 function renderMoodDelta(moodBefore, moodAfter, moodCount, urgeCount, urgeTotal, urgeAfterCount, urgeAfterTotal) {
   const container = document.getElementById('mood-delta-container');
 
-  const hasMood = moodCount > 0 && moodBefore > 0;
+  const hasMood = false; // mood_before/after not written by current schema — hidden until implemented
   const hasUrge = urgeCount > 0 && urgeAfterCount > 0;
 
   if (!hasMood && !hasUrge) {
@@ -1052,25 +926,32 @@ function renderFeed() {
     const type = e.entry_type || 'did';
 
     const chips = [];
-    if (e.urge_before) chips.push(`<span class="chip"><strong>Urge</strong>${e.urge_before}/10${e.urge_after ? ' → ' + e.urge_after : ''}</span>`);
-    if (e.bfrb_type) chips.push(`<span class="chip"><strong>Type</strong>${e.bfrb_type}</span>`);
-    if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${Array.isArray(e.body_areas) ? e.body_areas.join(', ') : e.body_areas}</span>`);
-    if (e.target) chips.push(`<span class="chip"><strong>Target</strong>${Array.isArray(e.target) ? e.target.join(', ') : e.target}</span>`);
-    if (e.awareness) chips.push(`<span class="chip"><strong>Awareness</strong>${e.awareness}</span>`);
-    if (e.duration) chips.push(`<span class="chip"><strong>Duration</strong>${e.duration}</span>`);
-    if (e.mirror) chips.push(`<span class="chip"><strong>Mirror</strong>${e.mirror}</span>`);
-    if (e.pre_feeling) chips.push(`<span class="chip"><strong>Before</strong>${e.pre_feeling}</span>`);
-    if (e.post_feeling) chips.push(`<span class="chip"><strong>After</strong>${e.post_feeling}</span>`);
-    if (e.emotional_triggers || e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${e.emotional_triggers || e.primary_trigger}</span>`);
-    if (e.pre_action) chips.push(`<span class="chip"><strong>Pre-action</strong>${e.pre_action}</span>`);
-    if (e.environment) chips.push(`<span class="chip"><strong>Environment</strong>${e.environment}</span>`);
-    if (e.activity) chips.push(`<span class="chip"><strong>Activity</strong>${e.activity}</span>`);
-    if (e.escalation) chips.push(`<span class="chip"><strong>Escalation</strong>${e.escalation}</span>`);
-    if (e.aftercare) chips.push(`<span class="chip"><strong>Aftercare</strong>${e.aftercare}</span>`);
-    if (e.skin_impact) chips.push(`<span class="chip"><strong>Skin impact</strong>${e.skin_impact}</span>`);
-    if (e.post_ritual) chips.push(`<span class="chip"><strong>Ritual</strong>${e.post_ritual}</span>`);
-    if (e.tried_intervention && e.interventions) chips.push(`<span class="chip"><strong>Tried</strong>${Array.isArray(e.interventions) ? e.interventions.join(', ') : e.interventions}</span>`);
-    if (e.specific_cr) chips.push(`<span class="chip"><strong>CR</strong>${escapeHtml(e.specific_cr)}</span>`);
+    const h = escapeHtml; // shorthand
+    const hArr = v => Array.isArray(v) ? v.map(h).join(', ') : h(v);
+    // ── Antecedent context (clinical flow: what led to it)
+    if (e.bfrb_type) chips.push(`<span class="chip"><strong>Type</strong>${h(e.bfrb_type)}</span>`);
+    if (e.pre_feeling) chips.push(`<span class="chip"><strong>Before</strong>${h(e.pre_feeling)}</span>`);
+    if (e.urge_before) chips.push(`<span class="chip"><strong>Urge</strong>${h(String(e.urge_before))}/10${e.urge_after ? ' → ' + h(String(e.urge_after)) : ''}</span>`);
+    if (e.emotional_triggers || e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${h(e.emotional_triggers || e.primary_trigger)}</span>`);
+    if (e.pre_action) chips.push(`<span class="chip"><strong>Pre-action</strong>${h(e.pre_action)}</span>`);
+    // ── Episode detail (what happened)
+    if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${hArr(e.body_areas)}</span>`);
+    if (e.target) chips.push(`<span class="chip"><strong>Target</strong>${hArr(e.target)}</span>`);
+    if (e.awareness) chips.push(`<span class="chip"><strong>Awareness</strong>${h(e.awareness)}</span>`);
+    if (e.duration) chips.push(`<span class="chip"><strong>Duration</strong>${h(e.duration)}</span>`);
+    if (e.mirror) chips.push(`<span class="chip"><strong>Mirror</strong>${h(e.mirror)}</span>`);
+    if (e.escalation) chips.push(`<span class="chip"><strong>Escalation</strong>${h(e.escalation)}</span>`);
+    // ── Environment & situation
+    if (e.environment) chips.push(`<span class="chip"><strong>Environment</strong>${h(e.environment)}</span>`);
+    if (e.activity) chips.push(`<span class="chip"><strong>Activity</strong>${h(e.activity)}</span>`);
+    // ── Aftermath (what happened after)
+    if (e.post_feeling) chips.push(`<span class="chip"><strong>After</strong>${h(e.post_feeling)}</span>`);
+    if (e.skin_impact) chips.push(`<span class="chip"><strong>Skin impact</strong>${h(e.skin_impact)}</span>`);
+    if (e.post_ritual) chips.push(`<span class="chip"><strong>Ritual</strong>${h(e.post_ritual)}</span>`);
+    if (e.aftercare) chips.push(`<span class="chip"><strong>Aftercare</strong>${h(e.aftercare)}</span>`);
+    // ── Intervention data
+    if (e.tried_intervention && e.interventions) chips.push(`<span class="chip"><strong>Tried</strong>${hArr(e.interventions)}</span>`);
+    if (e.specific_cr) chips.push(`<span class="chip"><strong>CR</strong>${h(e.specific_cr)}</span>`);
     if (e.intervention_effectiveness) chips.push(`<span class="chip"><strong>Tool eff.</strong>${e.intervention_effectiveness}/5</span>`);
     if (e.surf_peak !== undefined) chips.push(`<span class="chip"><strong>Surf peak</strong>${e.surf_peak}/10 → ${e.surf_end ?? '?'}/10</span>`);
 
@@ -1146,6 +1027,8 @@ window.editLog = (id) => {
   editingId = id;
   document.getElementById('edit-outcome').value = entry.entry_type || 'did';
   document.getElementById('edit-urge').value = entry.urge_before || 5;
+  document.getElementById('edit-urge-after').value = entry.urge_after || '';
+  document.getElementById('edit-pre-feeling').value = entry.pre_feeling || '';
   document.getElementById('edit-notes').value = entry.notes || '';
   document.getElementById('edit-narrative').value = entry.narrative_notes || '';
   document.getElementById('edit-modal').classList.add('on');
@@ -1155,9 +1038,12 @@ window.saveEdit = async () => {
   if (!editingId) return;
   const btn = document.getElementById('edit-save-btn');
   btn.disabled = true; btn.textContent = 'Saving…';
+  const urgeAfterVal = document.getElementById('edit-urge-after').value;
   const updates = {
     entry_type: document.getElementById('edit-outcome').value,
     urge_before: parseInt(document.getElementById('edit-urge').value),
+    urge_after: urgeAfterVal ? parseInt(urgeAfterVal) : null,
+    pre_feeling: document.getElementById('edit-pre-feeling').value.trim(),
     notes: document.getElementById('edit-notes').value.trim(),
     narrative_notes: document.getElementById('edit-narrative').value.trim()
   };
@@ -1176,17 +1062,71 @@ window.handleImport = async (event) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = async (e) => {
-    const lines = e.target.result.split('\n').filter(l => l.trim());
-    if (lines.length < 2) { showToast('File empty or invalid', true); return; }
+    // Proper CSV parse: handles quoted fields with embedded newlines and commas
+    function parseCSV(text) {
+      const rows = []; let row = []; let field = ''; let inQuote = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuote) {
+          if (ch === '"') {
+            if (text[i+1] === '"') { field += '"'; i++; } // escaped quote
+            else inQuote = false;
+          } else { field += ch; }
+        } else {
+          if (ch === '"') { inQuote = true; }
+          else if (ch === ',') { row.push(field.trim()); field = ''; }
+          else if (ch === '\n' || (ch === '\r' && text[i+1] === '\n')) {
+            row.push(field.trim()); field = '';
+            if (row.length > 1 || row[0]) rows.push(row);
+            row = [];
+            if (ch === '\r') i++; // skip \n after \r
+          } else { field += ch; }
+        }
+      }
+      if (field || row.length) { row.push(field.trim()); rows.push(row); }
+      return rows;
+    }
+
+    const rows = parseCSV(e.target.result);
+    if (rows.length < 2) { showToast('File empty or invalid', true); return; }
     let count = 0;
     try {
       let batch = writeBatch(db); let ops = 0;
-      for (let i = 1; i < lines.length; i++) {
-        const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
         if (row.length < 4) continue;
         const createdAt = (row[0] && row[1]) ? new Date(`${row[0]} ${row[1]}`) : new Date();
         const ref = doc(collection(db, 'users', window._uid, 'entries'));
-        batch.set(ref, { created_at: createdAt, bfrb_type: row[2]||'picking', entry_type: row[3]||'did', urge_before: parseInt(row[4])||5, body_areas: row[5]||'', target: row[6]||'', awareness: row[7]||'', duration: row[8]||'', post_ritual: row[9]||'', pre_action: row[10]||'', primary_trigger: row[11]||'', environment: row[12]||'', post_feeling: row[13]||'', interventions: (row[14]&&row[14].toLowerCase()!=='nan')?row[14]:'', tried_intervention: !!(row[14]&&row[14].toLowerCase()!=='nan'), notes: row[16]||'' });
+        batch.set(ref, {
+          created_at: createdAt,
+          bfrb_type: row[2]||'picking',
+          entry_type: row[3]||'did',
+          urge_before: parseInt(row[4])||5,
+          urge_after: row[5] ? parseInt(row[5]) : null,
+          pre_feeling: row[6]||'',
+          body_areas: row[7]||'',
+          target: row[8]||'',
+          awareness: row[9]||'',
+          duration: row[10]||'',
+          post_ritual: row[11]||'',
+          mirror: row[12]||'',
+          skin_impact: row[13]||'',
+          pre_action: row[14]||'',
+          primary_trigger: row[15]||'',
+          environment: row[16]||'',
+          activity: row[17]||'',
+          escalation: row[18]||'',
+          post_feeling: row[19]||'',
+          aftercare: row[20]||'',
+          interventions: (row[21]&&row[21].toLowerCase()!=='nan')?row[21]:'',
+          tried_intervention: !!(row[21]&&row[21].toLowerCase()!=='nan'),
+          specific_cr: row[22]||'',
+          intervention_effectiveness: row[23] ? parseInt(row[23]) : null,
+          surf_peak: row[24] ? parseInt(row[24]) : undefined,
+          surf_end: row[25] ? parseInt(row[25]) : undefined,
+          narrative_notes: row[26]||'',
+          notes: row[27]||''
+        });
         count++; ops++;
         if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
       }
@@ -1202,11 +1142,11 @@ window.handleImport = async (event) => {
 window.exportCSV = () => {
   const entries = window._allEntries;
   if (!entries.length) { showToast('No data to export'); return; }
-  const headers = ['Date','Time','Behavior','Outcome','Urge_Before','Urge_After','Area','Target','Awareness','Duration','Post_Ritual','Pre_Action','Trigger','Environment','Activity','Escalation','Post_Feeling','Aftercare','Interventions_Tried','Specific_CR','Effectiveness','Narrative','Notes'];
+  const headers = ['Date','Time','Behavior','Outcome','Urge_Before','Urge_After','Pre_Feeling','Area','Target','Awareness','Duration','Post_Ritual','Mirror','Skin_Impact','Pre_Action','Trigger','Environment','Activity','Escalation','Post_Feeling','Aftercare','Interventions_Tried','Specific_CR','Effectiveness','Surf_Peak','Surf_End','Narrative','Notes'];
   let csv = headers.join(',') + '\n';
   entries.forEach(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.bfrb_type||'', e.entry_type||'', e.urge_before||'', e.urge_after||'', e.body_areas||'', e.target||'', e.awareness||'', e.duration||'', e.post_ritual||'', e.pre_action||'', e.primary_trigger||'', e.environment||'', e.activity||'', e.escalation||'', e.post_feeling||'', e.aftercare||'', e.interventions||'', e.specific_cr||'', e.intervention_effectiveness||'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' '), (e.notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
+    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.bfrb_type||'', e.entry_type||'', e.urge_before||'', e.urge_after||'', e.pre_feeling||'', e.body_areas||'', e.target||'', e.awareness||'', e.duration||'', e.post_ritual||'', e.mirror||'', e.skin_impact||'', e.pre_action||'', e.primary_trigger||'', e.environment||'', e.activity||'', e.escalation||'', e.post_feeling||'', e.aftercare||'', e.interventions||'', e.specific_cr||'', e.intervention_effectiveness||'', e.surf_peak!==undefined?e.surf_peak:'', e.surf_end!==undefined?e.surf_end:'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' '), (e.notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
     csv += row.map(v => `"${v}"`).join(',') + '\n';
   });
   const a = document.createElement('a');
@@ -1292,7 +1232,7 @@ async function loadDailyStateCorrelation(entries) {
 new MutationObserver(() => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const m = document.getElementById('theme-color-meta');
-  if (m) m.setAttribute('content', isDark ? '#161618' : '#F5F5F3');
+  if (m) m.setAttribute('content', isDark ? '#181C20' : '#F2EEE8');
   if (window._allEntries?.length) { processData(window._allEntries); renderFeed(); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
@@ -1378,7 +1318,7 @@ new MutationObserver(() => {
     ];
     const mu = cv('--mu');
     let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:64px repeat(7,1fr);gap:4px;min-width:260px">
-      <div></div>${DOW.map(d => `<div style="font-size:11px;color:${mu};text-align:center;font-weight:500">${d}</div>`).join('')}`;
+      <div></div>${DOW.map(d => `<div style="font-size:11px;color:${mu};text-align:center;font-weight:600">${d}</div>`).join('')}`;
     rows.forEach(row => {
       html += `<div style="font-size:11px;color:${mu};display:flex;align-items:center">${row.label}</div>`;
       for (let i = 0; i < 7; i++) {
