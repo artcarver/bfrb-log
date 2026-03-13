@@ -252,88 +252,288 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
   </div>
 
   <div id="tab-framework" class="tab-pane">
+
+    <!-- 1. NEUROBIOLOGY -->
     <div class="card">
       <h2 class="fw-h2">Neurobiology of BFRBs</h2>
-      <p class="fw-p">Body-Focused Repetitive Behaviors (BFRBs) operate through the cortico-striato-thalamo-cortical (CSTC) circuit. The behavior is maintained by a dopaminergic reinforcement loop in the basal ganglia. When executive function in the prefrontal cortex is depleted by stress or fatigue, the habit circuitry dominates, resulting in automatic or urge-driven motor behaviors.</p>
+      <p class="fw-p">BFRBs are maintained by the <strong>cortico-striato-thalamo-cortical (CSTC) circuit</strong> — the same loop implicated in OCD, Tourette's, and trichotillomania. The dorsal striatum encodes the behavior as a motor habit; the ventral striatum (nucleus accumbens) provides dopaminergic reinforcement each time the urge is acted on. This is why BFRBs feel automatic and why they escalate under stress: prefrontal cortical inhibition of the striatum is resource-dependent, so when the PFC is depleted by fatigue, anxiety, or cognitive load, habit circuitry wins by default.</p>
+      <p class="fw-p">The sensory dimension is equally important. Most picking is preceded by a tactile or visual detection event — a bump felt on the scalp, a rough edge on a nail — processed via the <strong>somatosensory cortex and thalamus</strong>. The resulting "itch-like" signal creates an ascending urge that resolves only when the perceived irregularity is removed. This explains why partial episodes escalate: the detection signal persists until the target is fully addressed, creating a compulsion loop that is distinct from OCD but mechanistically adjacent.</p>
+      <p class="fw-p">Post-behavior relief (the "zoned out" feeling) reflects a transient drop in arousal via the <strong>HPA axis</strong> — cortisol decreases briefly after the behavior, which is the physiological basis of negative reinforcement. Over time this conditioning makes the behavior more resistant to extinction because its function is emotion regulation, not pleasure-seeking.</p>
     </div>
 
+    <!-- 2. THE LOG — INDEX PAGE -->
     <div class="card">
-      <h2 class="fw-h2">The Comprehensive Behavioral (ComB) Log</h2>
-      <p class="fw-p">The tracker maps the entire behavioral chain. Capturing these specific variables informs targeted interventions.</p>
-      
+      <h2 class="fw-h2">The Log — what each field captures</h2>
+      <p class="fw-p">Every field maps to a specific node in the behavioral chain. The goal of ComB (Comprehensive Behavioral Treatment) is to identify <em>which</em> nodes are most active for you, then apply the most targeted intervention at that node.</p>
+
       <div class="fw-table-wrap">
         <table class="fw-table">
-          <thead>
-            <tr>
-              <th>Component</th>
-              <th>Clinical Target</th>
-              <th>Mechanism of Action</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Field</th><th>What it captures</th><th>Clinical purpose</th></tr></thead>
           <tbody>
             <tr>
-              <td>Pre-Action</td>
-              <td>Motor chain interception</td>
-              <td>Identifies preconscious scanning or postural setups. Allows intervention before the primary tissue damage sequence initiates.</td>
+              <td>Behavior type<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking vs. Biting</span></td>
+              <td>Motor pathway classification</td>
+              <td>Picking and nail/skin biting recruit distinct motor programs and are triggered by different sensory signals. Treating them as one behavior conflates two separate intervention targets. Your data shows they have different trigger profiles (sensory/postural for biting; anxiety+visual scan for picking), which means different CRs are needed for each.</td>
             </tr>
             <tr>
-              <td>Primary Trigger</td>
-              <td>Arousal state mapping</td>
-              <td>Differentiates hyper-arousal (anxiety) from hypo-arousal (boredom) and executive depletion (fatigue), dictating the necessary counter-measure.</td>
+              <td>When<br><span style="font-weight:400;color:var(--mu);font-size:12px">Right now vs. Earlier</span></td>
+              <td>Temporal accuracy</td>
+              <td>Real-time logging improves data validity significantly. "Earlier" entries are reconstructions subject to mood-congruent recall bias — you're more likely to remember and log episodes when still in a negative post-behavior state, which skews frequency counts upward. Both are still worth logging; just weight real-time data more heavily in pattern analysis.</td>
             </tr>
             <tr>
-              <td>Duration</td>
-              <td>Severity scaling</td>
-              <td>Tracks temporal severity. A 30-minute dissociative episode requires different clinical management than a 30-second transient pick.</td>
+              <td>Outcome<br><span style="font-weight:400;color:var(--mu);font-size:12px">Resisted / Near Miss / Caught / Episode</span></td>
+              <td>Behavioral outcome classification</td>
+              <td><strong>Resisted</strong>: urge present, behavior absent — the highest-value data point; confirms active inhibition. <strong>Near Miss</strong>: partial motor sequence initiated but stopped — signals the interception window is working. <strong>Caught mid-act</strong>: automatic behavior interrupted by delayed awareness — tracks improving interoceptive awareness. <strong>Episode</strong>: full behavioral sequence completed. Near misses and caught entries are often more clinically useful than episodes because they prove the inhibition circuit is activating.</td>
             </tr>
             <tr>
-              <td>Post-Feeling</td>
-              <td>Reinforcement loop</td>
-              <td>Determines if the behavior is maintained by negative reinforcement (relief) or if it generates secondary distress (shame) requiring cognitive defusion.</td>
+              <td>Pre-feeling<br><span style="font-weight:400;color:var(--mu);font-size:12px">Emotional state before</span></td>
+              <td>Antecedent arousal state</td>
+              <td>Determines the <em>functional class</em> of the behavior. If the antecedent is anxiety/stress, the behavior functions as a downregulation strategy (anxiolytic). If fatigue/depleted, it's a stimulation-seeking behavior (self-arousal). If boredom/restless, it's filling an attentional void. Each functional class requires a different counter-strategy — anxiolytic BFRBs respond to vagal/grounding tools; stimulation-seeking BFRBs respond to sensory substitutes.</td>
+            </tr>
+            <tr>
+              <td>Urge before &amp; after<br><span style="font-weight:400;color:var(--mu);font-size:12px">1–10 scale</span></td>
+              <td>Reinforcement gradient measurement</td>
+              <td>The before/after delta is the most direct measure of negative reinforcement strength. A large drop (e.g., 9 → 3) indicates strong physiological relief — the behavior is powerfully maintained by its consequence. A small drop or no drop suggests the behavior is more automatic/habitual than driven by relief. This informs how much ERP-style extinction work is needed vs. simple habit interruption.</td>
+            </tr>
+            <tr>
+              <td>Where &amp; What<br><span style="font-weight:400;color:var(--mu);font-size:12px">Body area and target type</span></td>
+              <td>Motor chain specificity</td>
+              <td>The Competing Response (CR) in HRT must be <em>physically incompatible</em> with the specific hand/body position used for that target. A CR for scalp picking (hands clasped behind head) is different from one for facial picking (hands pressed flat on thighs). Logging area+target identifies which motor sub-programs need dedicated CRs.</td>
+            </tr>
+            <tr>
+              <td>Awareness<br><span style="font-weight:400;color:var(--mu);font-size:12px">Automatic / Mid-action / Urge first</span></td>
+              <td>Interception window identification</td>
+              <td><strong>Automatic</strong>: behavior completes before conscious awareness — the behavioral chain must be interrupted at the antecedent (pre-action/environment) level rather than at the urge level. <strong>Urge first</strong>: conscious urge precedes behavior — ERP and urge surfing can directly target this window. <strong>Mid-action</strong>: awareness arrives during execution — Decoupling Redirect is specifically designed for this state.</td>
+            </tr>
+            <tr>
+              <td>Duration<br><span style="font-weight:400;color:var(--mu);font-size:12px">&lt;1 min to 30+ min</span></td>
+              <td>Severity and dissociation index</td>
+              <td>Your data shows a bimodal distribution: most episodes are under 1 minute (brief, reactive) but a significant portion are 30+ minutes. Long-duration episodes typically involve dissociation — the PFC has effectively gone offline, and the behavior runs on autopilot. These episodes require upstream prevention (stimulus control, environmental barriers) because by the time they start, acute intervention capacity is compromised.</td>
+            </tr>
+            <tr>
+              <td>Mirror / camera<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking only</span></td>
+              <td>Visual cue dependency</td>
+              <td>Mirror use during picking is a strong predictor of session duration and severity. The mirror converts a tactile drive into a visual-tactile feedback loop — you can see what you're doing, which maintains engagement far longer than tactile sensation alone. Mirror-initiated episodes (your data shows bathroom mirror + "Visual" trigger co-occurring) are a distinct behavioral subtype that responds specifically to mirror removal as a stimulus control intervention.</td>
+            </tr>
+            <tr>
+              <td>Skin impact<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking only</span></td>
+              <td>Tissue damage severity tracking</td>
+              <td>Tracks medical severity over time and informs wound care needs. Significant or repeated moderate impact at the same site increases scarring and hyperpigmentation risk, which can itself become a visual trigger ("I need to fix it") — creating a positive feedback loop. Documenting this is useful for dermatology referral and for identifying specific body sites that need physical barriers (bandages).</td>
+            </tr>
+            <tr>
+              <td>Post-ritual<br><span style="font-weight:400;color:var(--mu);font-size:12px">Ingested / Examined / Discarded</span></td>
+              <td>Secondary reinforcement mapping</td>
+              <td>Post-behavior rituals are often the most stigmatized and least discussed aspect of BFRBs, but they're clinically significant. Ingesting or closely examining the material provides a secondary sensory reward that strengthens the reinforcement loop. These rituals also indicate that the behavior is serving a sensory need beyond mere skin irregularity removal — often a proprioceptive or oral stimulation need that can be addressed with a substitute.</td>
+            </tr>
+            <tr>
+              <td>Escalation<br><span style="font-weight:400;color:var(--mu);font-size:12px">Single pick → Couldn't stop</span></td>
+              <td>Session progression tracking</td>
+              <td>The transition from "single pick" to "escalated" or "couldn't stop" reflects the point at which PFC inhibition is overwhelmed. Identifying this threshold is clinically useful: if most of your sessions are "single pick," short acute interventions are sufficient. If most are "escalated," the focus shifts to upstream prevention — stopping before the first contact rather than trying to interrupt mid-session.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
 
+    <!-- 3. CONTEXT FIELDS -->
     <div class="card">
-      <h2 class="fw-h2">Intervention Rationale</h2>
-      <p class="fw-p">Tools are categorized by functional state. Acute interventions target physiological overrides, while cold-state tools alter the environmental discriminative stimuli.</p>
-      
+      <h2 class="fw-h2">Context fields — full mode</h2>
+      <p class="fw-p">Context data identifies the environmental and situational conditions under which the behavior occurs. This is the basis for stimulus control interventions — changing the environment to reduce exposure to discriminative stimuli before the urge activates.</p>
+
       <div class="fw-table-wrap">
         <table class="fw-table">
-          <thead>
-            <tr>
-              <th>Intervention</th>
-              <th>Protocol</th>
-              <th>Mechanism of Action</th>
-            </tr>
-          </thead>
+          <thead><tr><th>Field</th><th>What it captures</th><th>Clinical purpose</th></tr></thead>
           <tbody>
             <tr>
-              <td>Motor Block (CR)</td>
-              <td>Habit Reversal Training</td>
-              <td>Relies on motoric incompatibility. By occupying the specific flexor/extensor pathways required for the BFRB, the behavior is mechanically prevented.</td>
+              <td>Pre-event activity<br><span style="font-weight:400;color:var(--mu);font-size:12px">Scanning / Mirror / Posture</span></td>
+              <td>Motor chain entry point</td>
+              <td><strong>Scanning / Feeling skin</strong>: a tactile search behavior that precedes picking — this is the discriminative stimulus, not the pick itself. Interrupting scanning is more effective than interrupting the pick. <strong>Mirror checking</strong>: visual search behavior that activates the visual-tactile loop. <strong>Resting posture</strong>: for biting, the hand-near-face resting position is the proximal antecedent — the bite is almost a reflex given the position. <strong>Oral fixation</strong>: signals an unmet stimulation need, often addressed better by a substitute (gum, textured food) than a CR.</td>
             </tr>
             <tr>
-              <td>Urge Surfing</td>
-              <td>ACT / Extinction</td>
-              <td>Based on Exposure and Response Prevention (ERP). Exposes the nervous system to autonomic arousal without executing the motor response, facilitating habituation and decoupling the urge from the action.</td>
+              <td>Trigger<br><span style="font-weight:400;color:var(--mu);font-size:12px">Anxiety / Fatigue / Sensory / Visual / Boredom</span></td>
+              <td>Functional analysis — the "why"</td>
+              <td>This is the most important contextual variable. <strong>Anxiety/Stress</strong> → behavior is anxiolytic; counter with vagal regulation or grounding. <strong>Fatigue/Depleted</strong> → PFC is offline; behavior is automatic; focus on barriers not willpower. <strong>Sensory</strong> → specific irregularity drove the behavior; tactile substitutes and competing sensory input are most effective. <strong>Visual</strong> → mirror or skin inspection initiated the chain; mirror barriers and removing magnifying mirrors are high-yield. <strong>Boredom</strong> → attentional void; environmental enrichment and hand occupation are the targets.</td>
             </tr>
             <tr>
-              <td>Grounding</td>
-              <td>Vagal Regulation</td>
-              <td>Extended exhalations (4-7-8 ratio) stimulate the vagus nerve, directly increasing parasympathetic tone and downregulating acute amygdala activation.</td>
+              <td>Environment<br><span style="font-weight:400;color:var(--mu);font-size:12px">Desk / Couch / Bathroom etc.</span></td>
+              <td>Discriminative stimulus mapping</td>
+              <td>Environments become conditioned stimuli through repeated co-occurrence with the behavior. Your data shows Desk/Study is your highest-risk environment (anxiety + cognitive load), followed by Couch/Bed (fatigue + passive activity). The bathroom is highest risk specifically for mirror-initiated episodes. Each environment may need different stimulus control modifications — e.g., mirror removal/covering in bathroom, fidget tools at desk, nail barriers when resting on couch.</td>
             </tr>
             <tr>
-              <td>Stimulus Control</td>
-              <td>Environmental Modification</td>
-              <td>Removes discriminative stimuli (visual cues like mirrors, tactile cues via barriers) to prevent the behavioral chain from activating when executive function is low.</td>
+              <td>Activity<br><span style="font-weight:400;color:var(--mu);font-size:12px">Studying / TV / Phone etc.</span></td>
+              <td>Attentional load assessment</td>
+              <td>BFRBs cluster around activities that split attention — cognitively demanding tasks (studying) that leave the hands unoccupied, or low-demand tasks (watching TV) that leave the attention system understimulated. "Studying / Lecture" is particularly high-risk because it combines cognitive stress with relative hand freedom. Interventions: fidget tools that are hand-occupying but low-distraction; barrier gloves during lectures; phone-position rules during TV.</td>
+            </tr>
+            <tr>
+              <td>Post-feeling<br><span style="font-weight:400;color:var(--mu);font-size:12px">Frustrated / Neutral / Relief / Shame</span></td>
+              <td>Reinforcement and secondary distress</td>
+              <td><strong>Relief / Zoned out</strong>: strong negative reinforcement — this is the most treatment-resistant pattern because the behavior is working physiologically. ERP (urge surfing) is the primary tool. <strong>Frustrated</strong>: the behavior is not achieving the intended relief — suggests the reinforcement is more automatic/habitual than relief-driven; HRT habit interruption is more relevant. <strong>Shame / self-critical</strong>: secondary emotional consequence requiring cognitive defusion work to prevent the shame → distress → BFRB → shame loop.</td>
+            </tr>
+            <tr>
+              <td>Aftercare<br><span style="font-weight:400;color:var(--mu);font-size:12px">Picking only</span></td>
+              <td>Wound care adherence</td>
+              <td>Tracks whether wound care is being applied after episodes — relevant both for physical healing and as a behavioral intervention. Applying lotion or treating skin immediately post-episode can serve as a brief mindfulness anchor that interrupts the urge to continue. Some clinicians prescribe aftercare as a structured response prevention tool, not just wound care.</td>
+            </tr>
+            <tr>
+              <td>Intervention attempted &amp; tool<br><span style="font-weight:400;color:var(--mu);font-size:12px">Yes/No + which tool</span></td>
+              <td>Effectiveness tracking</td>
+              <td>This is how the Patterns page calculates outcome rates per tool. A tool's "outcome rate" is: (entries where tool was used AND outcome was Resisted or Near Miss) ÷ (total entries where tool was used). Logging this consistently over 3–4 weeks generates a personal effectiveness ranking — which tool actually works for you, under which conditions, rather than relying on general population data.</td>
+            </tr>
+            <tr>
+              <td>Effectiveness rating<br><span style="font-weight:400;color:var(--mu);font-size:12px">1–5 scale</span></td>
+              <td>Subjective efficacy vs. objective outcome</td>
+              <td>Separate from the binary outcome rate. A tool rated 4/5 by you but with a 40% outcome rate might still be worth using if it reduces distress even when it doesn't fully prevent the episode. Comparing subjective rating vs. objective outcome rate across tools can reveal discrepancies — e.g., tools that feel helpful but don't change behavior, or tools you rate low but that objectively improve outcomes.</td>
+            </tr>
+            <tr>
+              <td>Reflection / Narrative<br><span style="font-weight:400;color:var(--mu);font-size:12px">Free text</span></td>
+              <td>Qualitative chain analysis</td>
+              <td>The most clinically rich field. Free-text narratives often reveal antecedents and maintaining factors that don't fit the structured options — e.g., your note about "coding this app" while watching TV and feeling bumps, or the press-on nail glue as a novel sensory target. These entries are the primary source for updating your SCAMP profile and identifying emerging behavioral variants.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+
+    <!-- 4. INTERVENTIONS PAGE -->
+    <div class="card">
+      <h2 class="fw-h2">Interventions — tool rationale</h2>
+      <p class="fw-p">The six active tools map to different nodes in the behavioral chain. Using the wrong tool for your functional state is why interventions often seem ineffective — a grounding breath for a sensory-driven urge won't work because it targets arousal, not sensory need.</p>
+
+      <div class="fw-table-wrap">
+        <table class="fw-table">
+          <thead><tr><th>Tool</th><th>Protocol basis</th><th>Mechanism &amp; when to use</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Motor Block<br><span style="font-weight:400;color:var(--mu);font-size:12px">Competing Response</span></td>
+              <td>Habit Reversal Training (HRT)</td>
+              <td>Uses motoric incompatibility — the CR occupies the exact muscle groups needed for the BFRB, making simultaneous execution physically impossible. Effective when awareness precedes or accompanies the urge (Urge first / Mid-action awareness). Requires the CR to be position-specific: a CR for arm picking (hands flat on table, palms down) will not work for scalp picking. HRT has the strongest RCT evidence base of any BFRB intervention.</td>
+            </tr>
+            <tr>
+              <td>Decoupling Redirect<br><span style="font-weight:400;color:var(--mu);font-size:12px">Movement redirect</span></td>
+              <td>Decoupling (Tic-adjacent)</td>
+              <td>Designed specifically for <strong>mid-action</strong> awareness — when you notice you're already doing it. Rather than stopping dead (which feels aversive and increases the urge), you complete the motor movement but redirect it away from the skin target. Counts and tracks redirections, building awareness of the movement pattern. Clinically, this is a variant of function-based intervention adapted from Comprehensive Behavioral Treatment for Tourette's.</td>
+            </tr>
+            <tr>
+              <td>Urge Surf<br><span style="font-weight:400;color:var(--mu);font-size:12px">ERP / ACT</span></td>
+              <td>Exposure &amp; Response Prevention (ERP)</td>
+              <td>Based on the extinction model: urges are time-limited autonomic events. If not acted on, they peak and subside within 10–20 minutes. Each time you surf an urge without responding, you reduce the conditioned association between the urge signal and the motor response (extinction). Over many trials, the urge loses its command value. This is the most evidence-based tool for behaviors driven by strong physiological relief (your "zoned out" post-feeling entries).</td>
+            </tr>
+            <tr>
+              <td>Cognitive Defusion<br><span style="font-weight:400;color:var(--mu);font-size:12px">ACT reframes</span></td>
+              <td>Acceptance &amp; Commitment Therapy (ACT)</td>
+              <td>Targets the <em>cognitive</em> dimension of the urge — the thoughts that give the urge permission or urgency ("just one," "I need to fix this," "it'll bother me all day"). Defusion techniques create psychological distance between the thought and the response: observing thoughts as events rather than commands. Particularly useful when the trigger is <strong>Perfectionism</strong> or <strong>Cognitive/overthinking</strong>, and when the pre-feeling is self-conscious or anxiety-driven.</td>
+            </tr>
+            <tr>
+              <td>Tactile Substitute<br><span style="font-weight:400;color:var(--mu);font-size:12px">Sensory redirect</span></td>
+              <td>Sensory substitution / ComB</td>
+              <td>Addresses the sensory function directly by providing an alternative sensory input that satisfies the same tactile need without causing damage. The three fidget categories map to specific sensory needs: <strong>Destruction/Peeling</strong> substitutes for the satisfaction of removing or disrupting a surface; <strong>Deep Pressure/Sensation</strong> substitutes for proprioceptive and pain-adjacent sensory input; <strong>Smoothing/Evenness</strong> substitutes for the need to resolve a tactile irregularity. Matching the category to your dominant sensory function increases efficacy significantly.</td>
+            </tr>
+            <tr>
+              <td>Grounding Reset<br><span style="font-weight:400;color:var(--mu);font-size:12px">4-7-8 breathing</span></td>
+              <td>Vagal Nerve Stimulation</td>
+              <td>The extended exhale (longer than inhale) activates the cardiac vagal brake via the nucleus tractus solitarius in the brainstem, increasing HRV and reducing sympathetic tone within 1–2 breath cycles. This directly downregulates amygdala activation and cortisol. Most effective when the trigger is <strong>Anxiety/Stress</strong> (hyperarousal state) — less effective for fatigue-driven or sensory-driven behaviors because those involve hypo-arousal or a specific sensory need, not sympathetic overdrive.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="fw-h2" style="margin-top:28px">Fidget tools — sensory category rationale</h2>
+      <p class="fw-p">Sensory substitutes work because they compete for the same sensory processing channels. A substitute that engages the same cortical map as the BFRB is more effective than a generic fidget.</p>
+      <div class="fw-table-wrap">
+        <table class="fw-table">
+          <thead><tr><th>Category</th><th>Target sensory need</th><th>Rationale</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Destruction &amp; Peeling</td>
+              <td>Tactile discontinuity resolution</td>
+              <td>Peeling, tearing, or destroying a substitute object satisfies the neural "completion" signal that skin removal provides — the feel of separating a surface. Targets users whose picking involves scabs, dry skin, or blackheads where the reward is the extraction sensation itself.</td>
+            </tr>
+            <tr>
+              <td>Deep Pressure &amp; Sensation</td>
+              <td>Proprioceptive &amp; nociceptive input</td>
+              <td>Squeezing, pressing, or applying pain-adjacent stimulation activates the same somatosensory pathways as digging or pressing into skin. Particularly relevant when the picking involves significant pressure or when the behavior serves a self-arousal function (stimming).</td>
+            </tr>
+            <tr>
+              <td>Smoothing &amp; Evenness</td>
+              <td>Tactile irregularity intolerance</td>
+              <td>Running fingers over a smooth surface satisfies the need to eliminate perceived tactile discontinuities — the neurological driver of "I felt a bump and had to check/fix it." Nail files, smooth stones, and silicone surfaces address the sensory cortex's irregularity-resolution drive without requiring a skin surface.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 5. PROFILE PAGE -->
+    <div class="card">
+      <h2 class="fw-h2">Profile — what each section does</h2>
+
+      <div class="fw-table-wrap">
+        <table class="fw-table">
+          <thead><tr><th>Section</th><th>Framework basis</th><th>How to use it</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>SCAMP Baseline<br><span style="font-weight:400;color:var(--mu);font-size:12px">Sensory / Cognitive / Affective / Motor / Place</span></td>
+              <td>ComB treatment model (Mansueto et al.)</td>
+              <td>SCAMP is a functional assessment framework that maps the five dimensions along which BFRBs can be driven. The goal is to identify your <em>dominant</em> drivers so that the intervention portfolio is targeted. If your dominant function is Sensory, motor blocks matter less than tactile substitutes. If it's Affective, grounding and urge surfing are higher priority than stimulus control. Write these as observations about your specific patterns, not generic descriptions — "Seeking scabs and rough skin bumps on arms and scalp while sitting at desk" is more actionable than "sensory seeking."</td>
+            </tr>
+            <tr>
+              <td>Stimulus Control Rules<br><span style="font-weight:400;color:var(--mu);font-size:12px">Checklist</span></td>
+              <td>Environmental Modification (ComB / CBT-E)</td>
+              <td>These are physical changes to your environment that reduce exposure to discriminative stimuli before the urge can activate. They work by breaking the antecedent-behavior chain at the environment level, which requires no willpower in the moment. The checkbox is a daily check-in: are your barriers actually in place? Barriers that are consistently unchecked are either ineffective or not being implemented — worth discussing in session. Examples from your data: mirrors covered in bathroom, tweezers inaccessible, barriers/bandages on high-target areas before high-risk activities (studying, TV).</td>
+            </tr>
+            <tr>
+              <td>Session Prep<br><span style="font-weight:400;color:var(--mu);font-size:12px">Reflections</span></td>
+              <td>Behavioral review / therapy preparation</td>
+              <td>Structured weekly or bi-weekly review of what worked and what didn't. The "Generate Report" button compiles this alongside your 30-day log summary and SCAMP profile into a copy-pasteable text for your therapist — removes the cognitive load of reconstructing the past two weeks from memory at the start of a session. Consistent reflection entries also give you a longitudinal view of which interventions are becoming more effective over time as conditioning takes hold.</td>
+            </tr>
+            <tr>
+              <td>Daily Baseline Log<br><span style="font-weight:400;color:var(--mu);font-size:12px">📋 button on Log &amp; Patterns pages</span></td>
+              <td>Upstream variable tracking</td>
+              <td>Captures sleep quality and stress level once per day. The Patterns page correlates these against episode data to show whether your BFRB frequency tracks sleep quality or stress — this is the most direct personal evidence of the PFC depletion model: on worse-sleep days, does episode count increase? If yes, this is both predictive (sleep as early warning) and actionable (sleep hygiene becomes a BFRB intervention, not just general health advice).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 6. PATTERNS PAGE -->
+    <div class="card">
+      <h2 class="fw-h2">Patterns — how to read the data</h2>
+      <p class="fw-p">The Patterns page is a behavioral analytics dashboard. Here's what each metric is actually measuring and how to interpret it clinically.</p>
+      <div class="fw-table-wrap">
+        <table class="fw-table">
+          <thead><tr><th>Metric</th><th>What it measures</th><th>How to interpret it</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Managed %</td>
+              <td>Resistance rate</td>
+              <td>Percentage of all entries that were Resisted, Near Miss, or Caught. This is your primary progress metric — not episode count, which is heavily influenced by stress and life events outside your control. A rising managed % over weeks/months indicates the inhibition circuit is strengthening regardless of absolute episode frequency.</td>
+            </tr>
+            <tr>
+              <td>Days since episode</td>
+              <td>Abstinence streak</td>
+              <td>Clinically useful but should not be the primary goal — it creates binary pass/fail framing and can intensify shame after an episode. Treat it as information, not a score. More useful is the <em>average days between episodes</em> metric, which smooths the streak framing and shows directional progress even when streaks break.</td>
+            </tr>
+            <tr>
+              <td>Resistance streak</td>
+              <td>Consecutive days with ≥1 resisted urge</td>
+              <td>More clinically meaningful than abstinence streak because it measures active inhibition, not just absence of behavior. A day with 3 resisted urges and 1 episode is a better day than a day with no urges and no episodes — the former shows the inhibition circuit firing.</td>
+            </tr>
+            <tr>
+              <td>Urge before → after delta</td>
+              <td>Reinforcement strength</td>
+              <td>A large negative delta (high before, low after) confirms strong negative reinforcement — the behavior works physiologically to reduce distress. This is the ERP treatment target. If the delta is small, the behavior may be more automatic/habitual than reinforced, and HRT habit interruption may be more relevant than extinction work.</td>
+            </tr>
+            <tr>
+              <td>Baseline correlation<br><span style="font-weight:400;color:var(--mu);font-size:12px">Sleep &amp; stress vs. episodes</span></td>
+              <td>Upstream variable correlation</td>
+              <td>Compares average sleep and stress on episode days vs. managed days. If episode-day stress is consistently 2+ points higher than managed-day stress, stress management is a direct treatment target, not just a co-morbid concern. Requires consistent daily baseline logging to generate meaningful data — even 2 weeks of daily logs produces a useful signal.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
 </main>
