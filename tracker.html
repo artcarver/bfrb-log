@@ -442,24 +442,12 @@ const FEED_PAGE_SIZE = 10;
 let chartInstances = {};
 let editingId = null;
 
-// Detect iOS standalone (home screen) mode — popup is blocked there
-const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
-
 window.signInWithGoogle = async () => {
   try {
-    if (isStandalone) {
-      await signInWithRedirect(auth, provider);
-    } else {
-      await signInWithPopup(auth, provider);
-    }
-  } catch(e) {
-    console.error('Sign in error:', e);
-  }
+    await signInWithPopup(auth, provider);
+  } catch(e) { console.error('Sign in error:', e); }
 };
 window.signOut = async () => { await fbSignOut(auth); };
-
-// Handle redirect result when returning from Google auth (iOS standalone)
-getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
 
 onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;
@@ -770,17 +758,6 @@ function renderStreakCalendar(entries) {
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oResisted};display:inline-block"></span>Resisted</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oNear};display:inline-block"></span>Near miss</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.ac};display:inline-block"></span>Caught mid-act</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oEpisode};display:inline-block"></span>Episode</span>
-    </div>
-  `;
-}
-
-  const c = getC();
-  container.innerHTML = `
-    <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px">${cells.join('')}</div>
-    <div style="display:flex;gap:12px;font-size:11px;color:var(--mu);flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oResisted};display:inline-block"></span>Resisted</span>
-      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oNear};display:inline-block"></span>Near miss</span>
       <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oEpisode};display:inline-block"></span>Episode</span>
     </div>
   `;

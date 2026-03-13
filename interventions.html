@@ -760,19 +760,12 @@ const auth     = getAuth(app);
 const provider = new GoogleAuthProvider();
 window._uid    = null;
 
-const isStandalone =
-  window.navigator.standalone === true ||
-  window.matchMedia('(display-mode: standalone)').matches;
-
 window.signInWithGoogle = async () => {
   try {
-    isStandalone
-      ? await signInWithRedirect(auth, provider)
-      : await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   } catch(e) { console.error('Sign in error:', e); }
 };
 window.signOut = async () => { await fbSignOut(auth); };
-getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
 
 onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;

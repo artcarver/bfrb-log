@@ -404,7 +404,8 @@ main {
     </div><!-- /card 1 -->
 
     <!-- CONTEXT CARD — full mode only -->
-    <div class="card full-section" id="full-ctx" style="margin-top:12px">
+    <div class="full-section" id="full-ctx" style="margin-top:12px">
+      <div class="card" id="full-ctx-inner" style="display:none">
 
       <div id="ctx-gated" style="display:none">
 
@@ -537,7 +538,8 @@ main {
 
       </div><!-- /ctx-gated -->
 
-    </div><!-- /full-ctx card -->
+    </div><!-- /full-ctx-inner card -->
+    </div><!-- /full-ctx -->
 
     <!-- SAVE ACTION BAR -->
     <div class="action-bar" id="bar-save">
@@ -601,19 +603,12 @@ const provider = new GoogleAuthProvider();
 window._uid          = null;
 window._currentDocId = null;
 
-const isStandalone =
-  window.navigator.standalone === true ||
-  window.matchMedia('(display-mode: standalone)').matches;
-
 window.signInWithGoogle = async () => {
   try {
-    isStandalone
-      ? await signInWithRedirect(auth, provider)
-      : await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   } catch(e) { console.error('Sign in error:', e); }
 };
 window.signOut = async () => { await fbSignOut(auth); };
-getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
 
 onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;
@@ -668,6 +663,10 @@ window.setMode = (mode) => {
   // Show ctx-gated only if behavior is already selected
   if (isFullMode && state.core.bfrb) {
     document.getElementById('ctx-gated').style.display = 'block';
+    document.getElementById('full-ctx-inner').style.display = 'block';
+  }
+  if (!isFullMode) {
+    document.getElementById('full-ctx-inner').style.display = 'none';
   }
 };
 
@@ -799,6 +798,7 @@ window.selectBehavior = (val, el) => {
   // In full mode show context card
   if (currentMode === 'full') {
     document.getElementById('ctx-gated').style.display = 'block';
+    document.getElementById('full-ctx-inner').style.display = 'block';
   }
 
   updateSaveBtn();
@@ -1064,6 +1064,7 @@ window.resetForm = () => {
   document.getElementById('int-yes-tag').classList.remove('on');
   document.getElementById('int-no-tag').classList.remove('on');
   document.getElementById('ctx-gated').style.display        = 'none';
+  document.getElementById('full-ctx-inner').style.display   = 'none';
   document.getElementById('narrative-notes').value          = '';
   document.getElementById('ctx-notes').value                = '';
   document.getElementById('urge-after-label').textContent   = 'Urge level after';
