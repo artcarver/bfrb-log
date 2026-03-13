@@ -17,7 +17,7 @@
     localStorage.setItem('theme', isDark ? '' : 'dark');
     // Keep PWA theme-color in sync
     const tcMeta = document.getElementById('theme-color-meta');
-    if (tcMeta) tcMeta.setAttribute('content', isDark ? '#161618' : '#F5F5F3');
+    if (tcMeta) tcMeta.setAttribute('content', isDark ? '#181C20' : '#F2EEE8');
   };
 
   // 2. FIREBASE STUBS
@@ -80,7 +80,7 @@
         justify-content: space-between;
         padding: 0 16px;
         padding-top: env(safe-area-inset-top);
-        background: rgba(245,245,243,.96);
+        background: rgba(242,238,232,.96);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--bdr);
@@ -91,26 +91,28 @@
         min-height: 52px;
       }
       [data-theme="dark"] .gw-nav-container {
-        background: rgba(22,22,24,.96);
+        background: rgba(24,28,32,.96);
       }
 
       /* Brand & Left */
       .nav-left { display: flex; align-items: center; justify-content: flex-start; }
-      .nav-brand { font-family: 'Instrument Serif', serif; font-size: 18px; color: var(--tx); text-decoration: none; font-weight: 400; }
+      .nav-brand { font-family: 'Nunito Sans',sans-serif; font-size: 18px; color: var(--tx); text-decoration: none; font-weight: 400; }
       .nav-brand span { color: var(--ac); }
 
       /* Links & Center */
-      .nav-links { display: flex; align-items: center; gap: 2px; justify-content: center; }
+      .nav-links { display: flex; align-items: center; gap: 2px; justify-content: center; min-width: 0; }
       .nav-link { 
-        font-family: 'Instrument Sans', sans-serif; 
+        font-family: 'Nunito Sans',sans-serif; 
         font-size: 13px; 
-        font-weight: 500; 
+        font-weight: 600; 
         color: var(--tx2); 
         text-decoration: none; 
         padding: 6px 12px; 
         border-radius: var(--pill); 
         transition: var(--tr); 
-        white-space: nowrap; 
+        white-space: nowrap;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
       }
       .nav-link:hover { background: var(--acl); color: var(--ac); }
       .nav-link.active { background: var(--acl); color: var(--ac); font-weight: 600; }
@@ -118,7 +120,7 @@
       /* Buttons & Right */
       .nav-right { display: flex; align-items: center; gap: 8px; justify-content: flex-end; position: relative; }
       .sign-btn {
-        font-family: 'Instrument Sans', sans-serif;
+        font-family: 'Nunito Sans',sans-serif;
         font-size: 12px;
         font-weight: 600;
         color: var(--tx2);
@@ -136,6 +138,12 @@
       @media (min-width: 700px) {
         .nav-left, .nav-right { flex: 1 !important; }
         .nav-links { flex: 0 0 auto !important; }
+      }
+
+      /* Narrow mobile: hide brand, tighter link padding */
+      @media (max-width: 374px) {
+        .nav-brand { display: none; }
+        .nav-link { padding: 6px 6px; font-size: 12px; }
       }
 
       /* iOS Safari Fix */
@@ -164,7 +172,7 @@
       .profile-menu {
         position: absolute;
         top: calc(100% + 8px);
-        right: 0;
+        right: -8px;
         background: var(--card);
         border: 1px solid var(--bdr);
         border-radius: var(--rsm);
@@ -180,9 +188,9 @@
         align-items: center;
         gap: 10px;
         padding: 12px 16px;
-        font-family: 'Instrument Sans', sans-serif;
+        font-family: 'Nunito Sans',sans-serif;
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--tx2);
         cursor: pointer;
         background: none;
@@ -250,5 +258,27 @@
         console.warn('SW registration failed:', err);
       });
     });
+  }
+
+  // 8. ACCESSIBILITY — make .tag divs keyboard-accessible
+  function patchTagAccessibility() {
+    document.querySelectorAll('.tag').forEach(el => {
+      if (el.tagName === 'BUTTON' || el.getAttribute('role')) return;
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          el.click();
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', patchTagAccessibility);
+  } else {
+    // Delay slightly so page scripts can finish building DOM
+    setTimeout(patchTagAccessibility, 100);
   }
 })();
