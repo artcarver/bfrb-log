@@ -16,60 +16,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="base.css">
 <style>
-:root {
-  --bg:#F5F5F3; --sur:#FAFAF9; --card:#FFFFFF; --bdr:#E4E4E0; --bdr2:#C8C8C2;
-  --tx:#1C1C1E; --tx2:#48484A; --mu:#98989E;
-  --ac:#5B6B8A; --ac-h:#4A5A78; --acl:rgba(91,107,138,.10); --acl2:rgba(91,107,138,.18);
-  --sage:#4A8C78; --sagel:rgba(74,140,120,.10); --sagem:rgba(74,140,120,.18);
-  --warm:#7A6B8A; --warml:rgba(122,107,138,.12);
-  --o-resisted:#3A9E6F; --o-near:#D4841A; --o-episode:#5B6B8A;
-  --rsm:10px; --r:16px; --rlg:24px; --pill:100px;
-  --s1:0 1px 3px rgba(0,0,0,.06); --s2:0 2px 12px rgba(0,0,0,.08);
-  --tr:all .15s ease;
-}
-[data-theme="dark"] {
-  --bg:#161618; --sur:#1E1E20; --card:#252527; --bdr:#2E2E32; --bdr2:#3E3E44;
-  --tx:#F2F2F7; --tx2:#AEAEB2; --mu:#636366;
-  --ac:#7B90B0; --ac-h:#8FA4C4; --acl:rgba(123,144,176,.12); --acl2:rgba(123,144,176,.20);
-  --sage:#62A892; --sagel:rgba(98,168,146,.12); --sagem:rgba(98,168,146,.22);
-  --warm:#9A88AC; --warml:rgba(154,136,172,.13);
-  --o-resisted:#4DBF88; --o-near:#E8A040; --o-episode:#7B90B0;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;min-height:100vh;padding-bottom:80px;transition:background .3s,color .3s}
-
-nav{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(245,245,243,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
-[data-theme="dark"] nav{background:rgba(22,22,24,.96)}
-.nav-brand{font-family:'Lora',serif;font-size:18px;color:var(--tx);text-decoration:none}
-.nav-brand em{font-style:italic}
-
-.auth-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:200;align-items:center;justify-content:center}
-.auth-screen.on{display:flex}
-.auth-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rlg);padding:44px 36px;text-align:center;max-width:320px;width:92%}
-.google-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:13px 20px;font-size:14px;font-weight:600;color:var(--tx);cursor:pointer;margin-top:20px;transition:var(--tr)}
-.google-btn:hover{border-color:var(--bdr2)}
-
-#app{display:none}
-#app.on{display:block}
-main{max-width:900px;margin:0 auto;padding:20px 14px}
+/* ── PAGE LAYOUT ── */
+main{max-width:900px;margin:0 auto;padding:20px 16px}
 
 /* ── HEADER ── */
 .header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
-.page-title{font-family:'Lora',serif;font-size:26px;color:var(--tx)}
 .controls{display:flex;gap:8px;align-items:center}
 
 .select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
 .select-btn:hover{border-color:var(--bdr2)}
 [data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23AEAEB2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
 
-.action-btn{padding:8px 14px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr)}
-.action-btn:hover{border-color:var(--bdr2)}
+/* .action-btn — from base.css */
 
-/* ── INSIGHT BANNER ── */
-.insight-bar{background:var(--acl2);border:1px solid rgba(91,107,138,.2);border-radius:var(--r);padding:14px 18px;margin-bottom:20px;display:none}
-.insight-bar.visible{display:block}
-.insight-text{font-size:14px;color:var(--tx);line-height:1.55}
-.insight-text strong{font-weight:600;color:var(--ac)}
 
 /* ── STATS ── */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
@@ -80,9 +39,7 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 .stat-sub{font-size:11px;color:var(--mu);margin-top:2px}
 
 /* ── SECTION HEADERS ── */
-.section-head{display:flex;align-items:baseline;gap:10px;margin:28px 0 14px;border-bottom:1px solid var(--bdr);padding-bottom:10px}
-.section-title{font-family:'Lora',serif;font-size:18px;color:var(--tx)}
-.section-note{font-size:12px;color:var(--mu);font-weight:400}
+/* section-head / section-title / section-note — from base.css */
 
 /* ── CHART LAYOUT ── */
 .chart-duo{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
@@ -176,13 +133,10 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
 .load-more-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
 
 /* ── EMPTY + LOADING ── */
-.empty-state{text-align:center;padding:48px 20px;color:var(--mu);font-size:14px;background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);margin-top:20px}
-.empty-state p{margin-bottom:16px}
+/* .empty-state — from base.css */
 
 /* ── TOAST ── */
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:10px 22px;font-size:13px;font-weight:600;color:var(--bg);transition:all .3s ease;z-index:999;pointer-events:none;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.toast.err{background:var(--ac)}
+/* .toast — from base.css */
 
 /* ── EDIT MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;pointer-events:none}
@@ -234,9 +188,6 @@ main{max-width:900px;margin:0 auto;padding:20px 14px}
     </div>
   </div>
 
-  <div class="insight-bar" id="insight-bar">
-    <div class="insight-text" id="insight-text"></div>
-  </div>
 
   <div id="loading" style="text-align:center;color:var(--mu);padding:48px;font-size:14px">Loading your data…</div>
 
@@ -646,7 +597,6 @@ function processData(entries) {
   document.getElementById('stat-interval').textContent = avgInterval !== null ? avgInterval + 'd' : '—';
 
   // Insight
-  buildInsight(entries, outcomes, emotional, times, tools, managed, total, escalations);
 
   // Render charts
   renderOutcomesDonut(outcomes, total);
@@ -666,55 +616,1185 @@ function processData(entries) {
   document.getElementById('dashboard').style.display = 'block';
 }
 
-function buildInsight(entries, outcomes, emotional, times, tools, managed, total, escalations) {
-  const bar = document.getElementById('insight-bar');
-  const txt = document.getElementById('insight-text');
-  const parts = [];
 
-  // Top trigger
-  const topTrigger = Object.entries(emotional).sort((a,b)=>b[1]-a[1])[0];
-  if (topTrigger && total >= 3) {
-    const pct = Math.round((topTrigger[1] / total) * 100);
-    parts.push(`<strong>${topTrigger[0]}</strong> is your most common trigger (${pct}% of entries). <a href="context.html" style="color:var(--sage);font-weight:600">Review your stimulus plan →</a>`);
+function renderOutcomesDonut(outcomes, total) {
+  const c = getC();
+  if (chartInstances['outcomes']) chartInstances['outcomes'].destroy();
+  const ctx = document.getElementById('chart-outcomes').getContext('2d');
+
+  const data = [outcomes.resisted, outcomes.near_miss, outcomes.did];
+  const colors = [c.oResisted, c.oNear, c.oEpisode];
+  const labels = ['Resisted', 'Near miss', 'Episode'];
+
+  chartInstances['outcomes'] = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } } },
+      cutout: '72%'
+    }
+  });
+
+  // Custom legend
+  const legend = document.getElementById('donut-legend');
+  legend.innerHTML = labels.map((l, i) => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${colors[i]}"></div>
+      <span>${l}</span>
+      <span class="legend-count">${data[i]}</span>
+      <span class="legend-pct">${total ? Math.round((data[i]/total)*100) : 0}%</span>
+    </div>
+  `).join('');
+}
+
+function renderStreakCalendar(entries) {
+  const container = document.getElementById('streak-container');
+  const days = 60;
+  const map = {};
+
+  entries.forEach(e => {
+    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    const key = d.toISOString().slice(0, 10);
+    if (!map[key]) map[key] = { did: 0, resisted: 0, near_miss: 0 };
+    map[key][e.entry_type || 'did']++;
+  });
+
+  const cells = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const data = map[key];
+    let cls = 'streak-cell empty';
+    let title = key;
+    if (data) {
+      if (data.did > 0) cls = 'streak-cell episode';
+      else if (data.near_miss > 0) cls = 'streak-cell near-miss';
+      else cls = 'streak-cell resisted';
+      title = `${key}: ${data.did} episode, ${data.resisted} resisted, ${data.near_miss} near miss`;
+    }
+    cells.push(`<div class="${cls}" title="${title}"></div>`);
   }
 
-  // Peak time
-  const topTime = Object.entries(times).sort((a,b)=>b[1]-a[1])[0];
-  if (topTime && topTime[1] > 0) {
-    parts.push(`Most activity happens in the <strong>${topTime[0].toLowerCase()}</strong>.`);
-  }
+  const c = getC();
+  container.innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px">${cells.join('')}</div>
+    <div style="display:flex;gap:12px;font-size:11px;color:var(--mu);flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oResisted};display:inline-block"></span>Resisted</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oNear};display:inline-block"></span>Near miss</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oEpisode};display:inline-block"></span>Episode</span>
+    </div>
+  `;
+}
 
-  // Best tool
-  const toolList = Object.entries(tools)
-    .filter(i => i[1].attempts >= 2)
-    .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100)])
-    .sort((a,b) => b[1]-a[1]);
-  if (toolList.length > 0 && toolList[0][1] > 0) {
-    parts.push(`Your most effective intervention is <strong>${toolList[0][0]}</strong> (${toolList[0][1]}% success rate).`);
-  }
+function renderTimeOfDay(times, c) {
+  if (chartInstances['time']) chartInstances['time'].destroy();
+  const ctx = document.getElementById('chart-time').getContext('2d');
+  const vals = [times.Morning, times.Afternoon, times.Evening, times.Night];
+  const max = Math.max(...vals);
+  const bgColors = vals.map(v => v === max ? c.ac : c.mu + '88');
 
-  // Escalation pattern
-  if (escalations && Object.keys(escalations).length >= 2) {
-    const severeCount = (escalations['Escalated'] || 0) + (escalations["Couldn't stop"] || 0);
-    const escTotal = Object.values(escalations).reduce((a, b) => a + b, 0);
-    if (escTotal >= 3) {
-      const pct = Math.round((severeCount / escTotal) * 100);
-      if (pct >= 50) {
-        parts.push(`<strong>${pct}% of sessions escalated</strong> or became hard to stop — a key pattern to bring to your therapist.`);
-      } else if (escalations['Single pick']) {
-        const singlePct = Math.round((escalations['Single pick'] / escTotal) * 100);
-        if (singlePct >= 50) parts.push(`<strong>${singlePct}% of episodes were single picks</strong> — your containment is improving.`);
+  chartInstances['time'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
+      datasets: [{ data: vals, backgroundColor: bgColors, borderRadius: 6, borderSkipped: false }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 1, color: c.mu, font: { size: 11 } }, grid: { color: c.bdr }, border: { display: false } },
+        x: { ticks: { color: c.mu, font: { size: 11 } }, grid: { display: false }, border: { display: false } }
       }
     }
+  });
+}
+
+function renderHeatmap(hourMap) {
+  const container = document.getElementById('heatmap-container');
+  const c = getC();
+  const maxVal = Math.max(...Object.values(hourMap).map(h => h.did + h.resisted + h.near_miss), 1);
+
+  const hourLabels = ['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
+
+  let headerRow = '<div style="display:grid;grid-template-columns:36px repeat(24,1fr);gap:2px;margin-bottom:2px">';
+  headerRow += '<div></div>';
+  hourLabels.forEach((l, i) => {
+    headerRow += `<div style="font-size:8px;color:var(--mu);text-align:center;line-height:1">${i % 3 === 0 ? l : ''}</div>`;
+  });
+  headerRow += '</div>';
+
+  const rows = [
+    { label: 'Episode', key: 'did', color: c.oEpisode },
+    { label: 'Resisted', key: 'resisted', color: c.oResisted },
+    { label: 'Near miss', key: 'near_miss', color: c.oNear },
+  ];
+
+  let html = headerRow;
+  rows.forEach(row => {
+    html += `<div style="display:grid;grid-template-columns:36px repeat(24,1fr);gap:2px;margin-bottom:2px">`;
+    html += `<div style="font-size:9px;color:var(--mu);display:flex;align-items:center;justify-content:flex-end;padding-right:4px">${row.label}</div>`;
+    for (let h = 0; h < 24; h++) {
+      const val = (hourMap[h] || {})[row.key] || 0;
+      const opacity = val === 0 ? 0.12 : 0.2 + (val / maxVal) * 0.8;
+      html += `<div style="height:14px;border-radius:2px;background:${row.color};opacity:${opacity.toFixed(2)}" title="${val} at ${hourLabels[h]}"></div>`;
+    }
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function renderBarRows(containerId, data, color, limit) {
+  const container = document.getElementById(containerId);
+  const sorted = Object.entries(data).sort((a,b) => b[1]-a[1]).slice(0, limit || 8);
+
+  if (sorted.length === 0) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No data logged yet</div>';
+    return;
   }
 
-  if (parts.length > 0) {
-    txt.innerHTML = parts.join(' ');
-    bar.classList.add('visible');
-  } else {
-    bar.classList.remove('visible');
-  }
+  const max = sorted[0][1];
+  container.innerHTML = sorted.map(([label, count]) => `
+    <div class="bar-row">
+      <div class="bar-row-label" title="${label}">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${Math.round((count/max)*100)}%;background:${color}"></div></div>
+      <div class="bar-count">${count}</div>
+    </div>
+  `).join('');
 }
+
+function renderMoodDelta(moodBefore, moodAfter, moodCount, urgeCount, urgeTotal, urgeAfterCount, urgeAfterTotal) {
+  const container = document.getElementById('mood-delta-container');
+
+  const hasMood = moodCount > 0 && moodBefore > 0;
+  const hasUrge = urgeCount > 0 && urgeAfterCount > 0;
+
+  if (!hasMood && !hasUrge) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:8px 0">Log mood before/after to see emotional impact patterns.</div>';
+    return;
+  }
+
+  let html = '<div class="mood-delta">';
+
+  if (hasUrge) {
+    const before = (urgeTotal / urgeCount).toFixed(1);
+    const after = (urgeAfterTotal / urgeAfterCount).toFixed(1);
+    const delta = (parseFloat(after) - parseFloat(before)).toFixed(1);
+    const deltaColor = parseFloat(delta) < 0 ? 'var(--sage)' : parseFloat(delta) > 0 ? 'var(--ac)' : 'var(--mu)';
+    html += `
+      <div class="mood-col">
+        <div class="mood-col-label">Urge before</div>
+        <div class="mood-col-val">${before}</div>
+        <div class="mood-col-sub">avg / 10</div>
+      </div>
+      <div class="mood-arrow" style="color:${deltaColor}">→ ${delta > 0 ? '+' : ''}${delta}</div>
+      <div class="mood-col">
+        <div class="mood-col-label">Urge after</div>
+        <div class="mood-col-val" style="color:${deltaColor}">${after}</div>
+        <div class="mood-col-sub">avg / 10</div>
+      </div>
+    `;
+  }
+
+  if (hasMood) {
+    const before = (moodBefore / moodCount).toFixed(1);
+    const after = (moodAfter / moodCount).toFixed(1);
+    const delta = (parseFloat(after) - parseFloat(before)).toFixed(1);
+    const deltaColor = parseFloat(delta) > 0 ? 'var(--sage)' : parseFloat(delta) < 0 ? 'var(--ac)' : 'var(--mu)';
+    html += `
+      ${hasUrge ? '<div style="width:1px;background:var(--bdr);margin:0 4px"></div>' : ''}
+      <div class="mood-col">
+        <div class="mood-col-label">Mood before</div>
+        <div class="mood-col-val">${before}</div>
+        <div class="mood-col-sub">avg / 10</div>
+      </div>
+      <div class="mood-arrow" style="color:${deltaColor}">→ ${delta > 0 ? '+' : ''}${delta}</div>
+      <div class="mood-col">
+        <div class="mood-col-label">Mood after</div>
+        <div class="mood-col-val" style="color:${deltaColor}">${after}</div>
+        <div class="mood-col-sub">avg / 10</div>
+      </div>
+    `;
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderAreaMap(areas, c) {
+  const AREA_MAP = {
+    'Forehead':'Face','Temples':'Face','Cheeks':'Face','Nose':'Face','Chin / Jaw':'Face','Lips':'Face',
+    'Scalp':'Head & Neck','Hairline':'Head & Neck','Behind Ears':'Head & Neck','Ears':'Head & Neck','Neck':'Head & Neck',
+    'Chest':'Chest & Back','Shoulders':'Chest & Back','Abdomen':'Chest & Back','Upper Back':'Chest & Back','Lower Back':'Chest & Back',
+    'Upper Arms':'Arms & Hands','Forearms':'Arms & Hands','Wrists':'Arms & Hands','Hands':'Arms & Hands','Fingers / Cuticles':'Arms & Hands',
+    'Thighs':'Legs & Feet','Knees':'Legs & Feet','Shins / Calves':'Legs & Feet','Ankles':'Legs & Feet','Feet':'Legs & Feet',
+    'Groin':'Groin & Glutes','Buttocks':'Groin & Glutes','Inner Thighs':'Groin & Glutes',
+    'Face':'Face','Back':'Chest & Back','Arms / Hands':'Arms & Hands','Legs':'Legs & Feet','Chest / Shoulders':'Chest & Back'
+  };
+  const grouped = {};
+  Object.entries(areas).forEach(([k, v]) => {
+    const parent = AREA_MAP[k] || k;
+    grouped[parent] = (grouped[parent] || 0) + v;
+  });
+  renderBarRows('bar-areas', grouped, c.ac, 8);
+}
+
+function renderToolBars(tools) {
+  const container = document.getElementById('bar-tools');
+  const sorted = Object.entries(tools)
+    .filter(i => i[1].attempts >= 1 && i[0])
+    .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100), i[1].attempts])
+    .sort((a,b) => b[1]-a[1])
+    .slice(0, 8);
+
+  if (sorted.length === 0) {
+    container.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No intervention data yet. Log what you tried in each entry.</div>';
+    return;
+  }
+
+  const c = getC();
+  container.innerHTML = sorted.map(([label, pct, attempts]) => `
+    <div class="bar-row">
+      <div class="bar-row-label" title="${label}">${label}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${pct >= 60 ? c.sage : pct >= 30 ? c.warm : c.mu}"></div></div>
+      <div class="bar-count" title="${attempts} attempts">${pct}%</div>
+    </div>
+  `).join('');
+}
+
+// ── FEED ──
+function escapeHtml(s) {
+  return (s || '').toString().replace(/[&<"']/g, m => ({ '&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;' }[m]));
+}
+
+window.setFeedFilter = (filter, el) => {
+  feedFilter = filter;
+  feedPage = 0;
+  document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
+  renderFeed();
+};
+
+function getFeedEntries() {
+  if (feedFilter === 'all') return window._allEntries;
+  return window._allEntries.filter(e => e.entry_type === feedFilter);
+}
+
+function renderFeed() {
+  const container = document.getElementById('log-feed');
+  const all = getFeedEntries();
+  const page = all.slice(0, (feedPage + 1) * FEED_PAGE_SIZE);
+  const labels = { resisted: 'Resisted', near_miss: 'Near miss', did: 'Episode' };
+
+  container.innerHTML = page.map(e => {
+    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    const dateStr = d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    const type = e.entry_type || 'did';
+
+    const chips = [];
+    if (e.urge_before) chips.push(`<span class="chip"><strong>Urge</strong>${e.urge_before}/10${e.urge_after ? ' → ' + e.urge_after : ''}</span>`);
+    if (e.bfrb_type) chips.push(`<span class="chip"><strong>Type</strong>${e.bfrb_type}</span>`);
+    if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${Array.isArray(e.body_areas) ? e.body_areas.join(', ') : e.body_areas}</span>`);
+    if (e.emotional_triggers || e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${e.emotional_triggers || e.primary_trigger}</span>`);
+    if (e.activity) chips.push(`<span class="chip"><strong>Activity</strong>${e.activity}</span>`);
+    if (e.tried_intervention && e.interventions) chips.push(`<span class="chip"><strong>Tried</strong>${Array.isArray(e.interventions) ? e.interventions.join(', ') : e.interventions}</span>`);
+
+    return `
+      <div class="log-card" data-id="${e.id}">
+        <div class="log-card-accent ${type}"></div>
+        <div class="log-card-body">
+          <div class="log-top">
+            <div class="log-date">${dateStr}</div>
+            <div class="log-badge ${type}">${labels[type] || type}</div>
+          </div>
+          ${chips.length ? `<div class="log-chips">${chips.join('')}</div>` : ''}
+          ${e.notes ? `<div class="log-notes">${escapeHtml(e.notes)}</div>` : ''}
+          <div class="log-actions">
+            <button class="log-act-btn" onclick="editLog('${e.id}')">Edit</button>
+            <button class="log-act-btn del" onclick="deleteLog('${e.id}')">Delete</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const moreBtn = document.getElementById('load-more-btn');
+  moreBtn.style.display = page.length < all.length ? 'block' : 'none';
+}
+
+window.loadMoreFeed = () => {
+  feedPage++;
+  renderFeed();
+};
+
+window.deleteLog = (id) => {
+  const card = document.querySelector(`[data-id="${id}"]`);
+  if (!card) return;
+  const actions = card.querySelector('.log-actions');
+  actions.innerHTML = `
+    <span style="font-size:12px;color:var(--tx2)">Delete this entry?</span>
+    <button class="log-act-btn del" onclick="confirmDelete('${id}')">Yes</button>
+    <button class="log-act-btn" onclick="renderFeed()">No</button>
+  `;
+};
+
+window.confirmDelete = async (id) => {
+  try {
+    await deleteDoc(doc(db, 'users', window._uid, 'entries', id));
+    window._allEntries = window._allEntries.filter(e => e.id !== id);
+    window._currentEntries = window._allEntries;
+    if (window._allEntries.length > 0) { processData(window._allEntries); renderFeed(); }
+    else { document.getElementById('dashboard').style.display = 'none'; document.getElementById('empty-state').style.display = 'block'; }
+  } catch(e) { showToast('Failed to delete', true); renderFeed(); }
+};
+
+window.editLog = (id) => {
+  const entry = window._allEntries.find(e => e.id === id);
+  if (!entry) return;
+  editingId = id;
+  document.getElementById('edit-outcome').value = entry.entry_type || 'did';
+  document.getElementById('edit-urge').value = entry.urge_before || 5;
+  document.getElementById('edit-notes').value = entry.notes || '';
+  document.getElementById('edit-modal').classList.add('on');
+};
+window.closeEdit = () => { editingId = null; document.getElementById('edit-modal').classList.remove('on'); };
+window.saveEdit = async () => {
+  if (!editingId) return;
+  const btn = document.getElementById('edit-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const updates = { entry_type: document.getElementById('edit-outcome').value, urge_before: parseInt(document.getElementById('edit-urge').value), notes: document.getElementById('edit-notes').value.trim() };
+  try {
+    await updateDoc(doc(db, 'users', window._uid, 'entries', editingId), updates);
+    const idx = window._allEntries.findIndex(e => e.id === editingId);
+    if (idx > -1) window._allEntries[idx] = { ...window._allEntries[idx], ...updates };
+    processData(window._allEntries); renderFeed(); closeEdit();
+  } catch(e) { showToast('Failed to save', true); }
+  btn.disabled = false; btn.textContent = 'Save';
+};
+
+// ── IMPORT / EXPORT ──
+window.handleImport = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const lines = e.target.result.split('\n').filter(l => l.trim());
+    if (lines.length < 2) { showToast('File empty or invalid', true); return; }
+    let count = 0;
+    try {
+      let batch = writeBatch(db); let ops = 0;
+      for (let i = 1; i < lines.length; i++) {
+        const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/^"|"$/g, '').trim());
+        if (row.length < 4) continue;
+        const createdAt = (row[0] && row[1]) ? new Date(`${row[0]} ${row[1]}`) : new Date();
+        const ref = doc(collection(db, 'users', window._uid, 'entries'));
+        batch.set(ref, { created_at: createdAt, bfrb_type: row[2]||'picking', entry_type: row[3]||'did', urge_before: parseInt(row[4])||5, body_areas: row[5]||'', target: row[6]||'', awareness: row[7]||'', duration: row[8]||'', post_ritual: row[9]||'', pre_action: row[10]||'', primary_trigger: row[11]||'', environment: row[12]||'', post_feeling: row[13]||'', interventions: (row[14]&&row[14].toLowerCase()!=='nan')?row[14]:'', tried_intervention: !!(row[14]&&row[14].toLowerCase()!=='nan'), notes: row[16]||'' });
+        count++; ops++;
+        if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
+      }
+      if (ops > 0) await batch.commit();
+      showToast(`Imported ${count} entries`);
+      loadData();
+    } catch(err) { console.error(err); showToast('Import failed', true); }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+};
+
+window.exportCSV = () => {
+  const entries = window._allEntries;
+  if (!entries.length) { showToast('No data to export'); return; }
+  const headers = ['Date','Time','Behavior','Outcome','Urge_Before','Urge_After','Area','Target','Awareness','Duration','Post_Ritual','Pre_Action','Trigger','Environment','Activity','Escalation','Post_Feeling','Aftercare','Interventions_Tried','Specific_CR','Effectiveness','Narrative','Notes'];
+  let csv = headers.join(',') + '\n';
+  entries.forEach(e => {
+    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.bfrb_type||'', e.entry_type||'', e.urge_before||'', e.urge_after||'', e.body_areas||'', e.target||'', e.awareness||'', e.duration||'', e.post_ritual||'', e.pre_action||'', e.primary_trigger||'', e.environment||'', e.activity||'', e.escalation||'', e.post_feeling||'', e.aftercare||'', e.interventions||'', e.specific_cr||'', e.intervention_effectiveness||'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' '), (e.notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
+    csv += row.map(v => `"${v}"`).join(',') + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = `Groundwork_Export_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+};
+
+// Theme observer — re-renders charts and syncs status-bar colour
+new MutationObserver(() => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const m = document.getElementById('theme-color-meta');
+  if (m) m.setAttribute('content', isDark ? '#161618' : '#F5F5F3');
+  if (window._allEntries?.length) { processData(window._allEntries); renderFeed(); }
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+</script>
+<script src="nav.js"></script>
+<script>
+(function () {
+
+  /* ── 1. LOADING SKELETON ─────────────────────────────────────────────── */
+  function injectSkeleton() {
+    const el = document.getElementById('loading');
+    if (!el) return;
+    el.innerHTML = `
+      <div style="max-width:900px;margin:0 auto;padding:0 14px">
+        <div class="skeleton-stat-grid">
+          ${Array(4).fill(`<div class="skeleton-stat"><div class="sk-line" style="height:30px;width:50%;margin-bottom:8px"></div><div class="sk-line sk-short"></div></div>`).join('')}
+        </div>
+        ${Array(2).fill(`<div class="skeleton-card" style="height:200px;margin-bottom:12px"></div>`).join('')}
+        ${Array(3).fill(`<div class="skeleton-card"><div class="sk-line sk-title"></div><div class="sk-line sk-med"></div><div class="sk-line sk-short"></div></div>`).join('')}
+      </div>`;
+    el.style.cssText = 'padding:20px 0;color:inherit;text-align:inherit';
+  }
+
+  /* ── 2. EMPTY STATE ──────────────────────────────────────────────────── */
+  function patchEmptyState() {
+    const el = document.getElementById('empty-state');
+    if (!el) return;
+    el.className = 'empty-state';
+    el.innerHTML = `
+      <div class="empty-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <div class="empty-title">Nothing logged in this period</div>
+      <div class="empty-body">Even one resistance or near miss tells you something useful — the picture builds quickly.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <a href="index.html" class="btn-primary" style="text-decoration:none;display:inline-block;min-width:140px;text-align:center">Log an entry</a>
+        <button class="btn-ghost" onclick="document.getElementById('import-file-empty').click()" style="min-width:120px">Import CSV</button>
+      </div>
+      <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">`;
+  }
+
+  /* ── 3. DAYS-SINCE CONDITIONAL COLOR ────────────────────────────────── */
+  function patchDaysSince() {
+    const observer = new MutationObserver(() => {
+      const card = document.getElementById('stat-since-card');
+      const val  = document.getElementById('stat-since');
+      if (!card || !val) return;
+      const days = parseInt(val.textContent, 10);
+      if (isNaN(days)) return;
+      if (days === 0)      card.className = 'stat-card ac';
+      else if (days < 7)   card.className = 'stat-card warm';
+      else                 card.className = 'stat-card sage';
+    });
+    const el = document.getElementById('stat-since');
+    if (el) observer.observe(el, { childList: true, characterData: true, subtree: true });
+  }
+
+  /* ── 4. RESPONSIVE HEATMAP ───────────────────────────────────────────── */
+  const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const HOUR_LABELS = ['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
+
+  function cv(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+  function renderHeatmapMobile(hourMap) {
+    const container = document.getElementById('heatmap-container');
+    if (!container) return;
+    const entries = window._allEntries || [];
+    const dayMap = {};
+    for (let i = 0; i < 7; i++) dayMap[i] = { did: 0, resisted: 0, near_miss: 0 };
+    entries.forEach(e => {
+      const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+      if (isNaN(d)) return;
+      const type = e.entry_type || 'did';
+      if (dayMap[d.getDay()]) dayMap[d.getDay()][type] = (dayMap[d.getDay()][type] || 0) + 1;
+    });
+    const maxVal = Math.max(...Object.values(dayMap).map(d => d.did + d.resisted + d.near_miss), 1);
+    const rows = [
+      { label: 'Episode',   key: 'did',      color: cv('--o-episode')  },
+      { label: 'Resisted',  key: 'resisted',  color: cv('--o-resisted') },
+      { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
+    ];
+    const mu = cv('--mu');
+    let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:64px repeat(7,1fr);gap:4px;min-width:260px">
+      <div></div>${DOW.map(d => `<div style="font-size:11px;color:${mu};text-align:center;font-weight:500">${d}</div>`).join('')}`;
+    rows.forEach(row => {
+      html += `<div style="font-size:11px;color:${mu};display:flex;align-items:center">${row.label}</div>`;
+      for (let i = 0; i < 7; i++) {
+        const v = dayMap[i][row.key] || 0;
+        const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
+        html += `<div style="height:24px;border-radius:4px;background:${row.color};opacity:${op.toFixed(2)}" title="${DOW[i]}: ${v} ${row.label.toLowerCase()}"></div>`;
+      }
+    });
+    html += `</div></div>` + heatmapLegend(rows);
+    container.innerHTML = html;
+  }
+
+  function renderHeatmapDesktop(hourMap) {
+    const container = document.getElementById('heatmap-container');
+    if (!container) return;
+    const maxVal = Math.max(...Object.values(hourMap).map(h => h.did + h.resisted + h.near_miss), 1);
+    const rows = [
+      { label: 'Episode',   key: 'did',      color: cv('--o-episode')  },
+      { label: 'Resisted',  key: 'resisted',  color: cv('--o-resisted') },
+      { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
+    ];
+    const mu = cv('--mu');
+    let html = `<div style="overflow-x:auto"><div style="min-width:440px">
+      <div style="display:grid;grid-template-columns:64px repeat(24,1fr);gap:2px;margin-bottom:3px">
+        <div></div>
+        ${HOUR_LABELS.map((l, i) => `<div style="font-size:11px;color:${mu};text-align:center">${i % 3 === 0 ? l : ''}</div>`).join('')}
+      </div>`;
+    rows.forEach(row => {
+      html += `<div style="display:grid;grid-template-columns:64px repeat(24,1fr);gap:2px;margin-bottom:3px">
+        <div style="font-size:11px;color:${mu};display:flex;align-items:center;justify-content:flex-end;padding-right:6px">${row.label}</div>`;
+      for (let h = 0; h < 24; h++) {
+        const v = (hourMap[h] || {})[row.key] || 0;
+        const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
+        html += `<div style="height:18px;border-radius:2px;background:${row.color};opacity:${op.toFixed(2)}" title="${v} at ${HOUR_LABELS[h]}"></div>`;
+      }
+      html += '</div>';
+    });
+    html += `</div></div>` + heatmapLegend(rows);
+    container.innerHTML = html;
+  }
+
+  function heatmapLegend(rows) {
+    return `<div style="display:flex;gap:12px;font-size:11px;color:${cv('--mu')};flex-wrap:wrap;margin-top:8px">
+      ${rows.map(r => `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${r.color};display:inline-block"></span>${r.label}</span>`).join('')}
+    </div>`;
+  }
+
+  window.renderHeatmap = function (hourMap) {
+    window.innerWidth < 600 ? renderHeatmapMobile(hourMap) : renderHeatmapDesktop(hourMap);
+  };
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (!window._allEntries || !window._allEntries.length) return;
+      const hourMap = {};
+      for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0 };
+      window._allEntries.forEach(e => {
+        const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+        if (isNaN(d)) return;
+        const h = d.getHours(), type = e.entry_type || 'did';
+        if (hourMap[h] && hourMap[h][type] !== undefined) hourMap[h][type]++;
+      });
+      window.renderHeatmap(hourMap);
+    }, 250);
+  });
+
+  /* ── INIT ────────────────────────────────────────────────────────────── */
+  function init() {
+    injectSkeleton();
+    patchEmptyState();
+    patchDaysSince();
+  }
+
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', init)
+    : init();
+
+})();
+</script>
+<script src="daily-state-widget.js"></script>
+</body>
+</html><style>
+/* tracker-specific — base tokens, reset, auth, nav all come from base.css */
+main{max-width:900px;margin:0 auto;padding:20px 16px}
+
+/* ── HEADER ── */
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.controls{display:flex;gap:8px;align-items:center}
+
+.select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;outline:none;cursor:pointer;transition:var(--tr);appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%2348484A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
+.select-btn:hover{border-color:var(--bdr2)}
+[data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23AEAEB2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
+
+/* .action-btn — from base.css */
+
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
+.stat-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:16px 14px;box-shadow:var(--s1);position:relative;overflow:hidden}
+
+.stat-val{font-size:30px;font-weight:300;color:var(--tx);line-height:1.1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat-lbl{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--mu);margin-top:5px;line-height:1.3}
+.stat-sub{font-size:11px;color:var(--mu);margin-top:2px}
+
+/* ── SECTION HEADERS ── */
+/* section-head / section-title / section-note — from base.css */
+
+/* ── CHART LAYOUT ── */
+.chart-duo{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:16px}
+@media(min-width:600px){.chart-duo{grid-template-columns:1fr 1fr}}
+.chart-solo{margin-bottom:16px}
+.chart-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:20px;box-shadow:var(--s1);position:relative}
+.chart-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:14px}
+.chart-wrapper{position:relative;width:100%}
+
+/* Outcomes donut legend */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.donut-canvas-wrap{position:relative;width:160px;height:160px;flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:8px;width:100%}
+@media(min-width:400px){.donut-wrap{flex-direction:row;align-items:center}.donut-legend{width:auto;flex:1}}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-count{font-weight:600;color:var(--tx);margin-left:auto;font-variant-numeric:tabular-nums}
+.legend-pct{font-size:11px;color:var(--mu);min-width:32px;text-align:right}
+
+/* Streak calendar */
+.streak-wrap{display:flex;flex-direction:column;gap:10px}
+.streak-row{display:flex;gap:4px;align-items:center}
+.streak-label{font-size:10px;color:var(--mu);width:28px;flex-shrink:0;text-align:right}
+.streak-days{display:flex;gap:3px;flex-wrap:wrap}
+.streak-cell{width:12px;height:12px;border-radius:3px;background:var(--bdr);flex-shrink:0;cursor:default;transition:opacity .15s}
+.streak-cell:hover{opacity:.75}
+.streak-cell.episode{background:var(--o-episode)}
+.streak-cell.resisted{background:var(--o-resisted)}
+.streak-cell.near-miss{background:var(--o-near)}
+.streak-cell.empty{background:var(--bdr);opacity:.4}
+
+/* Hourly heatmap */
+.heatmap-grid{display:grid;grid-template-columns:28px repeat(24,1fr);gap:2px}
+.hm-cell{height:18px;border-radius:2px;background:var(--bdr);transition:opacity .15s}
+.hm-cell:hover{opacity:.7}
+.hm-label{font-size:9px;color:var(--mu);display:flex;align-items:center;justify-content:flex-end;padding-right:4px}
+.hm-hour{font-size:8px;color:var(--mu);text-align:center;padding-top:2px;grid-row:1}
+.hm-legend{display:flex;gap:3px;align-items:center;margin-top:6px;justify-content:flex-end}
+.hm-legend-cell{width:10px;height:10px;border-radius:2px}
+.hm-legend-label{font-size:10px;color:var(--mu);margin:0 4px}
+
+/* Horizontal bar rows */
+.bar-rows{display:flex;flex-direction:column;gap:10px}
+.bar-row{display:grid;grid-template-columns:110px 1fr 28px;gap:8px;align-items:center}
+.bar-row-label{font-size:12px;color:var(--tx2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:8px;background:var(--bdr);border-radius:var(--pill);overflow:hidden}
+.bar-fill{height:100%;border-radius:var(--pill);transition:width .5s cubic-bezier(.25,.46,.45,.94)}
+.bar-count{font-size:12px;color:var(--mu);text-align:left;font-variant-numeric:tabular-nums}
+
+/* Mood delta */
+.mood-delta{display:flex;gap:12px;align-items:stretch}
+.mood-col{flex:1;text-align:center;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 10px}
+.mood-col-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.mood-col-val{font-size:28px;font-weight:300;letter-spacing:-.02em;color:var(--tx)}
+.mood-col-sub{font-size:11px;color:var(--mu);margin-top:3px}
+.mood-arrow{display:flex;align-items:center;font-size:11px;color:var(--mu);padding-top:28px;flex-shrink:0}
+
+/* ── LOG FEED ── */
+.feed-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.feed-right{display:flex;gap:8px;align-items:center}
+
+/* Filter tabs */
+.feed-tabs{display:flex;gap:2px;background:var(--sur);border:1px solid var(--bdr);border-radius:var(--pill);padding:3px}
+.feed-tab{border:none;background:none;padding:5px 14px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);white-space:nowrap}
+.feed-tab.active{background:var(--card);color:var(--tx);box-shadow:var(--s1)}
+
+.log-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--rsm);padding:0;margin-bottom:10px;box-shadow:var(--s1);overflow:hidden;display:grid;grid-template-columns:4px 1fr}
+.log-card-accent{background:var(--bdr)}
+.log-card-accent.did{background:var(--o-episode)}
+.log-card-accent.resisted{background:var(--o-resisted)}
+.log-card-accent.near_miss{background:var(--o-near)}
+.log-card-body{padding:14px 16px}
+.log-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
+.log-date{font-size:12px;font-weight:500;color:var(--tx2)}
+.log-badge{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--rsm);flex-shrink:0}
+.log-badge.did{background:rgba(91,107,138,.12);color:var(--o-episode)}
+.log-badge.resisted{background:rgba(58,158,111,.12);color:var(--o-resisted)}
+.log-badge.near_miss{background:rgba(212,132,26,.12);color:var(--o-near)}
+
+.log-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.chip{font-size:11px;padding:3px 9px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap}
+.chip strong{color:var(--tx);font-weight:600;margin-right:3px}
+
+.log-notes{font-size:12px;color:var(--tx2);background:var(--bg);padding:10px 12px;border-radius:var(--rsm);border:1px solid var(--bdr);line-height:1.5;margin-bottom:10px}
+.log-actions{display:flex;gap:14px;padding-top:10px;border-top:1px solid var(--bdr)}
+.log-act-btn{background:none;border:none;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);padding:0}
+.log-act-btn:hover{color:var(--tx)}
+.log-act-btn.del:hover{color:var(--ac)}
+
+.load-more-btn{width:100%;padding:12px;border:1.5px dashed var(--bdr);border-radius:var(--rsm);background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);margin-top:4px}
+.load-more-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
+
+/* ── EMPTY + LOADING ── */
+/* .empty-state — from base.css */
+
+/* ── TOAST ── */
+/* .toast — from base.css */
+
+/* ── EDIT MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:900;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;pointer-events:none}
+.modal-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
+.modal-card{background:var(--card);border:1px solid var(--bdr);border-radius:var(--r);padding:24px;width:100%;max-width:400px;box-shadow:var(--s2)}
+.modal-title{font-family:'Lora',serif;font-size:18px;color:var(--tx);margin-bottom:18px}
+.modal-field{margin-bottom:14px}
+.modal-label{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
+.modal-input,.modal-select{width:100%;background:var(--bg);border:1.5px solid var(--bdr);border-radius:var(--rsm);padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--tx);outline:none;transition:var(--tr)}
+.modal-input:focus,.modal-select:focus{border-color:var(--ac)}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-btn{flex:1;padding:11px;border-radius:var(--pill);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:var(--tr);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx)}
+.modal-btn.primary{background:var(--ac);color:#fff;border-color:var(--ac)}
+.modal-btn.primary:hover{background:var(--ac-h)}
+</style>
+<script>
+(function(){
+  const stored=localStorage.getItem('gw-theme');
+  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#161618');}
+})();
+</script>
+</head>
+<body>
+
+<div class="auth-screen on" id="auth-screen">
+  <div class="auth-card">
+    <div style="font-family:'Lora',serif;font-size:24px;margin-bottom:8px">Groundwork</div>
+    <div style="font-size:14px;color:var(--mu)">Sign in to view patterns.</div>
+    <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
+  </div>
+</div>
+
+<div id="gw-nav"></div>
+
+<div id="app">
+<main>
+  <div class="header-row">
+    <div class="page-title">Patterns</div>
+    <div class="controls">
+      <select class="select-btn" id="time-filter" onchange="loadData()">
+        <option value="7">Last 7 days</option>
+        <option value="30" selected>Last 30 days</option>
+        <option value="90">Last 90 days</option>
+        <option value="all">All time</option>
+      </select>
+      <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
+      <button class="action-btn" onclick="document.getElementById('import-file').click()">Import</button>
+      <button class="action-btn" onclick="exportCSV()">Export</button>
+    </div>
+  </div>
+
+
+  <div id="loading" style="text-align:center;color:var(--mu);padding:48px;font-size:14px">Loading your data…</div>
+
+  <div id="dashboard" style="display:none">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card ac">
+        <div class="stat-val" id="stat-total">—</div>
+        <div class="stat-lbl">Total entries</div>
+      </div>
+      <div class="stat-card sage">
+        <div class="stat-val" id="stat-resist">—</div>
+        <div class="stat-lbl">Managed</div>
+        <div class="stat-sub" id="stat-resist-sub"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-urge">—</div>
+        <div class="stat-lbl">Avg urge before</div>
+        <div class="stat-sub" id="stat-urge-after"></div>
+      </div>
+      <div class="stat-card sage" id="stat-since-card">
+        <div class="stat-val" id="stat-since">—</div>
+        <div class="stat-lbl" id="stat-since-lbl">Days since episode</div>
+      </div>
+      <div class="stat-card" id="stat-interval-card">
+        <div class="stat-val" id="stat-interval">—</div>
+        <div class="stat-lbl">Avg days between episodes</div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="section-head">
+      <div class="section-title">Overview</div>
+      <div class="section-note">outcomes &amp; activity</div>
+    </div>
+    <div class="chart-duo">
+      <div class="chart-card">
+        <div class="chart-label">Outcomes</div>
+        <div class="donut-wrap" id="donut-wrap">
+          <div class="donut-canvas-wrap"><canvas id="chart-outcomes"></canvas></div>
+          <div class="donut-legend" id="donut-legend"></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Activity — last 60 days</div>
+        <div id="streak-container"></div>
+      </div>
+    </div>
+
+    <!-- WHEN -->
+    <div class="section-head">
+      <div class="section-title">When</div>
+      <div class="section-note">time patterns</div>
+    </div>
+    <div class="chart-duo">
+      <div class="chart-card">
+        <div class="chart-label">Time of day</div>
+        <div class="chart-wrapper" style="height:160px"><canvas id="chart-time"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Hour heatmap</div>
+        <div id="heatmap-container"></div>
+      </div>
+    </div>
+
+    <!-- WHY -->
+    <div class="section-head">
+      <div class="section-title">Why</div>
+      <div class="section-note">triggers &amp; context</div>
+    </div>
+    <div class="chart-duo">
+      <div class="chart-card">
+        <div class="chart-label">Emotional triggers</div>
+        <div class="bar-rows" id="bar-triggers"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Sensory triggers</div>
+        <div class="bar-rows" id="bar-sensory"></div>
+      </div>
+    </div>
+    <div class="chart-solo">
+      <div class="chart-card">
+        <div class="chart-label">Mood — before vs. after episodes</div>
+        <div id="mood-delta-container"></div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="section-head">
+      <div class="section-title">Body</div>
+      <div class="section-note">areas &amp; targets</div>
+    </div>
+    <div class="chart-duo">
+      <div class="chart-card">
+        <div class="chart-label">Body areas</div>
+        <div class="bar-rows" id="bar-areas"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Target types</div>
+        <div class="bar-rows" id="bar-targets"></div>
+      </div>
+    </div>
+
+    <!-- INTERVENTIONS -->
+    <div class="section-head">
+      <div class="section-title">Interventions</div>
+      <div class="section-note">what's working</div>
+    </div>
+    <div class="chart-solo">
+      <div class="chart-card">
+        <div class="chart-label">Effectiveness (% led to resist or near-miss)</div>
+        <div class="bar-rows" id="bar-tools"></div>
+      </div>
+    </div>
+
+    <!-- CONTEXT PATTERNS -->
+    <div class="section-head">
+      <div class="section-title">Context patterns</div>
+      <div class="section-note">activity &amp; escalation</div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-label">Activity at time of episode</div>
+        <div class="bar-rows" id="bar-activity"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Session escalation pattern</div>
+        <div class="bar-rows" id="bar-escalation"></div>
+      </div>
+    </div>
+
+    <!-- LOG -->
+    <div class="section-head" style="margin-top:36px">
+      <div class="section-title">Log history</div>
+    </div>
+    <div class="feed-header">
+      <div class="feed-tabs" id="feed-tabs">
+        <button class="feed-tab active" data-filter="all" onclick="setFeedFilter('all',this)">All</button>
+        <button class="feed-tab" data-filter="did" onclick="setFeedFilter('did',this)">Episodes</button>
+        <button class="feed-tab" data-filter="resisted" onclick="setFeedFilter('resisted',this)">Resisted</button>
+        <button class="feed-tab" data-filter="near_miss" onclick="setFeedFilter('near_miss',this)">Near miss</button>
+      </div>
+    </div>
+    <div id="log-feed"></div>
+    <button class="load-more-btn" id="load-more-btn" style="display:none" onclick="loadMoreFeed()">Show more entries</button>
+
+  </div><!-- /dashboard -->
+
+  <div id="empty-state" class="empty-state" style="display:none">
+    <p>No entries in this timeframe.</p>
+    <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">
+    <button class="action-btn" onclick="document.getElementById('import-file-empty').click()">Import CSV</button>
+  </div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-card">
+    <div class="modal-title">Edit entry</div>
+    <div class="modal-field">
+      <label class="modal-label">Outcome</label>
+      <select class="modal-select" id="edit-outcome">
+        <option value="did">Episode</option>
+        <option value="near_miss">Near Miss</option>
+        <option value="resisted">Resisted</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Urge level (1–10)</label>
+      <input type="number" class="modal-input" id="edit-urge" min="1" max="10">
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Notes</label>
+      <textarea class="modal-input" id="edit-notes" rows="3" style="resize:vertical"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="closeEdit()">Cancel</button>
+      <button class="modal-btn primary" id="edit-save-btn" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
+  authDomain: "skin-picking-log.firebaseapp.com",
+  projectId: "skin-picking-log",
+  storageBucket: "skin-picking-log.firebasestorage.app",
+  messagingSenderId: "162906566118",
+  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+window._db = db;
+const provider = new GoogleAuthProvider();
+
+window._uid = null;
+window._currentEntries = [];
+window._allEntries = [];
+let feedFilter = 'all';
+let feedPage = 0;
+const FEED_PAGE_SIZE = 10;
+let chartInstances = {};
+let editingId = null;
+
+// Detect iOS standalone (home screen) mode — popup is blocked there
+const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+
+window.signInWithGoogle = async () => {
+  try {
+    if (isStandalone) {
+      await signInWithRedirect(auth, provider);
+    } else {
+      await signInWithPopup(auth, provider);
+    }
+  } catch(e) {
+    console.error('Sign in error:', e);
+  }
+};
+window.signOut = async () => { await fbSignOut(auth); };
+
+// Handle redirect result when returning from Google auth (iOS standalone)
+getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
+
+onAuthStateChanged(auth, user => {
+  window._uid = user ? user.uid : null;
+  document.getElementById('auth-screen').classList.toggle('on', !user);
+  document.getElementById('app').classList.toggle('on', !!user);
+  if (user) loadData();
+});
+
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+function getC() {
+  return { ac: getCSSVar('--ac'), sage: getCSSVar('--sage'), warm: getCSSVar('--warm'), mu: getCSSVar('--mu'), bdr: getCSSVar('--bdr'), tx: getCSSVar('--tx'), tx2: getCSSVar('--tx2'),
+    oResisted: getCSSVar('--o-resisted'), oNear: getCSSVar('--o-near'), oEpisode: getCSSVar('--o-episode') };
+}
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+window.loadData = async () => {
+  if (!window._uid) return;
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('empty-state').style.display = 'none';
+
+  const days = document.getElementById('time-filter').value;
+  let q;
+  if (days === 'all') {
+    q = query(collection(db, 'users', window._uid, 'entries'), orderBy('created_at', 'desc'));
+  } else {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - parseInt(days));
+    q = query(collection(db, 'users', window._uid, 'entries'), where('created_at', '>=', cutoff), orderBy('created_at', 'desc'));
+  }
+
+  try {
+    const snap = await getDocs(q);
+    const entries = [];
+    snap.forEach(d => entries.push({ id: d.id, ...d.data() }));
+    window._currentEntries = entries;
+    window._allEntries = entries;
+
+    if (entries.length === 0) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'block';
+      return;
+    }
+
+    processData(entries);
+    feedFilter = 'all';
+    feedPage = 0;
+    document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'all'));
+    renderFeed();
+  } catch(e) {
+    console.error(e);
+    document.getElementById('loading').textContent = 'Error loading data.';
+  }
+};
+
+function processData(entries) {
+  const c = getC();
+  let outcomes = { resisted: 0, near_miss: 0, did: 0 };
+  let times = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
+  let hourMap = {};
+  let emotional = {}, sensory = {}, areas = {}, targets = {}, tools = {}, activities = {}, escalations = {};
+  let totalUrge = 0, urgeCount = 0, totalMoodBefore = 0, totalMoodAfter = 0, moodCount = 0;
+  let urgeAfterTotal = 0, urgeAfterCount = 0;
+
+  // Build hourly data
+  for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0 };
+
+  entries.forEach(e => {
+    const type = e.entry_type || 'did';
+    if (outcomes[type] !== undefined) outcomes[type]++;
+
+    if (e.urge_before) { totalUrge += parseInt(e.urge_before); urgeCount++; }
+    if (e.urge_after) { urgeAfterTotal += parseInt(e.urge_after); urgeAfterCount++; }
+    if (e.mood_before) { totalMoodBefore += parseInt(e.mood_before); moodCount++; }
+    if (e.mood_after) { totalMoodAfter += parseInt(e.mood_after); moodCount > 0 && moodCount--; moodCount++; }
+
+    if (e.created_at) {
+      const d = e.created_at.toDate ? e.created_at.toDate() : new Date(e.created_at);
+      const h = d.getHours();
+      if (hourMap[h]) hourMap[h][type] = (hourMap[h][type] || 0) + 1;
+      if (h >= 6 && h < 12) times.Morning++;
+      else if (h >= 12 && h < 17) times.Afternoon++;
+      else if (h >= 17 && h < 22) times.Evening++;
+      else times.Night++;
+    }
+
+    // Triggers — handle both array and string
+    const parseTags = (v) => {
+      if (!v) return [];
+      if (Array.isArray(v)) return v;
+      return v.split(',').map(s => s.trim()).filter(Boolean);
+    };
+
+    parseTags(e.emotional_triggers || e.primary_trigger).forEach(t => {
+      if (t && t.toLowerCase() !== 'nan') emotional[t] = (emotional[t] || 0) + 1;
+    });
+    parseTags(e.sensory_triggers).forEach(t => {
+      if (t && t.toLowerCase() !== 'nan') sensory[t] = (sensory[t] || 0) + 1;
+    });
+
+    parseTags(e.body_areas).forEach(a => {
+      if (a) areas[a] = (areas[a] || 0) + 1;
+    });
+    parseTags(e.target || e.picked_what || e.bite_what).forEach(t => {
+      if (t && t.toLowerCase() !== 'nan') targets[t] = (targets[t] || 0) + 1;
+    });
+
+    if (e.tried_intervention && e.interventions) {
+      const isWin = type === 'resisted' || type === 'near_miss';
+      parseTags(e.interventions).forEach(tool => {
+        if (!tool || tool.toLowerCase() === 'nan') return;
+        if (!tools[tool]) tools[tool] = { attempts: 0, wins: 0 };
+        tools[tool].attempts++;
+        if (isWin) tools[tool].wins++;
+      });
+    }
+
+    if (e.activity) activities[e.activity] = (activities[e.activity] || 0) + 1;
+    if (e.escalation) escalations[e.escalation] = (escalations[e.escalation] || 0) + 1;
+  });
+
+  const total = entries.length;
+  const managed = outcomes.resisted + outcomes.near_miss;
+
+  // Stats
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-resist').textContent = Math.round((managed / total) * 100) + '%';
+  document.getElementById('stat-resist-sub').textContent = `${managed} of ${total} entries`;
+  document.getElementById('stat-urge').textContent = urgeCount ? (totalUrge / urgeCount).toFixed(1) : '—';
+  document.getElementById('stat-urge-after').textContent = urgeAfterCount ? `↓ ${(urgeAfterTotal / urgeAfterCount).toFixed(1)} after` : '';
+
+  const lastEpisode = entries.filter(e => e.entry_type === 'did').map(e => {
+    return e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+  }).sort((a, b) => b - a)[0];
+
+  if (lastEpisode) {
+    const today = new Date(); today.setHours(0,0,0,0);
+    const episodeDay = new Date(lastEpisode); episodeDay.setHours(0,0,0,0);
+    const daysSince = Math.round((today - episodeDay) / 86400000);
+    document.getElementById('stat-since').textContent = daysSince;
+    document.getElementById('stat-since-lbl').textContent = 'Days since episode';
+    document.getElementById('stat-since-card').className = 'stat-card sage';
+  } else {
+    document.getElementById('stat-since').textContent = '—';
+    document.getElementById('stat-since-lbl').textContent = 'Days since episode';
+    document.getElementById('stat-since-card').className = 'stat-card sage';
+  }
+
+  // Avg days between episodes
+  const episodeDates = entries
+    .filter(e => e.entry_type === 'did')
+    .map(e => e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at))
+    .sort((a, b) => a - b);
+
+  let avgInterval = null;
+  if (episodeDates.length >= 2) {
+    const gaps = [];
+    for (let i = 1; i < episodeDates.length; i++) {
+      gaps.push((episodeDates[i] - episodeDates[i-1]) / 86400000);
+    }
+    avgInterval = (gaps.reduce((a, b) => a + b, 0) / gaps.length).toFixed(1);
+  }
+  document.getElementById('stat-interval').textContent = avgInterval !== null ? avgInterval + 'd' : '—';
+
+  // Insight
+
+  // Render charts
+  renderOutcomesDonut(outcomes, total);
+  renderStreakCalendar(entries);
+  renderTimeOfDay(times, c);
+  renderHeatmap(hourMap);
+  renderBarRows('bar-triggers', emotional, c.warm, 6);
+  renderBarRows('bar-sensory', sensory, c.ac, 6);
+  renderMoodDelta(totalMoodBefore, totalMoodAfter, moodCount, urgeCount, totalUrge, urgeAfterCount, urgeAfterTotal);
+  renderAreaMap(areas, c);
+  renderBarRows('bar-targets', targets, c.mu, 6);
+  renderToolBars(tools);
+  renderBarRows('bar-activity', activities, c.ac, 8);
+  renderBarRows('bar-escalation', escalations, c.oNear, 4);
+
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+}
+
 
 function renderOutcomesDonut(outcomes, total) {
   const c = getC();
