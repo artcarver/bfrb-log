@@ -593,16 +593,15 @@ function processData(entries) {
   }).sort((a, b) => b - a)[0];
 
   if (lastEpisode) {
-    // Compare by calendar date, not milliseconds — avoids "0 days" when episode was yesterday
     const today = new Date(); today.setHours(0,0,0,0);
     const episodeDay = new Date(lastEpisode); episodeDay.setHours(0,0,0,0);
     const daysSince = Math.round((today - episodeDay) / 86400000);
     document.getElementById('stat-since').textContent = daysSince;
-    document.getElementById('stat-since-lbl').textContent = daysSince === 0 ? 'Episode today' : 'Days since episode';
-    document.getElementById('stat-since-card').className = `stat-card ${daysSince === 0 ? '' : 'sage'}`;
+    document.getElementById('stat-since-lbl').textContent = 'Days since episode';
+    document.getElementById('stat-since-card').className = 'stat-card sage';
   } else {
     document.getElementById('stat-since').textContent = '—';
-    document.getElementById('stat-since-lbl').textContent = 'No episodes in window';
+    document.getElementById('stat-since-lbl').textContent = 'Days since episode';
     document.getElementById('stat-since-card').className = 'stat-card sage';
   }
 
