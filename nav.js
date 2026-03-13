@@ -76,11 +76,10 @@
       .gw-nav-container {
         height: calc(52px + env(safe-area-inset-top));
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
         padding: 0 16px;
         padding-top: env(safe-area-inset-top);
-        padding-bottom: 0;
         background: rgba(245,245,243,.96);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
