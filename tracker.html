@@ -72,6 +72,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .streak-cell.episode{background:var(--o-episode)}
 .streak-cell.resisted{background:var(--o-resisted)}
 .streak-cell.near-miss{background:var(--o-near)}
+.streak-cell.caught{background:var(--ac)}
 .streak-cell.empty{background:var(--bdr);opacity:.4}
 
 /* Hourly heatmap */
@@ -114,6 +115,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .log-card-accent.did{background:var(--o-episode)}
 .log-card-accent.resisted{background:var(--o-resisted)}
 .log-card-accent.near_miss{background:var(--o-near)}
+.log-card-accent.caught{background:var(--ac)}
 .log-card-body{padding:14px 16px}
 .log-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
 .log-date{font-size:13px;font-weight:500;color:var(--tx2)}
@@ -121,6 +123,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 .log-badge.did{background:rgba(91,107,138,.12);color:var(--o-episode)}
 .log-badge.resisted{background:rgba(58,158,111,.12);color:var(--o-resisted)}
 .log-badge.near_miss{background:rgba(212,132,26,.12);color:var(--o-near)}
+.log-badge.caught{background:rgba(74,120,180,.12);color:var(--ac)}
 
 .log-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
 .chip{font-size:13px;padding:4px 10px;border-radius:var(--rsm);background:var(--sur);border:1px solid var(--bdr);color:var(--tx2);white-space:nowrap;font-family:'DM Sans',sans-serif}
@@ -134,6 +137,8 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
 
 .load-more-btn{width:100%;padding:12px;border:1.5px dashed var(--bdr);border-radius:var(--rsm);background:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--mu);cursor:pointer;transition:var(--tr);margin-top:4px}
 .load-more-btn:hover{border-color:var(--bdr2);color:var(--tx2)}
+/* Discussed-in-session badge */
+.discussed-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--sage);background:var(--sagel);border:1px solid var(--sagem,rgba(74,140,120,.18));border-radius:var(--pill);padding:2px 8px;flex-shrink:0}
 
 /* ── EMPTY + LOADING ── */
 /* .empty-state — from base.css */
@@ -221,6 +226,11 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <div class="stat-val" id="stat-since">—</div>
         <div class="stat-lbl" id="stat-since-lbl">Days since episode</div>
       </div>
+      <div class="stat-card sage" id="stat-streak-card">
+        <div class="stat-val" id="stat-streak">—</div>
+        <div class="stat-lbl">Resistance streak</div>
+        <div class="stat-sub" id="stat-streak-sub">days in a row</div>
+      </div>
       <div class="stat-card" id="stat-interval-card">
         <div class="stat-val" id="stat-interval">—</div>
         <div class="stat-lbl">Avg days between episodes</div>
@@ -245,6 +255,12 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <div id="streak-container"></div>
       </div>
     </div>
+    <div class="chart-solo">
+      <div class="chart-card">
+        <div class="chart-label">Weekly episodes — trend over time</div>
+        <div class="chart-wrapper" style="height:150px"><canvas id="chart-weekly"></canvas></div>
+      </div>
+    </div>
 
     <!-- WHEN -->
     <div class="section-head">
@@ -256,6 +272,12 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <div class="chart-label">Time of day</div>
         <div class="chart-wrapper" style="height:160px"><canvas id="chart-time"></canvas></div>
       </div>
+      <div class="chart-card">
+        <div class="chart-label">Day of week</div>
+        <div class="chart-wrapper" style="height:160px"><canvas id="chart-dow"></canvas></div>
+      </div>
+    </div>
+    <div class="chart-solo">
       <div class="chart-card">
         <div class="chart-label">Hour heatmap</div>
         <div id="heatmap-container"></div>
@@ -305,10 +327,14 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
       <div class="section-title">Interventions</div>
       <div class="section-note">what's working</div>
     </div>
-    <div class="chart-solo">
+    <div class="chart-duo">
       <div class="chart-card">
-        <div class="chart-label">Effectiveness (% led to resist or near-miss)</div>
+        <div class="chart-label">Outcome rate (% resist / near-miss)</div>
         <div class="bar-rows" id="bar-tools"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">User-rated effectiveness (avg 1–5)</div>
+        <div class="bar-rows" id="bar-tools-rated"></div>
       </div>
     </div>
 
@@ -338,6 +364,7 @@ main{max-width:900px;margin:0 auto;padding:20px 16px}
         <button class="feed-tab" data-filter="did" onclick="setFeedFilter('did',this)">Episodes</button>
         <button class="feed-tab" data-filter="resisted" onclick="setFeedFilter('resisted',this)">Resisted</button>
         <button class="feed-tab" data-filter="near_miss" onclick="setFeedFilter('near_miss',this)">Near miss</button>
+        <button class="feed-tab" data-filter="discussed" onclick="setFeedFilter('discussed',this)">Discussed</button>
       </div>
     </div>
     <div id="log-feed"></div>
@@ -498,18 +525,26 @@ window.loadData = async () => {
     renderFeed();
   } catch(e) {
     console.error(e);
-    document.getElementById('loading').textContent = 'Error loading data.';
+    const loadEl = document.getElementById('loading');
+    if (e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))) {
+      loadEl.innerHTML = '<div style="font-size:14px;color:var(--warm,#c87941);line-height:1.55">Daily read limit reached.<br>Firestore free-tier quota resets at midnight Pacific. Try again tomorrow.</div>';
+    } else {
+      loadEl.textContent = 'Error loading data — check your connection and reload.';
+    }
   }
 };
 
 function processData(entries) {
   const c = getC();
-  let outcomes = { resisted: 0, near_miss: 0, did: 0 };
+  let outcomes = { resisted: 0, near_miss: 0, caught: 0, did: 0 };
   let times = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
   let hourMap = {};
+  let dowMap = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 }; // Sun–Sat episodes
   let emotional = {}, sensory = {}, areas = {}, targets = {}, tools = {}, activities = {}, escalations = {};
   let totalUrge = 0, urgeCount = 0, totalMoodBefore = 0, totalMoodAfter = 0, moodCount = 0;
   let urgeAfterTotal = 0, urgeAfterCount = 0;
+  // Weekly bins: key = YYYY-WW
+  const weeklyEpisodes = {};
 
   // Build hourly data
   for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0 };
@@ -519,7 +554,7 @@ function processData(entries) {
     if (outcomes[type] !== undefined) outcomes[type]++;
 
     if (e.urge_before) { totalUrge += parseInt(e.urge_before); urgeCount++; }
-    if (e.urge_after) { urgeAfterTotal += parseInt(e.urge_after); urgeAfterCount++; }
+    if (e.urge_after)  { urgeAfterTotal += parseInt(e.urge_after); urgeAfterCount++; }
     if (e.mood_before) { totalMoodBefore += parseInt(e.mood_before); moodCount++; }
     if (e.mood_after)  { totalMoodAfter  += parseInt(e.mood_after); }
 
@@ -531,6 +566,17 @@ function processData(entries) {
       else if (h >= 12 && h < 17) times.Afternoon++;
       else if (h >= 17 && h < 22) times.Evening++;
       else times.Night++;
+
+      // Day of week (episodes only — so the chart shows episode risk)
+      if (type === 'did') dowMap[d.getDay()]++;
+
+      // Weekly episode bins
+      if (type === 'did') {
+        const startOfYear = new Date(d.getFullYear(), 0, 1);
+        const weekNum = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+        const wKey = `${d.getFullYear()}-W${String(weekNum).padStart(2,'0')}`;
+        weeklyEpisodes[wKey] = (weeklyEpisodes[wKey] || 0) + 1;
+      }
     }
 
     // Triggers — handle both array and string
@@ -556,11 +602,13 @@ function processData(entries) {
 
     if (e.tried_intervention && e.interventions) {
       const isWin = type === 'resisted' || type === 'near_miss';
+      const rated = e.intervention_effectiveness ? parseInt(e.intervention_effectiveness) : null;
       parseTags(e.interventions).forEach(tool => {
         if (!tool || tool.toLowerCase() === 'nan') return;
-        if (!tools[tool]) tools[tool] = { attempts: 0, wins: 0 };
+        if (!tools[tool]) tools[tool] = { attempts: 0, wins: 0, ratedTotal: 0, ratedCount: 0 };
         tools[tool].attempts++;
         if (isWin) tools[tool].wins++;
+        if (rated && rated >= 1 && rated <= 5) { tools[tool].ratedTotal += rated; tools[tool].ratedCount++; }
       });
     }
 
@@ -569,7 +617,25 @@ function processData(entries) {
   });
 
   const total = entries.length;
-  const managed = outcomes.resisted + outcomes.near_miss;
+  const managed = outcomes.resisted + outcomes.near_miss + outcomes.caught;
+
+  // ── Resistance streak: consecutive calendar days with ≥1 resisted entry ──
+  const resistDays = new Set(
+    entries
+      .filter(e => e.entry_type === 'resisted')
+      .map(e => { const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at); return d.toISOString().slice(0,10); })
+  );
+  let resistStreak = 0;
+  const today = new Date(); today.setHours(0,0,0,0);
+  for (let i = 0; ; i++) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    if (resistDays.has(d.toISOString().slice(0,10))) resistStreak++;
+    else break;
+  }
+  document.getElementById('stat-streak').textContent = resistStreak || '—';
+  document.getElementById('stat-streak-sub').textContent = resistStreak === 1 ? 'day in a row' : 'days in a row';
+  const streakCard = document.getElementById('stat-streak-card');
+  if (streakCard) streakCard.className = resistStreak >= 7 ? 'stat-card sage' : resistStreak >= 3 ? 'stat-card ac' : 'stat-card';
 
   // Stats
   document.getElementById('stat-total').textContent = total;
@@ -583,9 +649,9 @@ function processData(entries) {
   }).sort((a, b) => b - a)[0];
 
   if (lastEpisode) {
-    const today = new Date(); today.setHours(0,0,0,0);
+    const tod = new Date(); tod.setHours(0,0,0,0);
     const episodeDay = new Date(lastEpisode); episodeDay.setHours(0,0,0,0);
-    const daysSince = Math.round((today - episodeDay) / 86400000);
+    const daysSince = Math.round((tod - episodeDay) / 86400000);
     document.getElementById('stat-since').textContent = daysSince;
     document.getElementById('stat-since-lbl').textContent = 'Days since episode';
     document.getElementById('stat-since-card').className = 'stat-card sage';
@@ -611,12 +677,12 @@ function processData(entries) {
   }
   document.getElementById('stat-interval').textContent = avgInterval !== null ? avgInterval + 'd' : '—';
 
-  // Insight
-
   // Render charts
   renderOutcomesDonut(outcomes, total);
   renderStreakCalendar(entries);
+  renderWeeklyTrend(weeklyEpisodes, c);
   renderTimeOfDay(times, c);
+  renderDayOfWeek(dowMap, c);
   renderHeatmap(hourMap);
   renderBarRows('bar-triggers', emotional, c.warm, 6);
   renderBarRows('bar-sensory', sensory, c.ac, 6);
@@ -637,9 +703,9 @@ function renderOutcomesDonut(outcomes, total) {
   if (chartInstances['outcomes']) chartInstances['outcomes'].destroy();
   const ctx = document.getElementById('chart-outcomes').getContext('2d');
 
-  const data = [outcomes.resisted, outcomes.near_miss, outcomes.did];
-  const colors = [c.oResisted, c.oNear, c.oEpisode];
-  const labels = ['Resisted', 'Near miss', 'Episode'];
+  const data   = [outcomes.resisted, outcomes.near_miss, outcomes.caught || 0, outcomes.did];
+  const colors = [c.oResisted, c.oNear, c.ac, c.oEpisode];
+  const labels = ['Resisted', 'Near miss', 'Caught mid-act', 'Episode'];
 
   chartInstances['outcomes'] = new Chart(ctx, {
     type: 'doughnut',
@@ -654,16 +720,15 @@ function renderOutcomesDonut(outcomes, total) {
     }
   });
 
-  // Custom legend
+  // Custom legend — hide zero-count rows
   const legend = document.getElementById('donut-legend');
-  legend.innerHTML = labels.map((l, i) => `
+  legend.innerHTML = labels.map((l, i) => data[i] > 0 ? `
     <div class="legend-item">
       <div class="legend-dot" style="background:${colors[i]}"></div>
       <span>${l}</span>
       <span class="legend-count">${data[i]}</span>
       <span class="legend-pct">${total ? Math.round((data[i]/total)*100) : 0}%</span>
-    </div>
-  `).join('');
+    </div>` : '').join('');
 }
 
 function renderStreakCalendar(entries) {
@@ -674,8 +739,10 @@ function renderStreakCalendar(entries) {
   entries.forEach(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
     const key = d.toISOString().slice(0, 10);
-    if (!map[key]) map[key] = { did: 0, resisted: 0, near_miss: 0 };
-    map[key][e.entry_type || 'did']++;
+    if (!map[key]) map[key] = { did: 0, resisted: 0, near_miss: 0, caught: 0 };
+    const t = e.entry_type || 'did';
+    if (map[key][t] !== undefined) map[key][t]++;
+    else map[key][t] = 1;
   });
 
   const cells = [];
@@ -689,11 +756,24 @@ function renderStreakCalendar(entries) {
     if (data) {
       if (data.did > 0) cls = 'streak-cell episode';
       else if (data.near_miss > 0) cls = 'streak-cell near-miss';
+      else if (data.caught > 0) cls = 'streak-cell caught';
       else cls = 'streak-cell resisted';
-      title = `${key}: ${data.did} episode, ${data.resisted} resisted, ${data.near_miss} near miss`;
+      title = `${key}: ${data.did} ep · ${data.caught} caught · ${data.near_miss} near miss · ${data.resisted} resisted`;
     }
     cells.push(`<div class="${cls}" title="${title}"></div>`);
   }
+
+  const c = getC();
+  container.innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px">${cells.join('')}</div>
+    <div style="display:flex;gap:12px;font-size:11px;color:var(--mu);flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oResisted};display:inline-block"></span>Resisted</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oNear};display:inline-block"></span>Near miss</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.ac};display:inline-block"></span>Caught mid-act</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${c.oEpisode};display:inline-block"></span>Episode</span>
+    </div>
+  `;
+}
 
   const c = getC();
   container.innerHTML = `
@@ -861,26 +941,131 @@ function renderAreaMap(areas, c) {
 }
 
 function renderToolBars(tools) {
-  const container = document.getElementById('bar-tools');
-  const sorted = Object.entries(tools)
-    .filter(i => i[1].attempts >= 1 && i[0])
-    .map(i => [i[0], Math.round((i[1].wins / i[1].attempts) * 100), i[1].attempts])
-    .sort((a,b) => b[1]-a[1])
+  const c = getC();
+  const noDataMsg = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No intervention data yet.</div>';
+
+  // — Outcome rate chart —
+  const outcomeSorted = Object.entries(tools)
+    .filter(([k, v]) => v.attempts >= 1 && k)
+    .map(([k, v]) => [k, Math.round((v.wins / v.attempts) * 100), v.attempts])
+    .sort((a, b) => b[1] - a[1])
     .slice(0, 8);
 
-  if (sorted.length === 0) {
-    container.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No intervention data yet. Log what you tried in each entry.</div>';
-    return;
+  const outContainer = document.getElementById('bar-tools');
+  if (outcomeSorted.length === 0) { outContainer.innerHTML = noDataMsg; }
+  else {
+    outContainer.innerHTML = outcomeSorted.map(([label, pct, attempts]) => `
+      <div class="bar-row">
+        <div class="bar-row-label" title="${label}">${label}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${pct >= 60 ? c.sage : pct >= 30 ? c.warm : c.mu}"></div></div>
+        <div class="bar-count" title="${attempts} uses">${pct}%</div>
+      </div>`).join('');
   }
 
-  const c = getC();
-  container.innerHTML = sorted.map(([label, pct, attempts]) => `
-    <div class="bar-row">
-      <div class="bar-row-label" title="${label}">${label}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${pct >= 60 ? c.sage : pct >= 30 ? c.warm : c.mu}"></div></div>
-      <div class="bar-count" title="${attempts} attempts">${pct}%</div>
-    </div>
-  `).join('');
+  // — User-rated effectiveness (avg 1–5) —
+  const ratedSorted = Object.entries(tools)
+    .filter(([k, v]) => v.ratedCount >= 1 && k)
+    .map(([k, v]) => [k, (v.ratedTotal / v.ratedCount), v.ratedCount])
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8);
+
+  const ratedContainer = document.getElementById('bar-tools-rated');
+  if (!ratedContainer) return;
+  if (ratedSorted.length === 0) {
+    ratedContainer.innerHTML = '<div style="font-size:13px;color:var(--mu);padding:12px 0">No user ratings yet. Rate tools 1–5 when logging.</div>';
+  } else {
+    ratedContainer.innerHTML = ratedSorted.map(([label, avg, count]) => {
+      const pct = Math.round((avg / 5) * 100);
+      return `
+        <div class="bar-row">
+          <div class="bar-row-label" title="${label}">${label}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${avg >= 3.5 ? c.sage : avg >= 2 ? c.warm : c.mu}"></div></div>
+          <div class="bar-count" title="${count} ratings">${avg.toFixed(1)}</div>
+        </div>`;
+    }).join('');
+  }
+}
+
+// ── WEEKLY EPISODE TREND ──
+function renderWeeklyTrend(weeklyEpisodes, c) {
+  const canvas = document.getElementById('chart-weekly');
+  if (!canvas) return;
+  if (window._weeklyChart) { window._weeklyChart.destroy(); window._weeklyChart = null; }
+
+  // Build last 16 weeks
+  const weeks = [];
+  const now = new Date();
+  for (let i = 15; i >= 0; i--) {
+    const d = new Date(now);
+    d.setDate(d.getDate() - i * 7);
+    const startOfYear = new Date(d.getFullYear(), 0, 1);
+    const wNum = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+    const wKey = `${d.getFullYear()}-W${String(wNum).padStart(2,'0')}`;
+    const label = `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}`;
+    weeks.push({ key: wKey, label, count: weeklyEpisodes[wKey] || 0 });
+  }
+
+  const labels = weeks.map((w, i) => i % 4 === 0 ? w.label : '');
+  const data = weeks.map(w => w.count);
+  const maxVal = Math.max(...data, 1);
+
+  window._weeklyChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        borderColor: c.ac,
+        backgroundColor: c.acl || 'rgba(74,120,180,0.08)',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        tension: 0.35,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: { title: (items) => weeks[items[0].dataIndex].label,
+                     label: (item) => `${item.raw} episode${item.raw !== 1 ? 's' : ''}` }
+      }},
+      scales: {
+        x: { grid: { display: false }, ticks: { color: c.mu, font: { size: 11 }, maxRotation: 0 } },
+        y: { beginAtZero: true, max: maxVal + 1, ticks: { color: c.mu, font: { size: 11 }, stepSize: 1 }, grid: { color: c.bdr } }
+      }
+    }
+  });
+}
+
+// ── DAY OF WEEK EPISODES ──
+function renderDayOfWeek(dowMap, c) {
+  const canvas = document.getElementById('chart-dow');
+  if (!canvas) return;
+  if (window._dowChart) { window._dowChart.destroy(); window._dowChart = null; }
+
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const data = days.map((_, i) => dowMap[i] || 0);
+  const maxVal = Math.max(...data, 1);
+  const colors = data.map(v => v >= maxVal * 0.75 ? c.warm : v >= maxVal * 0.4 ? c.ac : c.bdr2 || c.mu);
+
+  window._dowChart = new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: days,
+      datasets: [{ data, backgroundColor: colors, borderRadius: 4, borderSkipped: false }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: { label: (item) => `${item.raw} episode${item.raw !== 1 ? 's' : ''}` }
+      }},
+      scales: {
+        x: { grid: { display: false }, ticks: { color: c.mu, font: { size: 11 } } },
+        y: { beginAtZero: true, ticks: { color: c.mu, font: { size: 11 }, stepSize: 1 }, grid: { color: c.bdr } }
+      }
+    }
+  });
 }
 
 // ── FEED ──
@@ -897,6 +1082,7 @@ window.setFeedFilter = (filter, el) => {
 
 function getFeedEntries() {
   if (feedFilter === 'all') return window._allEntries;
+  if (feedFilter === 'discussed') return window._allEntries.filter(e => e.discussed_in_session);
   return window._allEntries.filter(e => e.entry_type === feedFilter);
 }
 
@@ -904,7 +1090,7 @@ function renderFeed() {
   const container = document.getElementById('log-feed');
   const all = getFeedEntries();
   const page = all.slice(0, (feedPage + 1) * FEED_PAGE_SIZE);
-  const labels = { resisted: 'Resisted', near_miss: 'Near miss', did: 'Episode' };
+  const labels = { resisted: 'Resisted', near_miss: 'Near miss', caught: 'Caught mid-act', did: 'Episode' };
 
   container.innerHTML = page.map(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
@@ -931,9 +1117,11 @@ function renderFeed() {
     if (e.post_ritual) chips.push(`<span class="chip"><strong>Ritual</strong>${e.post_ritual}</span>`);
     if (e.tried_intervention && e.interventions) chips.push(`<span class="chip"><strong>Tried</strong>${Array.isArray(e.interventions) ? e.interventions.join(', ') : e.interventions}</span>`);
     if (e.specific_cr) chips.push(`<span class="chip"><strong>CR</strong>${escapeHtml(e.specific_cr)}</span>`);
-    if (e.intervention_effectiveness) chips.push(`<span class="chip"><strong>Tool eff.</strong>${e.intervention_effectiveness}/10</span>`);
+    if (e.intervention_effectiveness) chips.push(`<span class="chip"><strong>Tool eff.</strong>${e.intervention_effectiveness}/5</span>`);
+    if (e.surf_peak !== undefined) chips.push(`<span class="chip"><strong>Surf peak</strong>${e.surf_peak}/10 → ${e.surf_end ?? '?'}/10</span>`);
 
     const narrative = e.narrative_notes || e.notes;
+    const isDiscussed = !!e.discussed_in_session;
 
     return `
       <div class="log-card" data-id="${e.id}">
@@ -941,12 +1129,16 @@ function renderFeed() {
         <div class="log-card-body">
           <div class="log-top">
             <div class="log-date">${dateStr}</div>
-            <div class="log-badge ${type}">${labels[type] || type}</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+              ${isDiscussed ? '<span class="discussed-badge">✓ Discussed</span>' : ''}
+              <div class="log-badge ${type}">${labels[type] || type}</div>
+            </div>
           </div>
           ${chips.length ? `<div class="log-chips">${chips.join('')}</div>` : ''}
           ${narrative ? `<div class="log-notes">${escapeHtml(narrative)}</div>` : ''}
           <div class="log-actions">
             <button class="log-act-btn" onclick="editLog('${e.id}')">Edit</button>
+            <button class="log-act-btn" onclick="toggleDiscussed('${e.id}',${isDiscussed})" style="color:${isDiscussed ? 'var(--sage)' : 'var(--mu)'}">${isDiscussed ? 'Unmark discussed' : 'Mark discussed'}</button>
             <button class="log-act-btn del" onclick="deleteLog('${e.id}')">Delete</button>
           </div>
         </div>
@@ -982,6 +1174,16 @@ window.confirmDelete = async (id) => {
     if (window._allEntries.length > 0) { processData(window._allEntries); renderFeed(); }
     else { document.getElementById('dashboard').style.display = 'none'; document.getElementById('empty-state').style.display = 'block'; }
   } catch(e) { showToast('Failed to delete', true); renderFeed(); }
+};
+
+window.toggleDiscussed = async (id, currentlyDiscussed) => {
+  const newVal = !currentlyDiscussed;
+  const idx = window._allEntries.findIndex(e => e.id === id);
+  if (idx > -1) window._allEntries[idx].discussed_in_session = newVal;
+  renderFeed();
+  try {
+    await updateDoc(doc(db, 'users', window._uid, 'entries', id), { discussed_in_session: newVal });
+  } catch(e) { showToast('Could not save', true); if (idx > -1) window._allEntries[idx].discussed_in_session = currentlyDiscussed; renderFeed(); }
 };
 
 window.editLog = (id) => {

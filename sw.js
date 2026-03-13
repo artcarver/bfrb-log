@@ -10,9 +10,16 @@
  *
  * nav.js (v2) already does this registration automatically —
  * so if you're using the new nav.js you don't need the snippet above.
+ *
+ * ── DEPLOYING A NEW VERSION ──────────────────────────────────────
+ * Whenever you change ANY file in the SHELL array below, increment
+ * the CACHE string (e.g. gw-shell-v3 → gw-shell-v4).
+ * This forces existing users to receive a fresh install on next load.
+ * Without a cache bump, users may run stale JS/CSS indefinitely.
+ * ────────────────────────────────────────────────────────────────
  */
 
-const CACHE  = 'gw-shell-v3';
+const CACHE  = 'gw-shell-v4';
 const SHELL  = [
   './',
   './index.html',

@@ -925,6 +925,8 @@ window.openTimer = (type) => {
   isPaused          = false;
   redirectCount     = 0;
   waveHistory       = [];
+  surfPeakUrge      = parseInt(document.getElementById('urge-live')?.value || '7', 10);
+  surfStartUrge     = surfPeakUrge;
   selectedCR        = 'fists';
   decoupleBeatPhase = 'approach';
   clearAllSubTimers();
@@ -934,9 +936,10 @@ window.openTimer = (type) => {
   currentSeconds = cfg.sec;
   totalSeconds   = cfg.sec;
 
-  // Overlay + tint
+  // Overlay + tint — push a history entry so back-swipe triggers popstate, not navigation
   const ov = document.getElementById('timer-overlay');
   ov.className = 'timer-overlay on ' + cfg.tint;
+  history.pushState({ timerOpen: true }, '');
   document.body.style.overflow = 'hidden';
 
   // Arc stroke colour
@@ -1125,10 +1128,15 @@ window.markRedirect = () => {
 };
 
 // ── SURF ─────────────────────────────────────────────────────────
+let surfPeakUrge = 7;
+let surfStartUrge = 7;
+
 window.updateWave = (val) => {
+  const n = parseInt(val, 10);
   document.getElementById('urge-live-val').textContent = val;
-  waveHistory.push(parseInt(val,10));
+  waveHistory.push(n);
   if (waveHistory.length > 80) waveHistory.shift();
+  if (n > surfPeakUrge) surfPeakUrge = n;
   drawWave();
 };
 
@@ -1266,9 +1274,28 @@ window.closeTimer = () => {
   document.getElementById('timer-fail').classList.remove('visible');
 };
 
+// Back-gesture / back-button closes the timer overlay instead of navigating away
+window.addEventListener('popstate', () => {
+  const ov = document.getElementById('timer-overlay');
+  if (ov && ov.classList.contains('on')) {
+    closeTimer();
+  }
+});
+
 // Pass tool param so index.html can pre-fill "which tool?" field
-window.logSuccess = () => { window.location.href = `index.html?from=intervention&outcome=held&tool=${currentMode}`; };
-window.logFail    = () => { window.location.href = `index.html?from=intervention&outcome=failed&tool=${currentMode}`; };
+// For surf sessions, also pass peak urge and final urge for clinical data
+window.logSuccess = () => {
+  const surfParams = currentMode === 'surf'
+    ? `&surf_peak=${surfPeakUrge}&surf_end=${waveHistory[waveHistory.length-1] ?? surfStartUrge}`
+    : '';
+  window.location.href = `index.html?from=intervention&outcome=held&tool=${currentMode}${surfParams}`;
+};
+window.logFail = () => {
+  const surfParams = currentMode === 'surf'
+    ? `&surf_peak=${surfPeakUrge}&surf_end=${waveHistory[waveHistory.length-1] ?? surfStartUrge}`
+    : '';
+  window.location.href = `index.html?from=intervention&outcome=failed&tool=${currentMode}${surfParams}`;
+};
 
 </script>
 <script src="nav.js"></script>

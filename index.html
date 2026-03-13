@@ -203,6 +203,7 @@ main {
           <div class="grid-3">
             <div class="tag sage-on" onclick="selectOutcome('Resisted',  this)">Resisted</div>
             <div class="tag"         onclick="selectOutcome('Near Miss', this)">Near Miss</div>
+            <div class="tag"         onclick="selectOutcome('Caught',    this)">Caught mid-act</div>
             <div class="tag"         onclick="selectOutcome('Episode',   this)">Episode</div>
           </div>
         </div>
@@ -558,6 +559,11 @@ main {
       <div class="success-title" id="success-title">Logged.</div>
       <div class="success-body"  id="success-body"></div>
       <button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="resetForm()">Log another</button>
+      <div id="success-cta" style="display:none;margin-top:12px">
+        <a href="interventions.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--sage);text-decoration:none;padding:10px 18px;border:1.5px solid var(--sage);border-radius:var(--pill)">
+          Want to try a tool? Open interventions →
+        </a>
+      </div>
       <div style="margin-top:14px">
         <a href="tracker.html" id="edit-entry-link" style="font-size:13px;color:var(--mu);text-decoration:none;border-bottom:1px solid var(--bdr2)">Edit this entry in Patterns</a>
       </div>
@@ -723,6 +729,12 @@ function handleArrivalParams() {
     }
   }
 
+  // Step 4: if surf params present, store for save
+  const surfPeak = params.get('surf_peak');
+  const surfEnd  = params.get('surf_end');
+  if (surfPeak !== null) state.core.surf_peak = parseInt(surfPeak, 10);
+  if (surfEnd  !== null) state.core.surf_end  = parseInt(surfEnd,  10);
+
   history.replaceState({}, '', 'index.html');
 }
 
@@ -799,18 +811,21 @@ window.selectOutcome = (val, el) => {
   el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   state.core.outcome = val;
+  if (navigator.vibrate) navigator.vibrate(10);
 
   const isResisted  = val === 'Resisted';
   const isNearMiss  = val === 'Near Miss';
+  const isCaught    = val === 'Caught';
   const isEpisode   = val === 'Episode';
-  const showDetails = isNearMiss || isEpisode;
+  const showDetails = isNearMiss || isCaught || isEpisode;
 
-  // ── Contextual urge-after label (clinical fix) ──────────────
+  // ── Contextual urge-after label ──────────────────────────────
   const afterLabel = document.getElementById('urge-after-label');
-  if (isResisted)   afterLabel.textContent = 'Urge relief after resisting';
+  if (isResisted)      afterLabel.textContent = 'Urge relief after resisting';
   else if (isNearMiss) afterLabel.textContent = 'Urge level after near miss';
+  else if (isCaught)   afterLabel.textContent = 'Urge level after stopping mid-act';
   else if (isEpisode)  afterLabel.textContent = 'Urge level after episode';
-  else afterLabel.textContent = 'Urge level after';
+  else                 afterLabel.textContent = 'Urge level after';
 
   // Where / what / awareness / duration
   document.getElementById('core-details').classList.toggle('hidden', !showDetails);
@@ -856,6 +871,7 @@ window.selectOutcome = (val, el) => {
 window.selectTag = (level, key, el) => {
   el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
+  if (navigator.vibrate) navigator.vibrate(10);
   const txt = el.querySelector('div') ? el.querySelector('div').textContent.trim() : el.textContent.trim();
   state[level][key] = txt;
 };
@@ -927,15 +943,10 @@ window.saveAll = async () => {
   const btn = document.getElementById('btn-save-all');
   btn.disabled = true; btn.textContent = 'Saving…';
 
-  const finalTime = state.core.timing === 'now'
-    ? new Date()
-    : (document.getElementById('core-time').value
-        ? new Date(document.getElementById('core-time').value)
-        : new Date());
-
   const outcomeKey =
     state.core.outcome === 'Near Miss' ? 'near_miss' :
-    state.core.outcome === 'Episode'   ? 'did'       : 'resisted';
+    state.core.outcome === 'Episode'   ? 'did'       :
+    state.core.outcome === 'Caught'    ? 'caught'    : 'resisted';
 
   const docData = {
     bfrb_type:                 state.core.bfrb,
@@ -943,7 +954,9 @@ window.saveAll = async () => {
     urge_before:               state.core.urge,
     urge_after:                state.core.urge_after,
     pre_feeling:               state.core.pre_feeling || '',
-    created_at:                finalTime,
+    created_at:                outcomeKey === 'resisted' || !document.getElementById('core-time')?.value
+                                 ? serverTimestamp()
+                                 : new Date(document.getElementById('core-time').value),
     pre_action:                state.ctx.pre_action  || '',
     primary_trigger:           state.ctx.trigger     || '',
     environment:               state.ctx.environment || '',
@@ -956,6 +969,8 @@ window.saveAll = async () => {
     intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
     narrative_notes:           (document.getElementById('narrative-notes')?.value || '').trim(),
     notes:                     (document.getElementById('ctx-notes')?.value || '').trim(),
+    ...(state.core.surf_peak !== undefined ? { surf_peak: state.core.surf_peak } : {}),
+    ...(state.core.surf_end  !== undefined ? { surf_end:  state.core.surf_end  } : {}),
   };
 
   if (outcomeKey !== 'resisted') {
@@ -977,11 +992,22 @@ window.saveAll = async () => {
     const msgs = {
       resisted:  { title: 'Logged.',  body: 'Resistance entries are the most clinically useful data point.' },
       near_miss: { title: 'Logged.',  body: 'Near misses show active friction in the urge-response chain — useful for pattern analysis.' },
+      caught:    { title: 'Logged.',  body: 'Catching yourself mid-act is a sign awareness is growing. This is meaningful progress.' },
       did:       { title: 'Logged.',  body: 'Episode data drives the pattern analysis. This entry counts.' }
     };
-    const msg = msgs[outcomeKey];
+    const msg = msgs[outcomeKey] || msgs.did;
     document.getElementById('success-title').textContent = msg.title;
     document.getElementById('success-body').textContent  = msg.body;
+
+    // Context-aware CTA: offer Tools for non-resisted outcomes
+    const ctaEl = document.getElementById('success-cta');
+    if (ctaEl) {
+      if (outcomeKey === 'near_miss' || outcomeKey === 'caught' || outcomeKey === 'did') {
+        ctaEl.style.display = 'block';
+      } else {
+        ctaEl.style.display = 'none';
+      }
+    }
 
     document.getElementById('log-form').classList.add('hidden');
     document.getElementById('bar-save').classList.add('hidden');
@@ -990,9 +1016,13 @@ window.saveAll = async () => {
 
   } catch(e) {
     console.error('Save error:', e);
-    showToast('Error saving — try again', true);
     btn.disabled = false; btn.textContent = 'Save';
     btn.classList.add('inactive');
+    if (e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))) {
+      showToast('Daily write limit reached — try again tomorrow', true);
+    } else {
+      showToast('Error saving — try again', true);
+    }
   }
 };
 
