@@ -3,57 +3,155 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Log BFRB episodes, near misses, and resistances in real time.">
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Groundwork">
-    <link rel="apple-touch-icon" href="icon-192.png">
-<title>Groundwork - Log</title>
+<meta name="description" content="Log BFRB episodes, near misses, and resistances in real time.">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Groundwork">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Groundwork — Log</title>
 <meta name="theme-color" id="theme-color-meta" content="#F5F5F3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
 <style>
-/* ── PAGE LAYOUT ── */
-main{max-width:540px;margin:0 auto;padding:20px 16px}
 
-/* AREA GROUPS */
-.area-group{margin-bottom:6px}
-.area-parent{width:100%;text-align:left;justify-content:flex-start;position:relative;padding-right:32px}
-.area-parent::after{content:'';position:absolute;right:14px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-65%) rotate(45deg);transition:transform .2s;opacity:.5}
-.area-parent.open::after{transform:translateY(-35%) rotate(-135deg)}
-.area-sub{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;margin-top:6px;padding-left:12px}
-.area-sub.hidden{display:none}
+/* ── STAGGER ENTRY ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.anim { opacity:0; animation:fadeUp .4s ease forwards; }
+.d1{animation-delay:.04s}.d2{animation-delay:.10s}.d3{animation-delay:.16s}
+.d4{animation-delay:.22s}.d5{animation-delay:.28s}.d6{animation-delay:.34s}
 
-/* SUCCESS SCREEN */
-.success-msg{text-align:center;padding:60px 20px;display:flex;flex-direction:column;align-items:center}
-.success-icon{width:56px;height:56px;background:var(--sagel);color:var(--sage);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px}
+main {
+  max-width: 540px;
+  margin: 0 auto;
+  /* pad top for sticky nav */
+  padding: calc(var(--nav-h,52px) + 16px) 16px 120px;
+}
 
-/* TOAST */
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-20px);opacity:0;background:var(--tx);border-radius:var(--pill);padding:12px 24px;font-size:13px;font-weight:600;color:#fff;transition:all .3s ease;z-index:999;pointer-events:none}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.toast.err{background:var(--ac)}
+/* ── MODE TOGGLE ── */
+.mode-toggle {
+  display: inline-flex;
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: var(--pill);
+  padding: 3px;
+  margin-bottom: 20px;
+}
+.mode-btn {
+  background: none; border: none;
+  border-radius: var(--pill);
+  padding: 6px 18px;
+  font-size: 13px; font-weight: 600;
+  color: var(--mu);
+  cursor: pointer; transition: var(--tr);
+  font-family: 'DM Sans', sans-serif;
+  touch-action: manipulation;
+}
+.mode-btn.on {
+  background: var(--card);
+  color: var(--tx);
+  box-shadow: var(--s1);
+}
+
+/* ── FORM STEP LABELS ── */
+.step-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--mu);
+  margin-bottom: 10px; margin-top: 6px;
+  padding-left: 2px;
+}
+
+/* ── AREA GROUPS ── */
+.area-group { margin-bottom: 6px; }
+.area-parent {
+  width: 100%; text-align: left;
+  justify-content: flex-start;
+  position: relative; padding-right: 32px;
+}
+.area-parent::after {
+  content: '';
+  position: absolute; right: 14px;
+  width: 8px; height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-65%) rotate(45deg);
+  transition: transform .2s; opacity: .5;
+}
+.area-parent.open::after { transform: translateY(-35%) rotate(-135deg); }
+.area-sub {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px; margin-top: 6px; padding-left: 12px;
+}
+.area-sub.hidden { display: none; }
+
+/* ── SAVE BUTTON INACTIVE STATE ── */
+/* btn-primary.inactive is defined in base.css but we reinforce here */
+#btn-save-all {
+  transition: background .2s, opacity .2s, border-color .2s;
+}
+
+/* ── SUCCESS SCREEN ── */
+.success-msg {
+  text-align: center;
+  padding: 60px 20px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.success-icon {
+  width: 56px; height: 56px;
+  background: var(--sagel); color: var(--sage);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin-bottom: 20px;
+}
+.success-title { font-family: 'Lora', serif; font-size: 22px; color: var(--tx); margin-bottom: 8px; }
+.success-body  { font-size: 14px; color: var(--mu); max-width: 320px; line-height: 1.55; }
+
+/* ── TOAST (uses nav-h token for positioning) ── */
+.toast {
+  position: fixed;
+  top: calc(var(--nav-h,52px) + 12px);
+  left: 50%; transform: translateX(-50%) translateY(-20px);
+  opacity: 0; background: var(--tx);
+  border-radius: var(--pill); padding: 11px 22px;
+  font-size: 13px; font-weight: 600; color: #fff;
+  transition: all .3s ease; z-index: 999;
+  pointer-events: none; white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.err  { background: var(--ac); }
+
+/* Full mode section transitions */
+.full-section {
+  overflow: hidden;
+  transition: max-height .35s ease, opacity .3s ease;
+  max-height: 0; opacity: 0;
+}
+.full-section.on { max-height: 9999px; opacity: 1; }
 </style>
 
-    <script>
-      // Keep theme-color meta in sync with colour scheme
-      (function() {
-        const stored = localStorage.getItem('gw-theme');
-        if (stored === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
-          const m = document.getElementById('theme-color-meta');
-          if (m) m.setAttribute('content', '#161618');
-        }
-      })();
-    </script>
-  </head>
+<script>
+(function() {
+  const stored = localStorage.getItem('gw-theme');
+  if (stored === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    const m = document.getElementById('theme-color-meta');
+    if (m) m.setAttribute('content', '#161618');
+  }
+})();
+</script>
+</head>
 <body>
 
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
-    <div class="card-title">Groundwork</div>
-    <div style="font-size:14px;color:var(--mu)">Sign in to log events.</div>
+    <div class="auth-card-title">Groundwork</div>
+    <div class="auth-card-sub">Sign in to log events.</div>
     <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
   </div>
 </div>
@@ -64,371 +162,402 @@ main{max-width:540px;margin:0 auto;padding:20px 16px}
 <main>
 
   <div id="log-form">
-    <div class="page-title">Log</div>
-    <div class="card">
-      
+    <!-- Header row: title + mode toggle -->
+    <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:16px" class="anim d1">
+      <div class="page-title" style="margin-bottom:0">Log</div>
+      <div class="mode-toggle" role="group" aria-label="Log mode">
+        <button class="mode-btn on" id="mode-quick" onclick="setMode('quick')" aria-pressed="true">Quick</button>
+        <button class="mode-btn"   id="mode-full"  onclick="setMode('full')"  aria-pressed="false">Full</button>
+      </div>
+    </div>
+
+    <div class="card anim d2">
+
+      <!-- WHEN -->
       <div class="field">
         <label class="field-label">When</label>
         <div class="grid-2">
           <div class="tag on" onclick="selectTiming('now', this)">Right now</div>
-          <div class="tag" onclick="selectTiming('earlier', this)">Earlier</div>
+          <div class="tag"    onclick="selectTiming('earlier', this)">Earlier</div>
         </div>
         <div id="core-time-wrap" class="hidden" style="margin-top:12px">
           <input type="datetime-local" id="core-time">
         </div>
       </div>
 
+      <!-- BEHAVIOR -->
       <div class="field">
         <label class="field-label">Behavior</label>
         <div class="grid-2">
           <div class="tag" onclick="selectBehavior('picking', this)">Picking</div>
-          <div class="tag" onclick="selectBehavior('biting', this)">Biting</div>
+          <div class="tag" onclick="selectBehavior('biting',  this)">Biting</div>
         </div>
       </div>
 
+      <!-- EVERYTHING GATED ON BEHAVIOR SELECTION -->
       <div id="behavior-gated" style="display:none">
-      <div class="field">
-        <label class="field-label">Outcome</label>
-        <div class="grid-3">
-          <div class="tag sage-on" onclick="selectOutcome('Resisted', this)">
-            <div>Resisted</div>
-          </div>
-          <div class="tag" onclick="selectOutcome('Near Miss', this)">Near Miss</div>
-          <div class="tag" onclick="selectOutcome('Episode', this)">Episode</div>
-        </div>
-      </div>
 
-      <div class="field" id="pre-feeling-field">
-        <label class="field-label">How were you feeling before?</label>
-        <div class="grid-auto">
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / tense</div>
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Frustrated / angry</div>
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Self-conscious</div>
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / flat</div>
-          <div class="tag" onclick="selectTag('core','pre_feeling',this)">Scattered / unfocused</div>
-        </div>
-      </div>
-
-      <div id="core-details" class="hidden">
-        <div class="divider"></div>
-        
-        <div class="field" id="where-field">
-          <label class="field-label">Where (Area)</label>
-          <div id="where-tags-picking" style="display:none">
-            <div class="area-group">
-              <div class="tag area-parent" onclick="toggleArea('face',this)">Face</div>
-              <div class="area-sub hidden" id="area-face">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Temples</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Nose</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Chin / Jaw</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips</div>
-              </div>
-            </div>
-            <div class="area-group">
-              <div class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck</div>
-              <div class="area-sub hidden" id="area-head">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Ears</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Neck</div>
-              </div>
-            </div>
-            <div class="area-group">
-              <div class="tag area-parent" onclick="toggleArea('torso',this)">Chest &amp; Back</div>
-              <div class="area-sub hidden" id="area-torso">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</div>
-              </div>
-            </div>
-            <div class="area-group">
-              <div class="tag area-parent" onclick="toggleArea('arms',this)">Arms &amp; Hands</div>
-              <div class="area-sub hidden" id="area-arms">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Hands</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</div>
-              </div>
-            </div>
-            <div class="area-group">
-              <div class="tag area-parent" onclick="toggleArea('legs',this)">Legs &amp; Feet</div>
-              <div class="area-sub hidden" id="area-legs">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Thighs</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Knees</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Calves</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Ankles</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Feet</div>
-              </div>
-            </div>
-            <div class="area-group">
-              <div class="tag area-parent" onclick="toggleArea('lower',this)">Groin &amp; Glutes</div>
-              <div class="area-sub hidden" id="area-lower">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Groin</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Buttocks</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Inner Thighs</div>
-              </div>
-            </div>
-          </div>
-          <div class="grid-auto" id="where-tags-biting" style="display:none">
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</div>
-            <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</div>
-          </div>
-        </div>
-
-        <div class="field" id="what-field">
-          <label class="field-label">What (Target)</label>
-          <div class="grid-auto" id="what-tags-picking" style="display:none">
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Ingrown Hair</div>
-          </div>
-          <div class="grid-auto" id="what-tags-biting" style="display:none">
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
-            <div class="tag" onclick="toggleMultiTag('core','what',this)">Lip Tissue</div>
-          </div>
-        </div>
-
-        <div class="field" id="mirror-field" style="display:none">
-          <label class="field-label">Mirror / camera involved?</label>
-          <div class="grid-2">
-            <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
-            <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
-            <div class="tag" onclick="selectTag('core','mirror',this)">Magnifying mirror</div>
-            <div class="tag" onclick="selectTag('core','mirror',this)">Phone camera</div>
-          </div>
-        </div>
-
-        <div class="field" id="skin-impact-field" style="display:none">
-          <label class="field-label">Skin impact</label>
-          <div class="grid-2">
-            <div class="tag" onclick="selectTag('core','skin_impact',this)">None</div>
-            <div class="tag" onclick="selectTag('core','skin_impact',this)">Minor</div>
-            <div class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</div>
-            <div class="tag" onclick="selectTag('core','skin_impact',this)">Significant</div>
-            <div class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</div>
-          </div>
-        </div>
-
-        <div class="field" id="ritual-field" style="display:none">
-          <label class="field-label">Aftermath / Ritual</label>
-          <div class="grid-2">
-            <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
-            <div class="tag" onclick="selectTag('core','ritual',this)">Examined</div>
-            <div class="tag" onclick="selectTag('core','ritual',this)">Chewed / Bit</div>
-            <div class="tag" onclick="selectTag('core','ritual',this)">Ingested</div>
-          </div>
-        </div>
-
+        <!-- OUTCOME -->
         <div class="field">
-          <label class="field-label">Awareness</label>
+          <label class="field-label">Outcome</label>
           <div class="grid-3">
-            <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
-            <div class="tag" onclick="selectTag('core','awareness',this)">Mid-action</div>
-            <div class="tag" onclick="selectTag('core','awareness',this)">Urge first</div>
+            <div class="tag sage-on" onclick="selectOutcome('Resisted',  this)">Resisted</div>
+            <div class="tag"         onclick="selectOutcome('Near Miss', this)">Near Miss</div>
+            <div class="tag"         onclick="selectOutcome('Episode',   this)">Episode</div>
           </div>
         </div>
 
-        <div class="field">
-          <label class="field-label">Duration</label>
-          <div class="grid-2">
-            <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
-            <div class="tag" onclick="selectTag('core','duration',this)">1-10 min</div>
-            <div class="tag" onclick="selectTag('core','duration',this)">10-30 min</div>
-            <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="field" style="margin-bottom:0">
-        <label class="field-label">Urge Level</label>
-        <div class="slider-row">
-          <input type="range" min="1" max="10" value="5" id="core-urge" oninput="updateSlider(this, 'core-urge-val', 'urge')">
-          <div class="slider-val" id="core-urge-val">5</div>
-        </div>
-        <div class="slider-lbls"><span>1: barely noticeable</span><span>10: unmanageable</span></div>
-      </div>
-
-      <div class="field" style="margin-bottom:0">
-        <label class="field-label">Urge level after</label>
-        <div class="slider-row">
-          <input type="range" min="1" max="10" value="3" id="core-urge-after" oninput="updateSlider(this, 'core-urge-after-val', 'urge_after')">
-          <div class="slider-val" id="core-urge-after-val">3</div>
-        </div>
-        <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
-      </div>
-    </div>
-    
-    <div class="card">
-
-      <div class="field">
-        <label class="field-label">Pre-event activity</label>
-        <div class="grid-2">
-          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling</div>
-          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting Posture</div>
-          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror Checking</div>
-          <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / Nothing</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Primary Trigger</label>
-        <div class="grid-auto">
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / Stress</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / Idle</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / Depleted</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
-          <div class="tag" onclick="selectTag('ctx','trigger',this)">Cognitive</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Environment</label>
-        <div class="grid-auto">
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Bathroom</div>
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Couch / Bed</div>
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</div>
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Desk / Study</div>
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Clinical / Work</div>
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
-          <div class="tag" onclick="selectTag('ctx','environment',this)">Social / Out</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Activity</label>
-        <div class="tag-sub" style="margin-bottom:10px;font-size:12px;color:var(--mu)">What were you doing in the moment?</div>
-        <div class="grid-auto">
-          <div class="tag" onclick="selectTag('ctx','activity',this)">Watching TV</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">On Phone</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">Getting Ready</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">Cooking</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">Working / Studying</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">In Conversation</div>
-          <div class="tag" onclick="selectTag('ctx','activity',this)">Other</div>
-        </div>
-      </div>
-
-      <div class="field" id="escalation-field" style="display:none">
-        <label class="field-label">Session pattern</label>
-        <div class="tag-sub" style="margin-bottom:10px;font-size:12px;color:var(--mu)">How did the episode unfold?</div>
-        <div class="grid-auto">
-          <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
-          <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
-          <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
-          <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
-        </div>
-      </div>
-
-      <div class="field" id="post-feeling-field" style="display:none">
-        <label class="field-label">Post-Event Feeling</label>
-        <div class="grid-2">
-          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Calm / relieved</div>
-          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
-          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Shame / self-critical</div>
-          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Low / sad</div>
-          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</div>
-          <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated</div>
-        </div>
-      </div>
-
-      <div class="field" id="aftercare-field" style="display:none">
-        <label class="field-label">Post-episode aftercare</label>
-        <div class="tag-sub" style="margin-bottom:10px;font-size:12px;color:var(--mu)">Did you do a skincare or wound-care ritual after?</div>
-        <div class="grid-2">
-          <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
-          <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Intervention attempted?</label>
-        <div class="grid-2">
-          <div class="tag" onclick="toggleIntervention(true, this)">Yes</div>
-          <div class="tag" onclick="toggleIntervention(false, this)">No</div>
-        </div>
-      </div>
-
-      <div id="intervention-block" class="hidden">
-        <div class="field">
-          <label class="field-label">Which tool?</label>
+        <!-- PRE-FEELING (quick + full) -->
+        <div class="field" id="pre-feeling-field">
+          <label class="field-label">How were you feeling before?</label>
           <div class="grid-auto">
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental Block</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Put on gloves</div>
-            <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Occupied hands</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / tense</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Frustrated / angry</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Self-conscious</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / flat</div>
+            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Scattered / unfocused</div>
           </div>
         </div>
-        <div class="field">
-          <label class="field-label">Specific action <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--mu)">(optional)</span></label>
-          <input type="text" id="specific-cr" placeholder="e.g. held ice cube under chin, pressed nails into palm…" style="font-size:16px">
+
+        <!-- URGE BEFORE (quick + full) -->
+        <div class="field" style="margin-bottom:0">
+          <label class="field-label">Urge level</label>
+          <div class="slider-row">
+            <input type="range" min="1" max="10" value="5" id="core-urge"
+              oninput="updateSlider(this,'core-urge-val','urge')">
+            <div class="slider-val" id="core-urge-val">5</div>
+          </div>
+          <div class="slider-lbls"><span>1 — barely there</span><span>10 — unmanageable</span></div>
         </div>
+
+        <!-- URGE AFTER (quick + full) — label changes by outcome -->
+        <div class="field" style="margin-bottom:0">
+          <label class="field-label" id="urge-after-label">Urge level after</label>
+          <div class="slider-row">
+            <input type="range" min="1" max="10" value="3" id="core-urge-after"
+              oninput="updateSlider(this,'core-urge-after-val','urge_after')">
+            <div class="slider-val" id="core-urge-after-val">3</div>
+          </div>
+          <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
+        </div>
+
+        <!-- ── FULL MODE SECTIONS ───────────────────────────── -->
+        <div class="full-section" id="full-core">
+
+          <!-- Divider -->
+          <div class="divider" style="margin-top:20px;margin-bottom:18px"></div>
+
+          <!-- Where / What (episode & near miss only) -->
+          <div id="core-details" class="hidden">
+
+            <div class="field" id="where-field">
+              <label class="field-label">Where</label>
+              <div id="where-tags-picking" style="display:none">
+                <div class="area-group">
+                  <div class="tag area-parent" onclick="toggleArea('face',this)">Face</div>
+                  <div class="area-sub hidden" id="area-face">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Temples</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Nose</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Chin / Jaw</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips</div>
+                  </div>
+                </div>
+                <div class="area-group">
+                  <div class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck</div>
+                  <div class="area-sub hidden" id="area-head">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Ears</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Neck</div>
+                  </div>
+                </div>
+                <div class="area-group">
+                  <div class="tag area-parent" onclick="toggleArea('torso',this)">Chest &amp; Back</div>
+                  <div class="area-sub hidden" id="area-torso">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</div>
+                  </div>
+                </div>
+                <div class="area-group">
+                  <div class="tag area-parent" onclick="toggleArea('arms',this)">Arms &amp; Hands</div>
+                  <div class="area-sub hidden" id="area-arms">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Hands</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</div>
+                  </div>
+                </div>
+                <div class="area-group">
+                  <div class="tag area-parent" onclick="toggleArea('legs',this)">Legs &amp; Feet</div>
+                  <div class="area-sub hidden" id="area-legs">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Thighs</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Knees</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Calves</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Ankles</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Feet</div>
+                  </div>
+                </div>
+                <div class="area-group">
+                  <div class="tag area-parent" onclick="toggleArea('lower',this)">Groin &amp; Glutes</div>
+                  <div class="area-sub hidden" id="area-lower">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Groin</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Buttocks</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Inner Thighs</div>
+                  </div>
+                </div>
+              </div>
+              <div class="grid-auto" id="where-tags-biting" style="display:none">
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</div>
+                <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</div>
+              </div>
+            </div>
+
+            <div class="field" id="what-field">
+              <label class="field-label">What (Target)</label>
+              <div class="grid-auto" id="what-tags-picking" style="display:none">
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Ingrown Hair</div>
+              </div>
+              <div class="grid-auto" id="what-tags-biting" style="display:none">
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
+                <div class="tag" onclick="toggleMultiTag('core','what',this)">Lip Tissue</div>
+              </div>
+            </div>
+
+            <div class="field" id="mirror-field" style="display:none">
+              <label class="field-label">Mirror / camera involved?</label>
+              <div class="grid-2">
+                <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
+                <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
+                <div class="tag" onclick="selectTag('core','mirror',this)">Magnifying mirror</div>
+                <div class="tag" onclick="selectTag('core','mirror',this)">Phone camera</div>
+              </div>
+            </div>
+
+            <div class="field" id="skin-impact-field" style="display:none">
+              <label class="field-label">Skin impact</label>
+              <div class="grid-2">
+                <div class="tag" onclick="selectTag('core','skin_impact',this)">None</div>
+                <div class="tag" onclick="selectTag('core','skin_impact',this)">Minor</div>
+                <div class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</div>
+                <div class="tag" onclick="selectTag('core','skin_impact',this)">Significant</div>
+                <div class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</div>
+              </div>
+            </div>
+
+            <div class="field" id="ritual-field" style="display:none">
+              <label class="field-label">Aftermath / Ritual</label>
+              <div class="grid-2">
+                <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
+                <div class="tag" onclick="selectTag('core','ritual',this)">Examined</div>
+                <div class="tag" onclick="selectTag('core','ritual',this)">Chewed / Bit</div>
+                <div class="tag" onclick="selectTag('core','ritual',this)">Ingested</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Awareness</label>
+              <div class="grid-3">
+                <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
+                <div class="tag" onclick="selectTag('core','awareness',this)">Mid-action</div>
+                <div class="tag" onclick="selectTag('core','awareness',this)">Urge first</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Duration</label>
+              <div class="grid-2">
+                <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
+                <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
+                <div class="tag" onclick="selectTag('core','duration',this)">10–30 min</div>
+                <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
+              </div>
+            </div>
+
+          </div><!-- /core-details -->
+
+        </div><!-- /full-core -->
+
+      </div><!-- /behavior-gated -->
+
+    </div><!-- /card 1 -->
+
+    <!-- CONTEXT CARD — full mode only -->
+    <div class="card full-section" id="full-ctx" style="margin-top:12px">
+
+      <div id="ctx-gated" style="display:none">
+
         <div class="field">
-          <label class="field-label">Effectiveness (1-5)</label>
-          <div class="grid-auto" style="grid-template-columns: repeat(5, 1fr);">
-            <div class="tag" onclick="selectTag('ctx','eff',this)">1</div>
-            <div class="tag" onclick="selectTag('ctx','eff',this)">2</div>
-            <div class="tag" onclick="selectTag('ctx','eff',this)">3</div>
-            <div class="tag" onclick="selectTag('ctx','eff',this)">4</div>
-            <div class="tag" onclick="selectTag('ctx','eff',this)">5</div>
+          <label class="field-label">Pre-event activity</label>
+          <div class="grid-2">
+            <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling</div>
+            <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting Posture</div>
+            <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror Checking</div>
+            <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / Nothing</div>
           </div>
         </div>
-      </div>
 
-      <div class="field" style="margin-bottom:0">
-        <label class="field-label">What was happening?</label>
-        <textarea id="narrative-notes" placeholder="Write freely — what were you feeling, what was the situation? This stays private and is for your own reflection." rows="4"></textarea>
-      </div>
+        <div class="field">
+          <label class="field-label">Primary Trigger</label>
+          <div class="grid-auto">
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / Stress</div>
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / Idle</div>
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / Depleted</div>
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory</div>
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual</div>
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
+            <div class="tag" onclick="selectTag('ctx','trigger',this)">Cognitive</div>
+          </div>
+        </div>
 
-      <div class="field" style="margin-bottom:0">
-        <label class="field-label">Notes</label>
-        <textarea id="ctx-notes" placeholder="Specific thoughts, details, or context..."></textarea>
-      </div>
-    </div>
+        <div class="field">
+          <label class="field-label">Environment</label>
+          <div class="grid-auto">
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Bathroom</div>
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Couch / Bed</div>
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</div>
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Desk / Study</div>
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Clinical / Work</div>
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
+            <div class="tag" onclick="selectTag('ctx','environment',this)">Social / Out</div>
+          </div>
+        </div>
 
-    </div><!-- /behavior-gated -->
-    <!-- single save bar -->
+        <div class="field">
+          <label class="field-label">Activity</label>
+          <div class="grid-auto">
+            <div class="tag" onclick="selectTag('ctx','activity',this)">Watching TV</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">On Phone</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">Getting Ready</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">Cooking</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">Working / Studying</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">In Conversation</div>
+            <div class="tag" onclick="selectTag('ctx','activity',this)">Other</div>
+          </div>
+        </div>
+
+        <div class="field" id="escalation-field" style="display:none">
+          <label class="field-label">Session pattern</label>
+          <div class="grid-auto">
+            <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
+            <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
+            <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
+            <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
+          </div>
+        </div>
+
+        <div class="field" id="post-feeling-field" style="display:none">
+          <label class="field-label">Post-event feeling</label>
+          <div class="grid-2">
+            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Calm / relieved</div>
+            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
+            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Shame / self-critical</div>
+            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Low / sad</div>
+            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</div>
+            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated</div>
+          </div>
+        </div>
+
+        <div class="field" id="aftercare-field" style="display:none">
+          <label class="field-label">Post-episode aftercare</label>
+          <div class="grid-2">
+            <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
+            <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
+          </div>
+        </div>
+
+        <!-- Intervention: Yes/No first, then details -->
+        <div class="field">
+          <label class="field-label">Intervention attempted?</label>
+          <div class="grid-2">
+            <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
+            <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
+          </div>
+        </div>
+
+        <div id="intervention-block" class="hidden">
+          <div class="field">
+            <label class="field-label">Which tool?</label>
+            <div class="grid-auto" id="tools-grid">
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental Block</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Put on gloves</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Occupied hands</div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Effectiveness (1–5)</label>
+            <div class="grid-auto" style="grid-template-columns:repeat(5,1fr)">
+              <div class="tag" onclick="selectTag('ctx','eff',this)">1</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)">2</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)">3</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)">4</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)">5</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <label class="field-label">Reflection <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--mu)">(optional)</span></label>
+          <textarea id="narrative-notes" placeholder="Write freely — what were you feeling, what was the situation? This stays private." rows="4"></textarea>
+        </div>
+
+        <div class="field" style="margin-bottom:0">
+          <label class="field-label">Notes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;color:var(--mu)">(optional)</span></label>
+          <textarea id="ctx-notes" placeholder="Specific details or context…"></textarea>
+        </div>
+
+      </div><!-- /ctx-gated -->
+
+    </div><!-- /full-ctx card -->
+
+    <!-- SAVE ACTION BAR -->
     <div class="action-bar" id="bar-save">
       <div class="action-inner">
-        <button class="btn-primary" id="btn-save-all" onclick="saveAll()">Save</button>
+        <button class="btn-primary inactive" id="btn-save-all" onclick="saveAll()" disabled>Save</button>
       </div>
     </div>
+
   </div><!-- /log-form -->
 
+  <!-- SUCCESS SCREEN -->
   <div id="screen-success" class="hidden">
     <div class="success-msg">
-      <div class="success-icon" id="success-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="card-title" id="success-title">Logged</div>
-      <div style="font-size:14px;color:var(--mu);margin-top:8px;text-align:center;max-width:320px" id="success-body"></div>
-      <button class="btn-primary" style="margin-top:24px; max-width:200px" onclick="resetForm()">Log another</button>
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="success-title" id="success-title">Logged.</div>
+      <div class="success-body"  id="success-body"></div>
+      <button class="btn-primary" style="margin-top:24px;max-width:200px" onclick="resetForm()">Log another</button>
       <div style="margin-top:14px">
         <a href="tracker.html" id="edit-entry-link" style="font-size:13px;color:var(--mu);text-decoration:none;border-bottom:1px solid var(--bdr2)">Edit this entry in Patterns</a>
       </div>
@@ -442,44 +571,42 @@ main{max-width:540px;margin:0 auto;padding:20px 16px}
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, updateDoc, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect,
+  getRedirectResult, onAuthStateChanged, signOut as fbSignOut }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, doc, serverTimestamp }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-  authDomain: "skin-picking-log.firebaseapp.com",
-  projectId: "skin-picking-log",
-  storageBucket: "skin-picking-log.firebasestorage.app",
+  apiKey:            "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
+  authDomain:        "skin-picking-log.firebaseapp.com",
+  projectId:         "skin-picking-log",
+  storageBucket:     "skin-picking-log.firebasestorage.app",
   messagingSenderId: "162906566118",
-  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
+  appId:             "1:162906566118:web:a89abbd383fc847ba97a27"
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+const db   = getFirestore(app);
 window._db = db;
 const provider = new GoogleAuthProvider();
 
-window._uid = null;
+window._uid          = null;
 window._currentDocId = null;
 
-// Detect iOS standalone (home screen) mode — popup is blocked there
-const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+const isStandalone =
+  window.navigator.standalone === true ||
+  window.matchMedia('(display-mode: standalone)').matches;
 
 window.signInWithGoogle = async () => {
   try {
-    if (isStandalone) {
-      await signInWithRedirect(auth, provider);
-    } else {
-      await signInWithPopup(auth, provider);
-    }
-  } catch(e) {
-    console.error('Sign in error:', e);
-  }
+    isStandalone
+      ? await signInWithRedirect(auth, provider)
+      : await signInWithPopup(auth, provider);
+  } catch(e) { console.error('Sign in error:', e); }
 };
 window.signOut = async () => { await fbSignOut(auth); };
-
-// Handle redirect result when returning from Google auth (iOS standalone)
 getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
 
 onAuthStateChanged(auth, user => {
@@ -487,98 +614,190 @@ onAuthStateChanged(auth, user => {
   document.getElementById('auth-screen').classList.toggle('on', !user);
   document.getElementById('app').classList.toggle('on', !!user);
   if (user) {
-    const s = document.getElementById('core-urge');
-    updateSlider(s, 'core-urge-val', 'urge');
-    const sa = document.getElementById('core-urge-after');
-    updateSlider(sa, 'core-urge-after-val', 'urge_after');
+    initSliders();
     handleArrivalParams();
   }
 });
 
-function handleArrivalParams() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('from') === 'intervention') {
-    const outcome = params.get('outcome');
-    // Must select a behavior first to reveal the outcome field
-    const pickingTag = document.querySelector('#log-form .grid-2 .tag');
-    if (pickingTag) pickingTag.click();
-    if (outcome === 'held') {
-      const resistedTag = document.querySelector('#behavior-gated .grid-3 .tag.sage-on');
-      if (resistedTag) resistedTag.click();
-    } else if (outcome === 'failed') {
-      const episodeTag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim().startsWith('Episode'));
-      if (episodeTag) episodeTag.click();
-    }
-    history.replaceState({}, '', 'index.html');
-  }
-}
-
+// ════════════════════════════════════════════════════════════
 // STATE
+// ════════════════════════════════════════════════════════════
 const state = {
-  core: { timing: 'now', bfrb: null, outcome: null, where: [], what: [], ritual: null, awareness: null, duration: null, urge: 5, urge_after: 3, pre_feeling: null, mirror: null, skin_impact: null },
-  ctx: { pre_action: null, trigger: null, environment: null, activity: null, escalation: null, aftercare: null, post_feeling: null, tried_tool: null, tools: [], eff: null }
+  core: {
+    timing: 'now', bfrb: null, outcome: null,
+    where: [], what: [],
+    ritual: null, awareness: null, duration: null,
+    urge: 5, urge_after: 3,
+    pre_feeling: null, mirror: null, skin_impact: null
+  },
+  ctx: {
+    pre_action: null, trigger: null, environment: null,
+    activity: null, escalation: null, aftercare: null,
+    post_feeling: null, tried_tool: null, tools: [], eff: null
+  }
 };
 
+// Current mode: 'quick' | 'full'
+let currentMode = localStorage.getItem('gw-log-mode') || 'quick';
+
+// ════════════════════════════════════════════════════════════
+// MODE TOGGLE
+// ════════════════════════════════════════════════════════════
+window.setMode = (mode) => {
+  currentMode = mode;
+  localStorage.setItem('gw-log-mode', mode);
+
+  document.getElementById('mode-quick').classList.toggle('on', mode === 'quick');
+  document.getElementById('mode-quick').setAttribute('aria-pressed', String(mode === 'quick'));
+  document.getElementById('mode-full').classList.toggle('on', mode === 'full');
+  document.getElementById('mode-full').setAttribute('aria-pressed', String(mode === 'full'));
+
+  const fullCore = document.getElementById('full-core');
+  const fullCtx  = document.getElementById('full-ctx');
+  const isFullMode = mode === 'full';
+
+  fullCore.classList.toggle('on', isFullMode);
+  fullCtx.classList.toggle('on', isFullMode);
+
+  // Show ctx-gated only if behavior is already selected
+  if (isFullMode && state.core.bfrb) {
+    document.getElementById('ctx-gated').style.display = 'block';
+  }
+};
+
+// Apply saved mode on load
+document.addEventListener('DOMContentLoaded', () => {
+  setMode(currentMode);
+  initSliders();
+});
+
+// ════════════════════════════════════════════════════════════
+// ARRIVAL PARAMS — from interventions.html redirect
+// ════════════════════════════════════════════════════════════
+function handleArrivalParams() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('from') !== 'intervention') return;
+
+  const outcome = params.get('outcome'); // 'held' | 'failed'
+  const tool    = params.get('tool');    // 'motor' | 'decouple' | 'surf' | 'unhook' | 'shock' | 'ground'
+
+  // Step 1: pick a behavior (picking as default, reveals gated fields)
+  const pickingTag = document.querySelector('#log-form .grid-2 .tag');
+  if (pickingTag) pickingTag.click();
+
+  // Step 2: select outcome
+  if (outcome === 'held') {
+    const resistedTag = document.querySelector('#behavior-gated .grid-3 .tag.sage-on');
+    if (resistedTag) resistedTag.click();
+  } else if (outcome === 'failed') {
+    const episodeTags = document.querySelectorAll('#behavior-gated .grid-3 .tag');
+    const ep = [...episodeTags].find(t => t.textContent.trim() === 'Episode');
+    if (ep) ep.click();
+  }
+
+  // Step 3: if there's a tool param, switch to Full mode and pre-fill
+  if (tool) {
+    setMode('full');
+    // Mark "Yes" to intervention
+    const yesTag = document.getElementById('int-yes-tag');
+    if (yesTag) {
+      document.querySelectorAll('#log-form .grid-2 .tag').forEach(t => t.classList.remove('on'));
+      yesTag.classList.add('on');
+      state.ctx.tried_tool = true;
+      document.getElementById('intervention-block').classList.remove('hidden');
+    }
+    // Map tool param → tool label in the grid
+    const toolMap = {
+      motor:    'Competing Response',
+      decouple: 'Competing Response',
+      surf:     'Urge Surfing',
+      unhook:   'Urge Surfing',
+      shock:    'Fidget / Sensory',
+      ground:   'Grounding',
+    };
+    const label = toolMap[tool];
+    if (label) {
+      const toolTag = [...document.querySelectorAll('#tools-grid .tag')]
+        .find(t => t.textContent.trim() === label);
+      if (toolTag) toolTag.click();
+    }
+  }
+
+  history.replaceState({}, '', 'index.html');
+}
+
+// ════════════════════════════════════════════════════════════
 // UI HELPERS
+// ════════════════════════════════════════════════════════════
+function updateSaveBtn() {
+  const btn = document.getElementById('btn-save-all');
+  const ready = !!(state.core.bfrb && state.core.outcome);
+  btn.disabled = !ready;
+  btn.classList.toggle('inactive', !ready);
+}
+
 window.selectTiming = (val, el) => {
-  const siblings = el.parentElement.querySelectorAll('.tag');
-  siblings.forEach(t => t.classList.remove('on'));
+  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   state.core.timing = val;
   document.getElementById('core-time-wrap').classList.toggle('hidden', val !== 'earlier');
 };
 
 window.selectBehavior = (val, el) => {
-  const siblings = el.parentElement.querySelectorAll('.tag');
-  siblings.forEach(t => t.classList.remove('on'));
+  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-
-  state.core.bfrb = val;
-  state.core.where = [];
-  state.core.what = [];
+  state.core.bfrb    = val;
+  state.core.where   = [];
+  state.core.what    = [];
   state.core.outcome = null;
 
-  // Reveal everything gated on behavior
   document.getElementById('behavior-gated').style.display = 'block';
 
-  // Reset outcome selection
-  document.querySelectorAll('.grid-3 .tag').forEach(t => t.classList.remove('on'));
+  // Reset outcome
+  document.querySelectorAll('#behavior-gated .grid-3 .tag').forEach(t => t.classList.remove('on'));
 
-  // Reset and hide all outcome-dependent sections
+  // Reset outcome-dependent sections
   document.getElementById('core-details').classList.add('hidden');
-  document.getElementById('post-feeling-field').style.display = 'none';
-  document.getElementById('aftercare-field').style.display = 'none';
-  document.getElementById('escalation-field').style.display = 'none';
+  document.getElementById('post-feeling-field').style.display  = 'none';
+  document.getElementById('aftercare-field').style.display     = 'none';
+  document.getElementById('escalation-field').style.display    = 'none';
   document.getElementById('intervention-block').classList.add('hidden');
+  document.getElementById('int-yes-tag').classList.remove('on');
+  document.getElementById('int-no-tag').classList.remove('on');
+  state.ctx.tried_tool = null;
 
   // Reset area groups
   document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
   document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
 
-  const pickingDisplay = val === 'picking' ? '' : 'none';
-  const bitingDisplay  = val === 'biting'  ? '' : 'none';
-  document.getElementById('where-tags-picking').style.display = pickingDisplay;
-  document.getElementById('where-tags-biting').style.display  = bitingDisplay;
-  document.getElementById('what-tags-picking').style.display  = pickingDisplay;
-  document.getElementById('what-tags-biting').style.display   = bitingDisplay;
-
+  const pickVis = val === 'picking' ? '' : 'none';
+  const biteVis = val === 'biting'  ? '' : 'none';
+  document.getElementById('where-tags-picking').style.display = pickVis;
+  document.getElementById('where-tags-biting').style.display  = biteVis;
+  document.getElementById('what-tags-picking').style.display  = pickVis;
+  document.getElementById('what-tags-biting').style.display   = biteVis;
   document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
 
   const mirrorField = document.getElementById('mirror-field');
   if (mirrorField) mirrorField.style.display = val === 'picking' ? 'block' : 'none';
-  if (val !== 'picking') { state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null; }
+  if (val !== 'picking') {
+    state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null;
+  }
 
-  if (window.stampAreaCounts) window.stampAreaCounts();
+  // In full mode show context card
+  if (currentMode === 'full') {
+    document.getElementById('ctx-gated').style.display = 'block';
+  }
 
-  // Scroll to outcome field smoothly
-  setTimeout(() => document.getElementById('behavior-gated').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+  updateSaveBtn();
+
+  setTimeout(() => document.getElementById('behavior-gated')
+    .scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 };
 
 window.selectOutcome = (val, el) => {
-  const siblings = el.parentElement.querySelectorAll('.tag');
-  siblings.forEach(t => t.classList.remove('on'));
+  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-
   state.core.outcome = val;
 
   const isResisted  = val === 'Resisted';
@@ -586,71 +805,59 @@ window.selectOutcome = (val, el) => {
   const isEpisode   = val === 'Episode';
   const showDetails = isNearMiss || isEpisode;
 
-  // ── Episode / Near Miss: show where/what/awareness/duration ─────────────
+  // ── Contextual urge-after label (clinical fix) ──────────────
+  const afterLabel = document.getElementById('urge-after-label');
+  if (isResisted)   afterLabel.textContent = 'Urge relief after resisting';
+  else if (isNearMiss) afterLabel.textContent = 'Urge level after near miss';
+  else if (isEpisode)  afterLabel.textContent = 'Urge level after episode';
+  else afterLabel.textContent = 'Urge level after';
+
+  // Where / what / awareness / duration
   document.getElementById('core-details').classList.toggle('hidden', !showDetails);
 
-  // Ritual only on Episode
-  const ritualField = document.getElementById('ritual-field');
-  if (ritualField) ritualField.style.display = isEpisode ? 'block' : 'none';
+  // Ritual: episode only
+  document.getElementById('ritual-field').style.display = isEpisode ? 'block' : 'none';
 
-  // Skin impact only on Episode + picking
-  const skinImpactField = document.getElementById('skin-impact-field');
-  if (skinImpactField) skinImpactField.style.display = (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
+  // Skin impact: episode + picking
+  document.getElementById('skin-impact-field').style.display =
+    (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
 
-  // Mirror only on Episode + picking (already handled by selectBehavior, keep visible)
+  // Mirror: episode / near-miss + picking
   const mirrorField = document.getElementById('mirror-field');
   if (mirrorField && state.core.bfrb === 'picking') {
     mirrorField.style.display = showDetails ? 'block' : 'none';
   }
 
-  // Clean up state when switching away from detailed outcomes
+  // Context visibility
+  document.getElementById('post-feeling-field').style.display  = showDetails ? 'block' : 'none';
+  document.getElementById('aftercare-field').style.display     =
+    (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
+  document.getElementById('escalation-field').style.display    = isEpisode ? 'block' : 'none';
+
+  // Clean state when switching
   if (!showDetails) {
     state.core.where = []; state.core.what = [];
     state.core.awareness = null; state.core.duration = null;
     state.core.ritual = null; state.core.skin_impact = null;
     document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
-  } else if (isNearMiss) {
-    state.core.ritual = null; state.core.skin_impact = null;
-    document.querySelectorAll('#ritual-field .tag, #skin-impact-field .tag').forEach(t => t.classList.remove('on'));
   }
 
-  // ── Context field visibility by pathway ─────────────────────────────────
-  // Post-feeling: Near Miss + Episode
-  document.getElementById('post-feeling-field').style.display = showDetails ? 'block' : 'none';
+  // ── Intervention block ───────────────────────────────────────
+  // CLINICAL FIX: do NOT auto-open or pre-select "Yes" for Resisted.
+  // Resisting does not mean a tool was used — the user decides.
+  // The original pre-selected Yes and opened the block automatically,
+  // which inflated intervention-effectiveness data.
+  // All three outcomes: leave intervention Y/N untouched.
+  // (We only auto-fill if arriving from interventions.html via URL param.)
 
-  // Aftercare: Episode + picking only
-  document.getElementById('aftercare-field').style.display = (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
-
-  // Escalation: Episode only
-  document.getElementById('escalation-field').style.display = isEpisode ? 'block' : 'none';
-
-  // ── Intervention block ───────────────────────────────────────────────────
-  // Resisted: pre-open intervention block (they did something that worked)
-  // Near Miss / Episode: keep collapsed unless user taps Yes
-  const interventionBlock = document.getElementById('intervention-block');
-  const intYesNoField = interventionBlock.previousElementSibling; // "Intervention attempted?" field
-  if (isResisted) {
-    // Pre-select "Yes" and open block
-    const yesTag = intYesNoField.querySelector('.tag');
-    intYesNoField.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-    yesTag.classList.add('on');
-    state.ctx.tried_tool = true;
-    interventionBlock.classList.remove('hidden');
-  } else {
-    // Reset — let user decide
-    intYesNoField.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-    state.ctx.tried_tool = null;
-    interventionBlock.classList.add('hidden');
-  }
+  updateSaveBtn();
 };
 
 window.selectTag = (level, key, el) => {
-  const siblings = el.parentElement.querySelectorAll('.tag');
-  siblings.forEach(t => t.classList.remove('on'));
+  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-  
-  const mainText = el.querySelector('div') ? el.querySelector('div').textContent.trim() : el.textContent.trim();
-  state[level][key] = mainText;
+  const txt = el.querySelector('div') ? el.querySelector('div').textContent.trim() : el.textContent.trim();
+  state[level][key] = txt;
 };
 
 window.toggleArea = (id, el) => {
@@ -659,11 +866,9 @@ window.toggleArea = (id, el) => {
   const isOpen = !sub.classList.contains('hidden');
   sub.classList.toggle('hidden', isOpen);
   el.classList.toggle('open', !isOpen);
-  // If closing, deselect all sub-tags and remove from state
   if (isOpen) {
     sub.querySelectorAll('.tag.on').forEach(t => {
-      const val = t.textContent.trim();
-      const idx = state.core.where.indexOf(val);
+      const idx = state.core.where.indexOf(t.textContent.trim());
       if (idx > -1) state.core.where.splice(idx, 1);
       t.classList.remove('on');
     });
@@ -675,7 +880,7 @@ window.toggleMultiTag = (level, key, el) => {
   const arr = state[level][key];
   const idx = arr.indexOf(val);
   if (idx > -1) { arr.splice(idx, 1); el.classList.remove('on'); }
-  else { arr.push(val); el.classList.add('on'); }
+  else          { arr.push(val);      el.classList.add('on');    }
 };
 
 window.updateSlider = (el, valId, key) => {
@@ -685,145 +890,161 @@ window.updateSlider = (el, valId, key) => {
   state.core[key] = parseInt(el.value);
 };
 
+function initSliders() {
+  const s  = document.getElementById('core-urge');
+  const sa = document.getElementById('core-urge-after');
+  if (s)  updateSlider(s,  'core-urge-val',      'urge');
+  if (sa) updateSlider(sa, 'core-urge-after-val', 'urge_after');
+}
+
 window.toggleIntervention = (didTry, el) => {
   const siblings = el.parentElement.querySelectorAll('.tag');
   siblings.forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-
   state.ctx.tried_tool = didTry;
   document.getElementById('intervention-block').classList.toggle('hidden', !didTry);
 };
 
-window.showToast = (msg, isErr=false) => {
+// ════════════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════════════
+window.showToast = (msg, isErr = false) => {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = 'toast' + (isErr ? ' err' : '');
-  void t.offsetWidth; t.classList.add('show');
+  t.className   = 'toast' + (isErr ? ' err' : '');
+  void t.offsetWidth;
+  t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 };
 
-// SUBMIT LOGIC
+// ════════════════════════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════════════════════════
 window.saveAll = async () => {
-  if (!state.core.bfrb) { showToast('Choose a behaviour first'); return; }
-  if (!state.core.outcome) { showToast('Choose an outcome first'); return; }
+  if (!state.core.bfrb)    { showToast('Choose a behaviour first', true); return; }
+  if (!state.core.outcome) { showToast('Choose an outcome first', true);  return; }
 
   const btn = document.getElementById('btn-save-all');
   btn.disabled = true; btn.textContent = 'Saving…';
 
-  let finalTime;
-  if (state.core.timing === 'now') {
-    finalTime = new Date();
-  } else {
-    const v = document.getElementById('core-time').value;
-    finalTime = v ? new Date(v) : new Date();
-  }
+  const finalTime = state.core.timing === 'now'
+    ? new Date()
+    : (document.getElementById('core-time').value
+        ? new Date(document.getElementById('core-time').value)
+        : new Date());
 
-  let outcomeKey = 'resisted';
-  if (state.core.outcome === 'Near Miss') outcomeKey = 'near_miss';
-  if (state.core.outcome === 'Episode') outcomeKey = 'did';
+  const outcomeKey =
+    state.core.outcome === 'Near Miss' ? 'near_miss' :
+    state.core.outcome === 'Episode'   ? 'did'       : 'resisted';
 
   const docData = {
-    bfrb_type: state.core.bfrb,
-    entry_type: outcomeKey,
-    urge_before: state.core.urge,
-    urge_after: state.core.urge_after,
-    pre_feeling: state.core.pre_feeling || '',
-    created_at: finalTime,
-    // context
-    pre_action: state.ctx.pre_action || '',
-    primary_trigger: state.ctx.trigger || '',
-    environment: state.ctx.environment || '',
-    activity: state.ctx.activity || '',
-    escalation: state.ctx.escalation || '',
-    aftercare: state.ctx.aftercare || '',
-    post_feeling: state.ctx.post_feeling || '',
-    tried_intervention: state.ctx.tried_tool === true,
-    interventions: state.ctx.tools.join(', '),
-    specific_cr: document.getElementById('specific-cr')?.value.trim() || '',
+    bfrb_type:                 state.core.bfrb,
+    entry_type:                outcomeKey,
+    urge_before:               state.core.urge,
+    urge_after:                state.core.urge_after,
+    pre_feeling:               state.core.pre_feeling || '',
+    created_at:                finalTime,
+    pre_action:                state.ctx.pre_action  || '',
+    primary_trigger:           state.ctx.trigger     || '',
+    environment:               state.ctx.environment || '',
+    activity:                  state.ctx.activity    || '',
+    escalation:                state.ctx.escalation  || '',
+    aftercare:                 state.ctx.aftercare   || '',
+    post_feeling:              state.ctx.post_feeling || '',
+    tried_intervention:        state.ctx.tried_tool === true,
+    interventions:             state.ctx.tools.join(', '),
     intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
-    narrative_notes: document.getElementById('narrative-notes')?.value.trim() || '',
-    notes: document.getElementById('ctx-notes').value.trim()
+    narrative_notes:           (document.getElementById('narrative-notes')?.value || '').trim(),
+    notes:                     (document.getElementById('ctx-notes')?.value || '').trim(),
   };
 
   if (outcomeKey !== 'resisted') {
     docData.body_areas = state.core.where.join(', ');
-    docData.target = state.core.what.join(', ');
-    docData.awareness = state.core.awareness || '';
-    docData.duration = state.core.duration || '';
-    if (outcomeKey === 'did') {
-      docData.post_ritual = state.core.ritual || '';
-    }
+    docData.target     = state.core.what.join(', ');
+    docData.awareness  = state.core.awareness || '';
+    docData.duration   = state.core.duration  || '';
+    if (outcomeKey === 'did') docData.post_ritual = state.core.ritual || '';
   }
   if (state.core.bfrb === 'picking') {
     docData.mirror = state.core.mirror || '';
-    if (outcomeKey === 'did') {
-      docData.skin_impact = state.core.skin_impact || '';
-    }
+    if (outcomeKey === 'did') docData.skin_impact = state.core.skin_impact || '';
   }
 
   try {
     const docRef = await addDoc(collection(db, 'users', window._uid, 'entries'), docData);
     window._currentDocId = docRef.id;
 
-    const successMessages = {
-      resisted: { title: 'Logged.', body: 'Resistance entries are the most clinically useful data point. Your therapist will want to see these.' },
-      near_miss: { title: 'Logged.', body: 'Near misses show active friction in the urge-response chain — useful for pattern analysis.' },
-      did: { title: 'Logged.', body: 'Episode data drives the pattern analysis. This entry counts.' }
+    const msgs = {
+      resisted:  { title: 'Logged.',  body: 'Resistance entries are the most clinically useful data point.' },
+      near_miss: { title: 'Logged.',  body: 'Near misses show active friction in the urge-response chain — useful for pattern analysis.' },
+      did:       { title: 'Logged.',  body: 'Episode data drives the pattern analysis. This entry counts.' }
     };
-    const msg = successMessages[outcomeKey];
+    const msg = msgs[outcomeKey];
     document.getElementById('success-title').textContent = msg.title;
-    document.getElementById('success-body').textContent = msg.body;
+    document.getElementById('success-body').textContent  = msg.body;
 
     document.getElementById('log-form').classList.add('hidden');
     document.getElementById('bar-save').classList.add('hidden');
     document.getElementById('screen-success').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
   } catch(e) {
+    console.error('Save error:', e);
     showToast('Error saving — try again', true);
     btn.disabled = false; btn.textContent = 'Save';
+    btn.classList.add('inactive');
   }
 };
 
+// ════════════════════════════════════════════════════════════
+// RESET
+// ════════════════════════════════════════════════════════════
 window.resetForm = () => {
-  state.core = { timing: 'now', bfrb: null, outcome: null, where: [], what: [], ritual: null, awareness: null, duration: null, urge: 5, urge_after: 3, pre_feeling: null, mirror: null, skin_impact: null };
-  state.ctx = { pre_action: null, trigger: null, environment: null, activity: null, escalation: null, aftercare: null, post_feeling: null, tried_tool: null, tools: [], eff: null };
+  state.core = {
+    timing: 'now', bfrb: null, outcome: null,
+    where: [], what: [], ritual: null, awareness: null, duration: null,
+    urge: 5, urge_after: 3, pre_feeling: null, mirror: null, skin_impact: null
+  };
+  state.ctx = {
+    pre_action: null, trigger: null, environment: null,
+    activity: null, escalation: null, aftercare: null,
+    post_feeling: null, tried_tool: null, tools: [], eff: null
+  };
   window._currentDocId = null;
-
-  document.getElementById('success-title').textContent = 'Logged.';
-  document.getElementById('success-body').textContent = '';
 
   document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
   document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
+
+  // Default "Right now" tag on
   const firstTag = document.querySelector('#log-form .grid-2 .tag');
   if (firstTag) firstTag.classList.add('on');
-  
+
   document.getElementById('core-time').value = '';
   document.getElementById('core-time-wrap').classList.add('hidden');
-  document.getElementById('behavior-gated').style.display = 'none';
+  document.getElementById('behavior-gated').style.display   = 'none';
   document.getElementById('core-details').classList.add('hidden');
-  document.getElementById('ritual-field').style.display = 'none';
+  document.getElementById('ritual-field').style.display     = 'none';
   document.getElementById('post-feeling-field').style.display = 'none';
-  document.getElementById('aftercare-field').style.display = 'none';
+  document.getElementById('aftercare-field').style.display  = 'none';
   document.getElementById('escalation-field').style.display = 'none';
-  document.getElementById('mirror-field').style.display = 'none';
+  document.getElementById('mirror-field').style.display     = 'none';
   document.getElementById('skin-impact-field').style.display = 'none';
   document.getElementById('intervention-block').classList.add('hidden');
-  document.getElementById('ctx-notes').value = '';
-  document.getElementById('narrative-notes').value = '';
-  const specificCr = document.getElementById('specific-cr');
-  if (specificCr) specificCr.value = '';
+  document.getElementById('int-yes-tag').classList.remove('on');
+  document.getElementById('int-no-tag').classList.remove('on');
+  document.getElementById('ctx-gated').style.display        = 'none';
+  document.getElementById('narrative-notes').value          = '';
+  document.getElementById('ctx-notes').value                = '';
+  document.getElementById('urge-after-label').textContent   = 'Urge level after';
 
-  const slider = document.getElementById('core-urge');
-  slider.value = 5;
-  updateSlider(slider, 'core-urge-val', 'urge');
+  const s  = document.getElementById('core-urge');
+  const sa = document.getElementById('core-urge-after');
+  s.value = 5;  updateSlider(s,  'core-urge-val',      'urge');
+  sa.value = 3; updateSlider(sa, 'core-urge-after-val', 'urge_after');
 
-  const sliderAfter = document.getElementById('core-urge-after');
-  sliderAfter.value = 3;
-  updateSlider(sliderAfter, 'core-urge-after-val', 'urge_after');
-  
-  const saveBtn = document.getElementById('btn-save-all');
-  if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = 'Save'; }
+  const btn = document.getElementById('btn-save-all');
+  btn.disabled = true; btn.textContent = 'Save'; btn.classList.add('inactive');
 
   document.getElementById('log-form').classList.remove('hidden');
   document.getElementById('bar-save').classList.remove('hidden');
@@ -831,14 +1052,15 @@ window.resetForm = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// Desktop: Enter saves when form is visible
-document.addEventListener('keydown', (e) => {
+// Enter key shortcut (desktop)
+document.addEventListener('keydown', e => {
   if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (!document.getElementById('log-form').classList.contains('hidden')) {
     e.preventDefault();
     document.getElementById('btn-save-all').click();
   }
 });
+
 </script>
 <script src="nav.js"></script>
 <script src="daily-state-widget.js"></script>
