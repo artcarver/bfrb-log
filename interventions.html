@@ -465,7 +465,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -483,8 +483,24 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 window._uid = null;
 
-window.signInWithGoogle = async () => { try { await signInWithPopup(auth, provider); } catch(e) { console.error(e); }};
+// Detect iOS standalone (home screen) mode — popup is blocked there
+const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+
+window.signInWithGoogle = async () => {
+  try {
+    if (isStandalone) {
+      await signInWithRedirect(auth, provider);
+    } else {
+      await signInWithPopup(auth, provider);
+    }
+  } catch(e) {
+    console.error('Sign in error:', e);
+  }
+};
 window.signOut = async () => { await fbSignOut(auth); };
+
+// Handle redirect result when returning from Google auth (iOS standalone)
+getRedirectResult(auth).catch(e => console.error('Redirect result error:', e));
 
 onAuthStateChanged(auth, user => {
   window._uid = user ? user.uid : null;
