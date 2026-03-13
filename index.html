@@ -219,8 +219,15 @@ main {
             <div class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</div>
             <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</div>
             <div class="tag" onclick="selectTag('core','pre_feeling',this)">Zoned out / dissociated</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Scattered / unfocused</div>
-          </div>
+
+              <div class="tag tag-other" onclick="otherSingle('core','pre_feeling',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-core-pre_feeling">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('core','pre_feeling',false,this)"
+                onblur="cancelOther('core','pre_feeling')">
+              <button class="other-confirm" onclick="confirmOther('core','pre_feeling',false,this.previousElementSibling)">Add</button>
+            </div>
         </div>
 
         <!-- URGE BEFORE (quick + full) -->
@@ -263,8 +270,15 @@ main {
                   <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
                   <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
                   <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</div>
-                </div>
+
+              <div class="tag tag-other" onclick="otherMulti('core','where_pick',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-core-where_pick">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('core','where_pick',true,this)"
+                onblur="cancelOther('core','where_pick')">
+              <button class="other-confirm" onclick="confirmOther('core','where_pick',true,this.previousElementSibling)">Add</button>
+            </div>
                 <!-- Expandable face sub-areas -->
                 <div class="area-group">
                   <div class="tag area-parent" onclick="toggleArea('face',this)">Face — specific area</div>
@@ -327,8 +341,15 @@ main {
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</div>
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Ingrown Hair</div>
-              </div>
+
+              <div class="tag tag-other" onclick="otherMulti('core','what_pick',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-core-what_pick">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('core','what_pick',true,this)"
+                onblur="cancelOther('core','what_pick')">
+              <button class="other-confirm" onclick="confirmOther('core','what_pick',true,this.previousElementSibling)">Add</button>
+            </div>
               <!-- Biting targets ordered by your frequency: Nail Edge > Cuticle -->
               <div class="grid-auto" id="what-tags-biting" style="display:none">
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
@@ -337,8 +358,15 @@ main {
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Press-on / Gel edge</div>
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
                 <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Lip Tissue</div>
-              </div>
+
+              <div class="tag tag-other" onclick="otherMulti('core','what_bite',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-core-what_bite">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('core','what_bite',true,this)"
+                onblur="cancelOther('core','what_bite')">
+              <button class="other-confirm" onclick="confirmOther('core','what_bite',true,this.previousElementSibling)">Add</button>
+            </div>
             </div>
 
             <div class="field" id="mirror-field" style="display:none">
@@ -368,8 +396,15 @@ main {
                 <div class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</div>
                 <div class="tag" onclick="selectTag('core','ritual',this)">Examined it</div>
                 <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
-                <div class="tag" onclick="selectTag('core','ritual',this)">Chewed / Bit</div>
-              </div>
+
+              <div class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-core-ritual">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('core','ritual',false,this)"
+                onblur="cancelOther('core','ritual')">
+              <button class="other-confirm" onclick="confirmOther('core','ritual',false,this.previousElementSibling)">Add</button>
+            </div>
             </div>
 
             <div class="field">
@@ -378,6 +413,13 @@ main {
                 <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
                 <div class="tag" onclick="selectTag('core','awareness',this)">Mid-action</div>
                 <div class="tag" onclick="selectTag('core','awareness',this)">Urge first</div>
+                <div class="tag tag-other" onclick="otherSingle('core','awareness',this)">Other…</div>
+              </div>
+              <div class="other-input-wrap" id="other-core-awareness">
+                <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                  onkeydown="if(event.key==='Enter')confirmOther('core','awareness',false,this)"
+                  onblur="cancelOther('core','awareness')">
+                <button class="other-confirm" onclick="confirmOther('core','awareness',false,this.previousElementSibling)">Add</button>
               </div>
             </div>
 
@@ -388,6 +430,13 @@ main {
                 <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
                 <div class="tag" onclick="selectTag('core','duration',this)">10–30 min</div>
                 <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
+                <div class="tag tag-other" onclick="otherSingle('core','duration',this)">Other…</div>
+              </div>
+              <div class="other-input-wrap" id="other-core-duration">
+                <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                  onkeydown="if(event.key==='Enter')confirmOther('core','duration',false,this)"
+                  onblur="cancelOther('core','duration')">
+                <button class="other-confirm" onclick="confirmOther('core','duration',false,this.previousElementSibling)">Add</button>
               </div>
             </div>
 
@@ -413,9 +462,15 @@ main {
               <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</div>
               <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror Checking</div>
               <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / Nothing</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Getting ready</div>
+
+              <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_pick',this)">Other…</div>
             </div>
-          </div>
+            <div class="other-input-wrap" id="other-ctx-pre_action_pick">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','pre_action_pick',false,this)"
+                onblur="cancelOther('ctx','pre_action_pick')">
+              <button class="other-confirm" onclick="confirmOther('ctx','pre_action_pick',false,this.previousElementSibling)">Add</button>
+            </div>
           <!-- Biting pre-actions -->
           <div id="pre-actions-biting" style="display:none">
             <div class="grid-2">
@@ -424,6 +479,13 @@ main {
               <div class="tag" onclick="selectTag('ctx','pre_action',this)">Oral fixation / needed something</div>
               <div class="tag" onclick="selectTag('ctx','pre_action',this)">Hand near mouth</div>
               <div class="tag" onclick="selectTag('ctx','pre_action',this)">Touching nails / cuticles</div>
+              <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_bite',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-pre_action_bite">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','pre_action_bite',false,this)"
+                onblur="cancelOther('ctx','pre_action_bite')">
+              <button class="other-confirm" onclick="confirmOther('ctx','pre_action_bite',false,this.previousElementSibling)">Add</button>
             </div>
           </div>
         </div>
@@ -437,8 +499,15 @@ main {
             <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual (saw something)</div>
             <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / Idle</div>
             <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Cognitive / overthinking</div>
-          </div>
+
+              <div class="tag tag-other" onclick="otherSingle('ctx','trigger',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-trigger">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','trigger',false,this)"
+                onblur="cancelOther('ctx','trigger')">
+              <button class="other-confirm" onclick="confirmOther('ctx','trigger',false,this.previousElementSibling)">Add</button>
+            </div>
         </div>
 
         <div class="field">
@@ -450,8 +519,15 @@ main {
             <div class="tag" onclick="selectTag('ctx','environment',this)">Around the apartment</div>
             <div class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</div>
             <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Social / Out</div>
-          </div>
+
+              <div class="tag tag-other" onclick="otherSingle('ctx','environment',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-environment">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','environment',false,this)"
+                onblur="cancelOther('ctx','environment')">
+              <button class="other-confirm" onclick="confirmOther('ctx','environment',false,this.previousElementSibling)">Add</button>
+            </div>
         </div>
 
         <div class="field">
@@ -464,8 +540,15 @@ main {
             <div class="tag" onclick="selectTag('ctx','activity',this)">Working / At computer</div>
             <div class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</div>
             <div class="tag" onclick="selectTag('ctx','activity',this)">In Conversation</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">Cooking</div>
-          </div>
+
+              <div class="tag tag-other" onclick="otherSingle('ctx','activity',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-activity">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','activity',false,this)"
+                onblur="cancelOther('ctx','activity')">
+              <button class="other-confirm" onclick="confirmOther('ctx','activity',false,this.previousElementSibling)">Add</button>
+            </div>
         </div>
 
         <div class="field" id="escalation-field" style="display:none">
@@ -474,8 +557,15 @@ main {
             <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
             <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
             <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
-            <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
-          </div>
+
+              <div class="tag tag-other" onclick="otherSingle('ctx','escalation',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-escalation">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','escalation',false,this)"
+                onblur="cancelOther('ctx','escalation')">
+              <button class="other-confirm" onclick="confirmOther('ctx','escalation',false,this.previousElementSibling)">Add</button>
+            </div>
         </div>
 
         <div class="field" id="post-feeling-field" style="display:none">
@@ -487,8 +577,15 @@ main {
             <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
             <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Shame / self-critical</div>
             <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Calm / relieved</div>
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Low / sad</div>
-          </div>
+
+              <div class="tag tag-other" onclick="otherSingle('ctx','post_feeling',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-post_feeling">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','post_feeling',false,this)"
+                onblur="cancelOther('ctx','post_feeling')">
+              <button class="other-confirm" onclick="confirmOther('ctx','post_feeling',false,this.previousElementSibling)">Add</button>
+            </div>
         </div>
 
         <div class="field" id="aftercare-field" style="display:none">
@@ -523,7 +620,14 @@ main {
               <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
               <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
               <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Put on gloves</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Occupied hands</div>
+
+              <div class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-tools">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','tools',true,this)"
+                onblur="cancelOther('ctx','tools')">
+              <button class="other-confirm" onclick="confirmOther('ctx','tools',true,this.previousElementSibling)">Add</button>
             </div>
           </div>
           <div class="field">
@@ -1108,7 +1212,120 @@ window.resetForm = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// Enter key shortcut (desktop)
+// ════════════════════════════════════════════════════════════
+// OTHER BUTTON SYSTEM
+// ════════════════════════════════════════════════════════════
+
+// Map Other field IDs to their real state keys
+// (some fields split picking/biting variants but write to same state key)
+const OTHER_KEY_MAP = {
+  'core-pre_feeling':     { level:'core', key:'pre_feeling',  multi:false },
+  'core-where_pick':      { level:'core', key:'where',        multi:true  },
+  'core-what_pick':       { level:'core', key:'what',         multi:true  },
+  'core-what_bite':       { level:'core', key:'what',         multi:true  },
+  'core-awareness':       { level:'core', key:'awareness',    multi:false },
+  'core-duration':        { level:'core', key:'duration',     multi:false },
+  'core-ritual':          { level:'core', key:'ritual',       multi:false },
+  'ctx-pre_action_pick':  { level:'ctx',  key:'pre_action',   multi:false },
+  'ctx-pre_action_bite':  { level:'ctx',  key:'pre_action',   multi:false },
+  'ctx-trigger':          { level:'ctx',  key:'trigger',      multi:false },
+  'ctx-environment':      { level:'ctx',  key:'environment',  multi:false },
+  'ctx-activity':         { level:'ctx',  key:'activity',     multi:false },
+  'ctx-escalation':       { level:'ctx',  key:'escalation',   multi:false },
+  'ctx-post_feeling':     { level:'ctx',  key:'post_feeling', multi:false },
+  'ctx-tools':            { level:'ctx',  key:'tools',        multi:true  },
+};
+
+window.otherSingle = function(level, key, tagEl) {
+  // Deselect existing tags in the same group
+  tagEl.parentElement.querySelectorAll('.tag:not(.tag-other)').forEach(t => t.classList.remove('on'));
+  showOtherInput(level, key);
+};
+
+window.otherMulti = function(level, key, tagEl) {
+  showOtherInput(level, key);
+};
+
+function showOtherInput(level, key) {
+  const wrap = document.getElementById(`other-${level}-${key}`);
+  if (!wrap) return;
+  wrap.classList.add('on');
+  const input = wrap.querySelector('.other-input');
+  if (input) { input.value = ''; setTimeout(() => input.focus(), 50); }
+}
+
+window.cancelOther = function(level, key) {
+  // Small delay so the Add button click fires before blur hides it
+  setTimeout(() => {
+    const wrap = document.getElementById(`other-${level}-${key}`);
+    if (wrap) {
+      const input = wrap.querySelector('.other-input');
+      // Only hide if input is empty (user tabbed away without typing)
+      if (input && !input.value.trim()) wrap.classList.remove('on');
+    }
+  }, 200);
+};
+
+window.confirmOther = function(level, key, isMulti, inputEl) {
+  const val = (inputEl?.value || '').trim();
+  if (!val) return;
+
+  // Save the custom value to state
+  if (isMulti) {
+    const arr = state[level][key] || [];
+    if (!arr.includes(val)) { arr.push(val); state[level][key] = arr; }
+  } else {
+    state[level][key] = val;
+  }
+
+  // Persist to localStorage so repeat entries are remembered
+  persistOtherValue(level, key, val);
+
+  // Show a confirmed tag inline
+  const wrap = document.getElementById(`other-${level}-${key}`);
+  if (wrap) {
+    // Insert a live tag before the wrap
+    const tag = document.createElement('div');
+    tag.className = 'tag on';
+    tag.textContent = val;
+    tag.setAttribute('data-custom', '1');
+    if (isMulti) {
+      tag.onclick = function() { toggleMultiTag(level, key, this); };
+    } else {
+      tag.onclick = function() {
+        this.closest('.grid-auto, .grid-2, .grid-3')
+          ?.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+        this.classList.add('on');
+        state[level][key] = val;
+      };
+    }
+    wrap.parentElement.insertBefore(tag, wrap);
+    wrap.classList.remove('on');
+    inputEl.value = '';
+  }
+
+  updateSaveBtn();
+};
+
+// ── PERSIST & LOAD CUSTOM "OTHER" VALUES ──────────────────────────────────
+// Stores all custom values keyed by field, so they persist across sessions
+// and can be scanned by the AI suggestion tool.
+
+function persistOtherValue(level, key, val) {
+  const storeKey = 'gw-other-values';
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(e) {}
+  const fieldKey = `${level}.${key}`;
+  if (!store[fieldKey]) store[fieldKey] = {};
+  store[fieldKey][val] = (store[fieldKey][val] || 0) + 1;
+  localStorage.setItem(storeKey, JSON.stringify(store));
+}
+
+window.getOtherValues = function() {
+  try { return JSON.parse(localStorage.getItem('gw-other-values') || '{}'); } catch(e) { return {}; }
+};
+
+
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
   if (!document.getElementById('log-form').classList.contains('hidden')) {

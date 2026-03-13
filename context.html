@@ -225,6 +225,24 @@ textarea.scamp-input:disabled{opacity:.5;cursor:not-allowed}
       </div>
     </div>
 
+    <div class="card" id="suggest-card">
+      <div class="card-header">
+        <div class="card-title">Suggest new options</div>
+        <div class="card-desc">Upload a CSV export — AI scans your "Other" entries and suggests which ones appear often enough to become permanent options in the log form.</div>
+      </div>
+      <input type="file" id="suggest-csv" accept=".csv" style="display:none" onchange="runSuggestions(event)">
+      <button class="btn-ghost" style="width:100%;margin-bottom:12px" onclick="document.getElementById('suggest-csv').click()" id="suggest-upload-btn">
+        Upload CSV export
+      </button>
+      <div id="suggest-results" style="display:none">
+        <div id="suggest-list"></div>
+        <p style="font-size:12px;color:var(--mu);margin-top:12px;line-height:1.6">These appear 2+ times in your "Other" entries. Copy the ones you want and ask Claude to add them to the log form.</p>
+      </div>
+      <div id="suggest-empty" style="display:none">
+        <p style="font-size:13px;color:var(--mu)">No frequently repeated "Other" entries found yet — keep logging and check back.</p>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-header">
         <div class="card-title">Session Prep</div>
@@ -821,7 +839,153 @@ window.deleteReflection = async (id) => {
   }
 };
 
-window.closeReportModal = () => {
+// ════════════════════════════════════════════════════════════
+// AI SUGGESTION SYSTEM
+// Scans CSV for "Other" field entries + localStorage custom values,
+// finds ones used 2+ times, asks Claude to suggest clean label names
+// ════════════════════════════════════════════════════════════
+
+const FIELD_COLUMNS = {
+  // CSV column index → field name for display
+  12: 'Trigger',
+  13: 'Environment',
+  14: 'Activity',
+  16: 'Post-feeling',
+  10: 'Pre-action',
+  7:  'Body area',
+  8:  'Target',
+  19: 'Intervention tool',
+};
+
+window.runSuggestions = async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const btn = document.getElementById('suggest-upload-btn');
+  btn.textContent = 'Scanning…';
+  btn.disabled = true;
+
+  const text = await file.text();
+  const lines = text.split('\n').filter(l => l.trim());
+  
+  // Collect all custom values from CSV
+  const counts = {}; // "FieldName::value" -> count
+
+  // Parse CSV values
+  for (let i = 1; i < lines.length; i++) {
+    const row = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+      .map(s => s.replace(/^"|"$/g, '').trim());
+    
+    Object.entries(FIELD_COLUMNS).forEach(([colIdx, fieldName]) => {
+      const val = row[colIdx] || '';
+      if (!val || val.toLowerCase() === 'nan' || val === '') return;
+      // Check if this value looks "custom" — not matching common known options
+      const k = `${fieldName}::${val}`;
+      counts[k] = (counts[k] || 0) + 1;
+    });
+  }
+
+  // Also pull from localStorage gw-other-values
+  let stored = {};
+  try { stored = JSON.parse(localStorage.getItem('gw-other-values') || '{}'); } catch(e) {}
+  Object.entries(stored).forEach(([fieldKey, vals]) => {
+    const fieldName = fieldKey.split('.')[1] || fieldKey;
+    Object.entries(vals).forEach(([val, count]) => {
+      const k = `${fieldName}::${val}`;
+      counts[k] = (counts[k] || 0) + count;
+    });
+  });
+
+  // Filter to entries appearing 2+ times
+  const frequent = Object.entries(counts)
+    .filter(([k, c]) => c >= 2)
+    .sort((a, b) => b[1] - a[1]);
+
+  if (frequent.length === 0) {
+    document.getElementById('suggest-empty').style.display = 'block';
+    document.getElementById('suggest-results').style.display = 'none';
+    btn.textContent = 'Upload CSV export';
+    btn.disabled = false;
+    event.target.value = '';
+    return;
+  }
+
+  // Ask Claude to clean up and summarise the suggestions
+  const prompt = `I'm reviewing a BFRB (body-focused repetitive behavior) self-monitoring app log. 
+The following values appear frequently in user "Other" free-text entries across different log fields.
+For each one, suggest a clean, concise label (max 4 words) that would work as a permanent button option.
+Format your response as a JSON array only, no other text:
+[{"field":"Field Name","value":"original value","suggestion":"clean label","count":N}, ...]
+
+Entries (field::value — count):
+${frequent.map(([k, c]) => `${k} — ${c}x`).join('\n')}`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '[]';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const suggestions = JSON.parse(clean);
+
+    renderSuggestions(suggestions);
+  } catch(e) {
+    // Fallback: show raw frequent entries without AI cleanup
+    const fallback = frequent.map(([k, c]) => {
+      const [field, value] = k.split('::');
+      return { field, value, suggestion: value, count: c };
+    });
+    renderSuggestions(fallback);
+  }
+
+  btn.textContent = 'Upload CSV export';
+  btn.disabled = false;
+  event.target.value = '';
+};
+
+function renderSuggestions(suggestions) {
+  const list = document.getElementById('suggest-list');
+  const results = document.getElementById('suggest-results');
+  const empty = document.getElementById('suggest-empty');
+
+  if (!suggestions.length) {
+    empty.style.display = 'block';
+    results.style.display = 'none';
+    return;
+  }
+
+  // Group by field
+  const grouped = {};
+  suggestions.forEach(s => {
+    if (!grouped[s.field]) grouped[s.field] = [];
+    grouped[s.field].push(s);
+  });
+
+  list.innerHTML = Object.entries(grouped).map(([field, items]) => `
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px">${field}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        ${items.map(s => `
+          <div class="suggest-chip" title="seen ${s.count}x — from: ${s.value}">
+            ${s.suggestion}
+            <span class="suggest-count">${s.count}×</span>
+          </div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  results.style.display = 'block';
+  empty.style.display = 'none';
+}
+
+ = () => {
   document.getElementById('report-modal').classList.remove('on');
 };
 

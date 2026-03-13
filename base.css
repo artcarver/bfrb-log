@@ -415,3 +415,15 @@ textarea{resize:vertical;min-height:80px}
  * All icons should use stroke-based SVGs matching the app's line weight (2px).
  * ────────────────────────────────────────────────────────────────────────
  */
+
+/* ── OTHER BUTTON & INLINE INPUT ── */
+.tag-other{background:none;border:1.5px dashed var(--bdr2);color:var(--mu);font-style:italic}
+.tag-other:hover{border-color:var(--ac);color:var(--ac);background:var(--acl)}
+.other-input-wrap{display:none;align-items:center;gap:6px;margin-top:6px}
+.other-input-wrap.on{display:flex}
+.other-input{flex:1;background:var(--card);border:1.5px solid var(--ac);border-radius:var(--rsm);padding:7px 12px;font-family:'Instrument Sans',sans-serif;font-size:14px;color:var(--tx);outline:none;min-width:0}
+.other-confirm{background:var(--ac);color:#fff;border:none;border-radius:var(--rsm);padding:7px 12px;font-family:'Instrument Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation}
+
+/* ── AI SUGGESTION CHIPS ── */
+.suggest-chip{display:inline-flex;align-items:center;gap:6px;background:var(--acl);border:1px solid var(--acl2,var(--bdr));border-radius:var(--pill);padding:6px 12px;font-size:13px;font-weight:500;color:var(--ac);cursor:default}
+.suggest-count{font-size:11px;font-weight:700;color:var(--mu);background:var(--sur);border-radius:var(--pill);padding:1px 6px}
