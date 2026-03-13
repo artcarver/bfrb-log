@@ -86,6 +86,7 @@ main{max-width:540px;margin:0 auto;padding:20px 16px}
         </div>
       </div>
 
+      <div id="behavior-gated" style="display:none">
       <div class="field">
         <label class="field-label">Outcome</label>
         <div class="grid-3">
@@ -222,6 +223,7 @@ main{max-width:540px;margin:0 auto;padding:20px 16px}
             <div class="tag" onclick="selectTag('core','skin_impact',this)">Minor</div>
             <div class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</div>
             <div class="tag" onclick="selectTag('core','skin_impact',this)">Significant</div>
+            <div class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</div>
           </div>
         </div>
 
@@ -329,7 +331,7 @@ main{max-width:540px;margin:0 auto;padding:20px 16px}
         </div>
       </div>
 
-      <div class="field" id="escalation-field">
+      <div class="field" id="escalation-field" style="display:none">
         <label class="field-label">Session pattern</label>
         <div class="tag-sub" style="margin-bottom:10px;font-size:12px;color:var(--mu)">How did the episode unfold?</div>
         <div class="grid-auto">
@@ -412,6 +414,7 @@ main{max-width:540px;margin:0 auto;padding:20px 16px}
       </div>
     </div>
 
+    </div><!-- /behavior-gated -->
     <!-- single save bar -->
     <div class="action-bar" id="bar-save">
       <div class="action-inner">
@@ -496,16 +499,16 @@ function handleArrivalParams() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('from') === 'intervention') {
     const outcome = params.get('outcome');
+    // Must select a behavior first to reveal the outcome field
+    const pickingTag = document.querySelector('#log-form .grid-2 .tag');
+    if (pickingTag) pickingTag.click();
     if (outcome === 'held') {
-      // Pre-select Resisted
-      const resistedTag = document.querySelector('#log-form .grid-3 .tag.sage-on');
-      if (resistedTag) { resistedTag.click(); }
+      const resistedTag = document.querySelector('#behavior-gated .grid-3 .tag.sage-on');
+      if (resistedTag) resistedTag.click();
     } else if (outcome === 'failed') {
-      // Pre-select Episode
-      const episodeTag = [...document.querySelectorAll('#log-form .grid-3 .tag')].find(t => t.textContent.trim().startsWith('Episode'));
-      if (episodeTag) { episodeTag.click(); }
+      const episodeTag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim().startsWith('Episode'));
+      if (episodeTag) episodeTag.click();
     }
-    // Clean URL
     history.replaceState({}, '', 'index.html');
   }
 }
@@ -529,67 +532,116 @@ window.selectBehavior = (val, el) => {
   const siblings = el.parentElement.querySelectorAll('.tag');
   siblings.forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-  
+
   state.core.bfrb = val;
   state.core.where = [];
   state.core.what = [];
-  
+  state.core.outcome = null;
+
+  // Reveal everything gated on behavior
+  document.getElementById('behavior-gated').style.display = 'block';
+
+  // Reset outcome selection
+  document.querySelectorAll('.grid-3 .tag').forEach(t => t.classList.remove('on'));
+
+  // Reset and hide all outcome-dependent sections
+  document.getElementById('core-details').classList.add('hidden');
+  document.getElementById('post-feeling-field').style.display = 'none';
+  document.getElementById('aftercare-field').style.display = 'none';
+  document.getElementById('escalation-field').style.display = 'none';
+  document.getElementById('intervention-block').classList.add('hidden');
+
   // Reset area groups
   document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
   document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
-  
+
   const pickingDisplay = val === 'picking' ? '' : 'none';
   const bitingDisplay  = val === 'biting'  ? '' : 'none';
   document.getElementById('where-tags-picking').style.display = pickingDisplay;
   document.getElementById('where-tags-biting').style.display  = bitingDisplay;
   document.getElementById('what-tags-picking').style.display  = pickingDisplay;
   document.getElementById('what-tags-biting').style.display   = bitingDisplay;
-  
+
   document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
 
   const mirrorField = document.getElementById('mirror-field');
   if (mirrorField) mirrorField.style.display = val === 'picking' ? 'block' : 'none';
-  if (val !== 'picking') { state.core.mirror = null; state.core.skin_impact = null; }
+  if (val !== 'picking') { state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null; }
 
   if (window.stampAreaCounts) window.stampAreaCounts();
+
+  // Scroll to outcome field smoothly
+  setTimeout(() => document.getElementById('behavior-gated').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
 };
 
 window.selectOutcome = (val, el) => {
   const siblings = el.parentElement.querySelectorAll('.tag');
   siblings.forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-  
-  state.core.outcome = val;
-  
-  const isDidIt = val === 'Episode';
-  const isNearMiss = val === 'Near Miss';
-  const showDetails = isDidIt || isNearMiss;
-  
-  document.getElementById('core-details').classList.toggle('hidden', !showDetails);
-  
-  const ritualField = document.getElementById('ritual-field');
-  if (ritualField) ritualField.style.display = isDidIt ? 'block' : 'none';
 
+  state.core.outcome = val;
+
+  const isResisted  = val === 'Resisted';
+  const isNearMiss  = val === 'Near Miss';
+  const isEpisode   = val === 'Episode';
+  const showDetails = isNearMiss || isEpisode;
+
+  // ── Episode / Near Miss: show where/what/awareness/duration ─────────────
+  document.getElementById('core-details').classList.toggle('hidden', !showDetails);
+
+  // Ritual only on Episode
+  const ritualField = document.getElementById('ritual-field');
+  if (ritualField) ritualField.style.display = isEpisode ? 'block' : 'none';
+
+  // Skin impact only on Episode + picking
   const skinImpactField = document.getElementById('skin-impact-field');
-  if (skinImpactField) skinImpactField.style.display = (isDidIt && state.core.bfrb === 'picking') ? 'block' : 'none';
-  if (!isDidIt) { state.core.skin_impact = null; }
-  
-  if (!showDetails) {
-    state.core.where = [];
-    state.core.what = [];
-    state.core.awareness = null;
-    state.core.duration = null;
-    state.core.ritual = null;
-    document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
-  } else if (isNearMiss) {
-    state.core.ritual = null;
-    document.querySelectorAll('#ritual-field .tag').forEach(t => t.classList.remove('on'));
+  if (skinImpactField) skinImpactField.style.display = (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
+
+  // Mirror only on Episode + picking (already handled by selectBehavior, keep visible)
+  const mirrorField = document.getElementById('mirror-field');
+  if (mirrorField && state.core.bfrb === 'picking') {
+    mirrorField.style.display = showDetails ? 'block' : 'none';
   }
 
-  // Show/hide context fields that depend on outcome — live as user selects
+  // Clean up state when switching away from detailed outcomes
+  if (!showDetails) {
+    state.core.where = []; state.core.what = [];
+    state.core.awareness = null; state.core.duration = null;
+    state.core.ritual = null; state.core.skin_impact = null;
+    document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
+  } else if (isNearMiss) {
+    state.core.ritual = null; state.core.skin_impact = null;
+    document.querySelectorAll('#ritual-field .tag, #skin-impact-field .tag').forEach(t => t.classList.remove('on'));
+  }
+
+  // ── Context field visibility by pathway ─────────────────────────────────
+  // Post-feeling: Near Miss + Episode
   document.getElementById('post-feeling-field').style.display = showDetails ? 'block' : 'none';
-  document.getElementById('aftercare-field').style.display = isDidIt ? 'block' : 'none';
-  document.getElementById('escalation-field').style.display = showDetails ? 'block' : 'none';
+
+  // Aftercare: Episode + picking only
+  document.getElementById('aftercare-field').style.display = (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
+
+  // Escalation: Episode only
+  document.getElementById('escalation-field').style.display = isEpisode ? 'block' : 'none';
+
+  // ── Intervention block ───────────────────────────────────────────────────
+  // Resisted: pre-open intervention block (they did something that worked)
+  // Near Miss / Episode: keep collapsed unless user taps Yes
+  const interventionBlock = document.getElementById('intervention-block');
+  const intYesNoField = interventionBlock.previousElementSibling; // "Intervention attempted?" field
+  if (isResisted) {
+    // Pre-select "Yes" and open block
+    const yesTag = intYesNoField.querySelector('.tag');
+    intYesNoField.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+    yesTag.classList.add('on');
+    state.ctx.tried_tool = true;
+    interventionBlock.classList.remove('hidden');
+  } else {
+    // Reset — let user decide
+    intYesNoField.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+    state.ctx.tried_tool = null;
+    interventionBlock.classList.add('hidden');
+  }
 };
 
 window.selectTag = (level, key, el) => {
@@ -748,6 +800,7 @@ window.resetForm = () => {
   
   document.getElementById('core-time').value = '';
   document.getElementById('core-time-wrap').classList.add('hidden');
+  document.getElementById('behavior-gated').style.display = 'none';
   document.getElementById('core-details').classList.add('hidden');
   document.getElementById('ritual-field').style.display = 'none';
   document.getElementById('post-feeling-field').style.display = 'none';
@@ -755,6 +808,7 @@ window.resetForm = () => {
   document.getElementById('escalation-field').style.display = 'none';
   document.getElementById('mirror-field').style.display = 'none';
   document.getElementById('skin-impact-field').style.display = 'none';
+  document.getElementById('intervention-block').classList.add('hidden');
   document.getElementById('ctx-notes').value = '';
   document.getElementById('narrative-notes').value = '';
   const specificCr = document.getElementById('specific-cr');
