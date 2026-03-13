@@ -54,12 +54,12 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 .hot-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--r);padding:20px 16px;text-align:left;cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:16px;box-shadow:var(--s1);width:100%;touch-action:manipulation}
 .hot-btn:hover{border-color:var(--ac);transform:translateY(-1px);box-shadow:var(--s2)}
 .hot-btn:active{transform:translateY(0);box-shadow:var(--s1);border-color:var(--ac)}
-.hot-icon{width:44px;height:44px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hot-icon{width:48px;height:48px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .hot-icon.ac{background:var(--acl);color:var(--ac)}
 .hot-icon.sage{background:var(--sagel);color:var(--sage)}
 .hot-icon.warm{background:var(--warml);color:var(--warm)}
 .hot-icon.mu{background:var(--sur);border:1px solid var(--bdr);color:var(--tx2)}
-.hot-icon svg{width:22px;height:22px;display:block;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.hot-icon svg{width:20px;height:20px;min-width:20px;display:block;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .hot-body{flex:1;min-width:0}
 .hot-title{font-family:'Lora',serif;font-size:16px;font-weight:500;color:var(--tx);margin-bottom:3px}
 .hot-sub{font-size:12px;color:var(--mu);line-height:1.4}
@@ -91,78 +91,85 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 /* =====================================================
    TIMER OVERLAY — full-screen guided experience
    ===================================================== */
-.timer-overlay{position:fixed;inset:0;background:var(--bg);z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;pointer-events:none;overflow:hidden}
+.timer-overlay{position:fixed;inset:0;background:var(--bg);z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility .35s ease;pointer-events:none;overflow:hidden}
 .timer-overlay.on{opacity:1;visibility:visible;pointer-events:auto}
-.timer-close{position:absolute;top:max(24px,env(safe-area-inset-top,24px));right:20px;background:none;border:none;color:var(--mu);cursor:pointer;line-height:1;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:var(--tr)}
+.timer-close{position:absolute;top:max(20px,env(safe-area-inset-top,20px));right:16px;background:none;border:none;color:var(--mu);cursor:pointer;line-height:1;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s,color .2s}
 .timer-close:hover{background:var(--sur);color:var(--tx)}
-.timer-close svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.timer-close svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;viewBox:0 0 24 24}
 
-/* Phase label above the readout */
-.timer-phase{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:12px;min-height:16px;transition:color .4s}
+/* Phase label */
+.timer-phase{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;min-height:14px;transition:color .5s ease}
 
-/* Primary instruction — Lora, calm */
-.timer-inst{font-family:'Lora',serif;font-size:clamp(18px,4.5vw,24px);color:var(--tx);line-height:1.5;margin-bottom:28px;max-width:380px;min-height:80px;transition:opacity .4s ease}
+/* Primary instruction */
+.timer-inst{font-family:'Lora',serif;font-size:clamp(20px,5vw,26px);color:var(--tx);line-height:1.55;margin-bottom:32px;max-width:360px;min-height:84px;transition:opacity .5s ease,transform .5s ease}
+.timer-inst.fade-out{opacity:0;transform:translateY(-6px)}
 
 /* Countdown */
-.timer-readout{font-family:'DM Sans',sans-serif;font-size:clamp(52px,18vw,80px);font-weight:300;line-height:1;margin-bottom:32px;font-variant-numeric:tabular-nums;transition:color .5s ease}
+.timer-readout{font-family:'DM Sans',sans-serif;font-size:clamp(56px,18vw,84px);font-weight:200;line-height:1;margin-bottom:36px;font-variant-numeric:tabular-nums;letter-spacing:-.02em;transition:color .6s ease}
 .timer-readout.ac{color:var(--ac)}
 .timer-readout.sage{color:var(--sage)}
 .timer-readout.warm{color:var(--warm)}
 .timer-readout.mu{color:var(--tx2)}
 
 /* Progress arc */
-.timer-arc-wrap{position:relative;width:140px;height:140px;margin:0 auto 28px;flex-shrink:0}
+.timer-arc-wrap{position:relative;width:160px;height:160px;margin:0 auto 32px;flex-shrink:0}
 .timer-arc-svg{width:100%;height:100%;transform:rotate(-90deg)}
-.timer-arc-bg{fill:none;stroke:var(--bdr);stroke-width:4}
-.timer-arc-fill{fill:none;stroke-width:4;stroke-linecap:round;transition:stroke-dashoffset .9s linear,stroke .5s ease}
+.timer-arc-bg{fill:none;stroke:var(--bdr);stroke-width:3}
+.timer-arc-fill{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .6s ease}
 .timer-arc-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 
-/* Specific visualisers */
-/* Breath ring — expands/contracts */
-.breath-ring{width:120px;height:120px;border-radius:50%;border:3px solid currentColor;display:flex;align-items:center;justify-content:center;transition:transform 1s cubic-bezier(.4,0,.2,1),color .5s,border-color .5s;flex-shrink:0}
-.breath-ring-inner{width:60px;height:60px;border-radius:50%;background:currentColor;opacity:.15;transition:transform 1s cubic-bezier(.4,0,.2,1)}
-.breath-label{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-top:12px;min-height:20px;transition:color .5s}
+/* Breath ring */
+@keyframes breath-pulse{0%,100%{opacity:.12} 50%{opacity:.22}}
+.breath-ring{width:148px;height:148px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;transition:transform 3.5s cubic-bezier(.45,0,.15,1),color .6s ease;flex-shrink:0;opacity:.9}
+.breath-ring-inner{width:64px;height:64px;border-radius:50%;background:currentColor;opacity:.12;transition:transform 3.5s cubic-bezier(.45,0,.15,1),opacity .6s ease}
+.breath-ring.inhale{transform:scale(1.18)}
+.breath-ring.inhale .breath-ring-inner{transform:scale(1.32);opacity:.22}
+.breath-ring.hold{transform:scale(1.18)}
+.breath-ring.hold .breath-ring-inner{transform:scale(1.32);opacity:.18}
+.breath-ring.exhale{transform:scale(1)}
+.breath-ring.exhale .breath-ring-inner{transform:scale(1);opacity:.1}
+.breath-label{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:currentColor;margin-top:14px;min-height:18px;transition:color .5s ease;opacity:.7}
 
 /* Urge wave tracker */
-.urge-track-wrap{width:100%;max-width:320px;margin:0 auto 24px}
-.urge-track-label{font-size:12px;color:var(--mu);margin-bottom:10px;font-weight:500}
-.urge-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--bdr);border-radius:var(--pill);outline:none;cursor:pointer}
-.urge-slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--sage);border:3px solid var(--card);box-shadow:0 2px 8px rgba(122,140,133,.3);cursor:pointer}
-.urge-slider::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:var(--sage);border:3px solid var(--card);cursor:pointer}
-.urge-readout{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-top:6px}
-.urge-wave-canvas{width:100%;max-width:320px;height:60px;margin:0 auto 4px;display:block;opacity:.6}
+.urge-track-wrap{width:100%;max-width:300px;margin:0 auto 28px}
+.urge-track-label{font-size:12px;color:var(--mu);margin-bottom:12px;font-weight:500}
+.urge-slider{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:var(--pill);background:var(--bdr);outline:none;cursor:pointer}
+.urge-slider::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--sage);border:3px solid var(--card);box-shadow:0 1px 6px rgba(74,140,120,.25);cursor:pointer}
+.urge-slider::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:var(--sage);border:3px solid var(--card);cursor:pointer}
+.urge-readout{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);margin-top:8px}
+.urge-wave-canvas{width:100%;max-width:300px;height:56px;margin:0 auto 4px;display:block;opacity:.5}
 
 /* Redirect cycle counter */
-.redirect-counter{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px}
-.redirect-beat{font-family:'Lora',serif;font-size:32px;color:var(--tx);min-height:42px;transition:opacity .2s,transform .2s}
-.redirect-beat.flash{opacity:.3;transform:scale(.92)}
-.redirect-taps{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:280px}
-.redirect-dot{width:12px;height:12px;border-radius:50%;background:var(--bdr);transition:background .2s,transform .2s}
-.redirect-dot.done{background:var(--ac);transform:scale(1.2)}
-.redirect-tap-btn{background:var(--acl);border:2px solid var(--ac);color:var(--ac);border-radius:var(--pill);padding:12px 28px;font-size:15px;font-weight:600;cursor:pointer;transition:var(--tr);margin-bottom:8px;touch-action:manipulation}
-.redirect-tap-btn:active{background:var(--ac);color:#fff;transform:scale(.96)}
+.redirect-counter{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:28px}
+.redirect-beat{font-family:'Lora',serif;font-size:30px;color:var(--tx);min-height:40px;transition:opacity .25s ease,transform .25s ease}
+.redirect-beat.flash{opacity:.2;transform:scale(.9)}
+.redirect-taps{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:260px}
+.redirect-dot{width:10px;height:10px;border-radius:50%;background:var(--bdr2);transition:background .3s ease,transform .3s ease}
+.redirect-dot.done{background:var(--ac);transform:scale(1.25)}
+.redirect-tap-btn{background:var(--acl);border:1.5px solid var(--ac);color:var(--ac);border-radius:var(--pill);padding:14px 32px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;margin-bottom:8px;touch-action:manipulation}
+.redirect-tap-btn:active{background:var(--ac);color:#fff;transform:scale(.95)}
 
 /* Defusion steps */
-.defusion-step{font-family:'Lora',serif;font-size:clamp(18px,4.5vw,22px);color:var(--tx);line-height:1.5;max-width:340px;opacity:0;transition:opacity .6s ease;position:absolute;left:50%;transform:translateX(-50%);width:90%;top:0}
-.defusion-step.active{opacity:1}
-.defusion-wrap{position:relative;height:80px;margin-bottom:24px;width:100%;max-width:360px}
+.defusion-step{font-family:'Lora',serif;font-size:clamp(17px,4.5vw,22px);color:var(--tx);line-height:1.6;max-width:320px;opacity:0;transition:opacity .7s ease,transform .7s ease;position:absolute;left:50%;transform:translateX(-50%) translateY(8px);width:90%;top:0}
+.defusion-step.active{opacity:1;transform:translateX(-50%) translateY(0)}
+.defusion-wrap{position:relative;height:84px;margin-bottom:28px;width:100%;max-width:360px}
 
 /* Tactile focus prompts */
-.tactile-prompt{font-family:'Lora',serif;font-size:20px;color:var(--tx);opacity:0;transition:opacity .8s ease;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px}
-.tactile-prompt.active{opacity:1}
-.tactile-wrap{position:relative;height:72px;width:100%;max-width:340px;margin-bottom:24px}
+.tactile-prompt{font-family:'Lora',serif;font-size:19px;color:var(--tx);opacity:0;transition:opacity .9s ease,transform .9s ease;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:0 20px;transform:translateY(6px)}
+.tactile-prompt.active{opacity:1;transform:translateY(0)}
+.tactile-wrap{position:relative;height:72px;width:100%;max-width:320px;margin-bottom:28px}
 
 /* Motor hold indicator */
-.hold-ring{width:100px;height:100px;border-radius:50%;border:4px solid var(--bdr);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;position:relative;transition:border-color .5s}
-.hold-ring.tensed{border-color:var(--ac);box-shadow:0 0 0 8px var(--acl)}
-.hold-ring-inner{width:52px;height:52px;border-radius:50%;background:var(--acl);transition:transform .3s,background .5s}
-.hold-ring.tensed .hold-ring-inner{transform:scale(1.15);background:rgba(91,107,138,.25)}
-.hold-phase{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;transition:color .3s}
+.hold-ring{width:110px;height:110px;border-radius:50%;border:3px solid var(--bdr);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;transition:border-color .6s ease,box-shadow .6s ease}
+.hold-ring.tensed{border-color:var(--ac);box-shadow:0 0 0 10px var(--acl)}
+.hold-ring-inner{width:56px;height:56px;border-radius:50%;background:var(--acl);transition:transform .5s cubic-bezier(.34,1.56,.64,1),background .6s ease}
+.hold-ring.tensed .hold-ring-inner{transform:scale(1.2);background:rgba(91,107,138,.2)}
+.hold-phase{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;transition:color .4s ease}
 .hold-phase.tensed{color:var(--ac)}
 
 /* BOTTOM ACTION BUTTONS */
-.timer-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:300px;margin-top:4px}
-.timer-btn{background:var(--card);border:2px solid var(--bdr);border-radius:var(--pill);padding:15px 20px;font-size:15px;font-weight:600;color:var(--tx);cursor:pointer;transition:var(--tr);min-height:52px;width:100%;font-family:'DM Sans',sans-serif;touch-action:manipulation}
+.timer-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px;margin-top:8px}
+.timer-btn{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--pill);padding:15px 20px;font-size:15px;font-weight:600;color:var(--tx);cursor:pointer;transition:border-color .2s,color .2s,transform .1s;min-height:52px;width:100%;font-family:'DM Sans',sans-serif;touch-action:manipulation}
 .timer-btn:hover{border-color:var(--ac);color:var(--ac)}
 .timer-btn:active{transform:scale(.97)}
 .timer-btn.done{background:var(--sage);border-color:var(--sage);color:#fff}
@@ -216,7 +223,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
   <div class="hot-grid">
     <button class="hot-btn" onclick="openTimer('motor')">
       <div class="hot-icon ac">
-        <svg><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Motor Block</div>
@@ -227,7 +234,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
     <button class="hot-btn" onclick="openTimer('decouple')">
       <div class="hot-icon ac">
-        <svg><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Decoupling Redirect</div>
@@ -238,7 +245,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
     <button class="hot-btn" onclick="openTimer('surf')">
       <div class="hot-icon sage">
-        <svg><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Urge Surf</div>
@@ -249,7 +256,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
     <button class="hot-btn" onclick="openTimer('unhook')">
       <div class="hot-icon mu">
-        <svg><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Cognitive Defusion</div>
@@ -260,7 +267,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
     <button class="hot-btn" onclick="openTimer('shock')">
       <div class="hot-icon sage">
-        <svg><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Tactile Substitute</div>
@@ -271,7 +278,7 @@ main{max-width:560px;margin:0 auto;padding:24px 14px}
 
     <button class="hot-btn" onclick="openTimer('ground')">
       <div class="hot-icon warm">
-        <svg><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Grounding Reset</div>
@@ -898,9 +905,9 @@ function continueTactile() {
 
 // ---- GROUNDING: 4-7-8 animated breath ----
 const BREATH_SEQ = [
-  { phase: 'inhale', label: 'Inhale', dur: 4000, scale: 1.5 },
-  { phase: 'hold',   label: 'Hold',   dur: 7000, scale: 1.5 },
-  { phase: 'exhale', label: 'Exhale', dur: 8000, scale: 1.0 },
+  { phase: 'inhale', label: 'Inhale', dur: 4000 },
+  { phase: 'hold',   label: 'Hold',   dur: 7000 },
+  { phase: 'exhale', label: 'Exhale', dur: 8000 },
 ];
 let breathSeqIdx = 0;
 let breathRunning = false;
@@ -920,7 +927,8 @@ function runBreathStep() {
   const countLabel = document.getElementById('breath-count-label');
 
   label.textContent = step.label;
-  ring.style.transform = `scale(${step.scale})`;
+  ring.className = `breath-ring ${step.phase}`;
+  ring.style.color = getComputedStyle(document.documentElement).getPropertyValue('--warm').trim();
 
   if (breathSeqIdx === 0) {
     breathCount++;
@@ -937,8 +945,6 @@ function runBreathStep() {
 function pauseBreath() {
   breathRunning = false;
   clearTimeout(breathTimer);
-  const ring = document.getElementById('breath-ring');
-  ring.style.transition = 'none';
 }
 
 function resumeBreath() {
