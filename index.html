@@ -68,46 +68,29 @@
         <!-- 2. OUTCOME — immediately after behavior, before any context -->
         <div class="field">
           <label class="field-label">Outcome</label>
+          <p class="field-hint">What ultimately happened — did the behavior complete, or did you interrupt it at some point?</p>
           <div class="grid-2" id="outcome-grid" role="group" aria-label="Outcome">
             <div class="tag outcome-resisted" onclick="selectOutcome('Resisted',  this)">Resisted</div>
-            <div class="tag outcome-nearmiss" onclick="selectOutcome('Near Miss', this)">Near miss</div>
             <div class="tag outcome-caught"   onclick="selectOutcome('Caught',    this)">Caught mid-act</div>
+            <div class="tag outcome-nearmiss" onclick="selectOutcome('Near Miss', this)">Near miss</div>
             <div class="tag outcome-episode"  onclick="selectOutcome('Episode',   this)">Full episode</div>
           </div>
         </div>
 
         <!-- All fields below gated on outcome selection -->
         <div id="outcome-gated" style="display:none">
-
-          <!-- 3. AWARENESS — in quick mode for all outcomes; clinically most time-sensitive -->
-          <div class="field" id="awareness-field">
-            <label class="field-label">How did you notice?</label>
-            <div class="grid-3" role="group" aria-label="Awareness type">
-              <div class="tag" onclick="selectTag('core','awareness',this)">
-                Urge came first
-                <span class="tag-sub">Felt the pull, then acted</span>
-              </div>
-              <div class="tag" onclick="selectTag('core','awareness',this)">
-                Noticed while doing it
-                <span class="tag-sub">Caught yourself mid-behavior</span>
-              </div>
-              <div class="tag" onclick="selectTag('core','awareness',this)">
-                Only noticed after
-                <span class="tag-sub">Already done by the time you saw it</span>
-              </div>
-            </div>
-          </div>
-
           <!-- 4. PRE-FEELING — what functional state preceded this -->
           <div class="field" id="pre-feeling-field">
             <label class="field-label" id="pre-feeling-label">State before</label>
+          <p class="field-hint" id="pre-feeling-hint">The emotional state that preceded the behavior — tells you what need it was serving (relief from anxiety, stimulation when bored, filling an attentional void).</p>
             <div class="grid-auto" role="group" aria-labelledby="pre-feeling-label">
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
               <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Frustrated</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</div>
               <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Overwhelmed</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Irritable / on edge</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
               <div class="tag" onclick="selectTag('core','pre_feeling',this)">Zoned out</div>
               <div class="tag tag-other" onclick="otherSingle('core','pre_feeling',this)">Other…</div>
             </div>
@@ -122,6 +105,7 @@
           <!-- 5. URGE BEFORE — picking always; biting gated -->
           <div class="field field--flush" id="urge-before-picking-wrap">
             <label class="field-label">Urge intensity before</label>
+            <p class="field-hint">How strong was the pull to do it, right before it happened. Compare this to "after" — the gap between them shows how much relief the behavior provided.</p>
             <div class="slider-row">
               <input type="range" min="1" max="10" value="5" id="core-urge"
                 aria-label="Urge intensity before, 1 to 10"
@@ -153,6 +137,7 @@
           <!-- 6. URGE AFTER — label adapts to outcome -->
           <div class="field field--flush" id="urge-after-wrap">
             <label class="field-label" id="urge-after-label">Urge level after</label>
+          <p class="field-hint">A big drop (8 → 2) means the behavior is strongly reinforced by relief — ERP/urge surfing is the right counter. A small drop means it's more automatic habit than relief-driven.</p>
             <div class="slider-row">
               <input type="range" min="1" max="10" value="3" id="core-urge-after"
                 aria-label="Urge level after, 1 to 10"
@@ -163,9 +148,30 @@
             <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
           </div>
 
+          <!-- 3. AWARENESS — in quick mode for all outcomes; clinically most time-sensitive -->
+          <div class="field" id="awareness-field">
+            <label class="field-label">How did you notice?</label>
+            <p class="field-hint">When in the sequence did awareness kick in? Earlier = the interception window is working and will keep getting faster.</p>
+            <div class="grid-3" role="group" aria-label="Awareness type">
+              <div class="tag" onclick="selectTag('core','awareness',this)">
+                Urge came first
+                <span class="tag-sub">Felt the pull, then acted</span>
+              </div>
+              <div class="tag" onclick="selectTag('core','awareness',this)">
+                Noticed while doing it
+                <span class="tag-sub">Caught yourself mid-behavior</span>
+              </div>
+              <div class="tag" onclick="selectTag('core','awareness',this)">
+                Only noticed after
+                <span class="tag-sub">Already done by the time you saw it</span>
+              </div>
+            </div>
+          </div>
+
           <!-- 7. INTERVENTION — after urge data, not before -->
           <div class="field" id="intervention-quick-wrap">
             <label class="field-label">Tool used?</label>
+            <p class="field-hint">Even if it didn't hold, logging it builds your personal effectiveness data over weeks.</p>
             <div class="grid-2" role="group" aria-label="Intervention attempted">
               <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
               <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
@@ -175,14 +181,16 @@
           <div id="intervention-block" class="hidden">
             <div class="field">
               <label class="field-label">Which tool?</label>
+              <p class="field-hint">Multi-select. Patterns ranks these by your actual outcome rate — your data, not general evidence.</p>
               <div class="grid-auto" id="tools-grid" role="group" aria-label="Intervention tools">
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Decoupling Redirect</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Cognitive Defusion</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding / Breathing</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental block</div>
@@ -197,6 +205,7 @@
             </div>
             <div class="field">
               <label class="field-label">How effective?</label>
+              <p class="field-hint">Subjective feel vs. objective outcome. Patterns will show where they diverge — tools that feel good but don't hold, and ones you underrate.</p>
               <div class="grid-5" role="group" aria-label="Effectiveness 1 to 5">
                 <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="1 — not helpful">1</div>
                 <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="2 — slightly helpful">2</div>
@@ -235,6 +244,7 @@
 
               <div class="field" id="where-field">
                 <label class="field-label">Where on your body?</label>
+                <p class="field-hint">Location shapes which competing response works — scalp, face, and arm picking all need different hand positions.</p>
                 <div id="where-tags-picking" style="display:none">
                   <div class="grid-auto grid-auto--mb" role="group" aria-label="Body area">
                     <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
@@ -303,6 +313,7 @@
 
               <div class="field" id="what-field">
                 <label class="field-label">Target type</label>
+              <p class="field-hint">What drew you to it. Reveals the sensory function: texture/irregularity = need to resolve, scab/blemish = visual + completion drive. Points directly to which sensory substitute would satisfy the same need.</p>
                 <div class="grid-auto" id="what-tags-picking" style="display:none" role="group" aria-label="Target type">
                   <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
                   <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
@@ -337,6 +348,7 @@
 
               <div class="field" id="mirror-field" style="display:none">
                 <label class="field-label">Mirror or camera involved?</label>
+              <p class="field-hint">Mirror use turns a tactile urge into a visual feedback loop and makes sessions much longer. Mirror + visual trigger in your data = mirror removal is your single highest-yield barrier.</p>
                 <div class="grid-2" role="group" aria-label="Mirror use">
                   <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
                   <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
@@ -384,6 +396,7 @@
 
               <div class="field">
                 <label class="field-label">Duration</label>
+              <p class="field-hint">Long sessions (30+ min) usually involve dissociation — conscious awareness has dropped out. These need upstream prevention. Short ones are habit-interruptible with acute tools.</p>
                 <div class="grid-2" role="group" aria-label="Duration">
                   <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
                   <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
@@ -410,6 +423,7 @@
 
               <div class="field">
                 <label class="field-label" id="pre-action-label">What were you doing just before?</label>
+          <p class="field-hint">The entry-point behavior that started the chain. Interrupting scanning or mirror-checking is more effective than trying to stop the pick itself — the chain is easier to break earlier.</p>
                 <div id="pre-actions-picking" style="display:none">
                   <div class="grid-2" role="group" aria-label="Pre-event activity">
                     <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</div>
@@ -443,13 +457,15 @@
 
               <div class="field">
                 <label class="field-label">Primary trigger</label>
+              <p class="field-hint">The underlying driver — determines which tool works. Anxiety/stress → breathing or urge surfing. Sensory urge → tactile substitute. Boredom → competing response. This is the most important context field.</p>
                 <div class="grid-auto" role="group" aria-label="Primary trigger">
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / stress</div>
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / depleted</div>
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory — felt something</div>
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual — saw something</div>
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / idle</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Pain / physical discomfort</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism / need to fix</div>
                   <div class="tag tag-other" onclick="otherSingle('ctx','trigger',this)">Other…</div>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-trigger">
@@ -502,6 +518,7 @@
               <!-- Episode-only context fields -->
               <div class="field" id="escalation-field" style="display:none">
                 <label class="field-label">Session pattern</label>
+              <p class="field-hint">Single pick = habit-interruptible with an acute tool. Escalated / couldn't stop = executive control dropped out. Focus shifts to preventing the first contact, not stopping mid-session.</p>
                 <div class="grid-auto" role="group" aria-label="Session pattern">
                   <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
                   <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
@@ -520,13 +537,14 @@
               <!-- Post-feeling: shown for all outcomes — important for reinforcement mapping -->
               <div class="field" id="post-feeling-field" style="display:none">
                 <label class="field-label">How did you feel after?</label>
+              <p class="field-hint">Relief/calm = strong negative reinforcement (the behavior "worked" — urge surfing is the counter). Self-critical thoughts = secondary shame loop that can trigger more episodes.</p>
                 <div class="grid-2" role="group" aria-label="Post-event feeling">
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Relieved / calm</div>
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Zoned out / dissociated</div>
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</div>
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated with myself</div>
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Self-critical thoughts</div>
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Zoned out / dissociated</div>
                   <div class="tag tag-other" onclick="otherSingle('ctx','post_feeling',this)">Other…</div>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-post_feeling">
@@ -539,6 +557,7 @@
 
               <div class="field" id="aftercare-field" style="display:none">
                 <label class="field-label">Aftercare applied?</label>
+              <p class="field-hint">Applying lotion right after an episode isn't just wound care — it can interrupt the urge to continue and works as a brief mindfulness anchor.</p>
                 <div class="grid-2" role="group" aria-label="Post-episode aftercare">
                   <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
                   <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
@@ -650,7 +669,7 @@ const state = {
     timing: 'now', bfrb: null, outcome: null,
     where: [], what: [],
     ritual: null, awareness: null, duration: null,
-    urge: 5, urge_after: 3,
+    urge: 5, urge_after: null,
     pre_feeling: null, mirror: null, skin_impact: null
   },
   ctx: {
@@ -698,6 +717,11 @@ function handleArrivalParams() {
   if (surfEnd  !== null) state.core.surf_end  = parseInt(surfEnd,  10);
 
   history.replaceState({}, '', 'index.html');
+
+  // Auto-select picking behavior so behavior-gated and outcome-gated
+  // are both visible before applyPendingArrival fires inside selectBehavior
+  const pickingTag = document.querySelector('.behavior-tag');
+  if (pickingTag) pickingTag.click();
 }
 
 function applyPendingArrival() {
@@ -805,7 +829,11 @@ window.selectBehavior = (val, el) => {
 
   const isBiting = val === 'biting';
   const preFeelingLabel = document.getElementById('pre-feeling-label');
+  const preFeelingHint  = document.getElementById('pre-feeling-hint');
   if (preFeelingLabel) preFeelingLabel.textContent = isBiting ? 'State before (if noticed)' : 'State before';
+  if (preFeelingHint)  preFeelingHint.textContent  = isBiting
+    ? 'Biting often happens automatically with no felt emotional state. Log it if you noticed one, skip if you truly weren't aware of any feeling.'
+    : 'The emotional state that preceded the behavior — this tells you what need it was serving (relief from anxiety, stimulation when bored, etc.).';
 
   const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
   const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
@@ -827,10 +855,12 @@ window.selectBehavior = (val, el) => {
   updateSaveBtn();
 
   setTimeout(() => {
+    // Only apply arrival params now that behavior is selected — outcome-gated will render correctly
     applyPendingArrival();
     const outcomeField = document.querySelector('#outcome-grid');
     if (outcomeField) outcomeField.closest('.field')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
+
 };
 
 window.selectOutcome = (val, el) => {
@@ -850,9 +880,10 @@ window.selectOutcome = (val, el) => {
 
   // Awareness field: hide for Resisted (no motor sequence to catch)
   const awarenessField = document.getElementById('awareness-field');
+  // Always reset awareness tags first, then restore state if field stays visible
+  document.querySelectorAll('#awareness-field .tag').forEach(t => t.classList.remove('on'));
+  state.core.awareness = null;
   if (awarenessField) awarenessField.style.display = isResisted ? 'none' : 'block';
-  // Clear awareness state if hidden
-  if (isResisted) { state.core.awareness = null; document.querySelectorAll('#awareness-field .tag').forEach(t => t.classList.remove('on')); }
 
   // Urge-after label adapts to outcome
   const afterLabel = document.getElementById('urge-after-label');
@@ -916,13 +947,18 @@ window.selectTag = (level, key, el) => {
   parent.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   if (navigator.vibrate) navigator.vibrate(10);
-  // Map the renamed awareness labels back to data values
+  // Read only the first direct text node — ignores nested .tag-sub spans
+  const rawText = Array.from(el.childNodes)
+    .filter(n => n.nodeType === Node.TEXT_NODE)
+    .map(n => n.textContent.trim())
+    .find(t => t.length > 0) || el.textContent.trim();
+  // Map the renamed awareness labels back to canonical data values
   const awarenessMap = {
-    'Urge came first':          'Urge first',
-    'Noticed while doing it':   'Mid-action',
-    'Only noticed after':       'Automatic',
+    'Urge came first':        'Urge first',
+    'Noticed while doing it': 'Mid-action',
+    'Only noticed after':     'Automatic',
   };
-  state[level][key] = awarenessMap[el.textContent.trim()] || el.textContent.trim();
+  state[level][key] = awarenessMap[rawText] || rawText;
 };
 
 window.toggleArea = (id, el) => {
@@ -967,9 +1003,19 @@ function initSliders() {
   const s  = document.getElementById('core-urge');
   const sb = document.getElementById('core-urge-biting');
   const sa = document.getElementById('core-urge-after');
+  // Set visual state for urge-before sliders (state.core.urge already = 5)
   if (s)  updateSlider(s,  'core-urge-val',        'urge',       'core-urge-word');
   if (sb) updateSlider(sb, 'core-urge-biting-val',  'urge',       'core-urge-biting-word');
-  if (sa) updateSlider(sa, 'core-urge-after-val',   'urge_after', 'core-urge-after-word');
+  // urge-after: set visual to 3 but do NOT write to state — stays null until user moves it
+  if (sa) {
+    const v = 3;
+    const pct = ((v - 1) / 9) * 100;
+    sa.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
+    document.getElementById('core-urge-after-val').textContent = v;
+    const wordEl = document.getElementById('core-urge-after-word');
+    if (wordEl) wordEl.textContent = 'Mild';
+    // state.core.urge_after intentionally left as null
+  }
 }
 
 window.setBitingUrge = function(hadUrge, el) {
@@ -1099,7 +1145,7 @@ window.resetForm = () => {
   state.core = {
     timing: 'now', bfrb: null, outcome: null,
     where: [], what: [], ritual: null, awareness: null, duration: null,
-    urge: 5, urge_after: 3, pre_feeling: null, mirror: null, skin_impact: null
+    urge: 5, urge_after: null, pre_feeling: null, mirror: null, skin_impact: null
   };
   state.ctx = {
     pre_action: null, trigger: null, environment: null,
@@ -1114,6 +1160,7 @@ window.resetForm = () => {
 
   document.getElementById('behavior-gated').style.display  = 'none';
   document.getElementById('outcome-gated').style.display   = 'none';
+  document.getElementById('ctx-gated').style.display       = 'none';
   document.getElementById('core-details').classList.add('hidden');
   document.getElementById('ritual-field').style.display    = 'none';
   document.getElementById('post-feeling-field').style.display = 'none';
@@ -1159,8 +1206,16 @@ window.resetForm = () => {
 
   const s  = document.getElementById('core-urge');
   const sa = document.getElementById('core-urge-after');
-  s.value = 5;  updateSlider(s,  'core-urge-val',      'urge',       'core-urge-word');
-  sa.value = 3; updateSlider(sa, 'core-urge-after-val', 'urge_after', 'core-urge-after-word');
+  s.value = 5;  updateSlider(s, 'core-urge-val', 'urge', 'core-urge-word');
+  // urge-after: reset visual to 3 but leave state.core.urge_after as null
+  if (sa) {
+    sa.value = 3;
+    const pct = ((3 - 1) / 9) * 100;
+    sa.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
+    document.getElementById('core-urge-after-val').textContent = 3;
+    const wordEl = document.getElementById('core-urge-after-word');
+    if (wordEl) wordEl.textContent = 'Mild';
+  }
 
   const btn = document.getElementById('btn-save-all');
   btn.disabled = true; btn.textContent = 'Save'; btn.classList.add('inactive');

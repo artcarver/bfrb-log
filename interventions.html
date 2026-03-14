@@ -406,7 +406,8 @@ async function savePrefs() {
   if (!window._uid) return;
   clearTimeout(_savePrefTimer);
   _savePrefTimer = setTimeout(async () => {
-    const tags = Array.from(document.querySelectorAll('.tag.on')).map(el => el.textContent.trim());
+    // Only save sensory substitute preference tags (identified by data-drive attribute)
+    const tags = Array.from(document.querySelectorAll('.tag[data-drive].on')).map(el => el.textContent.trim());
     try { await setDoc(doc(db,'users',window._uid,'prefs','tools'), { tags }, { merge:true }); }
     catch(e) { console.error(e); }
   }, 800);
@@ -541,6 +542,16 @@ const CONFIGS = {
               inst:'Follow the breath guide. Let everything else wait.' },
 };
 
+function hideAllVis() {
+  ['motor','decouple','surf','defusion','tactile','ground'].forEach(id => {
+    const el = document.getElementById('vis-'+id);
+    if (el) el.style.display = 'none';
+  });
+  const subWrap = document.getElementById('sub-recommend-wrap');
+  if (subWrap) subWrap.style.display = 'none';
+}
+function showVis(id) { const el = document.getElementById('vis-'+id); if (el) el.style.display = 'flex'; }
+
 window.openTimer = (type) => {
   currentMode       = type;
   isPaused          = false;
@@ -629,15 +640,6 @@ window.openTimer = (type) => {
   }
   startCountdown();
   requestWakeLock();
-
-function hideAllVis() {
-  ['motor','decouple','surf','defusion','tactile','ground'].forEach(id => {
-    const el = document.getElementById('vis-'+id);
-    if (el) el.style.display = 'none';
-  });
-  document.getElementById('sub-recommend-wrap').style.display = 'none';
-}
-function showVis(id) { const el = document.getElementById('vis-'+id); if (el) el.style.display = 'flex'; }
 
 function updateArc(left, total) {
   const offset = ARC_CIRC * (1 - left/total);
@@ -939,6 +941,7 @@ window.closeTimer = () => {
   clearInterval(timerInterval); clearAllSubTimers(); clearTimeout(failRevealTimer);
   breathRunning=false;
   releaseWakeLock();
+  hideAllVis();
   const ov = document.getElementById('timer-overlay');
   const wasOpen = ov.classList.contains('on');
   ov.classList.remove('on');

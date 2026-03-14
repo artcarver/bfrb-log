@@ -1159,11 +1159,18 @@ window.handleImport = async (event) => {
         const ref = doc(collection(db, 'users', window._uid, 'entries'));
         // Normalize field values to match current form options
         const normAwareness = {
-          'Focused': 'Urge first', 'focused': 'Urge first',
-          'conscious': 'Mid-action', 'Conscious': 'Mid-action',
-          'Automatic': 'Already done', 'automatic': 'Already done',
-          'Mid-action': 'Caught mid-act',
-          'Urge first': 'Urge came first',
+          // Legacy labels → current canonical saved values (must match awarenessMap in index.html selectTag)
+          'Focused':           'Urge first',
+          'focused':           'Urge first',
+          'Urge came first':   'Urge first',
+          'conscious':         'Mid-action',
+          'Conscious':         'Mid-action',
+          'Noticed while doing it': 'Mid-action',
+          'Caught mid-act':    'Mid-action',
+          'Automatic':         'Automatic',
+          'automatic':         'Automatic',
+          'Already done':      'Automatic',
+          'Only noticed after':'Automatic',
         };
         const normPreFeel = {
           'Anxious / tense': 'Anxious / stressed',
