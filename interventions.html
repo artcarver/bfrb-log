@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="Evidence-based BFRB intervention tools and timers.">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#f4f1ee" id="theme-color-meta">
+<meta name="theme-color" content="#ffffff" id="theme-color-meta">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
@@ -27,7 +27,7 @@
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     const m = document.getElementById('theme-color-meta');
-    if (m) m.setAttribute('content', '#1d2222');
+    if (m) m.setAttribute('content', '#1a1820');
   }
 })();
 </script>
@@ -107,9 +107,9 @@
       </div>
     </button>
 
-    <button class="hot-btn tx anim d5" onclick="openTimer('unhook')">
-      <div class="hot-icon tx">
-        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <button class="hot-btn mu anim d5" onclick="openTimer('unhook')">
+      <div class="hot-icon mu">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
       </div>
       <div class="hot-body">
         <div class="hot-title">Cognitive Defusion</div>
@@ -350,7 +350,7 @@
   <div class="timer-actions">
     <button class="timer-btn"       id="timer-action" onclick="togglePause()">Pause</button>
     <button class="timer-btn-ghost" id="timer-fail"   onclick="logFail()">
-      Step away — log this moment
+      Couldn't stay — log what happened
     </button>
   </div>
 
@@ -594,9 +594,8 @@ window.openTimer = (type) => {
 
   document.getElementById('timer-readout').className = 'timer-readout ' + cfg.cls;
 
-  // Fail button — starts invisible, restore display in case finishTimer hid it
+  // Fail button — starts invisible
   const failBtn = document.getElementById('timer-fail');
-  failBtn.style.display = '';
   failBtn.classList.remove('visible');
   failRevealTimer = setTimeout(() => failBtn.classList.add('visible'), 20000);
 
@@ -691,7 +690,6 @@ function clearAllSubTimers() {
   clearTimeout(decoupleTmr);
   clearInterval(surfSampleTmr);
   surfSampleTmr = null;
-  if (typeof clearSurfPhases === 'function') clearSurfPhases();
 }
 
 // ── MOTOR BLOCK ──────────────────────────────────────────────────
@@ -839,40 +837,25 @@ function drawWave() {
 }
 
 // Phase-by-phase coaching — mirrors the clinical urge arc (ERP exposure logic)
-let surfPhaseTmrs = [];
-
-function clearSurfPhases() {
-  surfPhaseTmrs.forEach(t => clearTimeout(t));
-  surfPhaseTmrs = [];
-}
-
 function startSurfPhases() {
-  clearSurfPhases();
   const inst  = document.getElementById('timer-inst');
   const phase = document.getElementById('timer-phase');
   const updates = [
-    { t:0,      ph:'Urge Surfing — ACT / ERP',          tx:'Stay with the urge. Slide to track its intensity right now. Watch it — don\'t fight it.' },
-    { t:25000,  ph:'Rising — stay present',              tx:'Notice it building. This is the exposure window. You are not in danger. Keep watching.' },
-    { t:80000,  ph:'Near the peak — hold here',          tx:'This is the hardest moment. Notice where you feel it in your body. It is already moving.' },
-    { t:130000, ph:'At the peak — you are here with it', tx:'You are at the peak right now. It cannot stay here. Urges always break. Keep watching.' },
-    { t:190000, ph:'Breaking — notice the shift',        tx:'Something is changing. Notice the difference from a minute ago. You stayed with it.' },
-    { t:250000, ph:'Subsiding — nearly through',         tx:'You are witnessing the full arc from the inside. This is what tolerance building looks like.' },
+    { t:0,      ph:'Urge Surfing — ACT / ERP',            tx:'Stay with the urge. Slide to track its intensity. It will peak and pass without you acting.' },
+    { t:25000,  ph:'Rising — stay present',                tx:'The urge is building. This is expected. Keep tracking it.' },
+    { t:80000,  ph:'Near the peak — hold on',              tx:'This is the hardest part. The urge feels strongest here. It will not stay here.' },
+    { t:130000, ph:'At the peak',                          tx:'You are at the peak. Urges always crest and fall. Stay. You don\'t need to act.' },
+    { t:190000, ph:'Past the peak — beginning to ease',   tx:'It is starting to come down. You\'ve proven the urge is survivable.' },
+    { t:250000, ph:'Subsiding — nearly through',           tx:'You stayed the whole way through. This is what ERP tolerance looks like from the inside.' },
   ];
-  updates.forEach(u => {
-    const tid = setTimeout(() => {
-      if (currentMode !== 'surf') return;
-      phase.textContent = u.ph;
-      if (u.tx) {
-        inst.classList.add('fade-out');
-        setTimeout(() => {
-          if (currentMode !== 'surf') return;
-          inst.textContent = u.tx;
-          inst.classList.remove('fade-out');
-        }, 380);
-      }
-    }, u.t);
-    surfPhaseTmrs.push(tid);
-  });
+  updates.forEach(u => setTimeout(() => {
+    if (isPaused || currentMode !== 'surf') return;
+    phase.textContent = u.ph;
+    if (u.tx) {
+      inst.classList.add('fade-out');
+      setTimeout(() => { inst.textContent = u.tx; inst.classList.remove('fade-out'); }, 380);
+    }
+  }, u.t));
 }
 
 // ── DEFUSION — 10 steps × 15s = 150s ─────────────────────────────
@@ -950,7 +933,7 @@ function finishTimer() {
 
   setTimeout(() => {
     document.getElementById('timer-inst').classList.add('fade-out');
-    btn.className='timer-btn done'; btn.textContent='Log what happened';
+    btn.className='timer-btn done'; btn.textContent='Intervention held — log it';
     btn.onclick=window.logSuccess; btn.disabled=false;
     document.getElementById('timer-fail').style.display='none';
     if (currentMode==='surf' && waveHistory.length>1) {
@@ -1009,7 +992,7 @@ window.logFail = () => {
     : '';
   const elapsed  = totalSeconds - currentSeconds;
   const holdParams = `&held_sec=${elapsed}&total_sec=${totalSeconds}`;
-  window.location.href = `index.html?from=intervention&outcome=caught&tool=${currentMode}${surfParams}${holdParams}`;
+  window.location.href = `index.html?from=intervention&outcome=failed&tool=${currentMode}${surfParams}${holdParams}`;
 };
 
 </script>
