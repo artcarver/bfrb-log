@@ -3,9 +3,9 @@
  *
  * Palette persistence works as follows:
  *   1. On every page load, BEFORE the nav renders, applyStoredPalette()
- *      injects a <style id="gw-palette"> that overrides the base.css tokens
- *      with the user's chosen palette. This runs synchronously so there is
- *      no flash of the default palette.
+ *      injects a <style id="gw-palette"> appended to <head> (after base.css)
+ *      that overrides CSS custom properties. Appending after base.css ensures
+ *      the palette cascade wins without needing !important.
  *   2. Palette choice is stored in localStorage under 'gw-palette'.
  *   3. 'default' means no override style — base.css tokens apply as-is.
  *   4. --theme-bg and --nav-bg-rgb are palette tokens too, so the nav glass
@@ -162,8 +162,8 @@
     if (!el) {
       el = document.createElement('style');
       el.id = 'gw-palette';
-      // Insert as first child of head so base.css overrides work
-      document.head.insertBefore(el, document.head.firstChild);
+      // Must be appended AFTER base.css in the cascade to win
+      document.head.appendChild(el);
     }
     el.textContent = buildPaletteCSS(tokens);
   }
@@ -284,7 +284,7 @@
         background: rgba(var(--nav-bg-rgb),.97);
         backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--bdr);
-        position: sticky; top: 0; z-index: 100;
+        position: sticky; top: 0; z-index: 100; /* timer-overlay uses z-index:1000 to clear this */
         box-sizing: border-box; min-height: 52px;
       }
       .nav-left { display: flex; align-items: center; }
