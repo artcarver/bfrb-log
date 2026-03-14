@@ -836,6 +836,11 @@ textarea{resize:vertical;min-height:80px}
   pointer-events: none; overflow-y: auto; -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
+timer-overlay.on {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 .timer-close {
   position: absolute;
   top: max(16px, env(safe-area-inset-top, 16px)); right: 16px;
