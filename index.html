@@ -88,9 +88,14 @@
           </div>
         </div>
 
+        <!-- BITING CONTEXT NOTE — shown when biting selected -->
+        <div id="biting-context-note" style="display:none;margin-bottom:20px">
+          <div class="behavior-note">Biting is often automatic — logging it even mid-act or after counts.</div>
+        </div>
+
         <!-- PRE-FEELING (quick + full) -->
         <div class="field" id="pre-feeling-field">
-          <label class="field-label">How were you feeling before?</label>
+          <label class="field-label" id="pre-feeling-label">How were you feeling before?</label>
           <div class="grid-auto">
             <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
             <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</div>
@@ -110,15 +115,25 @@
             </div>
         </div>
 
-        <!-- URGE BEFORE (quick + full) -->
-        <div class="field field--flush">
-          <label class="field-label">Urge level</label>
+        <!-- URGE BEFORE — picking only -->
+        <div class="field field--flush" id="urge-before-wrap">
+          <label class="field-label">Urge level before</label>
           <div class="slider-row">
             <input type="range" min="1" max="10" value="5" id="core-urge"
               oninput="updateSlider(this,'core-urge-val','urge')">
             <div class="slider-val" id="core-urge-val">5</div>
           </div>
           <div class="slider-lbls"><span>1 — barely there</span><span>10 — unmanageable</span></div>
+        </div>
+
+        <!-- BITING AWARENESS SHORTCUT — replaces urge slider for biting -->
+        <div class="field" id="biting-awareness-wrap" style="display:none">
+          <label class="field-label">When did you notice?</label>
+          <div class="grid-3">
+            <div class="tag" onclick="selectTag('core','awareness',this)">Before it started</div>
+            <div class="tag" onclick="selectTag('core','awareness',this)">Mid-act</div>
+            <div class="tag" onclick="selectTag('core','awareness',this)">After</div>
+          </div>
         </div>
 
         <!-- URGE AFTER (quick + full) — label changes by outcome, hidden until outcome selected -->
@@ -341,7 +356,7 @@
             </div>
             </div>
 
-            <div class="field">
+            <div class="field" id="awareness-detail-field">
               <label class="field-label">Awareness</label>
               <div class="grid-3">
                 <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
@@ -824,6 +839,33 @@ window.selectBehavior = (val, el) => {
     state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null;
   }
 
+  // ── Biting vs picking workflow separation ────────────────────
+  const isBiting = val === 'biting';
+  const bitingNote = document.getElementById('biting-context-note');
+  if (bitingNote) bitingNote.style.display = isBiting ? 'block' : 'none';
+
+  // Pre-feeling label
+  const preFeelingLabel = document.getElementById('pre-feeling-label');
+  if (preFeelingLabel) preFeelingLabel.textContent = isBiting
+    ? 'State before (if aware)'
+    : 'How were you feeling before?';
+
+  // Urge before — picking only; biting gets awareness shortcut instead
+  const urgeBeforeWrap = document.getElementById('urge-before-wrap');
+  const bitingAwarenessWrap = document.getElementById('biting-awareness-wrap');
+  if (urgeBeforeWrap) urgeBeforeWrap.style.display = isBiting ? 'none' : '';
+  if (bitingAwarenessWrap) bitingAwarenessWrap.style.display = isBiting ? 'block' : 'none';
+
+  // Reset biting awareness tags when switching
+  if (bitingAwarenessWrap) bitingAwarenessWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  // Clear picking urge state if switching to biting
+  if (isBiting) { state.core.urge = null; }
+  else { state.core.urge = 5; const s = document.getElementById('core-urge'); if (s) { s.value = 5; updateSlider(s,'core-urge-val','urge'); } }
+
+  // Hide the detail-level awareness field for biting (shortcut handles it above)
+  const awarenessDetailField = document.getElementById('awareness-detail-field');
+  if (awarenessDetailField) awarenessDetailField.style.display = isBiting ? 'none' : '';
+
   // In full mode show context card
   if (currentMode === 'full') {
     document.getElementById('ctx-gated').style.display = 'block';
@@ -1108,6 +1150,16 @@ window.resetForm = () => {
   document.getElementById('narrative-notes').value          = '';
   document.getElementById('urge-after-label').textContent   = 'Urge level after';
   document.getElementById('urge-after-wrap').style.display  = 'none';
+
+  // Reset biting/picking separation elements
+  const bitingNote = document.getElementById('biting-context-note');
+  if (bitingNote) bitingNote.style.display = 'none';
+  const preFeelingLabel = document.getElementById('pre-feeling-label');
+  if (preFeelingLabel) preFeelingLabel.textContent = 'How were you feeling before?';
+  const urgeBeforeWrap = document.getElementById('urge-before-wrap');
+  if (urgeBeforeWrap) urgeBeforeWrap.style.display = '';
+  const bitingAwarenessWrap = document.getElementById('biting-awareness-wrap');
+  if (bitingAwarenessWrap) { bitingAwarenessWrap.style.display = 'none'; bitingAwarenessWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on')); }
 
   const s  = document.getElementById('core-urge');
   const sa = document.getElementById('core-urge-after');
