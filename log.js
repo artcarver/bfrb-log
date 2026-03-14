@@ -82,23 +82,14 @@ function applyPendingArrival() {
   const { outcome, tool } = _pendingArrival;
   _pendingArrival = null;
 
-  if (outcome === 'held') {
-    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Resisted');
-    if (tag) tag.click();
-  } else if (outcome === 'caught') {
-    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Caught mid-act');
-    if (tag) tag.click();
-  } else if (outcome === 'failed') {
-    // legacy fallback
-    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Caught mid-act');
+  const outcomeLabel = { held: 'Resisted', caught: 'Caught mid-act' }[outcome];
+  if (outcomeLabel) {
+    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === outcomeLabel);
     if (tag) tag.click();
   }
 
   if (tool) {
-    const yesTag = document.getElementById('int-yes-tag');
-    if (yesTag) yesTag.click();
-    
-    // Bug fix applied here
+    document.getElementById('int-yes-tag')?.click();
     const toolMap = {
       motor: 'Competing Response', decouple: 'Decoupling Redirect',
       surf:  'Urge Surfing',       unhook:   'Cognitive Defusion',
@@ -344,16 +335,9 @@ function initSliders() {
   const s  = document.getElementById('core-urge');
   const sb = document.getElementById('core-urge-biting');
   const sa = document.getElementById('core-urge-after');
-  if (s)  updateSlider(s,  'core-urge-val',        'urge',       'core-urge-word');
-  if (sb) updateSlider(sb, 'core-urge-biting-val',  'urge',       'core-urge-biting-word');
-  if (sa) {
-    const v = 3;
-    const pct = ((v - 1) / 9) * 100;
-    sa.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-    document.getElementById('core-urge-after-val').textContent = v;
-    const wordEl = document.getElementById('core-urge-after-word');
-    if (wordEl) wordEl.textContent = 'Mild';
-  }
+  if (s)  updateSlider(s,  'core-urge-val',       'urge',       'core-urge-word');
+  if (sb) updateSlider(sb, 'core-urge-biting-val', 'urge',       'core-urge-biting-word');
+  if (sa) { sa.value = 3; updateSlider(sa, 'core-urge-after-val', 'urge_after', 'core-urge-after-word'); }
 }
 
 window.setBitingUrge = function(hadUrge, el) {
@@ -534,15 +518,8 @@ window.resetForm = () => {
 
   const s  = document.getElementById('core-urge');
   const sa = document.getElementById('core-urge-after');
-  s.value = 5;  updateSlider(s, 'core-urge-val', 'urge', 'core-urge-word');
-  if (sa) {
-    sa.value = 3;
-    const pct = ((3 - 1) / 9) * 100;
-    sa.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-    document.getElementById('core-urge-after-val').textContent = 3;
-    const wordEl = document.getElementById('core-urge-after-word');
-    if (wordEl) wordEl.textContent = 'Mild';
-  }
+  if (s)  { s.value  = 5; updateSlider(s,  'core-urge-val',       'urge',       'core-urge-word'); }
+  if (sa) { sa.value = 3; updateSlider(sa, 'core-urge-after-val', 'urge_after', 'core-urge-after-word'); }
 
   const btn = document.getElementById('btn-save-all');
   btn.disabled = true; btn.textContent = 'Save'; btn.classList.add('inactive');
@@ -554,22 +531,6 @@ window.resetForm = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-const OTHER_KEY_MAP = {
-  'core-pre_feeling':    { level:'core', key:'pre_feeling',  multi:false },
-  'core-where_pick':     { level:'core', key:'where',        multi:true  },
-  'core-what_pick':      { level:'core', key:'what',         multi:true  },
-  'core-what_bite':      { level:'core', key:'what',         multi:true  },
-  'core-duration':       { level:'core', key:'duration',     multi:false },
-  'core-ritual':         { level:'core', key:'ritual',       multi:false },
-  'ctx-pre_action_pick': { level:'ctx',  key:'pre_action',   multi:false },
-  'ctx-pre_action_bite': { level:'ctx',  key:'pre_action',   multi:false },
-  'ctx-trigger':         { level:'ctx',  key:'trigger',      multi:false },
-  'ctx-environment':     { level:'ctx',  key:'environment',  multi:false },
-  'ctx-activity':        { level:'ctx',  key:'activity',     multi:false },
-  'ctx-escalation':      { level:'ctx',  key:'escalation',   multi:false },
-  'ctx-post_feeling':    { level:'ctx',  key:'post_feeling', multi:false },
-  'ctx-tools':           { level:'ctx',  key:'tools',        multi:true  },
-};
 
 window.otherSingle = function(level, key, tagEl) {
   tagEl.parentElement.querySelectorAll('.tag:not(.tag-other)').forEach(t => t.classList.remove('on'));
@@ -643,9 +604,6 @@ function persistOtherValue(level, key, val) {
   localStorage.setItem(storeKey, JSON.stringify(store));
 }
 
-window.getOtherValues = function() {
-  try { return JSON.parse(localStorage.getItem('gw-other-values') || '{}'); } catch(e) { return {}; }
-};
 
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;

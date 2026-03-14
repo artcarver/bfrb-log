@@ -82,7 +82,7 @@
         -webkit-overflow-scrolling:touch;
       }
       .ds-panel.on{display:block}
-      .ds-title{font-family:'Lora',serif;font-size:16px;color:var(--tx);margin-bottom:4px}
+      .ds-title{font-family:'Nunito Sans',sans-serif;font-size:16px;color:var(--tx);margin-bottom:4px}
       .ds-sub{font-size:12px;color:var(--mu);margin-bottom:16px}
       .ds-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;display:block}
       .ds-stars{display:flex;gap:6px;margin-bottom:16px}
@@ -96,7 +96,7 @@
       }
       .ds-star.on{opacity:1}
       .ds-stress-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-      .ds-stress-val{font-family:'Lora',serif;font-size:20px;color:var(--ac);width:24px;text-align:right}
+      .ds-stress-val{font-family:'Nunito Sans',sans-serif;font-size:20px;color:var(--ac);width:24px;text-align:right}
       .ds-stress-track{
         flex:1;height:6px;border-radius:10px;
         background:var(--bdr);outline:none;
@@ -119,7 +119,7 @@
       .ds-note{
         width:100%;background:var(--sur);
         border:1.5px solid var(--bdr);border-radius:var(--rsm);
-        padding:10px 12px;font-family:'DM Sans',sans-serif;
+        padding:10px 12px;font-family:'Nunito Sans',sans-serif;
         font-size:16px;color:var(--tx);outline:none;
         resize:none;min-height:56px;transition:var(--tr);margin-bottom:14px;
       }
@@ -127,7 +127,7 @@
       .ds-save{
         width:100%;background:var(--sage);color:#fff;
         border:none;border-radius:var(--pill);padding:11px;
-        font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;
+        font-family:'Nunito Sans',sans-serif;font-size:14px;font-weight:600;
         cursor:pointer;transition:var(--tr);touch-action:manipulation;
       }
       .ds-save:hover{opacity:.9}

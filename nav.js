@@ -4,7 +4,7 @@
 
 (function () {
   // 1. THEME INITIALIZATION
-  const savedTheme = localStorage.getItem('gw-theme') || localStorage.getItem('theme');
+  const savedTheme = localStorage.getItem('gw-theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
   if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -14,7 +14,6 @@
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
     localStorage.setItem('gw-theme', isDark ? '' : 'dark');
-    localStorage.setItem('theme', isDark ? '' : 'dark');
     // Keep PWA theme-color in sync
     const tcMeta = document.getElementById('theme-color-meta');
     if (tcMeta) tcMeta.setAttribute('content', isDark ? '#1a1820' : '#ffffff');
