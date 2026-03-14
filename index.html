@@ -42,7 +42,6 @@
 
   <div id="log-form">
 
-    <!-- Header -->
     <div class="log-header-row anim d1">
       <div class="page-title page-title--flush">Log</div>
       <div class="mode-toggle" role="group" aria-label="Log mode">
@@ -53,7 +52,6 @@
 
     <div class="card anim d2">
 
-      <!-- 1. BEHAVIOR — first because it gates everything else -->
       <div class="field">
         <label class="field-label">What happened?</label>
         <div class="grid-2" role="group" aria-label="Behavior type">
@@ -62,10 +60,8 @@
         </div>
       </div>
 
-      <!-- All fields below gated on behavior selection -->
       <div id="behavior-gated" style="display:none">
 
-        <!-- 2. OUTCOME — immediately after behavior, before any context -->
         <div class="field">
           <label class="field-label">Outcome</label>
           <p class="field-hint">What ultimately happened — did the behavior complete, or did you interrupt it at some point?</p>
@@ -77,12 +73,10 @@
           </div>
         </div>
 
-        <!-- All fields below gated on outcome selection -->
         <div id="outcome-gated" style="display:none">
-          <!-- 4. PRE-FEELING — what functional state preceded this -->
           <div class="field" id="pre-feeling-field">
             <label class="field-label" id="pre-feeling-label">State before</label>
-          <p class="field-hint" id="pre-feeling-hint">The emotional state that preceded the behavior — tells you what need it was serving (relief from anxiety, stimulation when bored, filling an attentional void).</p>
+          <p class="field-hint" id="pre-feeling-hint">The emotional state that preceded the behavior.</p>
             <div class="grid-auto" role="group" aria-labelledby="pre-feeling-label">
               <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</div>
               <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</div>
@@ -102,10 +96,9 @@
             </div>
           </div>
 
-          <!-- 5. URGE BEFORE — picking always; biting gated -->
           <div class="field field--flush" id="urge-before-picking-wrap">
             <label class="field-label">Urge intensity before</label>
-            <p class="field-hint">How strong was the pull to do it, right before it happened. Compare this to "after" — the gap between them shows how much relief the behavior provided.</p>
+            <p class="field-hint">How strong was the pull to do it, right before it happened.</p>
             <div class="slider-row">
               <input type="range" min="1" max="10" value="5" id="core-urge"
                 aria-label="Urge intensity before, 1 to 10"
@@ -134,10 +127,9 @@
             </div>
           </div>
 
-          <!-- 6. URGE AFTER — label adapts to outcome -->
           <div class="field field--flush" id="urge-after-wrap">
             <label class="field-label" id="urge-after-label">Urge level after</label>
-          <p class="field-hint">A big drop (8 → 2) means the behavior is strongly reinforced by relief — ERP/urge surfing is the right counter. A small drop means it's more automatic habit than relief-driven.</p>
+            <p class="field-hint">A big drop means the behavior is strongly reinforced by relief.</p>
             <div class="slider-row">
               <input type="range" min="1" max="10" value="3" id="core-urge-after"
                 aria-label="Urge level after, 1 to 10"
@@ -148,10 +140,8 @@
             <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
           </div>
 
-          <!-- 3. AWARENESS — in quick mode for all outcomes; clinically most time-sensitive -->
           <div class="field" id="awareness-field">
             <label class="field-label">How did you notice?</label>
-            <p class="field-hint">When in the sequence did awareness kick in? Earlier = the interception window is working and will keep getting faster.</p>
             <div class="grid-3" role="group" aria-label="Awareness type">
               <div class="tag" onclick="selectTag('core','awareness',this)">
                 Urge came first
@@ -168,10 +158,8 @@
             </div>
           </div>
 
-          <!-- 7. INTERVENTION — after urge data, not before -->
           <div class="field" id="intervention-quick-wrap">
             <label class="field-label">Tool used?</label>
-            <p class="field-hint">Even if it didn't hold, logging it builds your personal effectiveness data over weeks.</p>
             <div class="grid-2" role="group" aria-label="Intervention attempted">
               <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
               <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
@@ -181,7 +169,6 @@
           <div id="intervention-block" class="hidden">
             <div class="field">
               <label class="field-label">Which tool?</label>
-              <p class="field-hint">Multi-select. Patterns ranks these by your actual outcome rate — your data, not general evidence.</p>
               <div class="grid-auto" id="tools-grid" role="group" aria-label="Intervention tools">
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
                 <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Decoupling Redirect</div>
@@ -205,7 +192,6 @@
             </div>
             <div class="field">
               <label class="field-label">How effective?</label>
-              <p class="field-hint">Subjective feel vs. objective outcome. Patterns will show where they diverge — tools that feel good but don't hold, and ones you underrate.</p>
               <div class="grid-5" role="group" aria-label="Effectiveness 1 to 5">
                 <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="1 — not helpful">1</div>
                 <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="2 — slightly helpful">2</div>
@@ -217,13 +203,11 @@
             </div>
           </div>
 
-          <!-- 8. NOTES -->
           <div class="field field--flush">
             <label class="field-label">Notes <span class="field-label__opt">(optional)</span></label>
             <textarea id="narrative-notes" placeholder="What was the situation? Anything worth noting…" rows="3"></textarea>
           </div>
 
-          <!-- 9. WHEN — lower priority, shown last in quick mode -->
           <div class="field field--flush" id="timing-field">
             <label class="field-label">When</label>
             <div class="grid-2" role="group" aria-label="Timing">
@@ -235,16 +219,13 @@
             </div>
           </div>
 
-          <!-- ── FULL MODE: Detail section ── -->
           <div class="full-section" id="full-core">
             <div class="log-step-divider">Detail</div>
 
-            <!-- Where / What — episode, near miss, caught -->
             <div id="core-details" class="hidden">
 
               <div class="field" id="where-field">
                 <label class="field-label">Where on your body?</label>
-                <p class="field-hint">Location shapes which competing response works — scalp, face, and arm picking all need different hand positions.</p>
                 <div id="where-tags-picking" style="display:none">
                   <div class="grid-auto grid-auto--mb" role="group" aria-label="Body area">
                     <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
@@ -313,7 +294,6 @@
 
               <div class="field" id="what-field">
                 <label class="field-label">Target type</label>
-              <p class="field-hint">What drew you to it. Reveals the sensory function: texture/irregularity = need to resolve, scab/blemish = visual + completion drive. Points directly to which sensory substitute would satisfy the same need.</p>
                 <div class="grid-auto" id="what-tags-picking" style="display:none" role="group" aria-label="Target type">
                   <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
                   <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
@@ -348,7 +328,6 @@
 
               <div class="field" id="mirror-field" style="display:none">
                 <label class="field-label">Mirror or camera involved?</label>
-              <p class="field-hint">Mirror use turns a tactile urge into a visual feedback loop and makes sessions much longer. Mirror + visual trigger in your data = mirror removal is your single highest-yield barrier.</p>
                 <div class="grid-2" role="group" aria-label="Mirror use">
                   <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
                   <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
@@ -396,7 +375,6 @@
 
               <div class="field">
                 <label class="field-label">Duration</label>
-              <p class="field-hint">Long sessions (30+ min) usually involve dissociation — conscious awareness has dropped out. These need upstream prevention. Short ones are habit-interruptible with acute tools.</p>
                 <div class="grid-2" role="group" aria-label="Duration">
                   <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
                   <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
@@ -412,18 +390,13 @@
                 </div>
               </div>
 
-            </div><!-- /core-details -->
-          </div><!-- /full-core -->
-
-          <!-- ── FULL MODE: Context section — same card, no break ── -->
-          <div class="full-section" id="full-ctx">
+            </div></div><div class="full-section" id="full-ctx">
             <div class="log-step-divider" id="ctx-divider">Context</div>
 
             <div id="ctx-gated">
 
               <div class="field">
                 <label class="field-label" id="pre-action-label">What were you doing just before?</label>
-          <p class="field-hint">The entry-point behavior that started the chain. Interrupting scanning or mirror-checking is more effective than trying to stop the pick itself — the chain is easier to break earlier.</p>
                 <div id="pre-actions-picking" style="display:none">
                   <div class="grid-2" role="group" aria-label="Pre-event activity">
                     <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</div>
@@ -457,7 +430,6 @@
 
               <div class="field">
                 <label class="field-label">Primary trigger</label>
-              <p class="field-hint">The underlying driver — determines which tool works. Anxiety/stress → breathing or urge surfing. Sensory urge → tactile substitute. Boredom → competing response. This is the most important context field.</p>
                 <div class="grid-auto" role="group" aria-label="Primary trigger">
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / stress</div>
                   <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / depleted</div>
@@ -515,10 +487,8 @@
                 </div>
               </div>
 
-              <!-- Episode-only context fields -->
               <div class="field" id="escalation-field" style="display:none">
                 <label class="field-label">Session pattern</label>
-              <p class="field-hint">Single pick = habit-interruptible with an acute tool. Escalated / couldn't stop = executive control dropped out. Focus shifts to preventing the first contact, not stopping mid-session.</p>
                 <div class="grid-auto" role="group" aria-label="Session pattern">
                   <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
                   <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
@@ -534,10 +504,8 @@
                 </div>
               </div>
 
-              <!-- Post-feeling: shown for all outcomes — important for reinforcement mapping -->
               <div class="field" id="post-feeling-field" style="display:none">
                 <label class="field-label">How did you feel after?</label>
-              <p class="field-hint">Relief/calm = strong negative reinforcement (the behavior "worked" — urge surfing is the counter). Self-critical thoughts = secondary shame loop that can trigger more episodes.</p>
                 <div class="grid-2" role="group" aria-label="Post-event feeling">
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Relieved / calm</div>
                   <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Zoned out / dissociated</div>
@@ -557,32 +525,19 @@
 
               <div class="field" id="aftercare-field" style="display:none">
                 <label class="field-label">Aftercare applied?</label>
-              <p class="field-hint">Applying lotion right after an episode isn't just wound care — it can interrupt the urge to continue and works as a brief mindfulness anchor.</p>
                 <div class="grid-2" role="group" aria-label="Post-episode aftercare">
                   <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
                   <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
                 </div>
               </div>
 
-            </div><!-- /ctx-gated -->
-          </div><!-- /full-ctx -->
-
-        </div><!-- /outcome-gated -->
-      </div><!-- /behavior-gated -->
-
-    </div><!-- /card -->
-
-    <!-- SAVE ACTION BAR -->
-    <div class="action-bar" id="bar-save">
+            </div></div></div></div></div><div class="action-bar" id="bar-save">
       <div class="action-inner">
         <button class="btn-primary inactive" id="btn-save-all" onclick="saveAll()" disabled>Save</button>
       </div>
     </div>
 
-  </div><!-- /log-form -->
-
-  <!-- SUCCESS SCREEN -->
-  <div id="screen-success" class="hidden" aria-live="assertive" role="status">
+  </div><div id="screen-success" class="hidden" aria-live="assertive" role="status">
     <div class="success-msg">
       <div class="success-icon" id="success-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -615,723 +570,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup,
-  onAuthStateChanged, signOut as fbSignOut }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, doc, serverTimestamp }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey:            "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-  authDomain:        "skin-picking-log.firebaseapp.com",
-  projectId:         "skin-picking-log",
-  storageBucket:     "skin-picking-log.firebasestorage.app",
-  messagingSenderId: "162906566118",
-  appId:             "1:162906566118:web:a89abbd383fc847ba97a27"
-};
-
-const app  = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db   = getFirestore(app);
-window._db = db;
-const provider = new GoogleAuthProvider();
-
-window._uid          = null;
-window._currentDocId = null;
-
-window.signInWithGoogle = async () => {
-  try { await signInWithPopup(auth, provider); }
-  catch(e) { if (e.code !== 'auth/popup-closed-by-user') console.error('Sign in error:', e); }
-};
-window.signOut = async () => { await fbSignOut(auth); };
-
-onAuthStateChanged(auth, user => {
-  window._uid = user ? user.uid : null;
-  document.getElementById('auth-screen').classList.toggle('on', !user);
-  document.getElementById('app').classList.toggle('on', !!user);
-  if (user) {
-    initSliders();
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', handleArrivalParams);
-    } else {
-      handleArrivalParams();
-    }
-  }
-});
-
-// ═══════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════
-const state = {
-  core: {
-    timing: 'now', bfrb: null, outcome: null,
-    where: [], what: [],
-    ritual: null, awareness: null, duration: null,
-    urge: 5, urge_after: null,
-    pre_feeling: null, mirror: null, skin_impact: null
-  },
-  ctx: {
-    pre_action: null, trigger: null, environment: null,
-    activity: null, escalation: null, aftercare: null,
-    post_feeling: null, tried_tool: null, tools: [], eff: null
-  }
-};
-
-let currentMode = localStorage.getItem('gw-log-mode') || 'quick';
-
-// ═══════════════════════════════════════
-// MODE TOGGLE
-// ═══════════════════════════════════════
-window.setMode = (mode) => {
-  currentMode = mode;
-  localStorage.setItem('gw-log-mode', mode);
-
-  document.getElementById('mode-quick').classList.toggle('on', mode === 'quick');
-  document.getElementById('mode-quick').setAttribute('aria-pressed', String(mode === 'quick'));
-  document.getElementById('mode-full').classList.toggle('on', mode === 'full');
-  document.getElementById('mode-full').setAttribute('aria-pressed', String(mode === 'full'));
-
-  const isFullMode = mode === 'full';
-  document.getElementById('full-core').classList.toggle('on', isFullMode);
-  document.getElementById('full-ctx').classList.toggle('on', isFullMode);
-};
-
-document.addEventListener('DOMContentLoaded', () => { setMode(currentMode); initSliders(); });
-
-// ═══════════════════════════════════════
-// ARRIVAL PARAMS — from interventions.html
-// ═══════════════════════════════════════
-let _pendingArrival = null;
-
-function handleArrivalParams() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('from') !== 'intervention') return;
-
-  _pendingArrival = { outcome: params.get('outcome'), tool: params.get('tool') };
-
-  const surfPeak = params.get('surf_peak');
-  const surfEnd  = params.get('surf_end');
-  if (surfPeak !== null) state.core.surf_peak = parseInt(surfPeak, 10);
-  if (surfEnd  !== null) state.core.surf_end  = parseInt(surfEnd,  10);
-
-  history.replaceState({}, '', 'index.html');
-
-  // Auto-select picking behavior so behavior-gated and outcome-gated
-  // are both visible before applyPendingArrival fires inside selectBehavior
-  const pickingTag = document.querySelector('.behavior-tag');
-  if (pickingTag) pickingTag.click();
-}
-
-function applyPendingArrival() {
-  if (!_pendingArrival) return;
-  const { outcome, tool } = _pendingArrival;
-  _pendingArrival = null;
-
-  if (outcome === 'held') {
-    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Resisted');
-    if (tag) tag.click();
-  } else if (outcome === 'failed') {
-    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Full episode');
-    if (tag) tag.click();
-  }
-
-  if (tool) {
-    const yesTag = document.getElementById('int-yes-tag');
-    if (yesTag) yesTag.click();
-    const toolMap = {
-      motor: 'Competing Response', decouple: 'Competing Response',
-      surf:  'Urge Surfing',       unhook:   'Urge Surfing',
-      shock: 'Fidget / Sensory',   ground:   'Grounding / Breathing',
-    };
-    const label = toolMap[tool];
-    if (label) {
-      const toolTag = [...document.querySelectorAll('#tools-grid .tag')].find(t => t.textContent.trim() === label);
-      if (toolTag) toolTag.click();
-    }
-  }
-}
-
-// ═══════════════════════════════════════
-// UI HELPERS
-// ═══════════════════════════════════════
-function updateSaveBtn() {
-  const btn = document.getElementById('btn-save-all');
-  const ready = !!(state.core.bfrb && state.core.outcome);
-  btn.disabled = !ready;
-  btn.classList.toggle('inactive', !ready);
-  if (ready) {
-    const labels = {
-      'Resisted':   'Log resistance',
-      'Near Miss':  'Log near miss',
-      'Caught':     'Log caught mid-act',
-      'Episode':    'Log episode'
-    };
-    btn.textContent = labels[state.core.outcome] || 'Save';
-  } else {
-    btn.textContent = 'Save';
-  }
-}
-
-window.selectTiming = (val, el) => {
-  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  state.core.timing = val;
-  const timeWrap  = document.getElementById('core-time-wrap');
-  const timeInput = document.getElementById('core-time');
-  timeWrap.classList.toggle('hidden', val !== 'earlier');
-  if (val === 'earlier' && !timeInput.value) {
-    const d = new Date(Date.now() - 30 * 60000);
-    const pad = n => String(n).padStart(2, '0');
-    timeInput.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  }
-};
-
-window.selectBehavior = (val, el) => {
-  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  state.core.bfrb  = val;
-  state.core.where = [];
-  state.core.what  = [];
-  state.core.outcome = null;
-
-  document.getElementById('behavior-gated').style.display = 'block';
-
-  // Reset outcome
-  document.querySelectorAll('#outcome-grid .tag').forEach(t => t.classList.remove('on'));
-  document.getElementById('outcome-gated').style.display = 'none';
-
-  // Reset area groups
-  document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
-  document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
-
-  const pickVis = val === 'picking' ? '' : 'none';
-  const biteVis = val === 'biting'  ? '' : 'none';
-  document.getElementById('where-tags-picking').style.display = pickVis;
-  document.getElementById('where-tags-biting').style.display  = biteVis;
-  document.getElementById('what-tags-picking').style.display  = pickVis;
-  document.getElementById('what-tags-biting').style.display   = biteVis;
-  document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
-
-  const preActionPicking = document.getElementById('pre-actions-picking');
-  const preActionBiting  = document.getElementById('pre-actions-biting');
-  if (preActionPicking) preActionPicking.style.display = pickVis;
-  if (preActionBiting)  preActionBiting.style.display  = biteVis;
-  state.ctx.pre_action = null;
-  document.querySelectorAll('#pre-actions-picking .tag, #pre-actions-biting .tag').forEach(t => t.classList.remove('on'));
-
-  const mirrorField = document.getElementById('mirror-field');
-  if (mirrorField) mirrorField.style.display = val === 'picking' ? 'block' : 'none';
-  if (val !== 'picking') {
-    state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null;
-  }
-
-  const isBiting = val === 'biting';
-  const preFeelingLabel = document.getElementById('pre-feeling-label');
-  const preFeelingHint  = document.getElementById('pre-feeling-hint');
-  if (preFeelingLabel) preFeelingLabel.textContent = isBiting ? 'State before (if noticed)' : 'State before';
-  if (preFeelingHint)  preFeelingHint.textContent  = isBiting
-    ? 'Biting often happens automatically with no felt emotional state. Log it if you noticed one, skip if you truly weren't aware of any feeling.'
-    : 'The emotional state that preceded the behavior — this tells you what need it was serving (relief from anxiety, stimulation when bored, etc.).';
-
-  const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
-  const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
-  if (pickingUrgeWrap) pickingUrgeWrap.style.display = isBiting ? 'none' : '';
-  if (bitingUrgeWrap)  bitingUrgeWrap.style.display  = isBiting ? '' : 'none';
-
-  if (bitingUrgeWrap) {
-    bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-    const bSlider = document.getElementById('biting-urge-slider');
-    if (bSlider) bSlider.style.display = 'none';
-  }
-  if (isBiting) { state.core.urge = null; }
-  else {
-    state.core.urge = 5;
-    const s = document.getElementById('core-urge');
-    if (s) { s.value = 5; updateSlider(s, 'core-urge-val', 'urge', 'core-urge-word'); }
-  }
-
-  updateSaveBtn();
-
-  setTimeout(() => {
-    // Only apply arrival params now that behavior is selected — outcome-gated will render correctly
-    applyPendingArrival();
-    const outcomeField = document.querySelector('#outcome-grid');
-    if (outcomeField) outcomeField.closest('.field')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 50);
-
-};
-
-window.selectOutcome = (val, el) => {
-  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  state.core.outcome = val;
-  if (navigator.vibrate) navigator.vibrate(10);
-
-  // Reveal all outcome-gated fields
-  document.getElementById('outcome-gated').style.display = 'block';
-
-  const isResisted  = val === 'Resisted';
-  const isNearMiss  = val === 'Near Miss';
-  const isCaught    = val === 'Caught';
-  const isEpisode   = val === 'Episode';
-  const showDetails = isNearMiss || isCaught || isEpisode;
-
-  // Awareness field: hide for Resisted (no motor sequence to catch)
-  const awarenessField = document.getElementById('awareness-field');
-  // Always reset awareness tags first, then restore state if field stays visible
-  document.querySelectorAll('#awareness-field .tag').forEach(t => t.classList.remove('on'));
-  state.core.awareness = null;
-  if (awarenessField) awarenessField.style.display = isResisted ? 'none' : 'block';
-
-  // Urge-after label adapts to outcome
-  const afterLabel = document.getElementById('urge-after-label');
-  if (isResisted)      afterLabel.textContent = 'Urge relief after resisting';
-  else if (isNearMiss) afterLabel.textContent = 'Urge level after near miss';
-  else if (isCaught)   afterLabel.textContent = 'Urge level after stopping';
-  else if (isEpisode)  afterLabel.textContent = 'Urge level after episode';
-
-  // Detail fields (where/what/mirror/skin/ritual/duration) — episode, near miss, caught
-  document.getElementById('core-details').classList.toggle('hidden', !showDetails);
-
-  if (isEpisode) {
-    document.getElementById('ritual-field').style.display = 'block';
-    const isBiting = state.core.bfrb === 'biting';
-    document.getElementById('ritual-tags-picking').style.display = isBiting ? 'none' : '';
-    document.getElementById('ritual-tags-biting').style.display  = isBiting ? '' : 'none';
-    state.core.ritual = null;
-    document.querySelectorAll('#ritual-field .tag').forEach(t => t.classList.remove('on'));
-  } else {
-    document.getElementById('ritual-field').style.display = 'none';
-  }
-
-  document.getElementById('skin-impact-field').style.display =
-    (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
-
-  const mirrorField = document.getElementById('mirror-field');
-  if (mirrorField && state.core.bfrb === 'picking') {
-    mirrorField.style.display = showDetails ? 'block' : 'none';
-  }
-
-  if (!showDetails) {
-    state.core.where = []; state.core.what = [];
-    state.core.duration = null; state.core.ritual = null; state.core.skin_impact = null;
-    document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
-  }
-
-  // Full mode context fields
-  document.getElementById('post-feeling-field').style.display = 'block';
-  document.getElementById('escalation-field').style.display   = isEpisode ? 'block' : 'none';
-  document.getElementById('aftercare-field').style.display    =
-    (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
-
-  if (isEpisode) {
-    // Show session pattern divider contextually
-  } else {
-    state.ctx.escalation = null;
-    document.querySelectorAll('#escalation-field .tag').forEach(t => t.classList.remove('on'));
-  }
-
-  // Apply full mode visibility
-  if (currentMode === 'full') {
-    document.getElementById('full-ctx').classList.add('on');
-  }
-
-  updateSaveBtn();
-};
-
-window.selectTag = (level, key, el) => {
-  // awareness field: find parent group correctly
-  const parent = el.closest('[role="group"]') || el.parentElement;
-  parent.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  if (navigator.vibrate) navigator.vibrate(10);
-  // Read only the first direct text node — ignores nested .tag-sub spans
-  const rawText = Array.from(el.childNodes)
-    .filter(n => n.nodeType === Node.TEXT_NODE)
-    .map(n => n.textContent.trim())
-    .find(t => t.length > 0) || el.textContent.trim();
-  // Map the renamed awareness labels back to canonical data values
-  const awarenessMap = {
-    'Urge came first':        'Urge first',
-    'Noticed while doing it': 'Mid-action',
-    'Only noticed after':     'Automatic',
-  };
-  state[level][key] = awarenessMap[rawText] || rawText;
-};
-
-window.toggleArea = (id, el) => {
-  const sub = document.getElementById('area-' + id);
-  if (!sub) return;
-  const isOpen = !sub.classList.contains('hidden');
-  sub.classList.toggle('hidden', isOpen);
-  el.classList.toggle('open', !isOpen);
-  if (isOpen) {
-    sub.querySelectorAll('.tag.on').forEach(t => {
-      const idx = state.core.where.indexOf(t.textContent.trim());
-      if (idx > -1) state.core.where.splice(idx, 1);
-      t.classList.remove('on');
-    });
-  }
-};
-
-window.toggleMultiTag = (level, key, el) => {
-  const val = el.textContent.trim();
-  const arr = state[level][key];
-  const idx = arr.indexOf(val);
-  if (idx > -1) { arr.splice(idx, 1); el.classList.remove('on'); }
-  else          { arr.push(val);      el.classList.add('on');    }
-};
-
-window.updateSlider = (el, valId, key, wordId) => {
-  const v = parseInt(el.value);
-  const pct = ((v - 1) / 9) * 100;
-  el.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-  document.getElementById(valId).textContent = v;
-  if (wordId) {
-    const wordEl = document.getElementById(wordId);
-    if (wordEl) {
-      const words = ['','Minimal','Low','Mild','Moderate','Noticeable','Elevated','High','Very high','Intense','Extreme'];
-      wordEl.textContent = words[v] || '';
-    }
-  }
-  state.core[key] = v;
-};
-
-function initSliders() {
-  const s  = document.getElementById('core-urge');
-  const sb = document.getElementById('core-urge-biting');
-  const sa = document.getElementById('core-urge-after');
-  // Set visual state for urge-before sliders (state.core.urge already = 5)
-  if (s)  updateSlider(s,  'core-urge-val',        'urge',       'core-urge-word');
-  if (sb) updateSlider(sb, 'core-urge-biting-val',  'urge',       'core-urge-biting-word');
-  // urge-after: set visual to 3 but do NOT write to state — stays null until user moves it
-  if (sa) {
-    const v = 3;
-    const pct = ((v - 1) / 9) * 100;
-    sa.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-    document.getElementById('core-urge-after-val').textContent = v;
-    const wordEl = document.getElementById('core-urge-after-word');
-    if (wordEl) wordEl.textContent = 'Mild';
-    // state.core.urge_after intentionally left as null
-  }
-}
-
-window.setBitingUrge = function(hadUrge, el) {
-  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  const sliderWrap = document.getElementById('biting-urge-slider');
-  if (hadUrge) {
-    sliderWrap.style.display = 'block';
-    const s = document.getElementById('core-urge-biting');
-    if (s) { s.value = 5; updateSlider(s, 'core-urge-biting-val', 'urge', 'core-urge-biting-word'); }
-  } else {
-    sliderWrap.style.display = 'none';
-    state.core.urge = null;
-  }
-};
-
-window.toggleIntervention = (didTry, el) => {
-  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  state.ctx.tried_tool = didTry;
-  document.getElementById('intervention-block').classList.toggle('hidden', !didTry);
-};
-
-// ═══════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════
-window.showToast = (msg, isErr = false) => {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className   = 'toast' + (isErr ? ' err' : '');
-  void t.offsetWidth;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-};
-
-// ═══════════════════════════════════════
-// SUBMIT
-// ═══════════════════════════════════════
-window.saveAll = async () => {
-  if (!state.core.bfrb)    { showToast('Choose a behaviour first', true); return; }
-  if (!state.core.outcome) { showToast('Choose an outcome first', true);  return; }
-
-  const btn = document.getElementById('btn-save-all');
-  btn.disabled = true; btn.textContent = 'Saving…';
-
-  const outcomeKey =
-    state.core.outcome === 'Near Miss' ? 'near_miss' :
-    state.core.outcome === 'Episode'   ? 'did'       :
-    state.core.outcome === 'Caught'    ? 'caught'    : 'resisted';
-
-  const docData = {
-    bfrb_type:                  state.core.bfrb,
-    entry_type:                 outcomeKey,
-    urge_before:                state.core.urge,
-    urge_after:                 state.core.urge_after,
-    pre_feeling:                state.core.pre_feeling  || '',
-    awareness:                  state.core.awareness    || '',
-    created_at:                 document.getElementById('core-time')?.value
-                                  ? new Date(document.getElementById('core-time').value)
-                                  : serverTimestamp(),
-    pre_action:                 state.ctx.pre_action    || '',
-    primary_trigger:            state.ctx.trigger       || '',
-    environment:                state.ctx.environment   || '',
-    activity:                   state.ctx.activity      || '',
-    escalation:                 state.ctx.escalation    || '',
-    aftercare:                  state.ctx.aftercare     || '',
-    post_feeling:               state.ctx.post_feeling  || '',
-    tried_intervention:         state.ctx.tried_tool === true,
-    interventions:              state.ctx.tools.join(', '),
-    intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
-    narrative_notes:            (document.getElementById('narrative-notes')?.value || '').trim(),
-    ...(state.core.surf_peak !== undefined ? { surf_peak: state.core.surf_peak } : {}),
-    ...(state.core.surf_end  !== undefined ? { surf_end:  state.core.surf_end  } : {}),
-  };
-
-  if (outcomeKey !== 'resisted') {
-    docData.body_areas = state.core.where.join(', ');
-    docData.target     = state.core.what.join(', ');
-    docData.duration   = state.core.duration || '';
-    if (outcomeKey === 'did') docData.post_ritual = state.core.ritual || '';
-  }
-  if (state.core.bfrb === 'picking') {
-    docData.mirror = state.core.mirror || '';
-    if (outcomeKey === 'did') docData.skin_impact = state.core.skin_impact || '';
-  }
-
-  try {
-    const docRef = await addDoc(collection(db, 'users', window._uid, 'entries'), docData);
-    window._currentDocId = docRef.id;
-
-    document.getElementById('success-title').textContent = 'Logged.';
-    document.getElementById('success-body').textContent  = '';
-
-    const iconEl = document.getElementById('success-icon');
-    if (iconEl) {
-      iconEl.className = 'success-icon ' + (
-        outcomeKey === 'resisted'  ? 'resisted' :
-        outcomeKey === 'caught'    ? 'caught'   :
-        outcomeKey === 'near_miss' ? 'nearmiss' : 'episode'
-      );
-    }
-
-    const isActive = outcomeKey === 'near_miss' || outcomeKey === 'caught' || outcomeKey === 'did';
-    document.getElementById('success-cta-primary').style.display  = isActive  ? 'block' : 'none';
-    document.getElementById('success-cta-resisted').style.display = !isActive ? 'block' : 'none';
-
-    document.getElementById('log-form').classList.add('hidden');
-    document.getElementById('bar-save').classList.add('hidden');
-    document.getElementById('screen-success').classList.remove('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  } catch(e) {
-    console.error('Save error:', e);
-    btn.disabled = false; btn.textContent = 'Save'; btn.classList.add('inactive');
-    if (e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))) {
-      showToast('Daily write limit reached — try again tomorrow', true);
-    } else {
-      showToast('Error saving — try again', true);
-    }
-  }
-};
-
-// ═══════════════════════════════════════
-// RESET
-// ═══════════════════════════════════════
-window.resetForm = () => {
-  state.core = {
-    timing: 'now', bfrb: null, outcome: null,
-    where: [], what: [], ritual: null, awareness: null, duration: null,
-    urge: 5, urge_after: null, pre_feeling: null, mirror: null, skin_impact: null
-  };
-  state.ctx = {
-    pre_action: null, trigger: null, environment: null,
-    activity: null, escalation: null, aftercare: null,
-    post_feeling: null, tried_tool: null, tools: [], eff: null
-  };
-  window._currentDocId = null;
-
-  document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
-  document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
-
-  document.getElementById('behavior-gated').style.display  = 'none';
-  document.getElementById('outcome-gated').style.display   = 'none';
-  document.getElementById('ctx-gated').style.display       = 'none';
-  document.getElementById('core-details').classList.add('hidden');
-  document.getElementById('ritual-field').style.display    = 'none';
-  document.getElementById('post-feeling-field').style.display = 'none';
-  document.getElementById('aftercare-field').style.display = 'none';
-  document.getElementById('escalation-field').style.display= 'none';
-  document.getElementById('mirror-field').style.display    = 'none';
-  document.getElementById('skin-impact-field').style.display = 'none';
-  document.getElementById('intervention-block').classList.add('hidden');
-  document.getElementById('awareness-field').style.display = 'block';
-
-  const pap = document.getElementById('pre-actions-picking');
-  const pab = document.getElementById('pre-actions-biting');
-  if (pap) pap.style.display = 'none';
-  if (pab) pab.style.display = 'none';
-
-  document.getElementById('narrative-notes').value = '';
-  document.getElementById('urge-after-label').textContent = 'Urge level after';
-
-  document.getElementById('core-time').value = '';
-  document.getElementById('core-time-wrap').classList.add('hidden');
-
-  // Reset timing — default to "Right now"
-  const timingTags = document.querySelectorAll('#timing-field .grid-2 .tag');
-  if (timingTags[0]) timingTags[0].classList.add('on');
-
-  const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
-  const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
-  if (pickingUrgeWrap) pickingUrgeWrap.style.display = '';
-  if (bitingUrgeWrap)  {
-    bitingUrgeWrap.style.display = 'none';
-    bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  }
-  const bSlider = document.getElementById('biting-urge-slider');
-  if (bSlider) bSlider.style.display = 'none';
-
-  const preFeelingLabel = document.getElementById('pre-feeling-label');
-  if (preFeelingLabel) preFeelingLabel.textContent = 'State before';
-
-  const pickRitual = document.getElementById('ritual-tags-picking');
-  const biteRitual = document.getElementById('ritual-tags-biting');
-  if (pickRitual) pickRitual.style.display = 'none';
-  if (biteRitual) biteRitual.style.display = 'none';
-
-  const s  = document.getElementById('core-urge');
-  const sa = document.getElementById('core-urge-after');
-  s.value = 5;  updateSlider(s, 'core-urge-val', 'urge', 'core-urge-word');
-  // urge-after: reset visual to 3 but leave state.core.urge_after as null
-  if (sa) {
-    sa.value = 3;
-    const pct = ((3 - 1) / 9) * 100;
-    sa.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-    document.getElementById('core-urge-after-val').textContent = 3;
-    const wordEl = document.getElementById('core-urge-after-word');
-    if (wordEl) wordEl.textContent = 'Mild';
-  }
-
-  const btn = document.getElementById('btn-save-all');
-  btn.disabled = true; btn.textContent = 'Save'; btn.classList.add('inactive');
-
-  document.getElementById('log-form').classList.remove('hidden');
-  document.getElementById('bar-save').classList.remove('hidden');
-  document.getElementById('screen-success').classList.add('hidden');
-  setMode(currentMode);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-// ═══════════════════════════════════════
-// OTHER BUTTON SYSTEM
-// ═══════════════════════════════════════
-const OTHER_KEY_MAP = {
-  'core-pre_feeling':    { level:'core', key:'pre_feeling',  multi:false },
-  'core-where_pick':     { level:'core', key:'where',        multi:true  },
-  'core-what_pick':      { level:'core', key:'what',         multi:true  },
-  'core-what_bite':      { level:'core', key:'what',         multi:true  },
-  'core-duration':       { level:'core', key:'duration',     multi:false },
-  'core-ritual':         { level:'core', key:'ritual',       multi:false },
-  'ctx-pre_action_pick': { level:'ctx',  key:'pre_action',   multi:false },
-  'ctx-pre_action_bite': { level:'ctx',  key:'pre_action',   multi:false },
-  'ctx-trigger':         { level:'ctx',  key:'trigger',      multi:false },
-  'ctx-environment':     { level:'ctx',  key:'environment',  multi:false },
-  'ctx-activity':        { level:'ctx',  key:'activity',     multi:false },
-  'ctx-escalation':      { level:'ctx',  key:'escalation',   multi:false },
-  'ctx-post_feeling':    { level:'ctx',  key:'post_feeling', multi:false },
-  'ctx-tools':           { level:'ctx',  key:'tools',        multi:true  },
-};
-
-window.otherSingle = function(level, key, tagEl) {
-  tagEl.parentElement.querySelectorAll('.tag:not(.tag-other)').forEach(t => t.classList.remove('on'));
-  showOtherInput(level, key);
-};
-window.otherMulti = function(level, key, tagEl) { showOtherInput(level, key); };
-
-function showOtherInput(level, key) {
-  const wrap = document.getElementById(`other-${level}-${key}`);
-  if (!wrap) return;
-  wrap.classList.add('on');
-  const input = wrap.querySelector('.other-input');
-  if (input) { input.value = ''; setTimeout(() => input.focus(), 50); }
-}
-
-window.cancelOther = function(level, key) {
-  setTimeout(() => {
-    const wrap = document.getElementById(`other-${level}-${key}`);
-    if (wrap) {
-      const input = wrap.querySelector('.other-input');
-      if (input && !input.value.trim()) wrap.classList.remove('on');
-    }
-  }, 300);
-};
-
-window.confirmOther = function(level, key, isMulti, inputEl) {
-  const val = (inputEl?.value || '').trim();
-  if (!val) return;
-
-  if (isMulti) {
-    const arr = state[level][key] || [];
-    if (!arr.includes(val)) { arr.push(val); state[level][key] = arr; }
-  } else {
-    state[level][key] = val;
-  }
-
-  persistOtherValue(level, key, val);
-
-  const wrap = document.getElementById(`other-${level}-${key}`);
-  if (wrap) {
-    const tag = document.createElement('div');
-    tag.className = 'tag on';
-    tag.textContent = val;
-    tag.setAttribute('data-custom', '1');
-    tag.setAttribute('role', 'button');
-    tag.setAttribute('tabindex', '0');
-    tag.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tag.click(); } });
-    if (isMulti) {
-      tag.onclick = function() { toggleMultiTag(level, key, this); };
-    } else {
-      tag.onclick = function() {
-        this.closest('[role="group"]')?.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-        this.classList.add('on');
-        state[level][key] = val;
-      };
-    }
-    wrap.parentElement.insertBefore(tag, wrap);
-    wrap.classList.remove('on');
-    inputEl.value = '';
-  }
-  updateSaveBtn();
-};
-
-function persistOtherValue(level, key, val) {
-  const storeKey = 'gw-other-values';
-  let store = {};
-  try { store = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(e) {}
-  const fieldKey = `${level}.${key}`;
-  if (!store[fieldKey]) store[fieldKey] = {};
-  store[fieldKey][val] = (store[fieldKey][val] || 0) + 1;
-  localStorage.setItem(storeKey, JSON.stringify(store));
-}
-
-window.getOtherValues = function() {
-  try { return JSON.parse(localStorage.getItem('gw-other-values') || '{}'); } catch(e) { return {}; }
-};
-
-document.addEventListener('keydown', e => {
-  if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
-  if (!document.getElementById('log-form').classList.contains('hidden')) {
-    e.preventDefault();
-    document.getElementById('btn-save-all').click();
-  }
-});
-
-</script>
+<script type="module" src="log.js"></script>
 <script src="nav.js"></script>
 <script src="daily-state-widget.js"></script>
 </body>
