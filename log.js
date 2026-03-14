@@ -85,8 +85,12 @@ function applyPendingArrival() {
   if (outcome === 'held') {
     const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Resisted');
     if (tag) tag.click();
+  } else if (outcome === 'caught') {
+    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Caught mid-act');
+    if (tag) tag.click();
   } else if (outcome === 'failed') {
-    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Full episode');
+    // legacy fallback
+    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Caught mid-act');
     if (tag) tag.click();
   }
 
