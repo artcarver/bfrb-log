@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="Evidence-based BFRB intervention tools and timers.">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#F2EEE8" id="theme-color-meta">
+<meta name="theme-color" content="#f3eae6" id="theme-color-meta">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
@@ -21,7 +21,7 @@
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     const m = document.getElementById('theme-color-meta');
-    if (m) m.setAttribute('content', '#181C20');
+    if (m) m.setAttribute('content', '#1e2424');
   }
 })();
 </script>
@@ -243,7 +243,7 @@
      ============================================================ -->
 <div class="timer-overlay" id="timer-overlay">
 
-  <button class="timer-close" onclick="closeTimer()" aria-label="Close timer">
+  <button class="timer-close" onclick="closeTimer()" aria-label="Close timer" style="touch-action:manipulation">
     <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
 
@@ -253,10 +253,10 @@
   <!-- MOTOR BLOCK — competing response selector + animated hold ring -->
   <div id="vis-motor" style="display:none;flex-direction:column;align-items:center">
     <div class="cr-picker" id="cr-picker">
-      <button class="cr-option active" onclick="selectCR(this,'fists')">Clench fists</button>
-      <button class="cr-option"        onclick="selectCR(this,'palms')">Palms flat</button>
-      <button class="cr-option"        onclick="selectCR(this,'sit')">Sit on hands</button>
-      <button class="cr-option"        onclick="selectCR(this,'interlace')">Interlace fingers</button>
+      <button class="cr-option active" onclick="selectCR(this,'fists')" style="touch-action:manipulation">Clench fists</button>
+      <button class="cr-option"        onclick="selectCR(this,'palms')" style="touch-action:manipulation">Palms flat</button>
+      <button class="cr-option"        onclick="selectCR(this,'sit')"   style="touch-action:manipulation">Sit on hands</button>
+      <button class="cr-option"        onclick="selectCR(this,'interlace')" style="touch-action:manipulation">Interlace fingers</button>
     </div>
     <div class="hold-phase" id="hold-phase">Get ready</div>
     <div class="hold-ring"  id="hold-ring"><div class="hold-ring-inner"></div></div>
@@ -269,7 +269,7 @@
       <div class="redirect-beat" id="redirect-beat">Initiate</div>
       <div class="redirect-taps" id="redirect-taps"></div>
     </div>
-    <button class="redirect-tap-btn" onclick="markRedirect()">Tap — Redirected <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polyline points="20 6 9 17 4 12"/></svg></button>
+    <button class="redirect-tap-btn" onclick="markRedirect()" style="touch-action:manipulation">Tap — Redirected <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><polyline points="20 6 9 17 4 12"/></svg></button>
   </div>
 
   <!-- SURF — live urge slider + drawn wave canvas -->
@@ -286,16 +286,16 @@
   <!-- DEFUSION — 10 stepped ACT phrases × 15s = 150s total -->
   <div id="vis-defusion" style="display:none;flex-direction:column;align-items:center;width:100%">
     <div class="defusion-wrap">
-      <div class="defusion-step" id="def-0">The urge is a neurological signal.</div>
-      <div class="defusion-step" id="def-1">Not a command.</div>
-      <div class="defusion-step" id="def-2">You can notice it without acting on it.</div>
-      <div class="defusion-step" id="def-3">It will pass without you doing anything.</div>
-      <div class="defusion-step" id="def-4">You are observing the urge.</div>
-      <div class="defusion-step" id="def-5">You are not the urge.</div>
-      <div class="defusion-step" id="def-6">Thoughts are not instructions.</div>
-      <div class="defusion-step" id="def-7">There is space between impulse and action.</div>
-      <div class="defusion-step" id="def-8">This sensation is temporary.</div>
-      <div class="defusion-step" id="def-9">You have already outlasted it before.</div>
+      <div class="defusion-step" id="def-0">Notice: there is an urge present right now.</div>
+      <div class="defusion-step" id="def-1">Name it: "I'm having the urge to pick."</div>
+      <div class="defusion-step" id="def-2">Thank your mind — it's trying to help in its way.</div>
+      <div class="defusion-step" id="def-3">Step back. You are the observer, not the urge.</div>
+      <div class="defusion-step" id="def-4">Watch it from a distance — like a cloud passing by.</div>
+      <div class="defusion-step" id="def-5">The urge is a signal. You are the one deciding.</div>
+      <div class="defusion-step" id="def-6">What would the person you want to be do right now?</div>
+      <div class="defusion-step" id="def-7">This urge will peak and pass. You do not need to act.</div>
+      <div class="defusion-step" id="def-8">You've outlasted urges before. This is one of those times.</div>
+      <div class="defusion-step" id="def-9">Return to now. You are here. The urge is just a visitor.</div>
     </div>
   </div>
 
@@ -344,7 +344,7 @@
   <div class="timer-actions">
     <button class="timer-btn"       id="timer-action" onclick="togglePause()">Pause</button>
     <button class="timer-btn-ghost" id="timer-fail"   onclick="logFail()">
-      Intervention didn't hold — log episode
+      Couldn't stay — log what happened
     </button>
   </div>
 
@@ -496,6 +496,17 @@ let breathTimer    = null;
 let defusionTimer  = null;
 let tactileTimer   = null;
 let decoupleTmr    = null;
+let surfSampleTmr  = null;
+
+// Screen wake lock — keeps display on during active intervention
+let _wakeLock = null;
+async function requestWakeLock() {
+  if (!('wakeLock' in navigator)) return;
+  try { _wakeLock = await navigator.wakeLock.request('screen'); } catch(e) { /* non-critical */ }
+}
+function releaseWakeLock() {
+  if (_wakeLock) { _wakeLock.release().catch(()=>{}); _wakeLock = null; }
+}
 
 // Per-mode state
 let redirectCount    = 0;
@@ -535,6 +546,7 @@ window.openTimer = (type) => {
   isPaused          = false;
   redirectCount     = 0;
   waveHistory       = [];
+  window._motorStage = null;
   surfPeakUrge      = parseInt(document.getElementById('urge-live')?.value || '7', 10);
   surfStartUrge     = surfPeakUrge;
   selectedCR        = 'fists';
@@ -590,15 +602,17 @@ window.openTimer = (type) => {
       break;
     case 'decouple':
       showVis('decouple');
-      buildRedirectDots(8);
+      buildRedirectDots(6);
       startDecoupleBeat();
       break;
     case 'surf':
       showVis('surf');
       document.getElementById('urge-live').value = 7;
       document.getElementById('urge-live-val').textContent = '7';
+      waveHistory.push(7); // seed with start value
       drawWave();
       startSurfPhases();
+      startSurfSampling();
       break;
     case 'unhook':
       showVis('defusion');
@@ -614,7 +628,7 @@ window.openTimer = (type) => {
       break;
   }
   startCountdown();
-};
+  requestWakeLock();
 
 function hideAllVis() {
   ['motor','decouple','surf','defusion','tactile','ground'].forEach(id => {
@@ -640,6 +654,7 @@ function startCountdown() {
     if (isPaused) return;
     currentSeconds--;
     if (currentMode !== 'ground') updateArc(currentSeconds, totalSeconds);
+    if (currentMode === 'motor' && window._motorStage) window._motorStage();
     if (currentSeconds <= 0) finishTimer();
   }, 1000);
 }
@@ -664,6 +679,8 @@ function clearAllSubTimers() {
   clearTimeout(defusionTimer);
   clearTimeout(tactileTimer);
   clearTimeout(decoupleTmr);
+  clearInterval(surfSampleTmr);
+  surfSampleTmr = null;
 }
 
 // ── MOTOR BLOCK ──────────────────────────────────────────────────
@@ -686,21 +703,42 @@ function startMotorStages() {
   const ring  = document.getElementById('hold-ring');
   const phase = document.getElementById('hold-phase');
   const note  = document.getElementById('hold-stage-note');
+  const crMap = { fists:'Fists clenched — maintain the tension.', palms:'Palms flat — keep them down.', sit:'Hands pinned — stay there.', interlace:'Fingers locked — hold.' };
 
+  // Stage thresholds in elapsed seconds (pause-aware — checked every tick)
+  // Stage 0: 0s  → engage ring
+  // Stage 1: 45s → halfway coaching
+  // Stage 2: 72s → final stretch
+  // Stage 3: 84s → release
+  let motorStage = 0;
+
+  // Engage ring immediately (600ms is negligible, keep it visual)
   setTimeout(() => {
     if (currentMode !== 'motor') return;
     ring.classList.add('tensed'); phase.classList.add('tensed');
     phase.textContent = 'Holding';
-    const map = { fists:'Fists clenched — maintain the tension.', palms:'Palms flat — keep them down.', sit:'Hands pinned — stay there.', interlace:'Fingers locked — hold.' };
-    note.textContent = map[selectedCR] || 'Hold the position.';
+    note.textContent = crMap[selectedCR] || 'Hold the position.';
+    motorStage = 1;
   }, 600);
-  setTimeout(() => { if (isPaused || currentMode !== 'motor') return; note.textContent = 'Halfway through. Urge is peaking — hold past it.'; }, 45000);
-  setTimeout(() => { if (isPaused || currentMode !== 'motor') return; note.textContent = 'Final stretch.'; phase.textContent = 'Almost done'; }, 72000);
-  setTimeout(() => {
-    if (isPaused || currentMode !== 'motor') return;
-    ring.classList.remove('tensed'); phase.classList.remove('tensed');
-    phase.textContent = 'Releasing'; note.textContent = 'Slowly release. Notice how your body feels now.';
-  }, 84000);
+
+  // Store a reference so startCountdown can call checkMotorStage each tick
+  window._motorStage = () => {
+    if (currentMode !== 'motor' || isPaused) return;
+    const elapsed = totalSeconds - currentSeconds;
+    if (motorStage === 1 && elapsed >= 45) {
+      motorStage = 2;
+      note.textContent = 'Halfway through. Urge is peaking — hold past it.';
+    } else if (motorStage === 2 && elapsed >= 72) {
+      motorStage = 3;
+      note.textContent = 'Final stretch.';
+      phase.textContent = 'Almost done';
+    } else if (motorStage === 3 && elapsed >= 84) {
+      motorStage = 4;
+      ring.classList.remove('tensed'); phase.classList.remove('tensed');
+      phase.textContent = 'Releasing';
+      note.textContent = 'Slowly release. Notice how your body feels now.';
+    }
+  };
 }
 
 // ── DECOUPLE ─────────────────────────────────────────────────────
@@ -717,16 +755,16 @@ function runDecoupleBeat() {
   if (decoupleBeatPhase === 'approach') {
     beat.classList.remove('flash'); beat.textContent = 'Initiate';
     decoupleBeatPhase = 'redirect';
-    decoupleTmr = setTimeout(runDecoupleBeat, 5500);
+    decoupleTmr = setTimeout(runDecoupleBeat, 4500);
   } else {
     beat.classList.add('flash'); beat.textContent = 'Redirect ↩';
     decoupleBeatPhase = 'approach';
-    decoupleTmr = setTimeout(() => { beat.classList.remove('flash'); runDecoupleBeat(); }, 5500);
+    decoupleTmr = setTimeout(() => { beat.classList.remove('flash'); runDecoupleBeat(); }, 4500);
   }
 }
 
 window.markRedirect = () => {
-  if (redirectCount >= 8) return;
+  if (redirectCount >= 6) return;
   const dot = document.getElementById('rdot-'+redirectCount);
   if (dot) dot.classList.add('done');
   redirectCount++;
@@ -749,6 +787,21 @@ window.updateWave = (val) => {
   if (n > surfPeakUrge) surfPeakUrge = n;
   drawWave();
 };
+
+// Periodic sampling every 5s so wave chart reflects passage of time
+// even when user doesn't move the slider (distinguishes stable vs untracked)
+function startSurfSampling() {
+  clearInterval(surfSampleTmr);
+  surfSampleTmr = setInterval(() => {
+    if (isPaused || currentMode !== 'surf') return;
+    const sliderEl = document.getElementById('urge-live');
+    const current = parseInt(sliderEl?.value || '7', 10);
+    waveHistory.push(current);
+    if (waveHistory.length > 80) waveHistory.shift();
+    if (current > surfPeakUrge) surfPeakUrge = current;
+    drawWave();
+  }, 5000);
+}
 
 function drawWave() {
   const canvas = document.getElementById('urge-wave'); if (!canvas) return;
@@ -845,6 +898,10 @@ function finishTimer() {
   clearInterval(timerInterval); timerInterval=null;
   clearAllSubTimers(); clearTimeout(failRevealTimer);
   breathRunning=false;
+  releaseWakeLock();
+
+  // Haptic completion signal — distinct double-pulse
+  if (navigator.vibrate) navigator.vibrate([80, 60, 80]);
 
   document.getElementById('timer-phase').textContent = 'Complete';
   document.getElementById('timer-readout').textContent = '';
@@ -881,6 +938,7 @@ function finishTimer() {
 window.closeTimer = () => {
   clearInterval(timerInterval); clearAllSubTimers(); clearTimeout(failRevealTimer);
   breathRunning=false;
+  releaseWakeLock();
   const ov = document.getElementById('timer-overlay');
   const wasOpen = ov.classList.contains('on');
   ov.classList.remove('on');
@@ -922,7 +980,9 @@ window.logFail = () => {
   const surfParams = currentMode === 'surf'
     ? `&surf_peak=${surfPeakUrge}&surf_end=${waveHistory[waveHistory.length-1] ?? surfStartUrge}`
     : '';
-  window.location.href = `index.html?from=intervention&outcome=failed&tool=${currentMode}${surfParams}`;
+  const elapsed  = totalSeconds - currentSeconds;
+  const holdParams = `&held_sec=${elapsed}&total_sec=${totalSeconds}`;
+  window.location.href = `index.html?from=intervention&outcome=failed&tool=${currentMode}${surfParams}${holdParams}`;
 };
 
 </script>

@@ -17,7 +17,7 @@
     localStorage.setItem('theme', isDark ? '' : 'dark');
     // Keep PWA theme-color in sync
     const tcMeta = document.getElementById('theme-color-meta');
-    if (tcMeta) tcMeta.setAttribute('content', isDark ? '#181C20' : '#F2EEE8');
+    if (tcMeta) tcMeta.setAttribute('content', isDark ? '#1e2424' : '#f3eae6');
   };
 
   // 2. FIREBASE STUBS
@@ -80,7 +80,7 @@
         justify-content: space-between;
         padding: 0 16px;
         padding-top: env(safe-area-inset-top);
-        background: rgba(242,238,232,.96);
+        background: rgba(243,234,230,.96);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid var(--bdr);
@@ -91,7 +91,7 @@
         min-height: 52px;
       }
       [data-theme="dark"] .gw-nav-container {
-        background: rgba(24,28,32,.96);
+        background: rgba(30,36,36,.96);
       }
 
       /* Brand & Left */

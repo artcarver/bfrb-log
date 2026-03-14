@@ -10,18 +10,17 @@
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork — Log</title>
-<meta name="theme-color" id="theme-color-meta" content="#F2EEE8">
+<meta name="theme-color" id="theme-color-meta" content="#f3eae6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
-
 <script>
 (function() {
   const stored = localStorage.getItem('gw-theme');
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     const m = document.getElementById('theme-color-meta');
-    if (m) m.setAttribute('content', '#181C20');
+    if (m) m.setAttribute('content', '#1e2424');
   }
 })();
 </script>
@@ -42,7 +41,8 @@
 <main class="log-main">
 
   <div id="log-form">
-    <!-- Header row: title + mode toggle -->
+
+    <!-- Header -->
     <div class="log-header-row anim d1">
       <div class="page-title page-title--flush">Log</div>
       <div class="mode-toggle" role="group" aria-label="Log mode">
@@ -53,53 +53,62 @@
 
     <div class="card anim d2">
 
-      <!-- WHEN -->
+      <!-- 1. BEHAVIOR — first because it gates everything else -->
       <div class="field">
-        <label class="field-label">When</label>
-        <div class="grid-2">
-          <div class="tag on" onclick="selectTiming('now', this)">Right now</div>
-          <div class="tag"    onclick="selectTiming('earlier', this)">Earlier</div>
-        </div>
-        <div id="core-time-wrap" class="hidden time-wrap">
-          <input type="datetime-local" id="core-time" aria-label="Date and time of event">
+        <label class="field-label">What happened?</label>
+        <div class="grid-2" role="group" aria-label="Behavior type">
+          <div class="tag behavior-tag" onclick="selectBehavior('picking', this)">Picking / Scratching</div>
+          <div class="tag behavior-tag" onclick="selectBehavior('biting',  this)">Nail / Skin Biting</div>
         </div>
       </div>
 
-      <!-- BEHAVIOR -->
-      <div class="field">
-        <label class="field-label">Behavior</label>
-        <div class="grid-2">
-          <div class="tag" onclick="selectBehavior('picking', this)">Picking / Scratching</div>
-          <div class="tag" onclick="selectBehavior('biting',  this)">Nail / Skin Biting</div>
-        </div>
-      </div>
-
-      <!-- EVERYTHING GATED ON BEHAVIOR SELECTION -->
+      <!-- All fields below gated on behavior selection -->
       <div id="behavior-gated" style="display:none">
 
-        <!-- OUTCOME -->
+        <!-- 2. OUTCOME — immediately after behavior, before any context -->
         <div class="field">
           <label class="field-label">Outcome</label>
-          <div class="grid-3">
-            <div class="tag" onclick="selectOutcome('Resisted',  this)">Resisted</div>
-            <div class="tag"         onclick="selectOutcome('Near Miss', this)">Near Miss</div>
-            <div class="tag"         onclick="selectOutcome('Caught',    this)">Caught mid-act</div>
-            <div class="tag"         onclick="selectOutcome('Episode',   this)">Episode</div>
+          <div class="grid-2" id="outcome-grid" role="group" aria-label="Outcome">
+            <div class="tag outcome-resisted" onclick="selectOutcome('Resisted',  this)">Resisted</div>
+            <div class="tag outcome-nearmiss" onclick="selectOutcome('Near Miss', this)">Near miss</div>
+            <div class="tag outcome-caught"   onclick="selectOutcome('Caught',    this)">Caught mid-act</div>
+            <div class="tag outcome-episode"  onclick="selectOutcome('Episode',   this)">Full episode</div>
           </div>
         </div>
 
-        <!-- PRE-FEELING (quick + full) -->
-        <div class="field" id="pre-feeling-field">
-          <label class="field-label" id="pre-feeling-label">How were you feeling before?</label>
-          <div class="grid-auto">
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Frustrated / angry</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</div>
-            <div class="tag" onclick="selectTag('core','pre_feeling',this)">Zoned out / dissociated</div>
+        <!-- All fields below gated on outcome selection -->
+        <div id="outcome-gated" style="display:none">
 
+          <!-- 3. AWARENESS — in quick mode for all outcomes; clinically most time-sensitive -->
+          <div class="field" id="awareness-field">
+            <label class="field-label">How did you notice?</label>
+            <div class="grid-3" role="group" aria-label="Awareness type">
+              <div class="tag" onclick="selectTag('core','awareness',this)">
+                Urge came first
+                <span class="tag-sub">Felt the urge, then acted</span>
+              </div>
+              <div class="tag" onclick="selectTag('core','awareness',this)">
+                Caught mid-act
+                <span class="tag-sub">Noticed while doing it</span>
+              </div>
+              <div class="tag" onclick="selectTag('core','awareness',this)">
+                Already done
+                <span class="tag-sub">Only noticed after</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. PRE-FEELING — what functional state preceded this -->
+          <div class="field" id="pre-feeling-field">
+            <label class="field-label" id="pre-feeling-label">State before</label>
+            <div class="grid-auto" role="group" aria-labelledby="pre-feeling-label">
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Frustrated</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</div>
+              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Zoned out</div>
               <div class="tag tag-other" onclick="otherSingle('core','pre_feeling',this)">Other…</div>
             </div>
             <div class="other-input-wrap" id="other-core-pre_feeling">
@@ -108,463 +117,441 @@
                 onblur="cancelOther('core','pre_feeling')">
               <button class="other-confirm" onclick="confirmOther('core','pre_feeling',false,this.previousElementSibling)">Add</button>
             </div>
-        </div>
-
-        <!-- URGE BEFORE — picking: always shown; biting: gated behind tension yes/no -->
-        <div class="field field--flush" id="urge-before-picking-wrap">
-          <label class="field-label">Urge level before</label>
-          <div class="slider-row">
-            <input type="range" min="1" max="10" value="5" id="core-urge"
-              oninput="updateSlider(this,'core-urge-val','urge')">
-            <div class="slider-val" id="core-urge-val">5</div>
           </div>
-          <div class="slider-lbls"><span>1 — barely there</span><span>10 — unmanageable</span></div>
-        </div>
 
-        <!-- BITING — tension/urge gate -->
-        <div class="field field--flush" id="urge-before-biting-wrap" style="display:none">
-          <label class="field-label">Tension or urge beforehand?</label>
-          <div class="urge-toggle-row">
-            <div class="tag" id="biting-urge-yes" onclick="setBitingUrge(true,this)">Yes</div>
-            <div class="tag" id="biting-urge-no"  onclick="setBitingUrge(false,this)">No — just happened</div>
-          </div>
-          <!-- Slider only shown if yes -->
-          <div id="biting-urge-slider" style="display:none;margin-top:16px">
+          <!-- 5. URGE BEFORE — picking always; biting gated -->
+          <div class="field field--flush" id="urge-before-picking-wrap">
+            <label class="field-label">Urge intensity before</label>
             <div class="slider-row">
-              <input type="range" min="1" max="10" value="5" id="core-urge-biting"
-                oninput="updateSlider(this,'core-urge-biting-val','urge')">
-              <div class="slider-val" id="core-urge-biting-val">5</div>
+              <input type="range" min="1" max="10" value="5" id="core-urge"
+                aria-label="Urge intensity before, 1 to 10"
+                oninput="updateSlider(this,'core-urge-val','urge','core-urge-word')">
+              <div class="slider-val" id="core-urge-val" aria-live="polite">5</div>
+              <div class="slider-word" id="core-urge-word"></div>
             </div>
-            <div class="slider-lbls"><span>1 — mild tension</span><span>10 — unmanageable</span></div>
+            <div class="slider-lbls"><span>1 — barely there</span><span>10 — unmanageable</span></div>
           </div>
-        </div>
 
-        <!-- URGE AFTER (quick + full) — label changes by outcome, hidden until outcome selected -->
-        <div class="field field--flush" id="urge-after-wrap" style="display:none">
-          <label class="field-label" id="urge-after-label">Urge level after</label>
-          <div class="slider-row">
-            <input type="range" min="1" max="10" value="3" id="core-urge-after"
-              oninput="updateSlider(this,'core-urge-after-val','urge_after')">
-            <div class="slider-val" id="core-urge-after-val">3</div>
-          </div>
-          <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
-        </div>
-
-        <!-- INTERVENTION (quick + full) — shown after outcome selected -->
-        <div class="field" id="intervention-quick-wrap" style="display:none">
-          <label class="field-label">Intervention attempted?</label>
-          <div class="grid-2">
-            <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
-            <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
-          </div>
-        </div>
-
-        <div id="intervention-block" class="hidden">
-          <div class="field">
-            <label class="field-label">Which tool?</label>
-            <div class="grid-auto" id="tools-grid">
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental Block</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Put on gloves</div>
-
-              <div class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</div>
+          <div class="field field--flush" id="urge-before-biting-wrap" style="display:none">
+            <label class="field-label">Tension or urge beforehand?</label>
+            <div class="urge-toggle-row" role="group" aria-label="Urge present before biting">
+              <div class="tag" id="biting-urge-yes" onclick="setBitingUrge(true,this)">Yes</div>
+              <div class="tag" id="biting-urge-no"  onclick="setBitingUrge(false,this)">No — just happened</div>
             </div>
-            <div class="other-input-wrap" id="other-ctx-tools">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','tools',true,this)"
-                onblur="cancelOther('ctx','tools')">
-              <button class="other-confirm" onclick="confirmOther('ctx','tools',true,this.previousElementSibling)">Add</button>
-            </div>
-          </div>
-          <div class="field">
-            <label class="field-label">How effective was it?</label>
-            <div class="grid-5">
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Not helpful">1</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Slightly helpful">2</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Somewhat helpful">3</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Helpful">4</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Very helpful">5</div>
-            </div>
-            <div class="slider-lbls"><span>1 — not helpful</span><span>5 — very helpful</span></div>
-          </div>
-        </div>
-
-        <!-- NOTES (quick + full) -->
-        <div class="field field--flush">
-          <label class="field-label">Notes &amp; reflection <span class="field-label__opt">(optional)</span></label>
-          <textarea id="narrative-notes" placeholder="What were you feeling? What was the situation? Any details worth noting…" rows="3"></textarea>
-        </div>
-
-        <!-- ── FULL MODE SECTIONS ───────────────────────────── -->
-        <div class="full-section" id="full-core">
-
-          <!-- Divider -->
-          <div class="divider full-divider"></div>
-
-          <!-- Where / What (episode & near miss only) -->
-          <div id="core-details" class="hidden">
-
-            <div class="field" id="where-field">
-              <label class="field-label">Where</label>
-              <div id="where-tags-picking" style="display:none">
-                <!-- Top-level quick picks (most common from data) -->
-                <div class="grid-auto grid-auto--mb">
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</div>
-
-              <div class="tag tag-other" onclick="otherMulti('core','where_pick',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-core-where_pick">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('core','where_pick',true,this)"
-                onblur="cancelOther('core','where_pick')">
-              <button class="other-confirm" onclick="confirmOther('core','where_pick',true,this.previousElementSibling)">Add</button>
-            </div>
-                <!-- Expandable face sub-areas -->
-                <div class="area-group">
-                  <div class="tag area-parent" onclick="toggleArea('face',this)">Face — specific area</div>
-                  <div class="area-sub hidden" id="area-face">
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Temples</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Jawline</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Chin</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Nose</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips</div>
-                  </div>
-                </div>
-                <div class="area-group">
-                  <div class="tag area-parent" onclick="toggleArea('arms',this)">Arms — specific area</div>
-                  <div class="area-sub hidden" id="area-arms">
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Hands</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</div>
-                  </div>
-                </div>
-                <div class="area-group">
-                  <div class="tag area-parent" onclick="toggleArea('torso',this)">Body — specific area</div>
-                  <div class="area-sub hidden" id="area-torso">
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Legs</div>
-                  </div>
-                </div>
-                <div class="area-group">
-                  <div class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck — specific</div>
-                  <div class="area-sub hidden" id="area-head">
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Ears</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Neck</div>
-                  </div>
-                </div>
+            <div id="biting-urge-slider" style="display:none;margin-top:16px">
+              <div class="slider-row">
+                <input type="range" min="1" max="10" value="5" id="core-urge-biting"
+                  aria-label="Urge intensity before, 1 to 10"
+                  oninput="updateSlider(this,'core-urge-biting-val','urge','core-urge-biting-word')">
+                <div class="slider-val" id="core-urge-biting-val" aria-live="polite">5</div>
+                <div class="slider-word" id="core-urge-biting-word"></div>
               </div>
-              <div class="grid-auto" id="where-tags-biting" style="display:none">
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</div>
-                <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</div>
+              <div class="slider-lbls"><span>1 — mild tension</span><span>10 — unmanageable</span></div>
+            </div>
+          </div>
+
+          <!-- 6. URGE AFTER — label adapts to outcome -->
+          <div class="field field--flush" id="urge-after-wrap">
+            <label class="field-label" id="urge-after-label">Urge level after</label>
+            <div class="slider-row">
+              <input type="range" min="1" max="10" value="3" id="core-urge-after"
+                aria-label="Urge level after, 1 to 10"
+                oninput="updateSlider(this,'core-urge-after-val','urge_after','core-urge-after-word')">
+              <div class="slider-val" id="core-urge-after-val" aria-live="polite">3</div>
+              <div class="slider-word" id="core-urge-after-word"></div>
+            </div>
+            <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
+          </div>
+
+          <!-- 7. INTERVENTION — after urge data, not before -->
+          <div class="field" id="intervention-quick-wrap">
+            <label class="field-label">Tool used?</label>
+            <div class="grid-2" role="group" aria-label="Intervention attempted">
+              <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
+              <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
+            </div>
+          </div>
+
+          <div id="intervention-block" class="hidden">
+            <div class="field">
+              <label class="field-label">Which tool?</label>
+              <div class="grid-auto" id="tools-grid" role="group" aria-label="Intervention tools">
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding / Breathing</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
+                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental block</div>
+                <div class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</div>
+              </div>
+              <div class="other-input-wrap" id="other-ctx-tools">
+                <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                  onkeydown="if(event.key==='Enter')confirmOther('ctx','tools',true,this)"
+                  onblur="cancelOther('ctx','tools')">
+                <button class="other-confirm" onclick="confirmOther('ctx','tools',true,this.previousElementSibling)">Add</button>
               </div>
             </div>
-
-            <div class="field" id="what-field">
-              <label class="field-label">What (Target)</label>
-              <!-- Picking targets ordered by your frequency: Texture/Bump > Scab > Blemish -->
-              <div class="grid-auto" id="what-tags-picking" style="display:none">
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</div>
-
-              <div class="tag tag-other" onclick="otherMulti('core','what_pick',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-core-what_pick">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('core','what_pick',true,this)"
-                onblur="cancelOther('core','what_pick')">
-              <button class="other-confirm" onclick="confirmOther('core','what_pick',true,this.previousElementSibling)">Add</button>
-            </div>
-              <!-- Biting targets ordered by your frequency: Nail Edge > Cuticle -->
-              <div class="grid-auto" id="what-tags-biting" style="display:none">
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Press-on / Gel edge</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
-                <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
-
-              <div class="tag tag-other" onclick="otherMulti('core','what_bite',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-core-what_bite">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('core','what_bite',true,this)"
-                onblur="cancelOther('core','what_bite')">
-              <button class="other-confirm" onclick="confirmOther('core','what_bite',true,this.previousElementSibling)">Add</button>
-            </div>
-            </div>
-
-            <div class="field" id="mirror-field" style="display:none">
-              <label class="field-label">Mirror / camera involved?</label>
-              <div class="grid-2">
-                <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
-                <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
-                <div class="tag" onclick="selectTag('core','mirror',this)">Magnifying mirror</div>
-                <div class="tag" onclick="selectTag('core','mirror',this)">Phone camera</div>
+            <div class="field">
+              <label class="field-label">How effective?</label>
+              <div class="grid-5" role="group" aria-label="Effectiveness 1 to 5">
+                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="1 — not helpful">1</div>
+                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="2 — slightly helpful">2</div>
+                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="3 — somewhat helpful">3</div>
+                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="4 — helpful">4</div>
+                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="5 — very helpful">5</div>
               </div>
+              <div class="slider-lbls"><span>1 — not helpful</span><span>5 — very helpful</span></div>
             </div>
+          </div>
 
-            <div class="field" id="skin-impact-field" style="display:none">
-              <label class="field-label">Skin impact</label>
-              <div class="grid-2">
-                <div class="tag" onclick="selectTag('core','skin_impact',this)">None</div>
-                <div class="tag" onclick="selectTag('core','skin_impact',this)">Minor</div>
-                <div class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</div>
-                <div class="tag" onclick="selectTag('core','skin_impact',this)">Significant</div>
-                <div class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</div>
-              </div>
+          <!-- 8. NOTES -->
+          <div class="field field--flush">
+            <label class="field-label">Notes <span class="field-label__opt">(optional)</span></label>
+            <textarea id="narrative-notes" placeholder="What was the situation? Anything worth noting…" rows="3"></textarea>
+          </div>
+
+          <!-- 9. WHEN — lower priority, shown last in quick mode -->
+          <div class="field field--flush" id="timing-field">
+            <label class="field-label">When</label>
+            <div class="grid-2" role="group" aria-label="Timing">
+              <div class="tag on" onclick="selectTiming('now', this)">Right now</div>
+              <div class="tag"    onclick="selectTiming('earlier', this)">Earlier today</div>
             </div>
+            <div id="core-time-wrap" class="hidden time-wrap">
+              <input type="datetime-local" id="core-time" aria-label="Date and time of event">
+            </div>
+          </div>
 
-            <div class="field" id="ritual-field" style="display:none">
-              <label class="field-label">Aftermath</label>
-              <!-- Picking aftermath -->
-              <div id="ritual-tags-picking" style="display:none">
-                <div class="grid-2">
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</div>
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Examined it</div>
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
-                  <div class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</div>
+          <!-- ── FULL MODE: Detail section ── -->
+          <div class="full-section" id="full-core">
+            <div class="log-step-divider">Detail</div>
+
+            <!-- Where / What — episode, near miss, caught -->
+            <div id="core-details" class="hidden">
+
+              <div class="field" id="where-field">
+                <label class="field-label">Where on your body?</label>
+                <div id="where-tags-picking" style="display:none">
+                  <div class="grid-auto grid-auto--mb" role="group" aria-label="Body area">
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms</div>
+                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</div>
+                    <div class="tag tag-other" onclick="otherMulti('core','where_pick',this)">Other…</div>
+                  </div>
+                  <div class="other-input-wrap" id="other-core-where_pick">
+                    <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                      onkeydown="if(event.key==='Enter')confirmOther('core','where_pick',true,this)"
+                      onblur="cancelOther('core','where_pick')">
+                    <button class="other-confirm" onclick="confirmOther('core','where_pick',true,this.previousElementSibling)">Add</button>
+                  </div>
+                  <div class="area-group">
+                    <div class="tag area-parent" onclick="toggleArea('face',this)">Face — specific area</div>
+                    <div class="area-sub hidden" id="area-face">
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Temples</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Jawline</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Chin</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Nose</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips</div>
+                    </div>
+                  </div>
+                  <div class="area-group">
+                    <div class="tag area-parent" onclick="toggleArea('arms',this)">Arms — specific area</div>
+                    <div class="area-sub hidden" id="area-arms">
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Hands</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</div>
+                    </div>
+                  </div>
+                  <div class="area-group">
+                    <div class="tag area-parent" onclick="toggleArea('torso',this)">Body — specific area</div>
+                    <div class="area-sub hidden" id="area-torso">
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Legs</div>
+                    </div>
+                  </div>
+                  <div class="area-group">
+                    <div class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck</div>
+                    <div class="area-sub hidden" id="area-head">
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Ears</div>
+                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Neck</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="other-input-wrap" id="other-core-ritual">
+                <div class="grid-auto" id="where-tags-biting" style="display:none" role="group" aria-label="Body area">
+                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</div>
+                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
+                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</div>
+                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</div>
+                </div>
+              </div>
+
+              <div class="field" id="what-field">
+                <label class="field-label">Target type</label>
+                <div class="grid-auto" id="what-tags-picking" style="display:none" role="group" aria-label="Target type">
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</div>
+                  <div class="tag tag-other" onclick="otherMulti('core','what_pick',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-core-what_pick">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                    onkeydown="if(event.key==='Enter')confirmOther('core','ritual',false,this)"
-                    onblur="cancelOther('core','ritual')">
-                  <button class="other-confirm" onclick="confirmOther('core','ritual',false,this.previousElementSibling)">Add</button>
+                    onkeydown="if(event.key==='Enter')confirmOther('core','what_pick',true,this)"
+                    onblur="cancelOther('core','what_pick')">
+                  <button class="other-confirm" onclick="confirmOther('core','what_pick',true,this.previousElementSibling)">Add</button>
+                </div>
+                <div class="grid-auto" id="what-tags-biting" style="display:none" role="group" aria-label="Target type">
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Press-on / Gel edge</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
+                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
+                  <div class="tag tag-other" onclick="otherMulti('core','what_bite',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-core-what_bite">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('core','what_bite',true,this)"
+                    onblur="cancelOther('core','what_bite')">
+                  <button class="other-confirm" onclick="confirmOther('core','what_bite',true,this.previousElementSibling)">Add</button>
                 </div>
               </div>
-              <!-- Biting aftermath -->
-              <div id="ritual-tags-biting" style="display:none">
-                <div class="grid-2">
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Swallowed / Ate it</div>
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Spat out</div>
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Kept going</div>
-                  <div class="tag" onclick="selectTag('core','ritual',this)">Examined nails after</div>
+
+              <div class="field" id="mirror-field" style="display:none">
+                <label class="field-label">Mirror or camera involved?</label>
+                <div class="grid-2" role="group" aria-label="Mirror use">
+                  <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
+                  <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
+                  <div class="tag" onclick="selectTag('core','mirror',this)">Magnifying mirror</div>
+                  <div class="tag" onclick="selectTag('core','mirror',this)">Phone camera</div>
                 </div>
               </div>
-            </div>
 
-            <div class="field">
-              <label class="field-label">Awareness</label>
-              <div class="grid-3">
-                <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
-                <div class="tag" onclick="selectTag('core','awareness',this)">Mid-action</div>
-                <div class="tag" onclick="selectTag('core','awareness',this)">Urge first</div>
-                <div class="tag tag-other" onclick="otherSingle('core','awareness',this)">Other…</div>
+              <div class="field" id="skin-impact-field" style="display:none">
+                <label class="field-label">Skin impact</label>
+                <div class="grid-2" role="group" aria-label="Skin impact">
+                  <div class="tag" onclick="selectTag('core','skin_impact',this)">None</div>
+                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Minor</div>
+                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</div>
+                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Significant</div>
+                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</div>
+                </div>
               </div>
-              <div class="other-input-wrap" id="other-core-awareness">
-                <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                  onkeydown="if(event.key==='Enter')confirmOther('core','awareness',false,this)"
-                  onblur="cancelOther('core','awareness')">
-                <button class="other-confirm" onclick="confirmOther('core','awareness',false,this.previousElementSibling)">Add</button>
+
+              <div class="field" id="ritual-field" style="display:none">
+                <label class="field-label">Aftermath</label>
+                <div id="ritual-tags-picking" style="display:none">
+                  <div class="grid-2" role="group" aria-label="Aftermath">
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</div>
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Examined it</div>
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
+                    <div class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</div>
+                  </div>
+                  <div class="other-input-wrap" id="other-core-ritual">
+                    <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                      onkeydown="if(event.key==='Enter')confirmOther('core','ritual',false,this)"
+                      onblur="cancelOther('core','ritual')">
+                    <button class="other-confirm" onclick="confirmOther('core','ritual',false,this.previousElementSibling)">Add</button>
+                  </div>
+                </div>
+                <div id="ritual-tags-biting" style="display:none">
+                  <div class="grid-2" role="group" aria-label="Aftermath">
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Swallowed / Ate it</div>
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Spat out</div>
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Kept going</div>
+                    <div class="tag" onclick="selectTag('core','ritual',this)">Examined nails after</div>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div class="field">
-              <label class="field-label">Duration</label>
-              <div class="grid-2">
-                <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
-                <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
-                <div class="tag" onclick="selectTag('core','duration',this)">10–30 min</div>
-                <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
-                <div class="tag tag-other" onclick="otherSingle('core','duration',this)">Other…</div>
+              <div class="field">
+                <label class="field-label">Duration</label>
+                <div class="grid-2" role="group" aria-label="Duration">
+                  <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
+                  <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
+                  <div class="tag" onclick="selectTag('core','duration',this)">10–30 min</div>
+                  <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
+                  <div class="tag tag-other" onclick="otherSingle('core','duration',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-core-duration">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('core','duration',false,this)"
+                    onblur="cancelOther('core','duration')">
+                  <button class="other-confirm" onclick="confirmOther('core','duration',false,this.previousElementSibling)">Add</button>
+                </div>
               </div>
-              <div class="other-input-wrap" id="other-core-duration">
-                <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                  onkeydown="if(event.key==='Enter')confirmOther('core','duration',false,this)"
-                  onblur="cancelOther('core','duration')">
-                <button class="other-confirm" onclick="confirmOther('core','duration',false,this.previousElementSibling)">Add</button>
+
+            </div><!-- /core-details -->
+          </div><!-- /full-core -->
+
+          <!-- ── FULL MODE: Context section — same card, no break ── -->
+          <div class="full-section" id="full-ctx">
+            <div class="log-step-divider" id="ctx-divider">Context</div>
+
+            <div id="ctx-gated">
+
+              <div class="field">
+                <label class="field-label" id="pre-action-label">What were you doing just before?</label>
+                <div id="pre-actions-picking" style="display:none">
+                  <div class="grid-2" role="group" aria-label="Pre-event activity">
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</div>
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror checking</div>
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / nothing specific</div>
+                    <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_pick',this)">Other…</div>
+                  </div>
+                  <div class="other-input-wrap" id="other-ctx-pre_action_pick">
+                    <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                      onkeydown="if(event.key==='Enter')confirmOther('ctx','pre_action_pick',false,this)"
+                      onblur="cancelOther('ctx','pre_action_pick')">
+                    <button class="other-confirm" onclick="confirmOther('ctx','pre_action_pick',false,this.previousElementSibling)">Add</button>
+                  </div>
+                </div>
+                <div id="pre-actions-biting" style="display:none">
+                  <div class="grid-2" role="group" aria-label="Pre-event activity">
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting — hand near mouth</div>
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Touching nails / cuticles</div>
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Oral fixation / needed something</div>
+                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / nothing specific</div>
+                    <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_bite',this)">Other…</div>
+                  </div>
+                  <div class="other-input-wrap" id="other-ctx-pre_action_bite">
+                    <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                      onkeydown="if(event.key==='Enter')confirmOther('ctx','pre_action_bite',false,this)"
+                      onblur="cancelOther('ctx','pre_action_bite')">
+                    <button class="other-confirm" onclick="confirmOther('ctx','pre_action_bite',false,this.previousElementSibling)">Add</button>
+                  </div>
+                </div>
               </div>
-            </div>
 
-          </div><!-- /core-details -->
+              <div class="field">
+                <label class="field-label">Primary trigger</label>
+                <div class="grid-auto" role="group" aria-label="Primary trigger">
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / stress</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / depleted</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory — felt something</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual — saw something</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / idle</div>
+                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
+                  <div class="tag tag-other" onclick="otherSingle('ctx','trigger',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-ctx-trigger">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('ctx','trigger',false,this)"
+                    onblur="cancelOther('ctx','trigger')">
+                  <button class="other-confirm" onclick="confirmOther('ctx','trigger',false,this.previousElementSibling)">Add</button>
+                </div>
+              </div>
 
-        </div><!-- /full-core -->
+              <div class="field">
+                <label class="field-label">Environment</label>
+                <div class="grid-auto" role="group" aria-label="Environment">
+                  <div class="tag" onclick="selectTag('ctx','environment',this)">Desk / Study</div>
+                  <div class="tag" onclick="selectTag('ctx','environment',this)">Couch / Bed</div>
+                  <div class="tag" onclick="selectTag('ctx','environment',this)">Bathroom</div>
+                  <div class="tag" onclick="selectTag('ctx','environment',this)">Around the apartment</div>
+                  <div class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</div>
+                  <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
+                  <div class="tag tag-other" onclick="otherSingle('ctx','environment',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-ctx-environment">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('ctx','environment',false,this)"
+                    onblur="cancelOther('ctx','environment')">
+                  <button class="other-confirm" onclick="confirmOther('ctx','environment',false,this.previousElementSibling)">Add</button>
+                </div>
+              </div>
 
+              <div class="field">
+                <label class="field-label">Activity at the time</label>
+                <div class="grid-auto" role="group" aria-label="Activity">
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">Studying / Lecture</div>
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">Watching TV</div>
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">On phone</div>
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">Getting ready</div>
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">Working / At computer</div>
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</div>
+                  <div class="tag" onclick="selectTag('ctx','activity',this)">In conversation</div>
+                  <div class="tag tag-other" onclick="otherSingle('ctx','activity',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-ctx-activity">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('ctx','activity',false,this)"
+                    onblur="cancelOther('ctx','activity')">
+                  <button class="other-confirm" onclick="confirmOther('ctx','activity',false,this.previousElementSibling)">Add</button>
+                </div>
+              </div>
+
+              <!-- Episode-only context fields -->
+              <div class="field" id="escalation-field" style="display:none">
+                <label class="field-label">Session pattern</label>
+                <div class="grid-auto" role="group" aria-label="Session pattern">
+                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
+                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
+                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
+                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
+                  <div class="tag tag-other" onclick="otherSingle('ctx','escalation',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-ctx-escalation">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('ctx','escalation',false,this)"
+                    onblur="cancelOther('ctx','escalation')">
+                  <button class="other-confirm" onclick="confirmOther('ctx','escalation',false,this.previousElementSibling)">Add</button>
+                </div>
+              </div>
+
+              <!-- Post-feeling: shown for all outcomes — important for reinforcement mapping -->
+              <div class="field" id="post-feeling-field" style="display:none">
+                <label class="field-label">How did you feel after?</label>
+                <div class="grid-2" role="group" aria-label="Post-event feeling">
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Relieved / calm</div>
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</div>
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated with myself</div>
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Self-critical thoughts</div>
+                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Zoned out / dissociated</div>
+                  <div class="tag tag-other" onclick="otherSingle('ctx','post_feeling',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-ctx-post_feeling">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('ctx','post_feeling',false,this)"
+                    onblur="cancelOther('ctx','post_feeling')">
+                  <button class="other-confirm" onclick="confirmOther('ctx','post_feeling',false,this.previousElementSibling)">Add</button>
+                </div>
+              </div>
+
+              <div class="field" id="aftercare-field" style="display:none">
+                <label class="field-label">Aftercare applied?</label>
+                <div class="grid-2" role="group" aria-label="Post-episode aftercare">
+                  <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
+                  <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
+                </div>
+              </div>
+
+            </div><!-- /ctx-gated -->
+          </div><!-- /full-ctx -->
+
+        </div><!-- /outcome-gated -->
       </div><!-- /behavior-gated -->
 
-    </div><!-- /card 1 -->
-
-    <!-- CONTEXT CARD — full mode only -->
-    <div class="full-section full-section--mt" id="full-ctx">
-      <div class="card" id="full-ctx-inner" style="display:none">
-
-      <div id="ctx-gated" style="display:none">
-
-        <div class="field">
-          <label class="field-label" id="pre-action-label">Pre-event activity</label>
-          <!-- Picking pre-actions -->
-          <div id="pre-actions-picking" style="display:none">
-            <div class="grid-2">
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror Checking</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / Nothing</div>
-
-              <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_pick',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-pre_action_pick">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','pre_action_pick',false,this)"
-                onblur="cancelOther('ctx','pre_action_pick')">
-              <button class="other-confirm" onclick="confirmOther('ctx','pre_action_pick',false,this.previousElementSibling)">Add</button>
-            </div>
-          </div><!-- /pre-actions-picking -->
-          <!-- Biting pre-actions -->
-          <div id="pre-actions-biting" style="display:none">
-            <div class="grid-2">
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting Posture</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / Nothing</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Oral fixation / needed something</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Hand near mouth</div>
-              <div class="tag" onclick="selectTag('ctx','pre_action',this)">Touching nails / cuticles</div>
-              <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_bite',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-pre_action_bite">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','pre_action_bite',false,this)"
-                onblur="cancelOther('ctx','pre_action_bite')">
-              <button class="other-confirm" onclick="confirmOther('ctx','pre_action_bite',false,this.previousElementSibling)">Add</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Primary Trigger</label>
-          <div class="grid-auto">
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / Stress</div>
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / Depleted</div>
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory (felt something)</div>
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual (saw something)</div>
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / Idle</div>
-            <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism</div>
-
-              <div class="tag tag-other" onclick="otherSingle('ctx','trigger',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-trigger">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','trigger',false,this)"
-                onblur="cancelOther('ctx','trigger')">
-              <button class="other-confirm" onclick="confirmOther('ctx','trigger',false,this.previousElementSibling)">Add</button>
-            </div>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Environment</label>
-          <div class="grid-auto">
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Desk / Study</div>
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Couch / Bed</div>
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Bathroom</div>
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Around the apartment</div>
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</div>
-            <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
-
-              <div class="tag tag-other" onclick="otherSingle('ctx','environment',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-environment">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','environment',false,this)"
-                onblur="cancelOther('ctx','environment')">
-              <button class="other-confirm" onclick="confirmOther('ctx','environment',false,this.previousElementSibling)">Add</button>
-            </div>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Activity</label>
-          <div class="grid-auto">
-            <div class="tag" onclick="selectTag('ctx','activity',this)">Studying / Lecture</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">Watching TV</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">On Phone</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">Getting Ready</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">Working / At computer</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</div>
-            <div class="tag" onclick="selectTag('ctx','activity',this)">In Conversation</div>
-
-              <div class="tag tag-other" onclick="otherSingle('ctx','activity',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-activity">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','activity',false,this)"
-                onblur="cancelOther('ctx','activity')">
-              <button class="other-confirm" onclick="confirmOther('ctx','activity',false,this.previousElementSibling)">Add</button>
-            </div>
-        </div>
-
-        <div class="field" id="escalation-field" style="display:none">
-          <label class="field-label">Session pattern</label>
-          <div class="grid-auto">
-            <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
-            <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
-            <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
-            <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
-
-              <div class="tag tag-other" onclick="otherSingle('ctx','escalation',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-escalation">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','escalation',false,this)"
-                onblur="cancelOther('ctx','escalation')">
-              <button class="other-confirm" onclick="confirmOther('ctx','escalation',false,this.previousElementSibling)">Add</button>
-            </div>
-        </div>
-
-        <div class="field" id="post-feeling-field" style="display:none">
-          <label class="field-label">Post-event feeling</label>
-          <div class="grid-2">
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated</div>
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</div>
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Relief / Zoned out</div>
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Shame / self-critical</div>
-            <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Calm / relieved</div>
-
-              <div class="tag tag-other" onclick="otherSingle('ctx','post_feeling',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-post_feeling">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','post_feeling',false,this)"
-                onblur="cancelOther('ctx','post_feeling')">
-              <button class="other-confirm" onclick="confirmOther('ctx','post_feeling',false,this.previousElementSibling)">Add</button>
-            </div>
-        </div>
-
-        <div class="field" id="aftercare-field" style="display:none">
-          <label class="field-label">Post-episode aftercare</label>
-          <div class="grid-2">
-            <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
-            <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
-          </div>
-        </div>
-
-      </div><!-- /ctx-gated -->
-
-    </div><!-- /full-ctx-inner card -->
-    </div><!-- /full-ctx -->
+    </div><!-- /card -->
 
     <!-- SAVE ACTION BAR -->
     <div class="action-bar" id="bar-save">
@@ -576,22 +563,29 @@
   </div><!-- /log-form -->
 
   <!-- SUCCESS SCREEN -->
-  <div id="screen-success" class="hidden">
+  <div id="screen-success" class="hidden" aria-live="assertive" role="status">
     <div class="success-msg">
-      <div class="success-icon">
+      <div class="success-icon" id="success-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
       <div class="success-title" id="success-title">Logged.</div>
-      <div class="success-body"  id="success-body"></div>
-      <button class="btn-primary success-actions" onclick="resetForm()">Log another</button>
-      <div id="success-cta" style="display:none;margin-top:12px">
-        <a href="interventions.html" class="success-cta-link">
-          Want to try a tool? Open Tools →
+      <div class="success-body" id="success-body"></div>
+
+      <div id="success-cta-primary" style="display:none;width:100%;max-width:280px;margin-top:20px">
+        <a href="interventions.html" class="success-tools-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Open a tool now
         </a>
+        <button class="success-log-another" onclick="resetForm()">Log another entry</button>
       </div>
-      <div class="success-edit-wrap">
+
+      <div id="success-cta-resisted" style="display:none;width:100%;max-width:280px;margin-top:20px">
+        <button class="btn-primary success-actions" onclick="resetForm()">Log another</button>
+      </div>
+
+      <div class="success-edit-wrap" style="margin-top:14px">
         <a href="tracker.html" id="edit-entry-link" class="success-edit-link">Edit this entry in Patterns</a>
       </div>
     </div>
@@ -629,13 +623,8 @@ window._uid          = null;
 window._currentDocId = null;
 
 window.signInWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
-      console.error('Sign in error:', e);
-    }
-  }
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { if (e.code !== 'auth/popup-closed-by-user') console.error('Sign in error:', e); }
 };
 window.signOut = async () => { await fbSignOut(auth); };
 
@@ -653,9 +642,9 @@ onAuthStateChanged(auth, user => {
   }
 });
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // STATE
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 const state = {
   core: {
     timing: 'now', bfrb: null, outcome: null,
@@ -671,12 +660,11 @@ const state = {
   }
 };
 
-// Current mode: 'quick' | 'full'
 let currentMode = localStorage.getItem('gw-log-mode') || 'quick';
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // MODE TOGGLE
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 window.setMode = (mode) => {
   currentMode = mode;
   localStorage.setItem('gw-log-mode', mode);
@@ -686,45 +674,24 @@ window.setMode = (mode) => {
   document.getElementById('mode-full').classList.toggle('on', mode === 'full');
   document.getElementById('mode-full').setAttribute('aria-pressed', String(mode === 'full'));
 
-  const fullCore = document.getElementById('full-core');
-  const fullCtx  = document.getElementById('full-ctx');
   const isFullMode = mode === 'full';
-
-  fullCore.classList.toggle('on', isFullMode);
-  fullCtx.classList.toggle('on', isFullMode);
-
-  // Show ctx-gated only if behavior is already selected
-  if (isFullMode && state.core.bfrb) {
-    document.getElementById('ctx-gated').style.display = 'block';
-    document.getElementById('full-ctx-inner').style.display = 'block';
-  }
-  if (!isFullMode) {
-    document.getElementById('full-ctx-inner').style.display = 'none';
-  }
+  document.getElementById('full-core').classList.toggle('on', isFullMode);
+  document.getElementById('full-ctx').classList.toggle('on', isFullMode);
 };
 
-// Apply saved mode on load
-document.addEventListener('DOMContentLoaded', () => {
-  setMode(currentMode);
-  initSliders();
-});
+document.addEventListener('DOMContentLoaded', () => { setMode(currentMode); initSliders(); });
 
-// ════════════════════════════════════════════════════════════
-// ARRIVAL PARAMS — from interventions.html redirect
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
+// ARRIVAL PARAMS — from interventions.html
+// ═══════════════════════════════════════
 let _pendingArrival = null;
 
 function handleArrivalParams() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('from') !== 'intervention') return;
 
-  const outcome = params.get('outcome'); // 'held' | 'failed'
-  const tool    = params.get('tool');    // 'motor' | 'decouple' | 'surf' | 'unhook' | 'shock' | 'ground'
+  _pendingArrival = { outcome: params.get('outcome'), tool: params.get('tool') };
 
-  // Store params — they'll be applied after user selects a behavior
-  _pendingArrival = { outcome, tool };
-
-  // Store surf data immediately
   const surfPeak = params.get('surf_peak');
   const surfEnd  = params.get('surf_end');
   if (surfPeak !== null) state.core.surf_peak = parseInt(surfPeak, 10);
@@ -733,54 +700,50 @@ function handleArrivalParams() {
   history.replaceState({}, '', 'index.html');
 }
 
-// Called from selectBehavior after the gated fields are revealed
 function applyPendingArrival() {
   if (!_pendingArrival) return;
   const { outcome, tool } = _pendingArrival;
   _pendingArrival = null;
 
-  // Select outcome
   if (outcome === 'held') {
-    const tag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim() === 'Resisted');
+    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Resisted');
     if (tag) tag.click();
   } else if (outcome === 'failed') {
-    const tag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim() === 'Episode');
+    const tag = [...document.querySelectorAll('#outcome-grid .tag')].find(t => t.textContent.trim() === 'Full episode');
     if (tag) tag.click();
   }
 
-  // Pre-fill intervention
   if (tool) {
     const yesTag = document.getElementById('int-yes-tag');
-    if (yesTag) {
-      yesTag.click();
-    }
+    if (yesTag) yesTag.click();
     const toolMap = {
-      motor:    'Competing Response',
-      decouple: 'Competing Response',
-      surf:     'Urge Surfing',
-      unhook:   'Urge Surfing',
-      shock:    'Fidget / Sensory',
-      ground:   'Grounding',
+      motor: 'Competing Response', decouple: 'Competing Response',
+      surf:  'Urge Surfing',       unhook:   'Urge Surfing',
+      shock: 'Fidget / Sensory',   ground:   'Grounding / Breathing',
     };
     const label = toolMap[tool];
     if (label) {
-      const toolTag = [...document.querySelectorAll('#tools-grid .tag')]
-        .find(t => t.textContent.trim() === label);
+      const toolTag = [...document.querySelectorAll('#tools-grid .tag')].find(t => t.textContent.trim() === label);
       if (toolTag) toolTag.click();
     }
   }
 }
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // UI HELPERS
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 function updateSaveBtn() {
   const btn = document.getElementById('btn-save-all');
   const ready = !!(state.core.bfrb && state.core.outcome);
   btn.disabled = !ready;
   btn.classList.toggle('inactive', !ready);
   if (ready) {
-    const labels = { 'Resisted': 'Log resistance', 'Near Miss': 'Log near miss', 'Caught': 'Log caught', 'Episode': 'Log episode' };
+    const labels = {
+      'Resisted':   'Log resistance',
+      'Near Miss':  'Log near miss',
+      'Caught':     'Log caught mid-act',
+      'Episode':    'Log episode'
+    };
     btn.textContent = labels[state.core.outcome] || 'Save';
   } else {
     btn.textContent = 'Save';
@@ -791,11 +754,10 @@ window.selectTiming = (val, el) => {
   el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   state.core.timing = val;
-  const timeWrap = document.getElementById('core-time-wrap');
+  const timeWrap  = document.getElementById('core-time-wrap');
   const timeInput = document.getElementById('core-time');
   timeWrap.classList.toggle('hidden', val !== 'earlier');
   if (val === 'earlier' && !timeInput.value) {
-    // Default to 30 min ago for convenience
     const d = new Date(Date.now() - 30 * 60000);
     const pad = n => String(n).padStart(2, '0');
     timeInput.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
@@ -805,26 +767,16 @@ window.selectTiming = (val, el) => {
 window.selectBehavior = (val, el) => {
   el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
-  state.core.bfrb    = val;
-  state.core.where   = [];
-  state.core.what    = [];
+  state.core.bfrb  = val;
+  state.core.where = [];
+  state.core.what  = [];
   state.core.outcome = null;
 
   document.getElementById('behavior-gated').style.display = 'block';
-  document.getElementById('urge-after-wrap').style.display = 'none'; // reset until outcome chosen
 
   // Reset outcome
-  document.querySelectorAll('#behavior-gated .grid-3 .tag').forEach(t => t.classList.remove('on'));
-
-  // Reset outcome-dependent sections
-  document.getElementById('core-details').classList.add('hidden');
-  document.getElementById('post-feeling-field').style.display  = 'none';
-  document.getElementById('aftercare-field').style.display     = 'none';
-  document.getElementById('escalation-field').style.display    = 'none';
-  document.getElementById('intervention-block').classList.add('hidden');
-  document.getElementById('int-yes-tag').classList.remove('on');
-  document.getElementById('int-no-tag').classList.remove('on');
-  state.ctx.tried_tool = null;
+  document.querySelectorAll('#outcome-grid .tag').forEach(t => t.classList.remove('on'));
+  document.getElementById('outcome-gated').style.display = 'none';
 
   // Reset area groups
   document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
@@ -838,12 +790,10 @@ window.selectBehavior = (val, el) => {
   document.getElementById('what-tags-biting').style.display   = biteVis;
   document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
 
-  // Show behavior-specific pre-action options
   const preActionPicking = document.getElementById('pre-actions-picking');
   const preActionBiting  = document.getElementById('pre-actions-biting');
   if (preActionPicking) preActionPicking.style.display = pickVis;
   if (preActionBiting)  preActionBiting.style.display  = biteVis;
-  // Reset pre-action selections
   state.ctx.pre_action = null;
   document.querySelectorAll('#pre-actions-picking .tag, #pre-actions-biting .tag').forEach(t => t.classList.remove('on'));
 
@@ -853,22 +803,15 @@ window.selectBehavior = (val, el) => {
     state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null;
   }
 
-  // ── Picking vs biting: urge gate + pre-feeling label ─────────
   const isBiting = val === 'biting';
-
-  // Pre-feeling label
   const preFeelingLabel = document.getElementById('pre-feeling-label');
-  if (preFeelingLabel) preFeelingLabel.textContent = isBiting
-    ? 'State / mood before (if noticed)'
-    : 'How were you feeling before?';
+  if (preFeelingLabel) preFeelingLabel.textContent = isBiting ? 'State before (if noticed)' : 'State before';
 
-  // Urge before: picking always shows slider; biting shows yes/no gate
   const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
   const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
   if (pickingUrgeWrap) pickingUrgeWrap.style.display = isBiting ? 'none' : '';
   if (bitingUrgeWrap)  bitingUrgeWrap.style.display  = isBiting ? '' : 'none';
 
-  // Reset biting urge gate
   if (bitingUrgeWrap) {
     bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
     const bSlider = document.getElementById('biting-urge-slider');
@@ -878,22 +821,15 @@ window.selectBehavior = (val, el) => {
   else {
     state.core.urge = 5;
     const s = document.getElementById('core-urge');
-    if (s) { s.value = 5; updateSlider(s, 'core-urge-val', 'urge'); }
-  }
-
-  // In full mode show context card
-  if (currentMode === 'full') {
-    document.getElementById('ctx-gated').style.display = 'block';
-    document.getElementById('full-ctx-inner').style.display = 'block';
+    if (s) { s.value = 5; updateSlider(s, 'core-urge-val', 'urge', 'core-urge-word'); }
   }
 
   updateSaveBtn();
 
   setTimeout(() => {
-    // Apply pending intervention arrival params if coming from Tools page
     applyPendingArrival();
-    const outcomeField = document.querySelector('#behavior-gated .field');
-    if (outcomeField) outcomeField.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const outcomeField = document.querySelector('#outcome-grid');
+    if (outcomeField) outcomeField.closest('.field')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
 };
 
@@ -903,81 +839,90 @@ window.selectOutcome = (val, el) => {
   state.core.outcome = val;
   if (navigator.vibrate) navigator.vibrate(10);
 
-  document.getElementById('urge-after-wrap').style.display = 'block';
-  // Show intervention question for all outcomes (moved to Quick mode)
-  document.getElementById('intervention-quick-wrap').style.display = 'block';
+  // Reveal all outcome-gated fields
+  document.getElementById('outcome-gated').style.display = 'block';
+
   const isResisted  = val === 'Resisted';
   const isNearMiss  = val === 'Near Miss';
   const isCaught    = val === 'Caught';
   const isEpisode   = val === 'Episode';
   const showDetails = isNearMiss || isCaught || isEpisode;
 
-  // ── Contextual urge-after label ──────────────────────────────
+  // Awareness field: hide for Resisted (no motor sequence to catch)
+  const awarenessField = document.getElementById('awareness-field');
+  if (awarenessField) awarenessField.style.display = isResisted ? 'none' : 'block';
+  // Clear awareness state if hidden
+  if (isResisted) { state.core.awareness = null; document.querySelectorAll('#awareness-field .tag').forEach(t => t.classList.remove('on')); }
+
+  // Urge-after label adapts to outcome
   const afterLabel = document.getElementById('urge-after-label');
   if (isResisted)      afterLabel.textContent = 'Urge relief after resisting';
   else if (isNearMiss) afterLabel.textContent = 'Urge level after near miss';
-  else if (isCaught)   afterLabel.textContent = 'Urge level after stopping mid-act';
+  else if (isCaught)   afterLabel.textContent = 'Urge level after stopping';
   else if (isEpisode)  afterLabel.textContent = 'Urge level after episode';
-  else                 afterLabel.textContent = 'Urge level after';
 
-  // Where / what / awareness / duration
+  // Detail fields (where/what/mirror/skin/ritual/duration) — episode, near miss, caught
   document.getElementById('core-details').classList.toggle('hidden', !showDetails);
 
-  // Ritual: episode only — show behavior-appropriate options
   if (isEpisode) {
     document.getElementById('ritual-field').style.display = 'block';
-    const pickRitual = document.getElementById('ritual-tags-picking');
-    const biteRitual = document.getElementById('ritual-tags-biting');
     const isBiting = state.core.bfrb === 'biting';
-    if (pickRitual) pickRitual.style.display = isBiting ? 'none' : '';
-    if (biteRitual) biteRitual.style.display = isBiting ? '' : 'none';
+    document.getElementById('ritual-tags-picking').style.display = isBiting ? 'none' : '';
+    document.getElementById('ritual-tags-biting').style.display  = isBiting ? '' : 'none';
     state.core.ritual = null;
     document.querySelectorAll('#ritual-field .tag').forEach(t => t.classList.remove('on'));
   } else {
     document.getElementById('ritual-field').style.display = 'none';
   }
 
-  // Skin impact: episode + picking
   document.getElementById('skin-impact-field').style.display =
     (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
 
-  // Mirror: episode / near-miss + picking
   const mirrorField = document.getElementById('mirror-field');
   if (mirrorField && state.core.bfrb === 'picking') {
     mirrorField.style.display = showDetails ? 'block' : 'none';
   }
 
-  // Context visibility — post-feeling shown for ALL outcomes (including resisted)
-  document.getElementById('post-feeling-field').style.display  = 'block';
-  document.getElementById('aftercare-field').style.display     =
-    (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
-  document.getElementById('escalation-field').style.display    = isEpisode ? 'block' : 'none';
-
-  // Clean state when switching outcomes
   if (!showDetails) {
     state.core.where = []; state.core.what = [];
-    state.core.awareness = null; state.core.duration = null;
-    state.core.ritual = null; state.core.skin_impact = null;
+    state.core.duration = null; state.core.ritual = null; state.core.skin_impact = null;
     document.querySelectorAll('#core-details .tag').forEach(t => t.classList.remove('on'));
-    document.querySelectorAll('#where-field .tag, #what-field .tag').forEach(t => t.classList.remove('on'));
   }
 
-  // ── Intervention block ───────────────────────────────────────
-  // CLINICAL FIX: do NOT auto-open or pre-select "Yes" for Resisted.
-  // Resisting does not mean a tool was used — the user decides.
-  // The original pre-selected Yes and opened the block automatically,
-  // which inflated intervention-effectiveness data.
-  // All three outcomes: leave intervention Y/N untouched.
-  // (We only auto-fill if arriving from interventions.html via URL param.)
+  // Full mode context fields
+  document.getElementById('post-feeling-field').style.display = 'block';
+  document.getElementById('escalation-field').style.display   = isEpisode ? 'block' : 'none';
+  document.getElementById('aftercare-field').style.display    =
+    (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
+
+  if (isEpisode) {
+    // Show session pattern divider contextually
+  } else {
+    state.ctx.escalation = null;
+    document.querySelectorAll('#escalation-field .tag').forEach(t => t.classList.remove('on'));
+  }
+
+  // Apply full mode visibility
+  if (currentMode === 'full') {
+    document.getElementById('full-ctx').classList.add('on');
+  }
 
   updateSaveBtn();
 };
 
 window.selectTag = (level, key, el) => {
-  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  // awareness field: find parent group correctly
+  const parent = el.closest('[role="group"]') || el.parentElement;
+  parent.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   if (navigator.vibrate) navigator.vibrate(10);
-  state[level][key] = el.textContent.trim();
+  // Map the renamed awareness labels back to data values
+  const awarenessMap = {
+    'Urge came first':  'Urge first',
+    'Caught mid-act':   'Mid-action',
+    'Already done':     'Automatic',
+  };
+  state[level][key] = awarenessMap[el.textContent.trim()] || el.textContent.trim();
 };
 
 window.toggleArea = (id, el) => {
@@ -1003,23 +948,30 @@ window.toggleMultiTag = (level, key, el) => {
   else          { arr.push(val);      el.classList.add('on');    }
 };
 
-window.updateSlider = (el, valId, key) => {
-  const pct = ((el.value - 1) / 9) * 100;
+window.updateSlider = (el, valId, key, wordId) => {
+  const v = parseInt(el.value);
+  const pct = ((v - 1) / 9) * 100;
   el.style.background = `linear-gradient(to right, var(--ac) ${pct}%, var(--bdr) ${pct}%)`;
-  document.getElementById(valId).textContent = el.value;
-  state.core[key] = parseInt(el.value);
+  document.getElementById(valId).textContent = v;
+  if (wordId) {
+    const wordEl = document.getElementById(wordId);
+    if (wordEl) {
+      const words = ['','Minimal','Low','Mild','Moderate','Noticeable','Elevated','High','Very high','Intense','Extreme'];
+      wordEl.textContent = words[v] || '';
+    }
+  }
+  state.core[key] = v;
 };
 
 function initSliders() {
   const s  = document.getElementById('core-urge');
   const sb = document.getElementById('core-urge-biting');
   const sa = document.getElementById('core-urge-after');
-  if (s)  updateSlider(s,  'core-urge-val',        'urge');
-  if (sb) updateSlider(sb, 'core-urge-biting-val',  'urge');
-  if (sa) updateSlider(sa, 'core-urge-after-val',   'urge_after');
+  if (s)  updateSlider(s,  'core-urge-val',        'urge',       'core-urge-word');
+  if (sb) updateSlider(sb, 'core-urge-biting-val',  'urge',       'core-urge-biting-word');
+  if (sa) updateSlider(sa, 'core-urge-after-val',   'urge_after', 'core-urge-after-word');
 }
 
-// Biting urge gate — yes shows slider and sets urge, no sets urge to null
 window.setBitingUrge = function(hadUrge, el) {
   el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
@@ -1027,24 +979,23 @@ window.setBitingUrge = function(hadUrge, el) {
   if (hadUrge) {
     sliderWrap.style.display = 'block';
     const s = document.getElementById('core-urge-biting');
-    if (s) { s.value = 5; updateSlider(s, 'core-urge-biting-val', 'urge'); }
+    if (s) { s.value = 5; updateSlider(s, 'core-urge-biting-val', 'urge', 'core-urge-biting-word'); }
   } else {
     sliderWrap.style.display = 'none';
-    state.core.urge = null; // automatic — no urge recorded
+    state.core.urge = null;
   }
 };
 
 window.toggleIntervention = (didTry, el) => {
-  const siblings = el.parentElement.querySelectorAll('.tag');
-  siblings.forEach(t => t.classList.remove('on'));
+  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   state.ctx.tried_tool = didTry;
   document.getElementById('intervention-block').classList.toggle('hidden', !didTry);
 };
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // TOAST
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 window.showToast = (msg, isErr = false) => {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1054,9 +1005,9 @@ window.showToast = (msg, isErr = false) => {
   setTimeout(() => t.classList.remove('show'), 3000);
 };
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // SUBMIT
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 window.saveAll = async () => {
   if (!state.core.bfrb)    { showToast('Choose a behaviour first', true); return; }
   if (!state.core.outcome) { showToast('Choose an outcome first', true);  return; }
@@ -1070,25 +1021,26 @@ window.saveAll = async () => {
     state.core.outcome === 'Caught'    ? 'caught'    : 'resisted';
 
   const docData = {
-    bfrb_type:                 state.core.bfrb,
-    entry_type:                outcomeKey,
-    urge_before:               state.core.urge,
-    urge_after:                state.core.urge_after,
-    pre_feeling:               state.core.pre_feeling || '',
-    created_at:                document.getElementById('core-time')?.value
-                                 ? new Date(document.getElementById('core-time').value)
-                                 : serverTimestamp(),
-    pre_action:                state.ctx.pre_action  || '',
-    primary_trigger:           state.ctx.trigger     || '',
-    environment:               state.ctx.environment || '',
-    activity:                  state.ctx.activity    || '',
-    escalation:                state.ctx.escalation  || '',
-    aftercare:                 state.ctx.aftercare   || '',
-    post_feeling:              state.ctx.post_feeling || '',
-    tried_intervention:        state.ctx.tried_tool === true,
-    interventions:             state.ctx.tools.join(', '),
+    bfrb_type:                  state.core.bfrb,
+    entry_type:                 outcomeKey,
+    urge_before:                state.core.urge,
+    urge_after:                 state.core.urge_after,
+    pre_feeling:                state.core.pre_feeling  || '',
+    awareness:                  state.core.awareness    || '',
+    created_at:                 document.getElementById('core-time')?.value
+                                  ? new Date(document.getElementById('core-time').value)
+                                  : serverTimestamp(),
+    pre_action:                 state.ctx.pre_action    || '',
+    primary_trigger:            state.ctx.trigger       || '',
+    environment:                state.ctx.environment   || '',
+    activity:                   state.ctx.activity      || '',
+    escalation:                 state.ctx.escalation    || '',
+    aftercare:                  state.ctx.aftercare     || '',
+    post_feeling:               state.ctx.post_feeling  || '',
+    tried_intervention:         state.ctx.tried_tool === true,
+    interventions:              state.ctx.tools.join(', '),
     intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
-    narrative_notes:           (document.getElementById('narrative-notes')?.value || '').trim(),
+    narrative_notes:            (document.getElementById('narrative-notes')?.value || '').trim(),
     ...(state.core.surf_peak !== undefined ? { surf_peak: state.core.surf_peak } : {}),
     ...(state.core.surf_end  !== undefined ? { surf_end:  state.core.surf_end  } : {}),
   };
@@ -1096,8 +1048,7 @@ window.saveAll = async () => {
   if (outcomeKey !== 'resisted') {
     docData.body_areas = state.core.where.join(', ');
     docData.target     = state.core.what.join(', ');
-    docData.awareness  = state.core.awareness || '';
-    docData.duration   = state.core.duration  || '';
+    docData.duration   = state.core.duration || '';
     if (outcomeKey === 'did') docData.post_ritual = state.core.ritual || '';
   }
   if (state.core.bfrb === 'picking') {
@@ -1109,25 +1060,21 @@ window.saveAll = async () => {
     const docRef = await addDoc(collection(db, 'users', window._uid, 'entries'), docData);
     window._currentDocId = docRef.id;
 
-    const msgs = {
-      resisted:  { title: 'Logged.',  body: 'That resistance matters. It\'s the clearest signal of progress in your data.' },
-      near_miss: { title: 'Logged.',  body: 'Catching it before it completed is exactly what awareness training looks like.' },
-      caught:    { title: 'Logged.',  body: 'You caught yourself mid-behavior — that\'s delayed awareness activating. The interception window is getting faster.' },
-      did:       { title: 'Logged.',  body: 'This entry is part of the picture. Every data point helps.' }
-    };
-    const msg = msgs[outcomeKey] || msgs.did;
-    document.getElementById('success-title').textContent = msg.title;
-    document.getElementById('success-body').textContent  = msg.body;
+    document.getElementById('success-title').textContent = 'Logged.';
+    document.getElementById('success-body').textContent  = '';
 
-    // Context-aware CTA: offer Tools for non-resisted outcomes
-    const ctaEl = document.getElementById('success-cta');
-    if (ctaEl) {
-      if (outcomeKey === 'near_miss' || outcomeKey === 'caught' || outcomeKey === 'did') {
-        ctaEl.style.display = 'block';
-      } else {
-        ctaEl.style.display = 'none';
-      }
+    const iconEl = document.getElementById('success-icon');
+    if (iconEl) {
+      iconEl.className = 'success-icon ' + (
+        outcomeKey === 'resisted'  ? 'resisted' :
+        outcomeKey === 'caught'    ? 'caught'   :
+        outcomeKey === 'near_miss' ? 'nearmiss' : 'episode'
+      );
     }
+
+    const isActive = outcomeKey === 'near_miss' || outcomeKey === 'caught' || outcomeKey === 'did';
+    document.getElementById('success-cta-primary').style.display  = isActive  ? 'block' : 'none';
+    document.getElementById('success-cta-resisted').style.display = !isActive ? 'block' : 'none';
 
     document.getElementById('log-form').classList.add('hidden');
     document.getElementById('bar-save').classList.add('hidden');
@@ -1136,8 +1083,7 @@ window.saveAll = async () => {
 
   } catch(e) {
     console.error('Save error:', e);
-    btn.disabled = false; btn.textContent = 'Save';
-    btn.classList.add('inactive');
+    btn.disabled = false; btn.textContent = 'Save'; btn.classList.add('inactive');
     if (e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))) {
       showToast('Daily write limit reached — try again tomorrow', true);
     } else {
@@ -1146,9 +1092,9 @@ window.saveAll = async () => {
   }
 };
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // RESET
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 window.resetForm = () => {
   state.core = {
     timing: 'now', bfrb: null, outcome: null,
@@ -1166,43 +1112,46 @@ window.resetForm = () => {
   document.querySelectorAll('.area-sub').forEach(s => s.classList.add('hidden'));
   document.querySelectorAll('.area-parent').forEach(p => p.classList.remove('open'));
 
-  // Default "Right now" tag on
-  const firstTag = document.querySelector('#log-form .grid-2 .tag');
-  if (firstTag) firstTag.classList.add('on');
-
-  document.getElementById('core-time').value = '';
-  document.getElementById('core-time-wrap').classList.add('hidden');
-  document.getElementById('behavior-gated').style.display   = 'none';
+  document.getElementById('behavior-gated').style.display  = 'none';
+  document.getElementById('outcome-gated').style.display   = 'none';
   document.getElementById('core-details').classList.add('hidden');
-  document.getElementById('ritual-field').style.display     = 'none';
+  document.getElementById('ritual-field').style.display    = 'none';
   document.getElementById('post-feeling-field').style.display = 'none';
-  document.getElementById('aftercare-field').style.display  = 'none';
-  document.getElementById('escalation-field').style.display = 'none';
-  document.getElementById('mirror-field').style.display     = 'none';
+  document.getElementById('aftercare-field').style.display = 'none';
+  document.getElementById('escalation-field').style.display= 'none';
+  document.getElementById('mirror-field').style.display    = 'none';
   document.getElementById('skin-impact-field').style.display = 'none';
-  document.getElementById('intervention-quick-wrap').style.display = 'none';
   document.getElementById('intervention-block').classList.add('hidden');
-  document.getElementById('int-yes-tag').classList.remove('on');
-  document.getElementById('int-no-tag').classList.remove('on');
-  document.getElementById('ctx-gated').style.display        = 'none';
-  document.getElementById('full-ctx-inner').style.display   = 'none';
+  document.getElementById('awareness-field').style.display = 'block';
+
   const pap = document.getElementById('pre-actions-picking');
   const pab = document.getElementById('pre-actions-biting');
   if (pap) pap.style.display = 'none';
   if (pab) pab.style.display = 'none';
-  document.getElementById('narrative-notes').value          = '';
-  document.getElementById('urge-after-label').textContent   = 'Urge level after';
-  document.getElementById('urge-after-wrap').style.display  = 'none';
 
-  // Reset picking/biting separation elements
+  document.getElementById('narrative-notes').value = '';
+  document.getElementById('urge-after-label').textContent = 'Urge level after';
+
+  document.getElementById('core-time').value = '';
+  document.getElementById('core-time-wrap').classList.add('hidden');
+
+  // Reset timing — default to "Right now"
+  const timingTags = document.querySelectorAll('#timing-field .grid-2 .tag');
+  if (timingTags[0]) timingTags[0].classList.add('on');
+
   const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
   const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
-  if (pickingUrgeWrap) pickingUrgeWrap.style.display = ''; // show by default (picking is first)
-  if (bitingUrgeWrap)  { bitingUrgeWrap.style.display = 'none'; bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on')); }
+  if (pickingUrgeWrap) pickingUrgeWrap.style.display = '';
+  if (bitingUrgeWrap)  {
+    bitingUrgeWrap.style.display = 'none';
+    bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  }
   const bSlider = document.getElementById('biting-urge-slider');
   if (bSlider) bSlider.style.display = 'none';
+
   const preFeelingLabel = document.getElementById('pre-feeling-label');
-  if (preFeelingLabel) preFeelingLabel.textContent = 'How were you feeling before?';
+  if (preFeelingLabel) preFeelingLabel.textContent = 'State before';
+
   const pickRitual = document.getElementById('ritual-tags-picking');
   const biteRitual = document.getElementById('ritual-tags-biting');
   if (pickRitual) pickRitual.style.display = 'none';
@@ -1210,8 +1159,8 @@ window.resetForm = () => {
 
   const s  = document.getElementById('core-urge');
   const sa = document.getElementById('core-urge-after');
-  s.value = 5;  updateSlider(s,  'core-urge-val',      'urge');
-  sa.value = 3; updateSlider(sa, 'core-urge-after-val', 'urge_after');
+  s.value = 5;  updateSlider(s,  'core-urge-val',      'urge',       'core-urge-word');
+  sa.value = 3; updateSlider(sa, 'core-urge-after-val', 'urge_after', 'core-urge-after-word');
 
   const btn = document.getElementById('btn-save-all');
   btn.disabled = true; btn.textContent = 'Save'; btn.classList.add('inactive');
@@ -1219,43 +1168,35 @@ window.resetForm = () => {
   document.getElementById('log-form').classList.remove('hidden');
   document.getElementById('bar-save').classList.remove('hidden');
   document.getElementById('screen-success').classList.add('hidden');
-  setMode(currentMode); // re-apply saved mode
+  setMode(currentMode);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// ════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════
 // OTHER BUTTON SYSTEM
-// ════════════════════════════════════════════════════════════
-
-// Map Other field IDs to their real state keys
-// (some fields split picking/biting variants but write to same state key)
+// ═══════════════════════════════════════
 const OTHER_KEY_MAP = {
-  'core-pre_feeling':     { level:'core', key:'pre_feeling',  multi:false },
-  'core-where_pick':      { level:'core', key:'where',        multi:true  },
-  'core-what_pick':       { level:'core', key:'what',         multi:true  },
-  'core-what_bite':       { level:'core', key:'what',         multi:true  },
-  'core-awareness':       { level:'core', key:'awareness',    multi:false },
-  'core-duration':        { level:'core', key:'duration',     multi:false },
-  'core-ritual':          { level:'core', key:'ritual',       multi:false },
-  'ctx-pre_action_pick':  { level:'ctx',  key:'pre_action',   multi:false },
-  'ctx-pre_action_bite':  { level:'ctx',  key:'pre_action',   multi:false },
-  'ctx-trigger':          { level:'ctx',  key:'trigger',      multi:false },
-  'ctx-environment':      { level:'ctx',  key:'environment',  multi:false },
-  'ctx-activity':         { level:'ctx',  key:'activity',     multi:false },
-  'ctx-escalation':       { level:'ctx',  key:'escalation',   multi:false },
-  'ctx-post_feeling':     { level:'ctx',  key:'post_feeling', multi:false },
-  'ctx-tools':            { level:'ctx',  key:'tools',        multi:true  },
+  'core-pre_feeling':    { level:'core', key:'pre_feeling',  multi:false },
+  'core-where_pick':     { level:'core', key:'where',        multi:true  },
+  'core-what_pick':      { level:'core', key:'what',         multi:true  },
+  'core-what_bite':      { level:'core', key:'what',         multi:true  },
+  'core-duration':       { level:'core', key:'duration',     multi:false },
+  'core-ritual':         { level:'core', key:'ritual',       multi:false },
+  'ctx-pre_action_pick': { level:'ctx',  key:'pre_action',   multi:false },
+  'ctx-pre_action_bite': { level:'ctx',  key:'pre_action',   multi:false },
+  'ctx-trigger':         { level:'ctx',  key:'trigger',      multi:false },
+  'ctx-environment':     { level:'ctx',  key:'environment',  multi:false },
+  'ctx-activity':        { level:'ctx',  key:'activity',     multi:false },
+  'ctx-escalation':      { level:'ctx',  key:'escalation',   multi:false },
+  'ctx-post_feeling':    { level:'ctx',  key:'post_feeling', multi:false },
+  'ctx-tools':           { level:'ctx',  key:'tools',        multi:true  },
 };
 
 window.otherSingle = function(level, key, tagEl) {
-  // Deselect existing tags in the same group
   tagEl.parentElement.querySelectorAll('.tag:not(.tag-other)').forEach(t => t.classList.remove('on'));
   showOtherInput(level, key);
 };
-
-window.otherMulti = function(level, key, tagEl) {
-  showOtherInput(level, key);
-};
+window.otherMulti = function(level, key, tagEl) { showOtherInput(level, key); };
 
 function showOtherInput(level, key) {
   const wrap = document.getElementById(`other-${level}-${key}`);
@@ -1266,12 +1207,10 @@ function showOtherInput(level, key) {
 }
 
 window.cancelOther = function(level, key) {
-  // Small delay so the Add button click fires before blur hides it
   setTimeout(() => {
     const wrap = document.getElementById(`other-${level}-${key}`);
     if (wrap) {
       const input = wrap.querySelector('.other-input');
-      // Only hide if input is empty (user tabbed away without typing)
       if (input && !input.value.trim()) wrap.classList.remove('on');
     }
   }, 300);
@@ -1281,7 +1220,6 @@ window.confirmOther = function(level, key, isMulti, inputEl) {
   const val = (inputEl?.value || '').trim();
   if (!val) return;
 
-  // Save the custom value to state
   if (isMulti) {
     const arr = state[level][key] || [];
     if (!arr.includes(val)) { arr.push(val); state[level][key] = arr; }
@@ -1289,13 +1227,10 @@ window.confirmOther = function(level, key, isMulti, inputEl) {
     state[level][key] = val;
   }
 
-  // Persist to localStorage so repeat entries are remembered
   persistOtherValue(level, key, val);
 
-  // Show a confirmed tag inline
   const wrap = document.getElementById(`other-${level}-${key}`);
   if (wrap) {
-    // Insert a live tag before the wrap
     const tag = document.createElement('div');
     tag.className = 'tag on';
     tag.textContent = val;
@@ -1307,8 +1242,7 @@ window.confirmOther = function(level, key, isMulti, inputEl) {
       tag.onclick = function() { toggleMultiTag(level, key, this); };
     } else {
       tag.onclick = function() {
-        this.closest('.grid-auto, .grid-2, .grid-3')
-          ?.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+        this.closest('[role="group"]')?.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
         this.classList.add('on');
         state[level][key] = val;
       };
@@ -1317,13 +1251,8 @@ window.confirmOther = function(level, key, isMulti, inputEl) {
     wrap.classList.remove('on');
     inputEl.value = '';
   }
-
   updateSaveBtn();
 };
-
-// ── PERSIST & LOAD CUSTOM "OTHER" VALUES ──────────────────────────────────
-// Stores all custom values keyed by field, so they persist across sessions
-// and can be scanned by the AI suggestion tool.
 
 function persistOtherValue(level, key, val) {
   const storeKey = 'gw-other-values';
@@ -1338,7 +1267,6 @@ function persistOtherValue(level, key, val) {
 window.getOtherValues = function() {
   try { return JSON.parse(localStorage.getItem('gw-other-values') || '{}'); } catch(e) { return {}; }
 };
-
 
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
