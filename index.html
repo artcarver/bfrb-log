@@ -88,11 +88,6 @@
           </div>
         </div>
 
-        <!-- BITING CONTEXT NOTE — shown when biting selected -->
-        <div id="biting-context-note" style="display:none;margin-bottom:20px">
-          <div class="behavior-note">Biting is often automatic — logging it even mid-act or after counts.</div>
-        </div>
-
         <!-- PRE-FEELING (quick + full) -->
         <div class="field" id="pre-feeling-field">
           <label class="field-label" id="pre-feeling-label">How were you feeling before?</label>
@@ -115,8 +110,8 @@
             </div>
         </div>
 
-        <!-- URGE BEFORE — picking only -->
-        <div class="field field--flush" id="urge-before-wrap">
+        <!-- URGE BEFORE — picking: always shown; biting: gated behind tension yes/no -->
+        <div class="field field--flush" id="urge-before-picking-wrap">
           <label class="field-label">Urge level before</label>
           <div class="slider-row">
             <input type="range" min="1" max="10" value="5" id="core-urge"
@@ -126,13 +121,21 @@
           <div class="slider-lbls"><span>1 — barely there</span><span>10 — unmanageable</span></div>
         </div>
 
-        <!-- BITING AWARENESS SHORTCUT — replaces urge slider for biting -->
-        <div class="field" id="biting-awareness-wrap" style="display:none">
-          <label class="field-label">When did you notice?</label>
-          <div class="grid-3">
-            <div class="tag" onclick="selectTag('core','awareness',this)">Before it started</div>
-            <div class="tag" onclick="selectTag('core','awareness',this)">Mid-act</div>
-            <div class="tag" onclick="selectTag('core','awareness',this)">After</div>
+        <!-- BITING — tension/urge gate -->
+        <div class="field field--flush" id="urge-before-biting-wrap" style="display:none">
+          <label class="field-label">Tension or urge beforehand?</label>
+          <div class="urge-toggle-row">
+            <div class="tag" id="biting-urge-yes" onclick="setBitingUrge(true,this)">Yes</div>
+            <div class="tag" id="biting-urge-no"  onclick="setBitingUrge(false,this)">No — just happened</div>
+          </div>
+          <!-- Slider only shown if yes -->
+          <div id="biting-urge-slider" style="display:none;margin-top:16px">
+            <div class="slider-row">
+              <input type="range" min="1" max="10" value="5" id="core-urge-biting"
+                oninput="updateSlider(this,'core-urge-biting-val','urge')">
+              <div class="slider-val" id="core-urge-biting-val">5</div>
+            </div>
+            <div class="slider-lbls"><span>1 — mild tension</span><span>10 — unmanageable</span></div>
           </div>
         </div>
 
@@ -340,23 +343,34 @@
             </div>
 
             <div class="field" id="ritual-field" style="display:none">
-              <label class="field-label">Aftermath / Ritual</label>
-              <div class="grid-2">
-                <div class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</div>
-                <div class="tag" onclick="selectTag('core','ritual',this)">Examined it</div>
-                <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
+              <label class="field-label">Aftermath</label>
+              <!-- Picking aftermath -->
+              <div id="ritual-tags-picking" style="display:none">
+                <div class="grid-2">
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</div>
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Examined it</div>
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
+                  <div class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</div>
+                </div>
+                <div class="other-input-wrap" id="other-core-ritual">
+                  <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                    onkeydown="if(event.key==='Enter')confirmOther('core','ritual',false,this)"
+                    onblur="cancelOther('core','ritual')">
+                  <button class="other-confirm" onclick="confirmOther('core','ritual',false,this.previousElementSibling)">Add</button>
+                </div>
+              </div>
+              <!-- Biting aftermath -->
+              <div id="ritual-tags-biting" style="display:none">
+                <div class="grid-2">
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Swallowed / Ate it</div>
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Spat out</div>
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Kept going</div>
+                  <div class="tag" onclick="selectTag('core','ritual',this)">Examined nails after</div>
+                </div>
+              </div>
+            </div>
 
-              <div class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-core-ritual">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('core','ritual',false,this)"
-                onblur="cancelOther('core','ritual')">
-              <button class="other-confirm" onclick="confirmOther('core','ritual',false,this.previousElementSibling)">Add</button>
-            </div>
-            </div>
-
-            <div class="field" id="awareness-detail-field">
+            <div class="field">
               <label class="field-label">Awareness</label>
               <div class="grid-3">
                 <div class="tag" onclick="selectTag('core','awareness',this)">Automatic</div>
@@ -839,32 +853,33 @@ window.selectBehavior = (val, el) => {
     state.core.mirror = null; state.core.skin_impact = null; state.ctx.aftercare = null;
   }
 
-  // ── Biting vs picking workflow separation ────────────────────
+  // ── Picking vs biting: urge gate + pre-feeling label ─────────
   const isBiting = val === 'biting';
-  const bitingNote = document.getElementById('biting-context-note');
-  if (bitingNote) bitingNote.style.display = isBiting ? 'block' : 'none';
 
   // Pre-feeling label
   const preFeelingLabel = document.getElementById('pre-feeling-label');
   if (preFeelingLabel) preFeelingLabel.textContent = isBiting
-    ? 'State before (if aware)'
+    ? 'State / mood before (if noticed)'
     : 'How were you feeling before?';
 
-  // Urge before — picking only; biting gets awareness shortcut instead
-  const urgeBeforeWrap = document.getElementById('urge-before-wrap');
-  const bitingAwarenessWrap = document.getElementById('biting-awareness-wrap');
-  if (urgeBeforeWrap) urgeBeforeWrap.style.display = isBiting ? 'none' : '';
-  if (bitingAwarenessWrap) bitingAwarenessWrap.style.display = isBiting ? 'block' : 'none';
+  // Urge before: picking always shows slider; biting shows yes/no gate
+  const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
+  const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
+  if (pickingUrgeWrap) pickingUrgeWrap.style.display = isBiting ? 'none' : '';
+  if (bitingUrgeWrap)  bitingUrgeWrap.style.display  = isBiting ? '' : 'none';
 
-  // Reset biting awareness tags when switching
-  if (bitingAwarenessWrap) bitingAwarenessWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  // Clear picking urge state if switching to biting
+  // Reset biting urge gate
+  if (bitingUrgeWrap) {
+    bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+    const bSlider = document.getElementById('biting-urge-slider');
+    if (bSlider) bSlider.style.display = 'none';
+  }
   if (isBiting) { state.core.urge = null; }
-  else { state.core.urge = 5; const s = document.getElementById('core-urge'); if (s) { s.value = 5; updateSlider(s,'core-urge-val','urge'); } }
-
-  // Hide the detail-level awareness field for biting (shortcut handles it above)
-  const awarenessDetailField = document.getElementById('awareness-detail-field');
-  if (awarenessDetailField) awarenessDetailField.style.display = isBiting ? 'none' : '';
+  else {
+    state.core.urge = 5;
+    const s = document.getElementById('core-urge');
+    if (s) { s.value = 5; updateSlider(s, 'core-urge-val', 'urge'); }
+  }
 
   // In full mode show context card
   if (currentMode === 'full') {
@@ -908,8 +923,19 @@ window.selectOutcome = (val, el) => {
   // Where / what / awareness / duration
   document.getElementById('core-details').classList.toggle('hidden', !showDetails);
 
-  // Ritual: episode only
-  document.getElementById('ritual-field').style.display = isEpisode ? 'block' : 'none';
+  // Ritual: episode only — show behavior-appropriate options
+  if (isEpisode) {
+    document.getElementById('ritual-field').style.display = 'block';
+    const pickRitual = document.getElementById('ritual-tags-picking');
+    const biteRitual = document.getElementById('ritual-tags-biting');
+    const isBiting = state.core.bfrb === 'biting';
+    if (pickRitual) pickRitual.style.display = isBiting ? 'none' : '';
+    if (biteRitual) biteRitual.style.display = isBiting ? '' : 'none';
+    state.core.ritual = null;
+    document.querySelectorAll('#ritual-field .tag').forEach(t => t.classList.remove('on'));
+  } else {
+    document.getElementById('ritual-field').style.display = 'none';
+  }
 
   // Skin impact: episode + picking
   document.getElementById('skin-impact-field').style.display =
@@ -986,10 +1012,27 @@ window.updateSlider = (el, valId, key) => {
 
 function initSliders() {
   const s  = document.getElementById('core-urge');
+  const sb = document.getElementById('core-urge-biting');
   const sa = document.getElementById('core-urge-after');
-  if (s)  updateSlider(s,  'core-urge-val',      'urge');
-  if (sa) updateSlider(sa, 'core-urge-after-val', 'urge_after');
+  if (s)  updateSlider(s,  'core-urge-val',        'urge');
+  if (sb) updateSlider(sb, 'core-urge-biting-val',  'urge');
+  if (sa) updateSlider(sa, 'core-urge-after-val',   'urge_after');
 }
+
+// Biting urge gate — yes shows slider and sets urge, no sets urge to null
+window.setBitingUrge = function(hadUrge, el) {
+  el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  const sliderWrap = document.getElementById('biting-urge-slider');
+  if (hadUrge) {
+    sliderWrap.style.display = 'block';
+    const s = document.getElementById('core-urge-biting');
+    if (s) { s.value = 5; updateSlider(s, 'core-urge-biting-val', 'urge'); }
+  } else {
+    sliderWrap.style.display = 'none';
+    state.core.urge = null; // automatic — no urge recorded
+  }
+};
 
 window.toggleIntervention = (didTry, el) => {
   const siblings = el.parentElement.querySelectorAll('.tag');
@@ -1151,15 +1194,19 @@ window.resetForm = () => {
   document.getElementById('urge-after-label').textContent   = 'Urge level after';
   document.getElementById('urge-after-wrap').style.display  = 'none';
 
-  // Reset biting/picking separation elements
-  const bitingNote = document.getElementById('biting-context-note');
-  if (bitingNote) bitingNote.style.display = 'none';
+  // Reset picking/biting separation elements
+  const pickingUrgeWrap = document.getElementById('urge-before-picking-wrap');
+  const bitingUrgeWrap  = document.getElementById('urge-before-biting-wrap');
+  if (pickingUrgeWrap) pickingUrgeWrap.style.display = ''; // show by default (picking is first)
+  if (bitingUrgeWrap)  { bitingUrgeWrap.style.display = 'none'; bitingUrgeWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on')); }
+  const bSlider = document.getElementById('biting-urge-slider');
+  if (bSlider) bSlider.style.display = 'none';
   const preFeelingLabel = document.getElementById('pre-feeling-label');
   if (preFeelingLabel) preFeelingLabel.textContent = 'How were you feeling before?';
-  const urgeBeforeWrap = document.getElementById('urge-before-wrap');
-  if (urgeBeforeWrap) urgeBeforeWrap.style.display = '';
-  const bitingAwarenessWrap = document.getElementById('biting-awareness-wrap');
-  if (bitingAwarenessWrap) { bitingAwarenessWrap.style.display = 'none'; bitingAwarenessWrap.querySelectorAll('.tag').forEach(t => t.classList.remove('on')); }
+  const pickRitual = document.getElementById('ritual-tags-picking');
+  const biteRitual = document.getElementById('ritual-tags-biting');
+  if (pickRitual) pickRitual.style.display = 'none';
+  if (biteRitual) biteRitual.style.display = 'none';
 
   const s  = document.getElementById('core-urge');
   const sa = document.getElementById('core-urge-after');

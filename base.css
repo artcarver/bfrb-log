@@ -462,6 +462,12 @@ textarea{resize:vertical;min-height:80px}
 .mode-btn{background:none;border:none;border-radius:var(--pill);padding:6px 18px;font-size:var(--fs-sm);font-weight:600;color:var(--mu);cursor:pointer;transition:var(--tr);font-family:'Nunito Sans',sans-serif;touch-action:manipulation}
 .mode-btn.on{background:var(--ac);color:#fff}
 
+/* Behavior context note */
+.behavior-note{font-size:var(--fs-sm);color:var(--mu);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;line-height:var(--lh-body)}
+
+/* Urge-toggle for biting (yes/no before showing slider) */
+.urge-toggle-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0}
+
 /* Behavior context note (biting callout) */
 .behavior-note{font-size:var(--fs-sm);color:var(--mu);background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rsm);padding:10px 14px;line-height:var(--lh-body)}
 

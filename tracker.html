@@ -39,6 +39,11 @@
   <div class="header-row">
     <div class="page-title">Patterns</div>
     <div class="controls">
+      <select class="select-btn" id="behavior-filter" onchange="applyBehaviorFilter()">
+        <option value="all" selected>All behaviors</option>
+        <option value="picking">Picking only</option>
+        <option value="biting">Biting only</option>
+      </select>
       <select class="select-btn" id="time-filter" onchange="loadData()">
         <option value="7">Last 7 days</option>
         <option value="30" selected>Last 30 days</option>
@@ -368,11 +373,7 @@ window.loadData = async () => {
     // Load daily state data for correlation (non-blocking)
     loadDailyStateCorrelation(entries).catch(() => {});
 
-    processData(entries);
-    feedFilter = 'all';
-    feedPage = 0;
-    document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'all'));
-    renderFeed();
+    applyBehaviorFilter();
   } catch(e) {
     console.error(e);
     const loadEl = document.getElementById('loading');
@@ -382,6 +383,30 @@ window.loadData = async () => {
       loadEl.textContent = 'Error loading data — check your connection and reload.';
     }
   }
+};
+
+window.applyBehaviorFilter = function() {
+  if (!window._allEntries) return;
+  const bFilter = document.getElementById('behavior-filter')?.value || 'all';
+  const filtered = bFilter === 'all'
+    ? window._allEntries
+    : window._allEntries.filter(e => e.bfrb_type === bFilter);
+
+  if (filtered.length === 0 && window._allEntries.length > 0) {
+    // Has entries but none for this behavior — show a soft message
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('empty-state').style.display = 'block';
+    const emptyTitle = document.querySelector('.empty-title');
+    if (emptyTitle) emptyTitle.textContent = 'No ' + bFilter + ' entries in this period';
+    return;
+  }
+
+  processData(filtered);
+  feedFilter = 'all';
+  feedPage = 0;
+  document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'all'));
+  renderFeed(filtered);
 };
 
 function processData(entries) {
@@ -934,12 +959,15 @@ window.setFeedFilter = (filter, el) => {
 };
 
 function getFeedEntries() {
-  if (feedFilter === 'all') return window._allEntries;
-  if (feedFilter === 'discussed') return window._allEntries.filter(e => e.discussed_in_session);
-  return window._allEntries.filter(e => e.entry_type === feedFilter);
+  const base = window._filteredEntries || window._allEntries || [];
+  if (feedFilter === 'all') return base;
+  if (feedFilter === 'discussed') return base.filter(e => e.discussed_in_session);
+  return base.filter(e => e.entry_type === feedFilter);
 }
 
-function renderFeed() {
+function renderFeed(sourceEntries) {
+  // Allow applyBehaviorFilter to pass a fresh filtered set on initial render
+  if (sourceEntries) window._filteredEntries = sourceEntries;
   const container = document.getElementById('log-feed');
   const all = getFeedEntries();
   const page = all.slice(0, (feedPage + 1) * FEED_PAGE_SIZE);
@@ -956,7 +984,8 @@ function renderFeed() {
     // ── Antecedent context (clinical flow: what led to it)
     if (e.bfrb_type) chips.push(`<span class="chip"><strong>Type</strong>${h(e.bfrb_type)}</span>`);
     if (e.pre_feeling) chips.push(`<span class="chip"><strong>Before</strong>${h(e.pre_feeling)}</span>`);
-    if (e.urge_before) chips.push(`<span class="chip"><strong>Urge</strong>${h(String(e.urge_before))}/10${e.urge_after ? ' → ' + h(String(e.urge_after)) : ''}</span>`);
+    if (e.urge_before != null) chips.push(`<span class="chip"><strong>Urge</strong>${h(String(e.urge_before))}/10${e.urge_after != null ? ' → ' + h(String(e.urge_after)) : ''}</span>`);
+    else if (e.bfrb_type === 'biting' && e.urge_after != null) chips.push(`<span class="chip"><strong>After</strong>${h(String(e.urge_after))}/10</span>`);
     if (e.emotional_triggers || e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${h(e.emotional_triggers || e.primary_trigger)}</span>`);
     if (e.pre_action) chips.push(`<span class="chip"><strong>Pre-action</strong>${h(e.pre_action)}</span>`);
     // ── Episode detail (what happened)
@@ -1031,7 +1060,7 @@ window.confirmDelete = async (id) => {
     await deleteDoc(doc(db, 'users', window._uid, 'entries', id));
     window._allEntries = window._allEntries.filter(e => e.id !== id);
     window._currentEntries = window._allEntries;
-    if (window._allEntries.length > 0) { processData(window._allEntries); renderFeed(); }
+    if (window._allEntries.length > 0) { applyBehaviorFilter(); }
     else { document.getElementById('dashboard').style.display = 'none'; document.getElementById('empty-state').style.display = 'block'; }
   } catch(e) { showToast('Failed to delete', true); renderFeed(); }
 };
@@ -1076,7 +1105,7 @@ window.saveEdit = async () => {
     await updateDoc(doc(db, 'users', window._uid, 'entries', editingId), updates);
     const idx = window._allEntries.findIndex(e => e.id === editingId);
     if (idx > -1) window._allEntries[idx] = { ...window._allEntries[idx], ...updates };
-    processData(window._allEntries); renderFeed(); closeEdit();
+    applyBehaviorFilter(); renderFeed(); closeEdit();
   } catch(e) { showToast('Failed to save', true); }
   btn.disabled = false; btn.textContent = 'Save';
 };
@@ -1256,7 +1285,7 @@ new MutationObserver(() => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const m = document.getElementById('theme-color-meta');
   if (m) m.setAttribute('content', isDark ? '#181C20' : '#F2EEE8');
-  if (window._allEntries?.length) { processData(window._allEntries); renderFeed(); }
+  if (window._allEntries?.length) { applyBehaviorFilter(); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 </script>
