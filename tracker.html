@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#F2EEE8" id="theme-color-meta">
+<meta name="theme-color" content="#f3eae6" id="theme-color-meta">
 <title>Groundwork — Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
 <script>
 (function(){
   const stored=localStorage.getItem('gw-theme');
-  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#181C20');}
+  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#1e2424');}
 })();
 </script>
 </head>
@@ -56,6 +56,7 @@
           <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
           <button class="overflow-menu-btn" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
           <button class="overflow-menu-btn overflow-menu-btn--border" onclick="exportCSV();toggleOverflow()">Export CSV</button>
+          <button class="overflow-menu-btn overflow-menu-btn--border" onclick="confirmClearAll();toggleOverflow()" style="color:var(--error)">Clear all entries</button>
         </div>
       </div>
     </div>
@@ -78,10 +79,10 @@
         <div class="stat-lbl">Avg urge before</div>
         <div class="stat-sub" id="stat-urge-after"></div>
       </div>
-      <div class="stat-card" id="stat-streak-card">
-        <div class="stat-val" id="stat-streak">—</div>
-        <div class="stat-lbl">Resistance streak</div>
-        <div class="stat-sub" id="stat-streak-sub">days in a row</div>
+      <div class="stat-card" id="stat-managed-card">
+        <div class="stat-val" id="stat-managed">—</div>
+        <div class="stat-lbl">Managed</div>
+        <div class="stat-sub" id="stat-managed-sub">of all entries</div>
       </div>
       <div class="stat-card" id="stat-tool-card">
         <div class="stat-val" id="stat-top-tool">—</div>
@@ -148,13 +149,17 @@
         <div class="bar-rows" id="bar-triggers"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-label">Pre-feeling (antecedent state)</div>
+        <div class="chart-label">State before (antecedent)</div>
         <div class="bar-rows" id="bar-prefeeling"></div>
       </div>
     </div>
-    <div class="chart-solo">
+    <div class="chart-duo">
       <div class="chart-card">
-        <div class="chart-label">Mood — before vs. after episodes</div>
+        <div class="chart-label">Awareness — how it was noticed</div>
+        <div class="bar-rows" id="bar-awareness"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Urge arc — before vs. after</div>
         <div id="mood-delta-container"></div>
       </div>
     </div>
@@ -182,11 +187,11 @@
     </div>
     <div class="chart-duo">
       <div class="chart-card">
-        <div class="chart-label">Outcome rate (% resist / near-miss)</div>
+        <div class="chart-label">Managed outcome rate per tool</div>
         <div class="bar-rows" id="bar-tools"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-label">User-rated effectiveness (avg 1–5)</div>
+        <div class="chart-label">Self-rated effectiveness (avg 1–5)</div>
         <div class="bar-rows" id="bar-tools-rated"></div>
       </div>
     </div>
@@ -212,12 +217,12 @@
       <div class="section-title">Log history</div>
     </div>
     <div class="feed-header">
-      <div class="feed-tabs" id="feed-tabs">
+      <div class="feed-tabs" id="feed-tabs" style="position:relative">
         <button class="feed-tab active" data-filter="all" onclick="setFeedFilter('all',this)">All</button>
-        <button class="feed-tab" data-filter="did" onclick="setFeedFilter('did',this)">Episodes</button>
-        <button class="feed-tab" data-filter="caught" onclick="setFeedFilter('caught',this)">Caught</button>
         <button class="feed-tab" data-filter="resisted" onclick="setFeedFilter('resisted',this)">Resisted</button>
+        <button class="feed-tab" data-filter="caught" onclick="setFeedFilter('caught',this)">Caught</button>
         <button class="feed-tab" data-filter="near_miss" onclick="setFeedFilter('near_miss',this)">Near miss</button>
+        <button class="feed-tab" data-filter="did" onclick="setFeedFilter('did',this)">Episodes</button>
         <button class="feed-tab" data-filter="discussed" onclick="setFeedFilter('discussed',this)">Discussed</button>
       </div>
     </div>
@@ -407,6 +412,8 @@ window.applyBehaviorFilter = function() {
   feedPage = 0;
   document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'all'));
   renderFeed(filtered);
+  // Re-run correlation with filtered data so it respects behavior filter
+  loadDailyStateCorrelation(filtered).catch(() => {});
 };
 
 function processData(entries) {
@@ -415,7 +422,7 @@ function processData(entries) {
   let times = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
   let hourMap = {};
   let dowMap = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 }; // Sun–Sat episodes
-  let emotional = {}, preFeelings = {}, areas = {}, targets = {}, tools = {}, activities = {}, escalations = {};
+  let emotional = {}, preFeelings = {}, awarenessMap = {}, areas = {}, targets = {}, tools = {}, activities = {}, escalations = {};
   let totalUrge = 0, urgeCount = 0, totalMoodBefore = 0, totalMoodAfter = 0, moodCount = 0;
   let urgeAfterTotal = 0, urgeAfterCount = 0;
   // Weekly bins: key = YYYY-WW
@@ -476,6 +483,10 @@ function processData(entries) {
     if (e.pre_feeling && e.pre_feeling.toLowerCase() !== 'nan') {
       preFeelings[e.pre_feeling] = (preFeelings[e.pre_feeling] || 0) + 1;
     }
+    // Awareness distribution
+    if (e.awareness && e.awareness.toLowerCase() !== 'nan') {
+      awarenessMap[e.awareness] = (awarenessMap[e.awareness] || 0) + 1;
+    }
 
     parseTags(e.body_areas).forEach(a => {
       if (a) areas[a] = (areas[a] || 0) + 1;
@@ -503,27 +514,21 @@ function processData(entries) {
   const total = entries.length;
   const managed = outcomes.resisted + outcomes.near_miss + outcomes.caught;
 
-  // ── Resistance streak: consecutive calendar days with ≥1 resisted entry ──
-  const resistDays = new Set(
-    entries
-      .filter(e => e.entry_type === 'resisted')
-      .map(e => { const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at); return d.toISOString().slice(0,10); })
-  );
-  let resistStreak = 0;
-  const today = new Date(); today.setHours(0,0,0,0);
-  for (let i = 0; ; i++) {
-    const d = new Date(today); d.setDate(d.getDate() - i);
-    if (resistDays.has(d.toISOString().slice(0,10))) resistStreak++;
-    else break;
+  // ── Managed % as primary progress metric ──
+  const managedPct = total > 0 ? Math.round((managed / total) * 100) : 0;
+  const managedEl = document.getElementById('stat-managed');
+  const managedSubEl = document.getElementById('stat-managed-sub');
+  if (managedEl) managedEl.textContent = total ? `${managedPct}%` : '—';
+  if (managedSubEl) managedSubEl.textContent = `${managed} of ${total} entries`;
+  // Color the managed card contextually
+  const managedCard = document.getElementById('stat-managed-card');
+  if (managedCard) {
+    managedCard.className = 'stat-card' + (managedPct >= 60 ? ' sage' : managedPct >= 30 ? '' : ' warm');
   }
-  document.getElementById('stat-streak').textContent = resistStreak || '—';
-  document.getElementById('stat-streak-sub').textContent = resistStreak === 1 ? 'day in a row' : 'days in a row';
-  const streakCard = document.getElementById('stat-streak-card');
-  if (streakCard) streakCard.className = 'stat-card';
 
   // Stats
   document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-entries-sub').textContent = `${Math.round((managed / total) * 100)}% managed`;
+  document.getElementById('stat-entries-sub').textContent = `${outcomes.did} episodes`;
   document.getElementById('stat-urge').textContent = urgeCount ? (totalUrge / urgeCount).toFixed(1) : '—';
   document.getElementById('stat-urge-after').textContent = urgeAfterCount ? `↓ ${(urgeAfterTotal / urgeAfterCount).toFixed(1)} after` : '';
 
@@ -554,6 +559,7 @@ function processData(entries) {
   renderHeatmap(hourMap);
   renderBarRows('bar-triggers', emotional, c.warm, 6);
   renderBarRows('bar-prefeeling', preFeelings, c.ac, 8);
+  renderBarRows('bar-awareness', awarenessMap, c.mu, 5);
   renderMoodDelta(totalMoodBefore, totalMoodAfter, moodCount, urgeCount, totalUrge, urgeAfterCount, urgeAfterTotal);
   renderAreaMap(areas, c);
   renderBarRows('bar-targets', targets, c.mu, 6);
@@ -971,7 +977,7 @@ function renderFeed(sourceEntries) {
   const container = document.getElementById('log-feed');
   const all = getFeedEntries();
   const page = all.slice(0, (feedPage + 1) * FEED_PAGE_SIZE);
-  const labels = { resisted: 'Resisted', near_miss: 'Near miss', caught: 'Caught mid-act', did: 'Episode' };
+  const labels = { resisted: 'Resisted', near_miss: 'Near miss', caught: 'Caught mid-act', did: 'Full episode' };
 
   container.innerHTML = page.map(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
@@ -1151,26 +1157,59 @@ window.handleImport = async (event) => {
         if (row.length < 4) continue;
         const createdAt = (row[0] && row[1]) ? new Date(`${row[0]} ${row[1]}`) : new Date();
         const ref = doc(collection(db, 'users', window._uid, 'entries'));
+        // Normalize field values to match current form options
+        const normAwareness = {
+          'Focused': 'Urge first', 'focused': 'Urge first',
+          'conscious': 'Mid-action', 'Conscious': 'Mid-action',
+          'Automatic': 'Already done', 'automatic': 'Already done',
+          'Mid-action': 'Caught mid-act',
+          'Urge first': 'Urge came first',
+        };
+        const normPreFeel = {
+          'Anxious / tense': 'Anxious / stressed',
+          'Restless / flat': 'Restless / bored',
+        };
+        const normTrigger = {
+          'Sensory': 'Sensory (felt something)',
+          'Visual': 'Visual (saw something)',
+        };
+        const normPostFeel = {
+          'Neutral': 'Neutral / flat',
+          'Frustrated': 'Frustrated with myself',
+          'Relief / Zoned Out': 'Relieved / calm',
+          'Relief / Zoned out': 'Relieved / calm',
+        };
+        const normActivity = {
+          'Watching a recorded lecture': 'Studying / Lecture',
+          'In Conversation': 'In conversation',
+          'On Phone': 'On phone',
+        };
+        const rawAwareness = row[9]||'';
+        const rawPreFeel   = row[6]||'';
+        const rawTrigger   = row[15]||'';
+        const rawPostFeel  = row[19]||'';
+        const rawActivity  = row[17]||'';
+
         batch.set(ref, {
           created_at: createdAt,
           bfrb_type: row[2]||'picking',
           entry_type: row[3]||'did',
-          urge_before: parseInt(row[4])||5,
+          urge_before: row[4] ? parseInt(row[4]) : null,
           urge_after: row[5] ? parseInt(row[5]) : null,
-          pre_feeling: row[6]||'',
+          pre_feeling: normPreFeel[rawPreFeel] || rawPreFeel,
           body_areas: row[7]||'',
           target: row[8]||'',
-          awareness: row[9]||'',
+          awareness: normAwareness[rawAwareness] || rawAwareness,
           duration: row[10]||'',
           post_ritual: row[11]||'',
           mirror: row[12]||'',
           skin_impact: row[13]||'',
           pre_action: row[14]||'',
-          primary_trigger: row[15]||'',
+          primary_trigger: normTrigger[rawTrigger] || rawTrigger,
           environment: row[16]||'',
-          activity: row[17]||'',
+          activity: normActivity[rawActivity] || rawActivity,
           escalation: row[18]||'',
-          post_feeling: row[19]||'',
+          post_feeling: normPostFeel[rawPostFeel] || rawPostFeel,
           aftercare: row[20]||'',
           interventions: (row[21]&&row[21].toLowerCase()!=='nan')?row[21]:'',
           tried_intervention: !!(row[21]&&row[21].toLowerCase()!=='nan'),
@@ -1191,6 +1230,38 @@ window.handleImport = async (event) => {
     event.target.value = '';
   };
   reader.readAsText(file);
+};
+
+window.confirmClearAll = () => {
+  const count = (window._allEntries || []).length;
+  if (count === 0) { showToast('No entries to clear'); return; }
+  document.getElementById('clear-count').textContent = count;
+  document.getElementById('clear-modal').classList.add('on');
+};
+
+window.executeDeleteAll = async () => {
+  const btn = document.getElementById('clear-confirm-btn');
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  const entries = window._allEntries || [];
+  try {
+    // Delete in batches of 450
+    let batch = writeBatch(db); let ops = 0;
+    for (const e of entries) {
+      batch.delete(doc(db, 'users', window._uid, 'entries', e.id));
+      ops++;
+      if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
+    }
+    if (ops > 0) await batch.commit();
+    window._allEntries = []; window._currentEntries = []; window._filteredEntries = [];
+    document.getElementById('clear-modal').classList.remove('on');
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('empty-state').style.display = 'block';
+    showToast(`Cleared ${entries.length} entries`);
+  } catch(err) {
+    console.error(err);
+    showToast('Delete failed — try again', true);
+  }
+  btn.disabled = false; btn.textContent = 'Delete all';
 };
 
 window.exportCSV = () => {
@@ -1284,7 +1355,7 @@ async function loadDailyStateCorrelation(entries) {
 new MutationObserver(() => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const m = document.getElementById('theme-color-meta');
-  if (m) m.setAttribute('content', isDark ? '#181C20' : '#F2EEE8');
+  if (m) m.setAttribute('content', isDark ? '#1e2424' : '#f3eae6');
   if (window._allEntries?.length) { applyBehaviorFilter(); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
