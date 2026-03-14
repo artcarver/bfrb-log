@@ -61,7 +61,7 @@
           <div class="tag"    onclick="selectTiming('earlier', this)">Earlier</div>
         </div>
         <div id="core-time-wrap" class="hidden time-wrap">
-          <input type="datetime-local" id="core-time">
+          <input type="datetime-local" id="core-time" aria-label="Date and time of event">
         </div>
       </div>
 
@@ -130,6 +130,59 @@
             <div class="slider-val" id="core-urge-after-val">3</div>
           </div>
           <div class="slider-lbls"><span>1 — gone</span><span>10 — still high</span></div>
+        </div>
+
+        <!-- INTERVENTION (quick + full) — shown after outcome selected -->
+        <div class="field" id="intervention-quick-wrap" style="display:none">
+          <label class="field-label">Intervention attempted?</label>
+          <div class="grid-2">
+            <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
+            <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
+          </div>
+        </div>
+
+        <div id="intervention-block" class="hidden">
+          <div class="field">
+            <label class="field-label">Which tool?</label>
+            <div class="grid-auto" id="tools-grid">
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental Block</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
+              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Put on gloves</div>
+
+              <div class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</div>
+            </div>
+            <div class="other-input-wrap" id="other-ctx-tools">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOther('ctx','tools',true,this)"
+                onblur="cancelOther('ctx','tools')">
+              <button class="other-confirm" onclick="confirmOther('ctx','tools',true,this.previousElementSibling)">Add</button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">How effective was it?</label>
+            <div class="grid-5">
+              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Not helpful">1</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Slightly helpful">2</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Somewhat helpful">3</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Helpful">4</div>
+              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Very helpful">5</div>
+            </div>
+            <div class="slider-lbls"><span>1 — not helpful</span><span>5 — very helpful</span></div>
+          </div>
+        </div>
+
+        <!-- NOTES (quick + full) -->
+        <div class="field field--flush">
+          <label class="field-label">Notes &amp; reflection <span class="field-label__opt">(optional)</span></label>
+          <textarea id="narrative-notes" placeholder="What were you feeling? What was the situation? Any details worth noting…" rows="3"></textarea>
         </div>
 
         <!-- ── FULL MODE SECTIONS ───────────────────────────── -->
@@ -439,6 +492,7 @@
             <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
             <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
             <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
+            <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
 
               <div class="tag tag-other" onclick="otherSingle('ctx','escalation',this)">Other…</div>
             </div>
@@ -478,59 +532,6 @@
           </div>
         </div>
 
-        <!-- Intervention: Yes/No first, then details -->
-        <div class="field">
-          <label class="field-label">Intervention attempted?</label>
-          <div class="grid-2">
-            <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
-            <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
-          </div>
-        </div>
-
-        <div id="intervention-block" class="hidden">
-          <div class="field">
-            <label class="field-label">Which tool?</label>
-            <div class="grid-auto" id="tools-grid">
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental Block</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Covered skin</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
-              <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Put on gloves</div>
-
-              <div class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</div>
-            </div>
-            <div class="other-input-wrap" id="other-ctx-tools">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOther('ctx','tools',true,this)"
-                onblur="cancelOther('ctx','tools')">
-              <button class="other-confirm" onclick="confirmOther('ctx','tools',true,this.previousElementSibling)">Add</button>
-            </div>
-          </div>
-          <div class="field">
-            <label class="field-label">How effective was it?</label>
-            <div class="grid-5">
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Not helpful">1</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Slightly helpful">2</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Somewhat helpful">3</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Helpful">4</div>
-              <div class="tag" onclick="selectTag('ctx','eff',this)" title="Very helpful">5</div>
-            </div>
-            <div class="slider-lbls"><span>1 — not helpful</span><span>5 — very helpful</span></div>
-          </div>
-        </div>
-
-        <div class="field field--flush">
-          <label class="field-label">Notes &amp; reflection <span class="field-label__opt">(optional)</span></label>
-          <textarea id="narrative-notes" placeholder="What were you feeling? What was the situation? Any details worth noting…" rows="4"></textarea>
-          <input type="hidden" id="ctx-notes" value="">
-        </div>
-
       </div><!-- /ctx-gated -->
 
     </div><!-- /full-ctx-inner card -->
@@ -558,7 +559,7 @@
       <button class="btn-primary success-actions" onclick="resetForm()">Log another</button>
       <div id="success-cta" style="display:none;margin-top:12px">
         <a href="interventions.html" class="success-cta-link">
-          Want to try a tool? Open interventions →
+          Want to try a tool? Open Tools →
         </a>
       </div>
       <div class="success-edit-wrap">
@@ -688,6 +689,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // ════════════════════════════════════════════════════════════
 // ARRIVAL PARAMS — from interventions.html redirect
 // ════════════════════════════════════════════════════════════
+let _pendingArrival = null;
+
 function handleArrivalParams() {
   const params = new URLSearchParams(window.location.search);
   if (params.get('from') !== 'intervention') return;
@@ -695,32 +698,39 @@ function handleArrivalParams() {
   const outcome = params.get('outcome'); // 'held' | 'failed'
   const tool    = params.get('tool');    // 'motor' | 'decouple' | 'surf' | 'unhook' | 'shock' | 'ground'
 
-  // Step 1: pick a behavior (picking as default, reveals gated fields)
-  const pickingTag = document.querySelector('#log-form .grid-2 .tag');
-  if (pickingTag) pickingTag.click();
+  // Store params — they'll be applied after user selects a behavior
+  _pendingArrival = { outcome, tool };
 
-  // Step 2: select outcome
+  // Store surf data immediately
+  const surfPeak = params.get('surf_peak');
+  const surfEnd  = params.get('surf_end');
+  if (surfPeak !== null) state.core.surf_peak = parseInt(surfPeak, 10);
+  if (surfEnd  !== null) state.core.surf_end  = parseInt(surfEnd,  10);
+
+  history.replaceState({}, '', 'index.html');
+}
+
+// Called from selectBehavior after the gated fields are revealed
+function applyPendingArrival() {
+  if (!_pendingArrival) return;
+  const { outcome, tool } = _pendingArrival;
+  _pendingArrival = null;
+
+  // Select outcome
   if (outcome === 'held') {
-    const resistedTag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim() === 'Resisted');
-    if (resistedTag) resistedTag.click();
+    const tag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim() === 'Resisted');
+    if (tag) tag.click();
   } else if (outcome === 'failed') {
-    const episodeTags = document.querySelectorAll('#behavior-gated .grid-3 .tag');
-    const ep = [...episodeTags].find(t => t.textContent.trim() === 'Episode');
-    if (ep) ep.click();
+    const tag = [...document.querySelectorAll('#behavior-gated .grid-3 .tag')].find(t => t.textContent.trim() === 'Episode');
+    if (tag) tag.click();
   }
 
-  // Step 3: if there's a tool param, switch to Full mode and pre-fill
+  // Pre-fill intervention
   if (tool) {
-    setMode('full');
-    // Mark "Yes" to intervention
     const yesTag = document.getElementById('int-yes-tag');
     if (yesTag) {
-      document.querySelectorAll('#log-form .grid-2 .tag').forEach(t => t.classList.remove('on'));
-      yesTag.classList.add('on');
-      state.ctx.tried_tool = true;
-      document.getElementById('intervention-block').classList.remove('hidden');
+      yesTag.click();
     }
-    // Map tool param → tool label in the grid
     const toolMap = {
       motor:    'Competing Response',
       decouple: 'Competing Response',
@@ -736,14 +746,6 @@ function handleArrivalParams() {
       if (toolTag) toolTag.click();
     }
   }
-
-  // Step 4: if surf params present, store for save
-  const surfPeak = params.get('surf_peak');
-  const surfEnd  = params.get('surf_end');
-  if (surfPeak !== null) state.core.surf_peak = parseInt(surfPeak, 10);
-  if (surfEnd  !== null) state.core.surf_end  = parseInt(surfEnd,  10);
-
-  history.replaceState({}, '', 'index.html');
 }
 
 // ════════════════════════════════════════════════════════════
@@ -754,13 +756,27 @@ function updateSaveBtn() {
   const ready = !!(state.core.bfrb && state.core.outcome);
   btn.disabled = !ready;
   btn.classList.toggle('inactive', !ready);
+  if (ready) {
+    const labels = { 'Resisted': 'Log resistance', 'Near Miss': 'Log near miss', 'Caught': 'Log caught', 'Episode': 'Log episode' };
+    btn.textContent = labels[state.core.outcome] || 'Save';
+  } else {
+    btn.textContent = 'Save';
+  }
 }
 
 window.selectTiming = (val, el) => {
   el.parentElement.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
   el.classList.add('on');
   state.core.timing = val;
-  document.getElementById('core-time-wrap').classList.toggle('hidden', val !== 'earlier');
+  const timeWrap = document.getElementById('core-time-wrap');
+  const timeInput = document.getElementById('core-time');
+  timeWrap.classList.toggle('hidden', val !== 'earlier');
+  if (val === 'earlier' && !timeInput.value) {
+    // Default to 30 min ago for convenience
+    const d = new Date(Date.now() - 30 * 60000);
+    const pad = n => String(n).padStart(2, '0');
+    timeInput.value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
 };
 
 window.selectBehavior = (val, el) => {
@@ -823,6 +839,8 @@ window.selectBehavior = (val, el) => {
   updateSaveBtn();
 
   setTimeout(() => {
+    // Apply pending intervention arrival params if coming from Tools page
+    applyPendingArrival();
     const outcomeField = document.querySelector('#behavior-gated .field');
     if (outcomeField) outcomeField.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
@@ -835,6 +853,8 @@ window.selectOutcome = (val, el) => {
   if (navigator.vibrate) navigator.vibrate(10);
 
   document.getElementById('urge-after-wrap').style.display = 'block';
+  // Show intervention question for all outcomes (moved to Quick mode)
+  document.getElementById('intervention-quick-wrap').style.display = 'block';
   const isResisted  = val === 'Resisted';
   const isNearMiss  = val === 'Near Miss';
   const isCaught    = val === 'Caught';
@@ -865,8 +885,8 @@ window.selectOutcome = (val, el) => {
     mirrorField.style.display = showDetails ? 'block' : 'none';
   }
 
-  // Context visibility
-  document.getElementById('post-feeling-field').style.display  = showDetails ? 'block' : 'none';
+  // Context visibility — post-feeling shown for ALL outcomes (including resisted)
+  document.getElementById('post-feeling-field').style.display  = 'block';
   document.getElementById('aftercare-field').style.display     =
     (isEpisode && state.core.bfrb === 'picking') ? 'block' : 'none';
   document.getElementById('escalation-field').style.display    = isEpisode ? 'block' : 'none';
@@ -976,9 +996,9 @@ window.saveAll = async () => {
     urge_before:               state.core.urge,
     urge_after:                state.core.urge_after,
     pre_feeling:               state.core.pre_feeling || '',
-    created_at:                outcomeKey === 'resisted' || !document.getElementById('core-time')?.value
-                                 ? serverTimestamp()
-                                 : new Date(document.getElementById('core-time').value),
+    created_at:                document.getElementById('core-time')?.value
+                                 ? new Date(document.getElementById('core-time').value)
+                                 : serverTimestamp(),
     pre_action:                state.ctx.pre_action  || '',
     primary_trigger:           state.ctx.trigger     || '',
     environment:               state.ctx.environment || '',
@@ -990,7 +1010,6 @@ window.saveAll = async () => {
     interventions:             state.ctx.tools.join(', '),
     intervention_effectiveness: state.ctx.eff ? parseInt(state.ctx.eff) : null,
     narrative_notes:           (document.getElementById('narrative-notes')?.value || '').trim(),
-    notes:                     (document.getElementById('ctx-notes')?.value || '').trim(),
     ...(state.core.surf_peak !== undefined ? { surf_peak: state.core.surf_peak } : {}),
     ...(state.core.surf_end  !== undefined ? { surf_end:  state.core.surf_end  } : {}),
   };
@@ -1014,7 +1033,7 @@ window.saveAll = async () => {
     const msgs = {
       resisted:  { title: 'Logged.',  body: 'That resistance matters. It\'s the clearest signal of progress in your data.' },
       near_miss: { title: 'Logged.',  body: 'Catching it before it completed is exactly what awareness training looks like.' },
-      caught:    { title: 'Logged.',  body: 'Stopping mid-act is hard. Your awareness is working.' },
+      caught:    { title: 'Logged.',  body: 'You caught yourself mid-behavior — that\'s delayed awareness activating. The interception window is getting faster.' },
       did:       { title: 'Logged.',  body: 'This entry is part of the picture. Every data point helps.' }
     };
     const msg = msgs[outcomeKey] || msgs.did;
@@ -1082,6 +1101,7 @@ window.resetForm = () => {
   document.getElementById('escalation-field').style.display = 'none';
   document.getElementById('mirror-field').style.display     = 'none';
   document.getElementById('skin-impact-field').style.display = 'none';
+  document.getElementById('intervention-quick-wrap').style.display = 'none';
   document.getElementById('intervention-block').classList.add('hidden');
   document.getElementById('int-yes-tag').classList.remove('on');
   document.getElementById('int-no-tag').classList.remove('on');
@@ -1092,7 +1112,6 @@ window.resetForm = () => {
   if (pap) pap.style.display = 'none';
   if (pab) pab.style.display = 'none';
   document.getElementById('narrative-notes').value          = '';
-  document.getElementById('ctx-notes').value                = '';
   document.getElementById('urge-after-label').textContent   = 'Urge level after';
   document.getElementById('urge-after-wrap').style.display  = 'none';
 
@@ -1188,6 +1207,9 @@ window.confirmOther = function(level, key, isMulti, inputEl) {
     tag.className = 'tag on';
     tag.textContent = val;
     tag.setAttribute('data-custom', '1');
+    tag.setAttribute('role', 'button');
+    tag.setAttribute('tabindex', '0');
+    tag.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tag.click(); } });
     if (isMulti) {
       tag.onclick = function() { toggleMultiTag(level, key, this); };
     } else {
