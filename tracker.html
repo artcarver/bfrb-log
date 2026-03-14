@@ -1369,10 +1369,10 @@ new MutationObserver(() => {
       { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
     ];
     const mu = cv('--mu');
-    let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:64px repeat(7,1fr);gap:4px;min-width:260px">
+    let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:72px repeat(7,1fr);gap:4px;min-width:280px">
       <div></div>${DOW.map(d => `<div style="font-size:11px;color:${mu};text-align:center;font-weight:600">${d}</div>`).join('')}`;
     rows.forEach(row => {
-      html += `<div style="font-size:11px;color:${mu};display:flex;align-items:center">${row.label}</div>`;
+      html += `<div style="font-size:11px;color:${mu};display:flex;align-items:center;white-space:nowrap">${row.label}</div>`;
       for (let i = 0; i < 7; i++) {
         const v = dayMap[i][row.key] || 0;
         const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
@@ -1393,14 +1393,14 @@ new MutationObserver(() => {
       { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
     ];
     const mu = cv('--mu');
-    let html = `<div style="overflow-x:auto"><div style="min-width:440px">
-      <div style="display:grid;grid-template-columns:64px repeat(24,1fr);gap:2px;margin-bottom:3px">
+    let html = `<div style="overflow-x:auto;margin:0 -4px"><div style="min-width:500px;padding:0 4px">
+      <div style="display:grid;grid-template-columns:72px repeat(24,1fr);gap:2px;margin-bottom:3px">
         <div></div>
-        ${HOUR_LABELS.map((l, i) => `<div style="font-size:11px;color:${mu};text-align:center">${i % 3 === 0 ? l : ''}</div>`).join('')}
+        ${HOUR_LABELS.map((l, i) => `<div style="font-size:10px;color:${mu};text-align:center">${i % 3 === 0 ? l : ''}</div>`).join('')}
       </div>`;
     rows.forEach(row => {
-      html += `<div style="display:grid;grid-template-columns:64px repeat(24,1fr);gap:2px;margin-bottom:3px">
-        <div style="font-size:11px;color:${mu};display:flex;align-items:center;justify-content:flex-end;padding-right:6px">${row.label}</div>`;
+      html += `<div style="display:grid;grid-template-columns:72px repeat(24,1fr);gap:2px;margin-bottom:3px">
+        <div style="font-size:11px;color:${mu};display:flex;align-items:center;justify-content:flex-end;padding-right:6px;white-space:nowrap">${row.label}</div>`;
       for (let h = 0; h < 24; h++) {
         const v = (hourMap[h] || {})[row.key] || 0;
         const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
