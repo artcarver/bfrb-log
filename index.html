@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork — Log</title>
-<meta name="theme-color" id="theme-color-meta" content="#eeebf8">
+<meta name="theme-color" id="theme-color-meta" content="">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
@@ -20,7 +20,7 @@
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     const m = document.getElementById('theme-color-meta');
-    if (m) m.setAttribute('content', '#1c1928');
+    
   }
 })();
 </script>
@@ -55,8 +55,8 @@
       <div class="field">
         <label class="field-label">What happened?</label>
         <div class="grid-2" role="group" aria-label="Behavior type">
-          <div class="tag behavior-tag" onclick="selectBehavior('picking', this)">Picking / Scratching</div>
-          <div class="tag behavior-tag" onclick="selectBehavior('biting',  this)">Nail / Skin Biting</div>
+          <button type="button" class="tag behavior-tag" onclick="selectBehavior('picking', this)">Picking / Scratching</button>
+          <button type="button" class="tag behavior-tag" onclick="selectBehavior('biting',  this)">Nail / Skin Biting</button>
         </div>
       </div>
 
@@ -66,10 +66,10 @@
           <label class="field-label">Outcome</label>
           <p class="field-hint">What ultimately happened — did the behavior complete, or did you interrupt it at some point?</p>
           <div class="grid-2" id="outcome-grid" role="group" aria-label="Outcome">
-            <div class="tag outcome-resisted" onclick="selectOutcome('Resisted',  this)">Resisted</div>
-            <div class="tag outcome-caught"   onclick="selectOutcome('Caught',    this)">Caught mid-act</div>
-            <div class="tag outcome-nearmiss" onclick="selectOutcome('Near Miss', this)">Near miss</div>
-            <div class="tag outcome-episode"  onclick="selectOutcome('Episode',   this)">Full episode</div>
+            <button type="button" class="tag outcome-resisted" onclick="selectOutcome('Resisted',  this)">Resisted</button>
+            <button type="button" class="tag outcome-caught"   onclick="selectOutcome('Caught',    this)">Caught mid-act</button>
+            <button type="button" class="tag outcome-nearmiss" onclick="selectOutcome('Near Miss', this)">Near miss</button>
+            <button type="button" class="tag outcome-episode"  onclick="selectOutcome('Episode',   this)">Full episode</button>
           </div>
         </div>
 
@@ -78,15 +78,15 @@
             <label class="field-label" id="pre-feeling-label">State before</label>
           <p class="field-hint" id="pre-feeling-hint">The emotional state that preceded the behavior.</p>
             <div class="grid-auto" role="group" aria-labelledby="pre-feeling-label">
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Overwhelmed</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Irritable / on edge</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</div>
-              <div class="tag" onclick="selectTag('core','pre_feeling',this)">Zoned out</div>
-              <div class="tag tag-other" onclick="otherSingle('core','pre_feeling',this)">Other…</div>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Anxious / stressed</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Restless / bored</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Fatigued / depleted</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Overwhelmed</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Irritable / on edge</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Low / sad</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Calm / neutral</button>
+              <button type="button" class="tag" onclick="selectTag('core','pre_feeling',this)">Zoned out</button>
+              <button type="button" class="tag tag-other" onclick="otherSingle('core','pre_feeling',this)">Other…</button>
             </div>
             <div class="other-input-wrap" id="other-core-pre_feeling">
               <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -111,8 +111,8 @@
           <div class="field field--flush" id="urge-before-biting-wrap" style="display:none">
             <label class="field-label">Tension or urge beforehand?</label>
             <div class="urge-toggle-row" role="group" aria-label="Urge present before biting">
-              <div class="tag" id="biting-urge-yes" onclick="setBitingUrge(true,this)">Yes</div>
-              <div class="tag" id="biting-urge-no"  onclick="setBitingUrge(false,this)">No — just happened</div>
+              <button type="button" class="tag" id="biting-urge-yes" onclick="setBitingUrge(true,this)">Yes</button>
+              <button type="button" class="tag" id="biting-urge-no"  onclick="setBitingUrge(false,this)">No — just happened</button>
             </div>
             <div id="biting-urge-slider" style="display:none;margin-top:16px">
               <div class="slider-row">
@@ -140,26 +140,26 @@
           <div class="field" id="awareness-field">
             <label class="field-label">How did you notice?</label>
             <div class="grid-3" role="group" aria-label="Awareness type">
-              <div class="tag" onclick="selectTag('core','awareness',this)">
+              <button type="button" class="tag" onclick="selectTag('core','awareness',this)">
                 Urge came first
                 <span class="tag-sub">Felt the pull, then acted</span>
-              </div>
-              <div class="tag" onclick="selectTag('core','awareness',this)">
+              </button>
+              <button type="button" class="tag" onclick="selectTag('core','awareness',this)">
                 Noticed while doing it
                 <span class="tag-sub">Caught yourself mid-behavior</span>
-              </div>
-              <div class="tag" onclick="selectTag('core','awareness',this)">
+              </button>
+              <button type="button" class="tag" onclick="selectTag('core','awareness',this)">
                 Only noticed after
                 <span class="tag-sub">Already done by the time you saw it</span>
-              </div>
+              </button>
             </div>
           </div>
 
           <div class="field" id="intervention-quick-wrap">
             <label class="field-label">Tool used?</label>
             <div class="grid-2" role="group" aria-label="Intervention attempted">
-              <div class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</div>
-              <div class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</div>
+              <button type="button" class="tag" id="int-yes-tag" onclick="toggleIntervention(true,  this)">Yes</button>
+              <button type="button" class="tag" id="int-no-tag"  onclick="toggleIntervention(false, this)">No</button>
             </div>
           </div>
 
@@ -167,18 +167,18 @@
             <div class="field">
               <label class="field-label">Which tool?</label>
               <div class="grid-auto" id="tools-grid" role="group" aria-label="Intervention tools">
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Decoupling Redirect</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Cognitive Defusion</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding / Breathing</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</div>
-                <div class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental block</div>
-                <div class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</div>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Competing Response</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Decoupling Redirect</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Urge Surfing</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Cognitive Defusion</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Grounding / Breathing</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Fidget / Sensory</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Left the room</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Barrier (gloves / bandage)</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Applied lotion / treated skin</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Sat on hands</button>
+                <button type="button" class="tag" onclick="toggleMultiTag('ctx','tools',this)">Environmental block</button>
+                <button type="button" class="tag tag-other" onclick="otherMulti('ctx','tools',this)">Other…</button>
               </div>
               <div class="other-input-wrap" id="other-ctx-tools">
                 <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -190,11 +190,11 @@
             <div class="field">
               <label class="field-label">How effective?</label>
               <div class="grid-5" role="group" aria-label="Effectiveness 1 to 5">
-                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="1 — not helpful">1</div>
-                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="2 — slightly helpful">2</div>
-                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="3 — somewhat helpful">3</div>
-                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="4 — helpful">4</div>
-                <div class="tag" onclick="selectTag('ctx','eff',this)" aria-label="5 — very helpful">5</div>
+                <button type="button" class="tag" onclick="selectTag('ctx','eff',this)" aria-label="1 — not helpful">1</button>
+                <button type="button" class="tag" onclick="selectTag('ctx','eff',this)" aria-label="2 — slightly helpful">2</button>
+                <button type="button" class="tag" onclick="selectTag('ctx','eff',this)" aria-label="3 — somewhat helpful">3</button>
+                <button type="button" class="tag" onclick="selectTag('ctx','eff',this)" aria-label="4 — helpful">4</button>
+                <button type="button" class="tag" onclick="selectTag('ctx','eff',this)" aria-label="5 — very helpful">5</button>
               </div>
             </div>
           </div>
@@ -207,8 +207,8 @@
           <div class="field field--flush" id="timing-field">
             <label class="field-label">When</label>
             <div class="grid-2" role="group" aria-label="Timing">
-              <div class="tag on" onclick="selectTiming('now', this)">Right now</div>
-              <div class="tag"    onclick="selectTiming('earlier', this)">Earlier today</div>
+              <button type="button" class="tag on" onclick="selectTiming('now', this)">Right now</button>
+              <button type="button" class="tag"    onclick="selectTiming('earlier', this)">Earlier today</button>
             </div>
             <div id="core-time-wrap" class="hidden time-wrap">
               <input type="datetime-local" id="core-time" aria-label="Date and time of event">
@@ -224,12 +224,12 @@
                 <label class="field-label">Where on your body?</label>
                 <div id="where-tags-picking" style="display:none">
                   <div class="grid-auto grid-auto--mb" role="group" aria-label="Body area">
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Face</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Back</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Arms</div>
-                    <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</div>
-                    <div class="tag tag-other" onclick="otherMulti('core','where_pick',this)">Other…</div>
+                    <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Face</button>
+                    <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Scalp</button>
+                    <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Back</button>
+                    <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Arms</button>
+                    <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Chest / Shoulders</button>
+                    <button type="button" class="tag tag-other" onclick="otherMulti('core','where_pick',this)">Other…</button>
                   </div>
                   <div class="other-input-wrap" id="other-core-where_pick">
                     <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -238,66 +238,66 @@
                     <button class="other-confirm" onclick="confirmOther('core','where_pick',true,this.previousElementSibling)">Add</button>
                   </div>
                   <div class="area-group">
-                    <div class="tag area-parent" onclick="toggleArea('face',this)">Face — specific area</div>
+                    <button type="button" class="tag area-parent" onclick="toggleArea('face',this)">Face — specific area</button>
                     <div class="area-sub hidden" id="area-face">
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Temples</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Jawline</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Chin</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Nose</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips</div>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Forehead</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Cheeks</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Temples</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Jawline</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Chin</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Nose</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Lips</button>
                     </div>
                   </div>
                   <div class="area-group">
-                    <div class="tag area-parent" onclick="toggleArea('arms',this)">Arms — specific area</div>
+                    <button type="button" class="tag area-parent" onclick="toggleArea('arms',this)">Arms — specific area</button>
                     <div class="area-sub hidden" id="area-arms">
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Hands</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</div>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Upper Arms</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Forearms</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Wrists</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Hands</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Fingers / Cuticles</button>
                     </div>
                   </div>
                   <div class="area-group">
-                    <div class="tag area-parent" onclick="toggleArea('torso',this)">Body — specific area</div>
+                    <button type="button" class="tag area-parent" onclick="toggleArea('torso',this)">Body — specific area</button>
                     <div class="area-sub hidden" id="area-torso">
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Chest</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Legs</div>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Chest</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Shoulders</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Abdomen</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Upper Back</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Lower Back</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Shins / Legs</button>
                     </div>
                   </div>
                   <div class="area-group">
-                    <div class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck</div>
+                    <button type="button" class="tag area-parent" onclick="toggleArea('head',this)">Head &amp; Neck</button>
                     <div class="area-sub hidden" id="area-head">
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Ears</div>
-                      <div class="tag" onclick="toggleMultiTag('core','where',this)">Neck</div>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Hairline</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Behind Ears</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Ears</button>
+                      <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Neck</button>
                     </div>
                   </div>
                 </div>
                 <div class="grid-auto" id="where-tags-biting" style="display:none" role="group" aria-label="Body area">
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</div>
-                  <div class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</div>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Right Hand</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Left Hand</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Both Hands</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','where',this)">Lips / Mouth</button>
                 </div>
               </div>
 
               <div class="field" id="what-field">
                 <label class="field-label">Target type</label>
                 <div class="grid-auto" id="what-tags-picking" style="display:none" role="group" aria-label="Target type">
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Scab</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</div>
-                  <div class="tag tag-other" onclick="otherMulti('core','what_pick',this)">Other…</div>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Texture / Bump</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Scab</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Blemish / Pimple</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Dry Skin</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Blackhead</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Sebaceous Filaments</button>
+                  <button type="button" class="tag tag-other" onclick="otherMulti('core','what_pick',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-core-what_pick">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -306,13 +306,13 @@
                   <button class="other-confirm" onclick="confirmOther('core','what_pick',true,this.previousElementSibling)">Add</button>
                 </div>
                 <div class="grid-auto" id="what-tags-biting" style="display:none" role="group" aria-label="Target type">
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Press-on / Gel edge</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</div>
-                  <div class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</div>
-                  <div class="tag tag-other" onclick="otherMulti('core','what_bite',this)">Other…</div>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Nail Edge</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Cuticle</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Hangnail</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Press-on / Gel edge</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Finger Skin</button>
+                  <button type="button" class="tag" onclick="toggleMultiTag('core','what',this)">Inner Cheek</button>
+                  <button type="button" class="tag tag-other" onclick="otherMulti('core','what_bite',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-core-what_bite">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -325,21 +325,21 @@
               <div class="field" id="mirror-field" style="display:none">
                 <label class="field-label">Mirror or camera involved?</label>
                 <div class="grid-2" role="group" aria-label="Mirror use">
-                  <div class="tag" onclick="selectTag('core','mirror',this)">No mirror</div>
-                  <div class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</div>
-                  <div class="tag" onclick="selectTag('core','mirror',this)">Magnifying mirror</div>
-                  <div class="tag" onclick="selectTag('core','mirror',this)">Phone camera</div>
+                  <button type="button" class="tag" onclick="selectTag('core','mirror',this)">No mirror</button>
+                  <button type="button" class="tag" onclick="selectTag('core','mirror',this)">Regular mirror</button>
+                  <button type="button" class="tag" onclick="selectTag('core','mirror',this)">Magnifying mirror</button>
+                  <button type="button" class="tag" onclick="selectTag('core','mirror',this)">Phone camera</button>
                 </div>
               </div>
 
               <div class="field" id="skin-impact-field" style="display:none">
                 <label class="field-label">Skin impact</label>
                 <div class="grid-2" role="group" aria-label="Skin impact">
-                  <div class="tag" onclick="selectTag('core','skin_impact',this)">None</div>
-                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Minor</div>
-                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</div>
-                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Significant</div>
-                  <div class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</div>
+                  <button type="button" class="tag" onclick="selectTag('core','skin_impact',this)">None</button>
+                  <button type="button" class="tag" onclick="selectTag('core','skin_impact',this)">Minor</button>
+                  <button type="button" class="tag" onclick="selectTag('core','skin_impact',this)">Moderate</button>
+                  <button type="button" class="tag" onclick="selectTag('core','skin_impact',this)">Significant</button>
+                  <button type="button" class="tag" onclick="selectTag('core','skin_impact',this)">Pain / sensitivity</button>
                 </div>
               </div>
 
@@ -347,10 +347,10 @@
                 <label class="field-label">Aftermath</label>
                 <div id="ritual-tags-picking" style="display:none">
                   <div class="grid-2" role="group" aria-label="Aftermath">
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</div>
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Examined it</div>
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Discarded</div>
-                    <div class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</div>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Ingested / Ate it</button>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Examined it</button>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Discarded</button>
+                    <button type="button" class="tag tag-other" onclick="otherSingle('core','ritual',this)">Other…</button>
                   </div>
                   <div class="other-input-wrap" id="other-core-ritual">
                     <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -361,10 +361,10 @@
                 </div>
                 <div id="ritual-tags-biting" style="display:none">
                   <div class="grid-2" role="group" aria-label="Aftermath">
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Swallowed / Ate it</div>
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Spat out</div>
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Kept going</div>
-                    <div class="tag" onclick="selectTag('core','ritual',this)">Examined nails after</div>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Swallowed / Ate it</button>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Spat out</button>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Kept going</button>
+                    <button type="button" class="tag" onclick="selectTag('core','ritual',this)">Examined nails after</button>
                   </div>
                 </div>
               </div>
@@ -372,11 +372,11 @@
               <div class="field">
                 <label class="field-label">Duration</label>
                 <div class="grid-2" role="group" aria-label="Duration">
-                  <div class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</div>
-                  <div class="tag" onclick="selectTag('core','duration',this)">1–10 min</div>
-                  <div class="tag" onclick="selectTag('core','duration',this)">10–30 min</div>
-                  <div class="tag" onclick="selectTag('core','duration',this)">30+ min</div>
-                  <div class="tag tag-other" onclick="otherSingle('core','duration',this)">Other…</div>
+                  <button type="button" class="tag" onclick="selectTag('core','duration',this)">&lt; 1 min</button>
+                  <button type="button" class="tag" onclick="selectTag('core','duration',this)">1–10 min</button>
+                  <button type="button" class="tag" onclick="selectTag('core','duration',this)">10–30 min</button>
+                  <button type="button" class="tag" onclick="selectTag('core','duration',this)">30+ min</button>
+                  <button type="button" class="tag tag-other" onclick="otherSingle('core','duration',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-core-duration">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -395,10 +395,10 @@
                 <label class="field-label" id="pre-action-label">What were you doing just before?</label>
                 <div id="pre-actions-picking" style="display:none">
                   <div class="grid-2" role="group" aria-label="Pre-event activity">
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</div>
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror checking</div>
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / nothing specific</div>
-                    <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_pick',this)">Other…</div>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Scanning / Feeling skin</button>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Mirror checking</button>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / nothing specific</button>
+                    <button type="button" class="tag tag-other" onclick="otherSingle('ctx','pre_action_pick',this)">Other…</button>
                   </div>
                   <div class="other-input-wrap" id="other-ctx-pre_action_pick">
                     <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -409,11 +409,11 @@
                 </div>
                 <div id="pre-actions-biting" style="display:none">
                   <div class="grid-2" role="group" aria-label="Pre-event activity">
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Resting — hand near mouth</div>
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Touching nails / cuticles</div>
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Oral fixation / needed something</div>
-                    <div class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / nothing specific</div>
-                    <div class="tag tag-other" onclick="otherSingle('ctx','pre_action_bite',this)">Other…</div>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Resting — hand near mouth</button>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Touching nails / cuticles</button>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Oral fixation / needed something</button>
+                    <button type="button" class="tag" onclick="selectTag('ctx','pre_action',this)">Idle / nothing specific</button>
+                    <button type="button" class="tag tag-other" onclick="otherSingle('ctx','pre_action_bite',this)">Other…</button>
                   </div>
                   <div class="other-input-wrap" id="other-ctx-pre_action_bite">
                     <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -427,14 +427,14 @@
               <div class="field">
                 <label class="field-label">Primary trigger</label>
                 <div class="grid-auto" role="group" aria-label="Primary trigger">
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / stress</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / depleted</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Sensory — felt something</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Visual — saw something</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / idle</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Pain / physical discomfort</div>
-                  <div class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism / need to fix</div>
-                  <div class="tag tag-other" onclick="otherSingle('ctx','trigger',this)">Other…</div>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Anxiety / stress</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Fatigue / depleted</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Sensory — felt something</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Visual — saw something</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Boredom / idle</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Pain / physical discomfort</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','trigger',this)">Perfectionism / need to fix</button>
+                  <button type="button" class="tag tag-other" onclick="otherSingle('ctx','trigger',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-trigger">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -447,13 +447,13 @@
               <div class="field">
                 <label class="field-label">Environment</label>
                 <div class="grid-auto" role="group" aria-label="Environment">
-                  <div class="tag" onclick="selectTag('ctx','environment',this)">Desk / Study</div>
-                  <div class="tag" onclick="selectTag('ctx','environment',this)">Couch / Bed</div>
-                  <div class="tag" onclick="selectTag('ctx','environment',this)">Bathroom</div>
-                  <div class="tag" onclick="selectTag('ctx','environment',this)">Around the apartment</div>
-                  <div class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</div>
-                  <div class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</div>
-                  <div class="tag tag-other" onclick="otherSingle('ctx','environment',this)">Other…</div>
+                  <button type="button" class="tag" onclick="selectTag('ctx','environment',this)">Desk / Study</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','environment',this)">Couch / Bed</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','environment',this)">Bathroom</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','environment',this)">Around the apartment</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','environment',this)">Kitchen</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','environment',this)">Transit / Car</button>
+                  <button type="button" class="tag tag-other" onclick="otherSingle('ctx','environment',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-environment">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -466,14 +466,14 @@
               <div class="field">
                 <label class="field-label">Activity at the time</label>
                 <div class="grid-auto" role="group" aria-label="Activity">
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">Studying / Lecture</div>
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">Watching TV</div>
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">On phone</div>
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">Getting ready</div>
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">Working / At computer</div>
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</div>
-                  <div class="tag" onclick="selectTag('ctx','activity',this)">In conversation</div>
-                  <div class="tag tag-other" onclick="otherSingle('ctx','activity',this)">Other…</div>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">Studying / Lecture</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">Watching TV</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">On phone</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">Getting ready</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">Working / At computer</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">Resting / Idle</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','activity',this)">In conversation</button>
+                  <button type="button" class="tag tag-other" onclick="otherSingle('ctx','activity',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-activity">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -486,11 +486,11 @@
               <div class="field" id="escalation-field" style="display:none">
                 <label class="field-label">Session pattern</label>
                 <div class="grid-auto" role="group" aria-label="Session pattern">
-                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</div>
-                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Short session</div>
-                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</div>
-                  <div class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</div>
-                  <div class="tag tag-other" onclick="otherSingle('ctx','escalation',this)">Other…</div>
+                  <button type="button" class="tag" onclick="selectTag('ctx','escalation',this)">Single pick</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','escalation',this)">Short session</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','escalation',this)">Escalated</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','escalation',this)">Couldn't stop</button>
+                  <button type="button" class="tag tag-other" onclick="otherSingle('ctx','escalation',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-escalation">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -503,13 +503,13 @@
               <div class="field" id="post-feeling-field" style="display:none">
                 <label class="field-label">How did you feel after?</label>
                 <div class="grid-2" role="group" aria-label="Post-event feeling">
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Relieved / calm</div>
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Zoned out / dissociated</div>
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</div>
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</div>
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated with myself</div>
-                  <div class="tag" onclick="selectTag('ctx','post_feeling',this)">Self-critical thoughts</div>
-                  <div class="tag tag-other" onclick="otherSingle('ctx','post_feeling',this)">Other…</div>
+                  <button type="button" class="tag" onclick="selectTag('ctx','post_feeling',this)">Relieved / calm</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','post_feeling',this)">Zoned out / dissociated</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','post_feeling',this)">Neutral / flat</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','post_feeling',this)">Still activated</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','post_feeling',this)">Frustrated with myself</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','post_feeling',this)">Self-critical thoughts</button>
+                  <button type="button" class="tag tag-other" onclick="otherSingle('ctx','post_feeling',this)">Other…</button>
                 </div>
                 <div class="other-input-wrap" id="other-ctx-post_feeling">
                   <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
@@ -522,8 +522,8 @@
               <div class="field" id="aftercare-field" style="display:none">
                 <label class="field-label">Aftercare applied?</label>
                 <div class="grid-2" role="group" aria-label="Post-episode aftercare">
-                  <div class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</div>
-                  <div class="tag" onclick="selectTag('ctx','aftercare',this)">No</div>
+                  <button type="button" class="tag" onclick="selectTag('ctx','aftercare',this)">Yes</button>
+                  <button type="button" class="tag" onclick="selectTag('ctx','aftercare',this)">No</button>
                 </div>
               </div>
 

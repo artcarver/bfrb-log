@@ -442,26 +442,5 @@
         console.warn('SW registration failed:', err);
       });
     });
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // ACCESSIBILITY
-  // ═══════════════════════════════════════════════════════════════
-  function patchTagAccessibility() {
-    document.querySelectorAll('.tag').forEach(el => {
-      if (el.tagName === 'BUTTON' || el.getAttribute('role')) return;
-      el.setAttribute('role', 'button');
-      el.setAttribute('tabindex', '0');
-      el.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
-      });
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', patchTagAccessibility);
-  } else {
-    setTimeout(patchTagAccessibility, 100);
-  }
 
 })();

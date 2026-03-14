@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#eeebf8" id="theme-color-meta">
+<meta name="theme-color" content="" id="theme-color-meta">
 <title>Groundwork — Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
 <script>
 (function(){
   const stored=localStorage.getItem('gw-theme');
-  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#1c1928');}
+  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');}
 })();
 </script>
 </head>
@@ -61,7 +61,6 @@
       </div>
     </div>
   </div>
-
 
   <div id="loading" class="loading-state">Loading your data…</div>
 
@@ -282,24 +281,11 @@
 </div>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc, writeBatch } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { auth, db, provider, signInWithPopup, onAuthStateChanged, fbSignOut } from './firebase-client.js';
+import { collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc, writeBatch }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-  authDomain: "skin-picking-log.firebaseapp.com",
-  projectId: "skin-picking-log",
-  storageBucket: "skin-picking-log.firebasestorage.app",
-  messagingSenderId: "162906566118",
-  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
 window._db = db;
-const provider = new GoogleAuthProvider();
 
 window._uid = null;
 window._currentEntries = [];
@@ -570,7 +556,6 @@ function processData(entries) {
   document.getElementById('loading').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
 }
-
 
 function renderOutcomesDonut(outcomes, total) {
   const c = getC();
@@ -1362,7 +1347,7 @@ async function loadDailyStateCorrelation(entries) {
 new MutationObserver(() => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const m = document.getElementById('theme-color-meta');
-  if (m) m.setAttribute('content', isDark ? '#1c1928' : '#eeebf8');
+  if (m) { const v = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg').trim(); if (v) m.setAttribute('content', v); }
   if (window._allEntries?.length) { applyBehaviorFilter(); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 

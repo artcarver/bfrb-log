@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-title" content="Groundwork">
     <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork — Profile</title>
-<meta name="theme-color" content="#eeebf8" id="theme-color-meta">
+<meta name="theme-color" content="" id="theme-color-meta">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
@@ -22,7 +22,7 @@
         if (stored === 'dark') {
           document.documentElement.setAttribute('data-theme', 'dark');
           const m = document.getElementById('theme-color-meta');
-          if (m) m.setAttribute('content', '#1c1928');
+          
         }
       })();
     </script>
@@ -465,23 +465,9 @@
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut as fbSignOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, query, orderBy, deleteDoc, where } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-  authDomain: "skin-picking-log.firebaseapp.com",
-  projectId: "skin-picking-log",
-  storageBucket: "skin-picking-log.firebasestorage.app",
-  messagingSenderId: "162906566118",
-  appId: "1:162906566118:web:a89abbd383fc847ba97a27"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
+import { auth, db, provider, signInWithPopup, onAuthStateChanged, fbSignOut } from './firebase-client.js';
+import { doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs, query, orderBy, deleteDoc, where }
+  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 window._uid = null;
 let currentRules = [];
@@ -617,9 +603,9 @@ function renderRules() {
   function esc(s) { return (s || '').toString().replace(/[&<"']/g, m => ({'&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;'}[m])); }
   list.innerHTML = currentRules.map(r => `
     <div class="rule-item ${r.active ? 'done' : ''}">
-      <div class="rule-checkbox" onclick="toggleRule('${r.id}', ${!r.active})">
+      <button type="button" class="rule-checkbox" onclick="toggleRule(\'${r.id}\', ${!r.active})">
         <svg class="rule-tick" viewBox="0 0 10 8"><polyline points="1,4 4,7 9,1"/></svg>
-      </div>
+      </button>
       <div class="rule-text" contenteditable="true" onblur="updateRuleText('${r.id}', this.innerText)">${esc(r.text)}</div>
       <button class="rule-del" onclick="deleteRule('${r.id}')">&times;</button>
     </div>

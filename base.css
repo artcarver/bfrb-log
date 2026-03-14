@@ -200,6 +200,12 @@ a,button,.tag,.btn-primary,.btn-ghost,.action-btn,.google-btn{-webkit-tap-highli
 .action-btn:hover{border-color:var(--bdr2)}
 
 /* ─── TAGS ───────────────────────────────────────────────────────────────── */
+/* Button reset — applied to all interactive .tag elements (now <button> not <div>) */
+button.tag {
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+}
 .tag{
   display:flex;
   flex-direction:column;

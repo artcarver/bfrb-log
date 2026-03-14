@@ -144,33 +144,33 @@
   <div class="card anim d7">
     <div class="card-title">Destruction &amp; Peeling</div>
     <div class="grid-auto">
-      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Washi tape roll</div>
-      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Picking stone</div>
-      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Dried liquid glue</div>
-      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Seeds in shell</div>
-      <div class="tag" data-drive="destruct" onclick="togglePref(this)">Velcro strips</div>
+      <button type="button" class="tag" data-drive="destruct" onclick="togglePref(this)">Washi tape roll</button>
+      <button type="button" class="tag" data-drive="destruct" onclick="togglePref(this)">Picking stone</button>
+      <button type="button" class="tag" data-drive="destruct" onclick="togglePref(this)">Dried liquid glue</button>
+      <button type="button" class="tag" data-drive="destruct" onclick="togglePref(this)">Seeds in shell</button>
+      <button type="button" class="tag" data-drive="destruct" onclick="togglePref(this)">Velcro strips</button>
     </div>
   </div>
 
   <div class="card anim d7">
     <div class="card-title">Deep Pressure &amp; Sensation</div>
     <div class="grid-auto">
-      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Spiky massage ring</div>
-      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Chewable silicone</div>
-      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Tension band</div>
-      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Strong mints</div>
-      <div class="tag" data-drive="pressure" onclick="togglePref(this)">Rough textured cloth</div>
+      <button type="button" class="tag" data-drive="pressure" onclick="togglePref(this)">Spiky massage ring</button>
+      <button type="button" class="tag" data-drive="pressure" onclick="togglePref(this)">Chewable silicone</button>
+      <button type="button" class="tag" data-drive="pressure" onclick="togglePref(this)">Tension band</button>
+      <button type="button" class="tag" data-drive="pressure" onclick="togglePref(this)">Strong mints</button>
+      <button type="button" class="tag" data-drive="pressure" onclick="togglePref(this)">Rough textured cloth</button>
     </div>
   </div>
 
   <div class="card anim d8">
     <div class="card-title">Smoothing &amp; Evenness</div>
     <div class="grid-auto">
-      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Smooth worry stone</div>
-      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Silicone cuticle edge</div>
-      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Textured ring</div>
-      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Tactile putty</div>
-      <div class="tag" data-drive="smooth" onclick="togglePref(this)">Emery board</div>
+      <button type="button" class="tag" data-drive="smooth" onclick="togglePref(this)">Smooth worry stone</button>
+      <button type="button" class="tag" data-drive="smooth" onclick="togglePref(this)">Silicone cuticle edge</button>
+      <button type="button" class="tag" data-drive="smooth" onclick="togglePref(this)">Textured ring</button>
+      <button type="button" class="tag" data-drive="smooth" onclick="togglePref(this)">Tactile putty</button>
+      <button type="button" class="tag" data-drive="smooth" onclick="togglePref(this)">Emery board</button>
     </div>
   </div>
 
@@ -350,26 +350,10 @@
 </div><!-- /timer-overlay -->
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup,
-  onAuthStateChanged, signOut as fbSignOut }
-  from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc }
+import { auth, db, provider, signInWithPopup, onAuthStateChanged, fbSignOut } from './firebase-client.js';
+import { doc, getDoc, setDoc }
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey:            "AIzaSyBpLjdsDss2eI7Ku9Ak1GDhnfavJdpY8OM",
-  authDomain:        "skin-picking-log.firebaseapp.com",
-  projectId:         "skin-picking-log",
-  storageBucket:     "skin-picking-log.firebasestorage.app",
-  messagingSenderId: "162906566118",
-  appId:             "1:162906566118:web:a89abbd383fc847ba97a27"
-};
-
-const app      = initializeApp(firebaseConfig);
-const db       = getFirestore(app);
-const auth     = getAuth(app);
-const provider = new GoogleAuthProvider();
 window._uid    = null;
 
 window.signInWithGoogle = async () => {

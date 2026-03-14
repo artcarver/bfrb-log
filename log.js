@@ -571,13 +571,11 @@ window.confirmOther = function(level, key, isMulti, inputEl) {
 
   const wrap = document.getElementById(`other-${level}-${key}`);
   if (wrap) {
-    const tag = document.createElement('div');
+    const tag = document.createElement('button');
+    tag.type = 'button';
     tag.className = 'tag on';
     tag.textContent = val;
     tag.setAttribute('data-custom', '1');
-    tag.setAttribute('role', 'button');
-    tag.setAttribute('tabindex', '0');
-    tag.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tag.click(); } });
     if (isMulti) {
       tag.onclick = function() { toggleMultiTag(level, key, this); };
     } else {
