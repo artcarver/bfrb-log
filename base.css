@@ -6,18 +6,17 @@
 
 /* ─── TOKENS ─────────────────────────────────────────────────────────────── */
 /*
- * Palette (recalibrated):
- *   Surfaces:  Stone #f4f1ee · Linen #ede8e3 · White #ffffff
- *   Text:      Slate #3a4444 · Granite #4f5c5c · Muted #8a9090
- *   Accent:    Clay #8c6b60  (desaturated terracotta — warm but not flushed)
- *   Sage:      #4f7a62      (resisted / positive)
- *   Warm:      #c48b72      (near-miss / caution fills only)
- *   Borders:   #ddd7d2 (light) · #bfb8b2 (emphasis)
+ * Palette — Lavender Fog:
+ *   Surfaces:  Page #eeebf8 · Surface #f5f3fc · Card #ffffff
+ *   Text:      Slate #26243a · Mid #4a4568 · Muted #9b8fb0
+ *   Accent:    Purple #7a66b0 · Deep #6250a0
+ *   Sage:      #3d8a6a (resisted / positive)
+ *   Warm:      #b07840 (near-miss / caution)
+ *   Borders:   #ddd8f0 (light) · #c4bce4 (emphasis)
  *
  * Contrast:
- *   --tx  (#3a4444) on --bg (#f4f1ee) → 9.8:1 AAA
- *   --ac  (#8c6b60) on white          → 4.8:1 AA
- *   --ac  (#8c6b60) on --bg           → 4.6:1 AA
+ *   --tx  (#26243a) on --bg (#eeebf8) → 11.2:1 AAA
+ *   --ac  (#7a66b0) on --card (#fff)  →  4.8:1 AA
  */
 :root {
   /* Lavender Fog — tinted page bg, white cards so content pops cleanly */
