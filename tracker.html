@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#f3eae6" id="theme-color-meta">
+<meta name="theme-color" content="#f4f1ee" id="theme-color-meta">
 <title>Groundwork — Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
@@ -18,7 +18,7 @@
 <script>
 (function(){
   const stored=localStorage.getItem('gw-theme');
-  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#1e2424');}
+  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');if(m)m.setAttribute('content','#1d2222');}
 })();
 </script>
 </head>
@@ -1355,7 +1355,7 @@ async function loadDailyStateCorrelation(entries) {
 new MutationObserver(() => {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   const m = document.getElementById('theme-color-meta');
-  if (m) m.setAttribute('content', isDark ? '#1e2424' : '#f3eae6');
+  if (m) m.setAttribute('content', isDark ? '#1d2222' : '#f4f1ee');
   if (window._allEntries?.length) { applyBehaviorFilter(); }
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 

@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
 <title>Groundwork — Log</title>
-<meta name="theme-color" id="theme-color-meta" content="#f3eae6">
+<meta name="theme-color" id="theme-color-meta" content="#f4f1ee">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css">
@@ -20,7 +20,7 @@
   if (stored === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     const m = document.getElementById('theme-color-meta');
-    if (m) m.setAttribute('content', '#1e2424');
+    if (m) m.setAttribute('content', '#1d2222');
   }
 })();
 </script>
@@ -85,15 +85,15 @@
             <div class="grid-3" role="group" aria-label="Awareness type">
               <div class="tag" onclick="selectTag('core','awareness',this)">
                 Urge came first
-                <span class="tag-sub">Felt the urge, then acted</span>
+                <span class="tag-sub">Felt the pull, then acted</span>
               </div>
               <div class="tag" onclick="selectTag('core','awareness',this)">
-                Caught mid-act
-                <span class="tag-sub">Noticed while doing it</span>
+                Noticed while doing it
+                <span class="tag-sub">Caught yourself mid-behavior</span>
               </div>
               <div class="tag" onclick="selectTag('core','awareness',this)">
-                Already done
-                <span class="tag-sub">Only noticed after</span>
+                Only noticed after
+                <span class="tag-sub">Already done by the time you saw it</span>
               </div>
             </div>
           </div>
@@ -918,9 +918,9 @@ window.selectTag = (level, key, el) => {
   if (navigator.vibrate) navigator.vibrate(10);
   // Map the renamed awareness labels back to data values
   const awarenessMap = {
-    'Urge came first':  'Urge first',
-    'Caught mid-act':   'Mid-action',
-    'Already done':     'Automatic',
+    'Urge came first':          'Urge first',
+    'Noticed while doing it':   'Mid-action',
+    'Only noticed after':       'Automatic',
   };
   state[level][key] = awarenessMap[el.textContent.trim()] || el.textContent.trim();
 };

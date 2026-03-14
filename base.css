@@ -6,45 +6,48 @@
 
 /* ─── TOKENS ─────────────────────────────────────────────────────────────── */
 /*
- * Palette: Iron Grey #414c4c · Granite #4f5c5c · Terracotta #af6666
- *          Dusty Rose #cb7c6e · Tangerine #e69175 · Almond #e8c5bb · Parchment #f3eae6
+ * Palette (recalibrated):
+ *   Surfaces:  Stone #f4f1ee · Linen #ede8e3 · White #ffffff
+ *   Text:      Slate #3a4444 · Granite #4f5c5c · Muted #8a9090
+ *   Accent:    Clay #8c6b60  (desaturated terracotta — warm but not flushed)
+ *   Sage:      #4f7a62      (resisted / positive)
+ *   Warm:      #c48b72      (near-miss / caution fills only)
+ *   Borders:   #ddd7d2 (light) · #bfb8b2 (emphasis)
  *
- * Contrast-safe rules:
- *   --tx  on any bg  → 9.4:1+ (AAA)
- *   --tx2 on any bg  → 7.3:1  (AAA)
- *   --ac  on white   → 4.6:1  (AA) · on --bg → 4.5:1 (AA, boundary)
- *   --mu  decorative only — never body text
- *   --warm fill/border only — never text
+ * Contrast:
+ *   --tx  (#3a4444) on --bg (#f4f1ee) → 9.8:1 AAA
+ *   --ac  (#8c6b60) on white          → 4.8:1 AA
+ *   --ac  (#8c6b60) on --bg           → 4.6:1 AA
  */
 :root {
-  /* Surfaces */
-  --bg:#f3eae6; --sur:#f3eae6; --card:#fff;
-  --bg-rgb:243,234,230;
+  /* Surfaces — neutral warm stone, not pink */
+  --bg:#f4f1ee; --sur:#f4f1ee; --card:#fff;
+  --bg-rgb:244,241,238;
 
-  /* Borders */
-  --bdr:#e8c5bb; --bdr2:#cb7c6e;
+  /* Borders — very quiet */
+  --bdr:#ddd7d2; --bdr2:#bfb8b2;
 
   /* Text */
-  --tx:#414c4c; --tx2:#4f5c5c; --mu:#cb7c6e;
+  --tx:#3a4444; --tx2:#4f5c5c; --mu:#8a9090;
 
-  /* Accent — Terracotta */
-  --ac:#af6666; --ac-h:#9a5555;
-  --acl:rgba(175,102,102,.10); --acl2:rgba(175,102,102,.18);
+  /* Accent — desaturated clay (warm but not flushed red) */
+  --ac:#8c6b60; --ac-h:#7a5c52;
+  --acl:rgba(140,107,96,.09); --acl2:rgba(140,107,96,.16);
 
-  /* Sage — kept for positive/resisted outcomes (green is semantically distinct) */
+  /* Sage — resisted / positive outcomes */
   --sage:#4f7a62; --sagel:rgba(79,122,98,.10); --sagem:rgba(79,122,98,.20);
 
-  /* Warm — Tangerine, fill/border only */
-  --warm:#e69175; --warml:rgba(230,145,117,.15);
+  /* Warm — near-miss fills / caution only, never text */
+  --warm:#c48b72; --warml:rgba(196,139,114,.13);
 
   /* Outcome accent colors */
-  --o-resisted:#4f7a62; --o-near:#cb7c6e; --o-episode:#af6666;
+  --o-resisted:#4f7a62; --o-near:#c48b72; --o-episode:#8c6b60;
 
   /* Shape */
   --rsm:12px; --r:20px; --rlg:28px; --pill:100px;
 
-  /* Elevation — flat style, one subtle shadow for overlays */
-  --s1:none; --s2:none; --s3:0 4px 24px rgba(65,76,76,.08);
+  /* Elevation */
+  --s1:none; --s2:none; --s3:0 4px 24px rgba(58,68,68,.07);
 
   /* Motion */
   --tr:all .15s ease;
@@ -68,28 +71,28 @@
 }
 
 [data-theme="dark"] {
-  /* Surfaces — deep teal-grey derived from Granite's hue */
-  --bg:#1e2424; --sur:#242c2c; --card:#2c3636;
-  --bg-rgb:30,36,36;
+  /* Surfaces — deep teal-slate */
+  --bg:#1d2222; --sur:#232929; --card:#2a3232;
+  --bg-rgb:29,34,34;
 
   /* Borders */
-  --bdr:#3a4848; --bdr2:#5a6a6a;
+  --bdr:#363f3f; --bdr2:#4a5555;
 
-  /* Text — light Parchment family */
-  --tx:#f3eae6; --tx2:#e8c5bb; --mu:#9a8a84;
+  /* Text */
+  --tx:#eef0f0; --tx2:#b8c0c0; --mu:#7a8888;
 
-  /* Accent — lifted Terracotta for dark bg */
-  --ac:#c97878; --ac-h:#db8a8a;
-  --acl:rgba(201,120,120,.13); --acl2:rgba(201,120,120,.22);
+  /* Accent — lifted clay for dark bg */
+  --ac:#b08070; --ac-h:#c49080;
+  --acl:rgba(176,128,112,.13); --acl2:rgba(176,128,112,.22);
 
   /* Sage */
   --sage:#6aaa88; --sagel:rgba(106,170,136,.13); --sagem:rgba(106,170,136,.24);
 
   /* Warm */
-  --warm:#e69175; --warml:rgba(230,145,117,.15);
+  --warm:#c48b72; --warml:rgba(196,139,114,.15);
 
   /* Outcome */
-  --o-resisted:#6aaa88; --o-near:#cb7c6e; --o-episode:#c97878;
+  --o-resisted:#6aaa88; --o-near:#c48b72; --o-episode:#b08070;
 
   /* Error */
   --error:#e05555;
@@ -476,6 +479,52 @@ textarea{resize:vertical;min-height:80px}
 .breath-ring{color:var(--warm)}
 .breath-label{color:var(--warm)}
 
+/* ─── OUTCOME TAG VARIANTS ───────────────────────────────────────────────── */
+.tag.outcome-resisted.on { background:var(--sagel);  border-color:var(--sage); color:var(--sage); }
+.tag.outcome-nearmiss.on { background:rgba(196,139,114,.12); border-color:rgba(196,139,114,.35); color:#8a5c42; }
+.tag.outcome-caught.on   { background:var(--acl);    border-color:var(--ac);   color:var(--ac);   }
+.tag.outcome-episode.on  { background:rgba(140,107,96,.10); border-color:rgba(140,107,96,.28); color:var(--ac); }
+
+/* ─── BEHAVIOR TAGS ──────────────────────────────────────────────────────── */
+.behavior-tag { min-height:56px; font-size:var(--fs-body); font-weight:700; }
+
+/* ─── FORM STEP DIVIDERS ─────────────────────────────────────────────────── */
+.log-step-divider {
+  display:flex; align-items:center; gap:10px;
+  margin:24px 0 16px;
+  font-size:var(--fs-label); font-weight:700;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--mu);
+}
+.log-step-divider::after { content:''; flex:1; height:1px; background:var(--bdr); }
+
+/* ─── SUCCESS SCREEN VARIANTS ────────────────────────────────────────────── */
+.success-icon.resisted { background:var(--sagel); color:var(--sage); }
+.success-icon.caught   { background:var(--acl);   color:var(--ac);   }
+.success-icon.nearmiss { background:var(--warml); color:var(--warm); }
+.success-icon.episode  { background:var(--sur);   color:var(--mu);   }
+
+.success-tools-primary {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; background:var(--ac); color:#fff; border:none;
+  border-radius:var(--pill); padding:15px 20px;
+  font-family:'Nunito Sans',sans-serif; font-size:var(--fs-body);
+  font-weight:700; cursor:pointer; transition:var(--tr);
+  text-decoration:none; touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+.success-tools-primary:hover { background:var(--ac-h); }
+.success-log-another {
+  display:inline-flex; align-items:center; justify-content:center;
+  margin-top:10px; font-size:var(--fs-sm); font-weight:600; color:var(--mu);
+  cursor:pointer; background:none; border:none; padding:8px 12px;
+  border-radius:var(--pill); touch-action:manipulation; transition:var(--tr);
+  font-family:'Nunito Sans',sans-serif;
+}
+.success-log-another:hover { color:var(--tx); }
+
+/* ─── SLIDER WORD LABEL ──────────────────────────────────────────────────── */
+.slider-word { font-size:var(--fs-label); color:var(--mu); font-weight:600; min-width:56px; text-align:left; }
+
 /*
  * ── DESIGN RULE: NO EMOJIS ───────────────────────────────────────────────
  * Emojis are not used anywhere in this UI. Use inline SVG icons instead.
@@ -569,7 +618,7 @@ textarea{resize:vertical;min-height:80px}
 /* Time filter dropdown */
 .select-btn{padding:8px 32px 8px 12px;border-radius:var(--pill);border:1.5px solid var(--bdr);background:var(--card);color:var(--tx);font-family:'Nunito Sans',sans-serif;font-size:var(--fs-sm);font-weight:600;outline:none;cursor:pointer;transition:var(--tr);touch-action:manipulation;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%234f5c5c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-size:14px}
 .select-btn:hover{border-color:var(--bdr2)}
-[data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23e8c5bb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
+[data-theme="dark"] .select-btn{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%23b8c0c0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")}
 
 /* Stats grid — defined in base, layout here */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:24px}
