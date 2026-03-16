@@ -442,5 +442,5 @@
         console.warn('SW registration failed:', err);
       });
     });
-
+  }
 })();
