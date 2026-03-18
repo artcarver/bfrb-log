@@ -19,7 +19,7 @@
  * ────────────────────────────────────────────────────────────────
  */
 
-const CACHE  = 'gw-shell-v22';
+const CACHE  = 'gw-shell-v23';
 const SHELL  = [
   './',
   './index.html',
