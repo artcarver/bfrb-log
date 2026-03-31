@@ -1,25 +1,8 @@
 /**
- * sw.js — Groundwork service worker
- *
- * Add to every page <head> (before </head>):
- *   <script>
- *     if ('serviceWorker' in navigator) {
- *       navigator.serviceWorker.register('sw.js');
- *     }
- *   </script>
- *
- * nav.js (v2) already does this registration automatically —
- * so if you're using the new nav.js you don't need the snippet above.
- *
- * ── DEPLOYING A NEW VERSION ──────────────────────────────────────
- * Whenever you change ANY file in the SHELL array below, increment
- * the CACHE string (e.g. gw-shell-v3 → gw-shell-v4).
- * This forces existing users to receive a fresh install on next load.
- * Without a cache bump, users may run stale JS/CSS indefinitely.
- * ────────────────────────────────────────────────────────────────
+ * sw.js -- Groundwork service worker (simplified)
  */
 
-const CACHE  = 'gw-shell-v24';
+const CACHE  = 'gw-shell-v27';
 const SHELL  = [
   './',
   './index.html',
@@ -29,6 +12,7 @@ const SHELL  = [
   './offline.html',
   './base.css',
   './nav.js',
+  './log.js',
   './daily-state-widget.js',
   './manifest.json',
 ];
@@ -51,7 +35,6 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-  // Firebase + Google APIs — always network
   if (
     url.hostname.includes('firestore.googleapis.com') ||
     url.hostname.includes('firebase') ||
@@ -59,13 +42,11 @@ self.addEventListener('fetch', e => {
     url.hostname.includes('gstatic.com') && url.hostname.includes('firebase')
   ) return;
 
-  // Google Fonts CDN — cache-first
   if (url.hostname.includes('fonts.gstatic.com') || url.hostname.includes('fonts.googleapis.com')) {
     e.respondWith(cacheFirst(e.request));
     return;
   }
 
-  // Our shell — stale-while-revalidate
   e.respondWith(staleWhileRevalidate(e.request));
 });
 

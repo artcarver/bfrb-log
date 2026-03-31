@@ -3,14 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Analyse BFRB patterns, triggers, and intervention outcomes over time.">
+<meta name="description" content="View skin picking patterns and trends.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Groundwork">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="" id="theme-color-meta">
-<title>Groundwork — Patterns</title>
+<title>Groundwork -- Patterns</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
@@ -18,7 +20,7 @@
 <script>
 (function(){
   const stored=localStorage.getItem('gw-theme');
-  if(stored==='dark'){document.documentElement.setAttribute('data-theme','dark');const m=document.getElementById('theme-color-meta');}
+  if(stored==='dark') document.documentElement.setAttribute('data-theme','dark');
 })();
 </script>
 </head>
@@ -27,7 +29,7 @@
 <div class="auth-screen on" id="auth-screen">
   <div class="auth-card">
     <div class="auth-card-title">Groundwork</div>
-    <div class="auth-sub">Sign in to view patterns.</div>
+    <div class="auth-card-sub">Sign in to view patterns.</div>
     <button class="google-btn" onclick="signInWithGoogle()">Continue with Google</button>
   </div>
 </div>
@@ -39,11 +41,6 @@
   <div class="header-row">
     <div class="page-title">Patterns</div>
     <div class="controls">
-      <select class="select-btn" id="behavior-filter" onchange="applyBehaviorFilter()">
-        <option value="all" selected>All behaviors</option>
-        <option value="picking">Picking only</option>
-        <option value="biting">Biting only</option>
-      </select>
       <select class="select-btn" id="time-filter" onchange="loadData()">
         <option value="7">Last 7 days</option>
         <option value="30" selected>Last 30 days</option>
@@ -51,49 +48,47 @@
         <option value="all">All time</option>
       </select>
       <div class="overflow-anchor">
-        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options" aria-haspopup="true" aria-expanded="false">Import / Export</button>
+        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options">Export</button>
         <div id="overflow-menu" class="overflow-menu">
           <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
           <button class="overflow-menu-btn" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
           <button class="overflow-menu-btn overflow-menu-btn--border" onclick="exportCSV();toggleOverflow()">Export CSV</button>
-          <button class="overflow-menu-btn overflow-menu-btn--border" onclick="confirmClearAll();toggleOverflow()" style="color:var(--error)">Clear all entries</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="loading" class="loading-state">Loading your data…</div>
+  <div id="loading" class="loading-state">Loading your data...</div>
 
   <div id="dashboard" style="display:none">
 
     <!-- STATS -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-val" id="stat-total">—</div>
-        <div class="stat-lbl">Entries</div>
+        <div class="stat-val" id="stat-total">--</div>
+        <div class="stat-lbl">Total entries</div>
         <div class="stat-sub" id="stat-entries-sub"></div>
       </div>
-      <div class="stat-card">
-        <div class="stat-val" id="stat-urge">—</div>
-        <div class="stat-lbl">Avg urge before</div>
-        <div class="stat-sub" id="stat-urge-after"></div>
-      </div>
       <div class="stat-card" id="stat-managed-card">
-        <div class="stat-val" id="stat-managed">—</div>
-        <div class="stat-lbl">Managed</div>
+        <div class="stat-val" id="stat-managed">--</div>
+        <div class="stat-lbl">Resisted</div>
         <div class="stat-sub" id="stat-managed-sub">of all entries</div>
       </div>
-      <div class="stat-card" id="stat-tool-card">
-        <div class="stat-val" id="stat-top-tool">—</div>
-        <div class="stat-lbl">Top intervention</div>
-        <div class="stat-sub" id="stat-top-tool-sub"></div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-urge">--</div>
+        <div class="stat-lbl">Avg urge</div>
+        <div class="stat-sub" id="stat-urge-sub"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-top-area">--</div>
+        <div class="stat-lbl">Top area</div>
+        <div class="stat-sub" id="stat-top-area-sub"></div>
       </div>
     </div>
 
     <!-- OVERVIEW -->
     <div class="section-head">
       <div class="section-title">Overview</div>
-      <div class="section-note">outcomes &amp; activity</div>
     </div>
     <div class="chart-duo">
       <div class="chart-card">
@@ -104,21 +99,14 @@
         </div>
       </div>
       <div class="chart-card">
-        <div class="chart-label">Activity — last 60 days</div>
+        <div class="chart-label">Activity -- last 60 days</div>
         <div id="streak-container"></div>
-      </div>
-    </div>
-    <div class="chart-solo">
-      <div class="chart-card">
-        <div class="chart-label">Weekly trend — episodes &amp; managed rate</div>
-        <div class="chart-wrapper chart-h150"><canvas id="chart-weekly"></canvas></div>
       </div>
     </div>
 
     <!-- WHEN -->
     <div class="section-head">
       <div class="section-title">When</div>
-      <div class="section-note">time patterns</div>
     </div>
     <div class="chart-duo">
       <div class="chart-card">
@@ -130,84 +118,29 @@
         <div class="chart-wrapper chart-h160"><canvas id="chart-dow"></canvas></div>
       </div>
     </div>
-    <div class="chart-solo">
-      <div class="chart-card">
-        <div class="chart-label">Hour heatmap</div>
-        <div id="heatmap-container"></div>
-      </div>
-    </div>
 
     <!-- WHY -->
     <div class="section-head">
-      <div class="section-title">Why</div>
-      <div class="section-note">triggers &amp; antecedents</div>
+      <div class="section-title">What's driving it</div>
     </div>
     <div class="chart-duo">
       <div class="chart-card">
-        <div class="chart-label">Primary triggers</div>
-        <div class="bar-rows" id="bar-triggers"></div>
+        <div class="chart-label">Emotional state before</div>
+        <div class="bar-rows" id="bar-state"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-label">State before (antecedent)</div>
-        <div class="bar-rows" id="bar-prefeeling"></div>
-      </div>
-    </div>
-    <div class="chart-duo">
-      <div class="chart-card">
-        <div class="chart-label">Awareness — how it was noticed</div>
-        <div class="bar-rows" id="bar-awareness"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-label">Urge arc — before vs. after</div>
-        <div id="mood-delta-container"></div>
-      </div>
-    </div>
-
-    <!-- BODY -->
-    <div class="section-head">
-      <div class="section-title">Body</div>
-      <div class="section-note">areas &amp; targets</div>
-    </div>
-    <div class="chart-duo">
       <div class="chart-card">
         <div class="chart-label">Body areas</div>
         <div class="bar-rows" id="bar-areas"></div>
       </div>
-      <div class="chart-card">
-        <div class="chart-label">Target types</div>
-        <div class="bar-rows" id="bar-targets"></div>
-      </div>
-    </div>
-
-    <!-- INTERVENTIONS -->
-    <div class="section-head">
-      <div class="section-title">Interventions</div>
-      <div class="section-note">what's working</div>
     </div>
     <div class="chart-duo">
       <div class="chart-card">
-        <div class="chart-label">Managed outcome rate per tool</div>
-        <div class="bar-rows" id="bar-tools"></div>
+        <div class="chart-label">Environment</div>
+        <div class="bar-rows" id="bar-environment"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-label">Self-rated effectiveness (avg 1–5)</div>
-        <div class="bar-rows" id="bar-tools-rated"></div>
-      </div>
-    </div>
-
-    <!-- CONTEXT PATTERNS -->
-    <div class="section-head">
-      <div class="section-title">Context patterns</div>
-      <div class="section-note">activity &amp; escalation</div>
-    </div>
-    <div class="chart-grid">
-      <div class="chart-card">
-        <div class="chart-label">Activity at time of episode</div>
+        <div class="chart-label">Activity at time</div>
         <div class="bar-rows" id="bar-activity"></div>
-      </div>
-      <div class="chart-card">
-        <div class="chart-label">Session escalation pattern</div>
-        <div class="bar-rows" id="bar-escalation"></div>
       </div>
     </div>
 
@@ -216,24 +149,26 @@
       <div class="section-title">Log history</div>
     </div>
     <div class="feed-header">
-      <div class="feed-tabs" id="feed-tabs" style="position:relative">
+      <div class="feed-tabs" id="feed-tabs">
         <button class="feed-tab active" data-filter="all" onclick="setFeedFilter('all',this)">All</button>
         <button class="feed-tab" data-filter="resisted" onclick="setFeedFilter('resisted',this)">Resisted</button>
-        <button class="feed-tab" data-filter="caught" onclick="setFeedFilter('caught',this)">Caught</button>
-        <button class="feed-tab" data-filter="near_miss" onclick="setFeedFilter('near_miss',this)">Near miss</button>
-        <button class="feed-tab" data-filter="did" onclick="setFeedFilter('did',this)">Episodes</button>
-        <button class="feed-tab" data-filter="discussed" onclick="setFeedFilter('discussed',this)">Discussed</button>
+        <button class="feed-tab" data-filter="did" onclick="setFeedFilter('did',this)">Picked</button>
       </div>
     </div>
     <div id="log-feed"></div>
-    <button class="load-more-btn" id="load-more-btn" style="display:none" onclick="loadMoreFeed()">Show more entries</button>
+    <button class="load-more-btn" id="load-more-btn" style="display:none" onclick="loadMoreFeed()">Show more</button>
 
   </div><!-- /dashboard -->
 
   <div id="empty-state" class="empty-state" style="display:none">
-    <p>No entries in this timeframe.</p>
-    <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">
-    <button class="action-btn" onclick="document.getElementById('import-file-empty').click()">Import CSV</button>
+    <div class="empty-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    </div>
+    <div class="empty-title">Nothing logged yet</div>
+    <div class="empty-body">Start logging to see your patterns here.</div>
+    <div class="empty-btn-row">
+      <a href="index.html" class="btn-primary btn-primary--link">Log an entry</a>
+    </div>
   </div>
 
 </main>
@@ -241,37 +176,20 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- EDIT MODAL -->
 <div class="modal-overlay" id="edit-modal">
   <div class="modal-card">
     <div class="modal-title">Edit entry</div>
     <div class="modal-field">
       <label class="modal-label">Outcome</label>
       <select class="modal-select" id="edit-outcome">
-        <option value="did">Episode</option>
-        <option value="caught">Caught mid-act</option>
-        <option value="near_miss">Near Miss</option>
+        <option value="did">Picked</option>
         <option value="resisted">Resisted</option>
       </select>
     </div>
     <div class="modal-field">
-      <label class="modal-label">Urge before (1–10)</label>
-      <input type="number" class="modal-input" id="edit-urge" min="1" max="10">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">Urge after (1–10)</label>
-      <input type="number" class="modal-input" id="edit-urge-after" min="1" max="10">
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">Pre-feeling</label>
-      <input type="text" class="modal-input" id="edit-pre-feeling" placeholder="e.g., Anxious / stressed">
-    </div>
-    <div class="modal-field">
       <label class="modal-label">Notes</label>
       <textarea class="modal-input modal-input--resize" id="edit-notes" rows="3"></textarea>
-    </div>
-    <div class="modal-field">
-      <label class="modal-label">Reflection / Narrative</label>
-      <textarea class="modal-input modal-input--resize" id="edit-narrative" rows="3" placeholder="What were you feeling? What was the situation?"></textarea>
     </div>
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeEdit()">Cancel</button>
@@ -286,24 +204,17 @@ import { collection, query, where, getDocs, orderBy, deleteDoc, doc, updateDoc, 
   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 window._db = db;
-
 window._uid = null;
-window._currentEntries = [];
 window._allEntries = [];
 let feedFilter = 'all';
 let feedPage = 0;
-const FEED_PAGE_SIZE = 10;
+const FEED_PAGE_SIZE = 15;
 let chartInstances = {};
 let editingId = null;
 
 window.signInWithGoogle = async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
-      console.error('Sign in error:', e);
-    }
-  }
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { if (e.code !== 'auth/popup-closed-by-user') console.error(e); }
 };
 window.signOut = async () => { await fbSignOut(auth); };
 
@@ -314,24 +225,16 @@ onAuthStateChanged(auth, user => {
   if (user) loadData();
 });
 
-function getCSSVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
-function getC() {
-  return { ac: getCSSVar('--ac'), sage: getCSSVar('--sage'), warm: getCSSVar('--warm'), mu: getCSSVar('--mu'), bdr: getCSSVar('--bdr'), tx: getCSSVar('--tx'), tx2: getCSSVar('--tx2'),
-    oResisted: getCSSVar('--o-resisted'), oNear: getCSSVar('--o-near'), oEpisode: getCSSVar('--o-episode') };
-}
-
+function cv(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 function showToast(msg, isErr=false) {
   const t = document.getElementById('toast');
   if (!t) return;
-  t.textContent = msg;
-  t.className = 'toast' + (isErr ? ' err' : '');
-  void t.offsetWidth;
-  t.classList.add('show');
+  t.textContent = msg; t.className = 'toast' + (isErr ? ' err' : '');
+  void t.offsetWidth; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
+/* ── LOAD DATA ─────────────────────────────────────────────────── */
 window.loadData = async () => {
   if (!window._uid) return;
   document.getElementById('loading').style.display = 'block';
@@ -352,226 +255,115 @@ window.loadData = async () => {
     const snap = await getDocs(q);
     const entries = [];
     snap.forEach(d => entries.push({ id: d.id, ...d.data() }));
-    window._currentEntries = entries;
-    window._allEntries = entries;
+    // Filter to picking only
+    window._allEntries = entries.filter(e => !e.bfrb_type || e.bfrb_type === 'picking');
 
-    if (entries.length === 0) {
+    if (window._allEntries.length === 0) {
       document.getElementById('loading').style.display = 'none';
       document.getElementById('empty-state').style.display = 'block';
       return;
     }
-
-    // Load daily state data for correlation (non-blocking)
-    loadDailyStateCorrelation(entries).catch(() => {});
-
-    applyBehaviorFilter();
+    processData(window._allEntries);
+    feedFilter = 'all'; feedPage = 0;
+    document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'all'));
+    renderFeed();
   } catch(e) {
     console.error(e);
-    const loadEl = document.getElementById('loading');
-    if (e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))) {
-      loadEl.innerHTML = '<div class="quota-error">Daily read limit reached.<br>Firestore free-tier quota resets at midnight Pacific. Try again tomorrow.</div>';
-    } else {
-      loadEl.textContent = 'Error loading data — check your connection and reload.';
-    }
+    document.getElementById('loading').textContent = 'Error loading data.';
   }
 };
 
-window.applyBehaviorFilter = function() {
-  if (!window._allEntries) return;
-  const bFilter = document.getElementById('behavior-filter')?.value || 'all';
-  const filtered = bFilter === 'all'
-    ? window._allEntries
-    : window._allEntries.filter(e => e.bfrb_type === bFilter);
-
-  if (filtered.length === 0 && window._allEntries.length > 0) {
-    // Has entries but none for this behavior — show a soft message
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('empty-state').style.display = 'block';
-    const emptyTitle = document.querySelector('.empty-title');
-    if (emptyTitle) emptyTitle.textContent = 'No ' + bFilter + ' entries in this period';
-    return;
-  }
-
-  processData(filtered);
-  feedFilter = 'all';
-  feedPage = 0;
-  document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === 'all'));
-  renderFeed(filtered);
-  // Re-run correlation with filtered data so it respects behavior filter
-  loadDailyStateCorrelation(filtered).catch(() => {});
-};
-
+/* ── PROCESS DATA ──────────────────────────────────────────────── */
 function processData(entries) {
-  const c = getC();
-  let outcomes = { resisted: 0, near_miss: 0, caught: 0, did: 0 };
+  let outcomes = { resisted: 0, did: 0 };
   let times = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
-  let hourMap = {};
-  let dowMap = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 }; // Sun–Sat episodes
-  let emotional = {}, preFeelings = {}, awarenessMap = {}, areas = {}, targets = {}, tools = {}, activities = {}, escalations = {};
-  let totalUrge = 0, urgeCount = 0, totalMoodBefore = 0, totalMoodAfter = 0, moodCount = 0;
-  let urgeAfterTotal = 0, urgeAfterCount = 0;
-  // Weekly bins: key = YYYY-WW
-  const weeklyEpisodes = {};
-  const weeklyManaged = {};
-
-  // Build hourly data
-  for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0, caught: 0 };
+  let dowMap = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 };
+  let states = {}, areas = {}, environments = {}, activities = {};
+  let totalUrge = 0, urgeCount = 0;
 
   entries.forEach(e => {
-    const type = e.entry_type || 'did';
-    if (outcomes[type] !== undefined) outcomes[type]++;
+    const type = e.entry_type === 'resisted' ? 'resisted' : 'did';
+    outcomes[type]++;
 
     if (e.urge_before) { totalUrge += parseInt(e.urge_before); urgeCount++; }
-    if (e.urge_after)  { urgeAfterTotal += parseInt(e.urge_after); urgeAfterCount++; }
-    if (e.mood_before) { totalMoodBefore += parseInt(e.mood_before); moodCount++; }
-    if (e.mood_after)  { totalMoodAfter  += parseInt(e.mood_after); }
 
     if (e.created_at) {
       const d = e.created_at.toDate ? e.created_at.toDate() : new Date(e.created_at);
       const h = d.getHours();
-      if (hourMap[h]) hourMap[h][type] = (hourMap[h][type] || 0) + 1;
       if (h >= 6 && h < 12) times.Morning++;
       else if (h >= 12 && h < 17) times.Afternoon++;
       else if (h >= 17 && h < 22) times.Evening++;
       else times.Night++;
-
-      // Day of week (episodes only — so the chart shows episode risk)
       if (type === 'did') dowMap[d.getDay()]++;
-
-      // Weekly episode bins
-      if (type === 'did') {
-        const startOfYear = new Date(d.getFullYear(), 0, 1);
-        const weekNum = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
-        const wKey = `${d.getFullYear()}-W${String(weekNum).padStart(2,'0')}`;
-        weeklyEpisodes[wKey] = (weeklyEpisodes[wKey] || 0) + 1;
-      }
-      // Weekly managed (resisted + near miss + caught)
-      if (type === 'resisted' || type === 'near_miss' || type === 'caught') {
-        const startOfYear = new Date(d.getFullYear(), 0, 1);
-        const weekNum = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
-        const wKey = `${d.getFullYear()}-W${String(weekNum).padStart(2,'0')}`;
-        weeklyManaged[wKey] = (weeklyManaged[wKey] || 0) + 1;
-      }
     }
 
-    // Triggers — handle both array and string
-    const parseTags = (v) => {
+    // State/feeling
+    if (e.pre_feeling && e.pre_feeling.toLowerCase() !== 'nan') {
+      states[e.pre_feeling] = (states[e.pre_feeling] || 0) + 1;
+    }
+
+    // Body areas
+    const parseTags = v => {
       if (!v) return [];
       if (Array.isArray(v)) return v;
       return v.split(',').map(s => s.trim()).filter(Boolean);
     };
+    parseTags(e.body_areas).forEach(a => { if (a) areas[a] = (areas[a] || 0) + 1; });
 
-    parseTags(e.emotional_triggers || e.primary_trigger).forEach(t => {
-      if (t && t.toLowerCase() !== 'nan') emotional[t] = (emotional[t] || 0) + 1;
-    });
-    // Pre-feeling (antecedent emotional state)
-    if (e.pre_feeling && e.pre_feeling.toLowerCase() !== 'nan') {
-      preFeelings[e.pre_feeling] = (preFeelings[e.pre_feeling] || 0) + 1;
+    if (e.environment && e.environment.toLowerCase() !== 'nan') {
+      environments[e.environment] = (environments[e.environment] || 0) + 1;
     }
-    // Awareness distribution
-    if (e.awareness && e.awareness.toLowerCase() !== 'nan') {
-      awarenessMap[e.awareness] = (awarenessMap[e.awareness] || 0) + 1;
+    if (e.activity && e.activity.toLowerCase() !== 'nan') {
+      activities[e.activity] = (activities[e.activity] || 0) + 1;
     }
-
-    parseTags(e.body_areas).forEach(a => {
-      if (a) areas[a] = (areas[a] || 0) + 1;
-    });
-    parseTags(e.target || e.picked_what || e.bite_what).forEach(t => {
-      if (t && t.toLowerCase() !== 'nan') targets[t] = (targets[t] || 0) + 1;
-    });
-
-    if (e.tried_intervention && e.interventions) {
-      const isWin = type === 'resisted' || type === 'near_miss' || type === 'caught';
-      const rated = e.intervention_effectiveness ? parseInt(e.intervention_effectiveness) : null;
-      parseTags(e.interventions).forEach(tool => {
-        if (!tool || tool.toLowerCase() === 'nan') return;
-        if (!tools[tool]) tools[tool] = { attempts: 0, wins: 0, ratedTotal: 0, ratedCount: 0 };
-        tools[tool].attempts++;
-        if (isWin) tools[tool].wins++;
-        if (rated && rated >= 1 && rated <= 5) { tools[tool].ratedTotal += rated; tools[tool].ratedCount++; }
-      });
-    }
-
-    if (e.activity) activities[e.activity] = (activities[e.activity] || 0) + 1;
-    if (e.escalation) escalations[e.escalation] = (escalations[e.escalation] || 0) + 1;
   });
 
   const total = entries.length;
-  const managed = outcomes.resisted + outcomes.near_miss + outcomes.caught;
-
-  // ── Managed % as primary progress metric ──
-  const managedPct = total > 0 ? Math.round((managed / total) * 100) : 0;
-  const managedEl = document.getElementById('stat-managed');
-  const managedSubEl = document.getElementById('stat-managed-sub');
-  if (managedEl) managedEl.textContent = total ? `${managedPct}%` : '—';
-  if (managedSubEl) managedSubEl.textContent = `${managed} of ${total} entries`;
-  // Color the managed card contextually
-  const managedCard = document.getElementById('stat-managed-card');
-  if (managedCard) {
-    managedCard.className = 'stat-card' + (managedPct >= 60 ? ' sage' : managedPct >= 30 ? '' : ' warm');
-  }
+  const resistedPct = total > 0 ? Math.round((outcomes.resisted / total) * 100) : 0;
 
   // Stats
   document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-entries-sub').textContent = `${outcomes.did} episodes`;
-  document.getElementById('stat-urge').textContent = urgeCount ? (totalUrge / urgeCount).toFixed(1) : '—';
-  document.getElementById('stat-urge-after').textContent = urgeAfterCount ? `↓ ${(urgeAfterTotal / urgeAfterCount).toFixed(1)} after` : '';
+  document.getElementById('stat-entries-sub').textContent = `${outcomes.did} picked, ${outcomes.resisted} resisted`;
 
-  // Top intervention by outcome rate (min 2 uses)
-  const topTool = Object.entries(tools)
-    .filter(([k, v]) => v.attempts >= 2 && k)
-    .map(([k, v]) => [k, Math.round((v.wins / v.attempts) * 100), v.attempts])
-    .sort((a, b) => b[1] - a[1])[0];
-  const toolEl    = document.getElementById('stat-top-tool');
-  const toolSubEl = document.getElementById('stat-top-tool-sub');
-  if (topTool && toolEl) {
-    // Truncate long names for the stat card
-    const name = topTool[0].length > 14 ? topTool[0].slice(0, 13) + '…' : topTool[0];
-    toolEl.textContent    = name;
-    toolEl.classList.add('stat-val--sm');
-    if (toolSubEl) toolSubEl.textContent = `${topTool[1]}% outcome rate`;
-  } else if (toolEl) {
-    toolEl.textContent = '—';
-    if (toolSubEl) toolSubEl.textContent = 'no intervention data yet';
-  }
+  const managedEl = document.getElementById('stat-managed');
+  const managedSub = document.getElementById('stat-managed-sub');
+  managedEl.textContent = total ? `${resistedPct}%` : '--';
+  managedSub.textContent = `${outcomes.resisted} of ${total}`;
+  const managedCard = document.getElementById('stat-managed-card');
+  if (managedCard) managedCard.className = 'stat-card' + (resistedPct >= 60 ? ' sage' : resistedPct >= 30 ? '' : ' warm');
 
-  // Render charts
+  document.getElementById('stat-urge').textContent = urgeCount ? (totalUrge / urgeCount).toFixed(1) : '--';
+  document.getElementById('stat-urge-sub').textContent = urgeCount ? 'avg before' : '';
+
+  const topArea = Object.entries(areas).sort((a,b) => b[1] - a[1])[0];
+  document.getElementById('stat-top-area').textContent = topArea ? topArea[0] : '--';
+  document.getElementById('stat-top-area-sub').textContent = topArea ? `${topArea[1]} times` : '';
+
+  // Charts
   renderOutcomesDonut(outcomes, total);
   renderStreakCalendar(entries);
-  renderWeeklyTrend(weeklyEpisodes, weeklyManaged, c);
-  renderTimeOfDay(times, c);
-  renderDayOfWeek(dowMap, c);
-  renderHeatmap(hourMap);
-  renderBarRows('bar-triggers', emotional, c.warm, 6);
-  renderBarRows('bar-prefeeling', preFeelings, c.ac, 8);
-  renderBarRows('bar-awareness', awarenessMap, c.mu, 5);
-  renderMoodDelta(totalMoodBefore, totalMoodAfter, moodCount, urgeCount, totalUrge, urgeAfterCount, urgeAfterTotal);
-  renderAreaMap(areas, c);
-  renderBarRows('bar-targets', targets, c.mu, 6);
-  renderToolBars(tools);
-  renderBarRows('bar-activity', activities, c.ac, 8);
-  renderBarRows('bar-escalation', escalations, c.oNear, 4);
+  renderTimeOfDay(times);
+  renderDayOfWeek(dowMap);
+  renderBarRows('bar-state', states, cv('--ac'), 6);
+  renderBarRows('bar-areas', areas, cv('--warm'), 6);
+  renderBarRows('bar-environment', environments, cv('--sage'), 5);
+  renderBarRows('bar-activity', activities, cv('--ac'), 5);
 
   document.getElementById('loading').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
 }
 
+/* ── CHARTS ────────────────────────────────────────────────────── */
 function renderOutcomesDonut(outcomes, total) {
-  const c = getC();
   if (chartInstances['outcomes']) chartInstances['outcomes'].destroy();
   const ctx = document.getElementById('chart-outcomes').getContext('2d');
-
-  const data   = [outcomes.resisted, outcomes.near_miss, outcomes.caught || 0, outcomes.did];
-  const colors = [c.oResisted, c.oNear, c.ac, c.oEpisode];
-  const labels = ['Resisted', 'Near miss', 'Caught mid-act', 'Episode'];
+  const data = [outcomes.resisted, outcomes.did];
+  const colors = [cv('--o-resisted'), cv('--o-episode')];
+  const labels = ['Resisted', 'Picked'];
 
   chartInstances['outcomes'] = new Chart(ctx, {
     type: 'doughnut',
-    data: {
-      labels,
-      datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }]
-    },
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 4 }] },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } } },
@@ -579,9 +371,7 @@ function renderOutcomesDonut(outcomes, total) {
     }
   });
 
-  // Custom legend — hide zero-count rows
-  const legend = document.getElementById('donut-legend');
-  legend.innerHTML = labels.map((l, i) => data[i] > 0 ? `
+  document.getElementById('donut-legend').innerHTML = labels.map((l, i) => data[i] > 0 ? `
     <div class="legend-item">
       <div class="legend-dot" style="background:${colors[i]}"></div>
       <span>${l}</span>
@@ -594,117 +384,91 @@ function renderStreakCalendar(entries) {
   const container = document.getElementById('streak-container');
   const days = 60;
   const map = {};
-
   entries.forEach(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
     const key = d.toISOString().slice(0, 10);
-    if (!map[key]) map[key] = { did: 0, resisted: 0, near_miss: 0, caught: 0 };
-    const t = e.entry_type || 'did';
-    if (map[key][t] !== undefined) map[key][t]++;
-    else map[key][t] = 1;
+    if (!map[key]) map[key] = { did: 0, resisted: 0 };
+    const t = e.entry_type === 'resisted' ? 'resisted' : 'did';
+    map[key][t]++;
   });
 
   const cells = [];
   for (let i = days - 1; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
+    const d = new Date(); d.setDate(d.getDate() - i);
     const key = d.toISOString().slice(0, 10);
     const data = map[key];
     let cls = 'streak-cell empty';
     let title = key;
     if (data) {
       if (data.did > 0) cls = 'streak-cell episode';
-      else if (data.near_miss > 0) cls = 'streak-cell near-miss';
-      else if (data.caught > 0) cls = 'streak-cell caught';
       else cls = 'streak-cell resisted';
-      title = `${key}: ${data.did} ep · ${data.caught} caught · ${data.near_miss} near miss · ${data.resisted} resisted`;
+      title = `${key}: ${data.did} picked, ${data.resisted} resisted`;
     }
     cells.push(`<div class="${cls}" title="${title}" aria-label="${title}" data-tip="${title}" onclick="this.classList.toggle('tapped')"></div>`);
   }
 
-  const c = getC();
   container.innerHTML = `
     <div class="streak-cells">${cells.join('')}</div>
     <div class="streak-legend">
-      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.oResisted}"></span>Resisted</span>
-      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.oNear}"></span>Near miss</span>
-      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.ac}"></span>Caught mid-act</span>
-      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${c.oEpisode}"></span>Episode</span>
+      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${cv('--o-resisted')}"></span>Resisted</span>
+      <span class="streak-legend-item"><span class="streak-legend-dot" style="background:${cv('--o-episode')}"></span>Picked</span>
     </div>
   `;
 }
 
-function renderTimeOfDay(times, c) {
+function renderTimeOfDay(times) {
   if (chartInstances['time']) chartInstances['time'].destroy();
   const ctx = document.getElementById('chart-time').getContext('2d');
   const vals = [times.Morning, times.Afternoon, times.Evening, times.Night];
   const max = Math.max(...vals);
-  const bgColors = vals.map(v => v === max ? c.ac : c.mu + '88');
+  const bgColors = vals.map(v => v === max ? cv('--ac') : cv('--mu') + '88');
 
   chartInstances['time'] = new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels: ['Morning', 'Afternoon', 'Evening', 'Night'],
-      datasets: [{ data: vals, backgroundColor: bgColors, borderRadius: 6, borderSkipped: false }]
-    },
+    data: { labels: ['Morning', 'Afternoon', 'Evening', 'Night'], datasets: [{ data: vals, backgroundColor: bgColors, borderRadius: 6, borderSkipped: false }] },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { beginAtZero: true, ticks: { stepSize: 1, color: c.mu, font: { size: 11 } }, grid: { color: c.bdr }, border: { display: false } },
-        x: { ticks: { color: c.mu, font: { size: 11 } }, grid: { display: false }, border: { display: false } }
+        y: { beginAtZero: true, ticks: { stepSize: 1, color: cv('--mu'), font: { size: 11 } }, grid: { color: cv('--bdr') }, border: { display: false } },
+        x: { ticks: { color: cv('--mu'), font: { size: 11 } }, grid: { display: false }, border: { display: false } }
       }
     }
   });
 }
 
-function renderHeatmap(hourMap) {
-  const container = document.getElementById('heatmap-container');
-  const c = getC();
-  const maxVal = Math.max(...Object.values(hourMap).map(h => h.did + h.resisted + h.near_miss + (h.caught||0)), 1);
+function renderDayOfWeek(dowMap) {
+  if (chartInstances['dow']) chartInstances['dow'].destroy();
+  const ctx = document.getElementById('chart-dow').getContext('2d');
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const data = days.map((_,i) => dowMap[i] || 0);
+  const maxVal = Math.max(...data, 1);
+  const colors = data.map(v => v >= maxVal * 0.75 ? cv('--warm') : v >= maxVal * 0.4 ? cv('--ac') : cv('--mu'));
 
-  const hourLabels = ['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
-
-  let headerRow = '<div style="display:grid;grid-template-columns:36px repeat(24,1fr);gap:2px;margin-bottom:2px">';
-  headerRow += '<div></div>';
-  hourLabels.forEach((l, i) => {
-    headerRow += `<div style="font-size:8px;color:var(--mu);text-align:center;line-height:1">${i % 3 === 0 ? l : ''}</div>`;
-  });
-  headerRow += '</div>';
-
-  const rows = [
-    { label: 'Episode', key: 'did', color: c.oEpisode },
-    { label: 'Resisted', key: 'resisted', color: c.oResisted },
-    { label: 'Near miss', key: 'near_miss', color: c.oNear },
-  ];
-
-  let html = headerRow;
-  rows.forEach(row => {
-    html += `<div style="display:grid;grid-template-columns:36px repeat(24,1fr);gap:2px;margin-bottom:2px">`;
-    html += `<div style="font-size:9px;color:var(--mu);display:flex;align-items:center;justify-content:flex-end;padding-right:4px">${row.label}</div>`;
-    for (let h = 0; h < 24; h++) {
-      const val = (hourMap[h] || {})[row.key] || 0;
-      const opacity = val === 0 ? 0.12 : 0.2 + (val / maxVal) * 0.8;
-      html += `<div style="height:14px;border-radius:2px;background:${row.color};opacity:${opacity.toFixed(2)}" title="${val} at ${hourLabels[h]}"></div>`;
+  chartInstances['dow'] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: days, datasets: [{ data, backgroundColor: colors, borderRadius: 4, borderSkipped: false }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: cv('--mu'), font: { size: 11 } } },
+        y: { beginAtZero: true, ticks: { color: cv('--mu'), font: { size: 11 }, stepSize: 1 }, grid: { color: cv('--bdr') } }
+      }
     }
-    html += '</div>';
   });
-
-  container.innerHTML = html;
 }
 
 function renderBarRows(containerId, data, color, limit) {
   const container = document.getElementById(containerId);
   const sorted = Object.entries(data).sort((a,b) => b[1]-a[1]).slice(0, limit || 8);
-
   if (sorted.length === 0) {
-    container.innerHTML = '<div class="no-data-msg">No data logged yet</div>';
+    container.innerHTML = '<div class="no-data-msg">No data yet</div>';
     return;
   }
-
   const max = sorted[0][1];
   container.innerHTML = sorted.map(([label, count]) => {
-    const safe = escapeHtml(label);
+    const safe = label.replace(/[&<"']/g, m => ({'&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;'}[m]));
     return `
     <div class="bar-row">
       <div class="bar-row-label" title="${safe}">${safe}</div>
@@ -714,294 +478,44 @@ function renderBarRows(containerId, data, color, limit) {
   }).join('');
 }
 
-function renderMoodDelta(moodBefore, moodAfter, moodCount, urgeCount, urgeTotal, urgeAfterCount, urgeAfterTotal) {
-  const container = document.getElementById('mood-delta-container');
-
-  const hasMood = false; // mood_before/after not written by current schema — hidden until implemented
-  const hasUrge = urgeCount > 0 && urgeAfterCount > 0;
-
-  if (!hasMood && !hasUrge) {
-    container.innerHTML = '<div class="no-data-msg--sm">Log mood before/after to see emotional impact patterns.</div>';
-    return;
-  }
-
-  let html = '<div class="mood-delta">';
-
-  if (hasUrge) {
-    const before = (urgeTotal / urgeCount).toFixed(1);
-    const after = (urgeAfterTotal / urgeAfterCount).toFixed(1);
-    const delta = (parseFloat(after) - parseFloat(before)).toFixed(1);
-    const deltaColor = parseFloat(delta) < 0 ? 'var(--sage)' : parseFloat(delta) > 0 ? 'var(--ac)' : 'var(--mu)';
-    html += `
-      <div class="mood-col">
-        <div class="mood-col-label">Urge before</div>
-        <div class="mood-col-val">${before}</div>
-        <div class="mood-col-sub">avg / 10</div>
-      </div>
-      <div class="mood-arrow" style="color:${deltaColor}">→ ${delta > 0 ? '+' : ''}${delta}</div>
-      <div class="mood-col">
-        <div class="mood-col-label">Urge after</div>
-        <div class="mood-col-val" style="color:${deltaColor}">${after}</div>
-        <div class="mood-col-sub">avg / 10</div>
-      </div>
-    `;
-  }
-
-  if (hasMood) {
-    const before = (moodBefore / moodCount).toFixed(1);
-    const after = (moodAfter / moodCount).toFixed(1);
-    const delta = (parseFloat(after) - parseFloat(before)).toFixed(1);
-    const deltaColor = parseFloat(delta) > 0 ? 'var(--sage)' : parseFloat(delta) < 0 ? 'var(--ac)' : 'var(--mu)';
-    html += `
-      ${hasUrge ? '<div style="width:1px;background:var(--bdr);margin:0 4px"></div>' : ''}
-      <div class="mood-col">
-        <div class="mood-col-label">Mood before</div>
-        <div class="mood-col-val">${before}</div>
-        <div class="mood-col-sub">avg / 10</div>
-      </div>
-      <div class="mood-arrow" style="color:${deltaColor}">→ ${delta > 0 ? '+' : ''}${delta}</div>
-      <div class="mood-col">
-        <div class="mood-col-label">Mood after</div>
-        <div class="mood-col-val" style="color:${deltaColor}">${after}</div>
-        <div class="mood-col-sub">avg / 10</div>
-      </div>
-    `;
-  }
-
-  html += '</div>';
-  container.innerHTML = html;
-}
-
-function renderAreaMap(areas, c) {
-  const AREA_MAP = {
-    'Forehead':'Face','Temples':'Face','Cheeks':'Face','Nose':'Face','Chin / Jaw':'Face','Lips':'Face',
-    'Scalp':'Head & Neck','Hairline':'Head & Neck','Behind Ears':'Head & Neck','Ears':'Head & Neck','Neck':'Head & Neck',
-    'Chest':'Chest & Back','Shoulders':'Chest & Back','Abdomen':'Chest & Back','Upper Back':'Chest & Back','Lower Back':'Chest & Back',
-    'Upper Arms':'Arms & Hands','Forearms':'Arms & Hands','Wrists':'Arms & Hands','Hands':'Arms & Hands','Fingers / Cuticles':'Arms & Hands',
-    'Thighs':'Legs & Feet','Knees':'Legs & Feet','Shins / Calves':'Legs & Feet','Ankles':'Legs & Feet','Feet':'Legs & Feet',
-    'Groin':'Groin & Glutes','Buttocks':'Groin & Glutes','Inner Thighs':'Groin & Glutes',
-    'Face':'Face','Back':'Chest & Back','Arms / Hands':'Arms & Hands','Legs':'Legs & Feet','Chest / Shoulders':'Chest & Back'
-  };
-  const grouped = {};
-  Object.entries(areas).forEach(([k, v]) => {
-    const parent = AREA_MAP[k] || k;
-    grouped[parent] = (grouped[parent] || 0) + v;
-  });
-  renderBarRows('bar-areas', grouped, c.ac, 8);
-}
-
-function renderToolBars(tools) {
-  const c = getC();
-  const noDataMsg = '<div class="no-data-msg">No intervention data yet.</div>';
-
-  // — Outcome rate chart —
-  const outcomeSorted = Object.entries(tools)
-    .filter(([k, v]) => v.attempts >= 1 && k)
-    .map(([k, v]) => [k, Math.round((v.wins / v.attempts) * 100), v.attempts])
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 8);
-
-  const outContainer = document.getElementById('bar-tools');
-  if (outcomeSorted.length === 0) { outContainer.innerHTML = noDataMsg; }
-  else {
-    outContainer.innerHTML = outcomeSorted.map(([label, pct, attempts]) => `
-      <div class="bar-row">
-        <div class="bar-row-label" title="${label}">${label}</div>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${pct >= 60 ? c.sage : pct >= 30 ? c.warm : c.mu}"></div></div>
-        <div class="bar-count" title="${attempts} uses">${pct}%</div>
-      </div>`).join('');
-  }
-
-  // — User-rated effectiveness (avg 1–5) —
-  const ratedSorted = Object.entries(tools)
-    .filter(([k, v]) => v.ratedCount >= 1 && k)
-    .map(([k, v]) => [k, (v.ratedTotal / v.ratedCount), v.ratedCount])
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 8);
-
-  const ratedContainer = document.getElementById('bar-tools-rated');
-  if (!ratedContainer) return;
-  if (ratedSorted.length === 0) {
-    ratedContainer.innerHTML = '<div class="no-data-msg">No user ratings yet. Rate tools 1–5 when logging.</div>';
-  } else {
-    ratedContainer.innerHTML = ratedSorted.map(([label, avg, count]) => {
-      const pct = Math.round((avg / 5) * 100);
-      return `
-        <div class="bar-row">
-          <div class="bar-row-label" title="${label}">${label}</div>
-          <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${avg >= 3.5 ? c.sage : avg >= 2 ? c.warm : c.mu}"></div></div>
-          <div class="bar-count" title="${count} ratings">${avg.toFixed(1)}</div>
-        </div>`;
-    }).join('');
-  }
-}
-
-// ── WEEKLY EPISODE TREND ──
-function renderWeeklyTrend(weeklyEpisodes, weeklyManaged, c) {
-  const canvas = document.getElementById('chart-weekly');
-  if (!canvas) return;
-  if (window._weeklyChart) { window._weeklyChart.destroy(); window._weeklyChart = null; }
-
-  // Build last 16 weeks
-  const weeks = [];
-  const now = new Date();
-  for (let i = 15; i >= 0; i--) {
-    const d = new Date(now);
-    d.setDate(d.getDate() - i * 7);
-    const startOfYear = new Date(d.getFullYear(), 0, 1);
-    const wNum = Math.ceil(((d - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
-    const wKey = `${d.getFullYear()}-W${String(wNum).padStart(2,'0')}`;
-    const label = `${d.toLocaleString('en-US', { month: 'short' })} ${d.getDate()}`;
-    weeks.push({ key: wKey, label, episodes: weeklyEpisodes[wKey] || 0, managed: weeklyManaged[wKey] || 0 });
-  }
-
-  const labels = weeks.map((w, i) => i % 4 === 0 ? w.label : '');
-  const epData = weeks.map(w => w.episodes);
-  const mgData = weeks.map(w => w.managed);
-  const maxVal = Math.max(...epData, ...mgData, 1);
-
-  window._weeklyChart = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Episodes',
-          data: epData,
-          borderColor: c.oEpisode,
-          backgroundColor: 'transparent',
-          borderWidth: 2,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-          tension: 0.35
-        },
-        {
-          label: 'Managed',
-          data: mgData,
-          borderColor: c.oResisted,
-          backgroundColor: c.sagel || 'rgba(74,140,106,0.08)',
-          borderWidth: 2,
-          pointRadius: 3,
-          pointHoverRadius: 5,
-          tension: 0.35,
-          fill: true
-        }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: true, position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 }, color: c.mu } },
-        tooltip: {
-          callbacks: {
-            title: (items) => weeks[items[0].dataIndex].label,
-            label: (item) => `${item.dataset.label}: ${item.raw}`
-          }
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: c.mu, font: { size: 11 }, maxRotation: 0 } },
-        y: { beginAtZero: true, max: maxVal + 1, ticks: { color: c.mu, font: { size: 11 }, stepSize: 1 }, grid: { color: c.bdr } }
-      }
-    }
-  });
-}
-
-// ── DAY OF WEEK EPISODES ──
-function renderDayOfWeek(dowMap, c) {
-  const canvas = document.getElementById('chart-dow');
-  if (!canvas) return;
-  if (window._dowChart) { window._dowChart.destroy(); window._dowChart = null; }
-
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const data = days.map((_, i) => dowMap[i] || 0);
-  const maxVal = Math.max(...data, 1);
-  const colors = data.map(v => v >= maxVal * 0.75 ? c.warm : v >= maxVal * 0.4 ? c.ac : c.bdr2 || c.mu);
-
-  window._dowChart = new Chart(canvas, {
-    type: 'bar',
-    data: {
-      labels: days,
-      datasets: [{ data, backgroundColor: colors, borderRadius: 4, borderSkipped: false }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: {
-        callbacks: { label: (item) => `${item.raw} episode${item.raw !== 1 ? 's' : ''}` }
-      }},
-      scales: {
-        x: { grid: { display: false }, ticks: { color: c.mu, font: { size: 11 } } },
-        y: { beginAtZero: true, ticks: { color: c.mu, font: { size: 11 }, stepSize: 1 }, grid: { color: c.bdr } }
-      }
-    }
-  });
-}
-
-// ── FEED ──
-function escapeHtml(s) {
-  return (s || '').toString().replace(/[&<"']/g, m => ({ '&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;' }[m]));
-}
+/* ── FEED ──────────────────────────────────────────────────────── */
+function escapeHtml(s) { return (s||'').toString().replace(/[&<"']/g, m => ({'&':'&amp;','<':'&lt;','"':'&quot;',"'":'&#039;'}[m])); }
 
 window.setFeedFilter = (filter, el) => {
-  feedFilter = filter;
-  feedPage = 0;
+  feedFilter = filter; feedPage = 0;
   document.querySelectorAll('.feed-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === filter));
   renderFeed();
 };
 
 function getFeedEntries() {
-  const base = window._filteredEntries || window._allEntries || [];
-  if (feedFilter === 'all') return base;
-  if (feedFilter === 'discussed') return base.filter(e => e.discussed_in_session);
-  return base.filter(e => e.entry_type === feedFilter);
+  if (feedFilter === 'all') return window._allEntries;
+  return window._allEntries.filter(e => {
+    if (feedFilter === 'resisted') return e.entry_type === 'resisted';
+    return e.entry_type !== 'resisted'; // 'did', 'caught', 'near_miss' all count as picked
+  });
 }
 
-function renderFeed(sourceEntries) {
-  // Allow applyBehaviorFilter to pass a fresh filtered set on initial render
-  if (sourceEntries) window._filteredEntries = sourceEntries;
+function renderFeed() {
   const container = document.getElementById('log-feed');
   const all = getFeedEntries();
   const page = all.slice(0, (feedPage + 1) * FEED_PAGE_SIZE);
-  const labels = { resisted: 'Resisted', near_miss: 'Near miss', caught: 'Caught mid-act', did: 'Full episode' };
+  const labels = { resisted: 'Resisted', did: 'Picked', caught: 'Picked', near_miss: 'Picked' };
 
   container.innerHTML = page.map(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
     const dateStr = d.toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-    const type = e.entry_type || 'did';
+    const type = e.entry_type === 'resisted' ? 'resisted' : 'did';
 
     const chips = [];
-    const h = escapeHtml; // shorthand
-    const hArr = v => Array.isArray(v) ? v.map(h).join(', ') : h(v);
-    // ── Antecedent context (clinical flow: what led to it)
-    if (e.bfrb_type) chips.push(`<span class="chip"><strong>Type</strong>${h(e.bfrb_type)}</span>`);
-    if (e.pre_feeling) chips.push(`<span class="chip"><strong>Before</strong>${h(e.pre_feeling)}</span>`);
-    if (e.urge_before != null) chips.push(`<span class="chip"><strong>Urge</strong>${h(String(e.urge_before))}/10${e.urge_after != null ? ' → ' + h(String(e.urge_after)) : ''}</span>`);
-    else if (e.bfrb_type === 'biting' && e.urge_after != null) chips.push(`<span class="chip"><strong>After</strong>${h(String(e.urge_after))}/10</span>`);
-    if (e.emotional_triggers || e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${h(e.emotional_triggers || e.primary_trigger)}</span>`);
-    if (e.pre_action) chips.push(`<span class="chip"><strong>Pre-action</strong>${h(e.pre_action)}</span>`);
-    // ── Episode detail (what happened)
-    if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${hArr(e.body_areas)}</span>`);
-    if (e.target) chips.push(`<span class="chip"><strong>Target</strong>${hArr(e.target)}</span>`);
-    if (e.awareness) chips.push(`<span class="chip"><strong>Awareness</strong>${h(e.awareness)}</span>`);
+    const h = escapeHtml;
+    if (e.pre_feeling) chips.push(`<span class="chip"><strong>State</strong>${h(e.pre_feeling)}</span>`);
+    if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${h(e.body_areas)}</span>`);
+    if (e.urge_before != null) chips.push(`<span class="chip"><strong>Urge</strong>${h(String(e.urge_before))}/10</span>`);
     if (e.duration) chips.push(`<span class="chip"><strong>Duration</strong>${h(e.duration)}</span>`);
-    if (e.mirror) chips.push(`<span class="chip"><strong>Mirror</strong>${h(e.mirror)}</span>`);
-    if (e.escalation) chips.push(`<span class="chip"><strong>Escalation</strong>${h(e.escalation)}</span>`);
-    // ── Environment & situation
-    if (e.environment) chips.push(`<span class="chip"><strong>Environment</strong>${h(e.environment)}</span>`);
+    if (e.environment) chips.push(`<span class="chip"><strong>Place</strong>${h(e.environment)}</span>`);
     if (e.activity) chips.push(`<span class="chip"><strong>Activity</strong>${h(e.activity)}</span>`);
-    // ── Aftermath (what happened after)
-    if (e.post_feeling) chips.push(`<span class="chip"><strong>After</strong>${h(e.post_feeling)}</span>`);
-    if (e.skin_impact) chips.push(`<span class="chip"><strong>Skin impact</strong>${h(e.skin_impact)}</span>`);
-    if (e.post_ritual) chips.push(`<span class="chip"><strong>Ritual</strong>${h(e.post_ritual)}</span>`);
-    if (e.aftercare) chips.push(`<span class="chip"><strong>Aftercare</strong>${h(e.aftercare)}</span>`);
-    // ── Intervention data
-    if (e.tried_intervention && e.interventions) chips.push(`<span class="chip"><strong>Tried</strong>${hArr(e.interventions)}</span>`);
-    if (e.specific_cr) chips.push(`<span class="chip"><strong>CR</strong>${h(e.specific_cr)}</span>`);
-    if (e.intervention_effectiveness) chips.push(`<span class="chip"><strong>Tool eff.</strong>${e.intervention_effectiveness}/5</span>`);
-    if (e.surf_peak !== undefined) chips.push(`<span class="chip"><strong>Surf peak</strong>${e.surf_peak}/10 → ${e.surf_end ?? '?'}/10</span>`);
 
     const narrative = e.narrative_notes || e.notes;
-    const isDiscussed = !!e.discussed_in_session;
 
     return `
       <div class="log-card" data-id="${e.id}">
@@ -1009,16 +523,12 @@ function renderFeed(sourceEntries) {
         <div class="log-card-body">
           <div class="log-top">
             <div class="log-date">${dateStr}</div>
-            <div class="log-top-right">
-              ${isDiscussed ? '<span class="discussed-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Discussed</span>' : ''}
-              <div class="log-badge ${type}">${labels[type] || type}</div>
-            </div>
+            <div class="log-badge ${type}">${labels[type] || type}</div>
           </div>
           ${chips.length ? `<div class="log-chips">${chips.join('')}</div>` : ''}
           ${narrative ? `<div class="log-notes">${escapeHtml(narrative)}</div>` : ''}
           <div class="log-actions">
             <button class="log-act-btn" onclick="editLog('${e.id}')">Edit</button>
-            <button class="log-act-btn" onclick="toggleDiscussed('${e.id}',${isDiscussed})" style="color:${isDiscussed ? 'var(--sage)' : 'var(--mu)'}">${isDiscussed ? 'Unmark discussed' : 'Mark discussed'}</button>
             <button class="log-act-btn del" onclick="deleteLog('${e.id}')">Delete</button>
           </div>
         </div>
@@ -1026,15 +536,12 @@ function renderFeed(sourceEntries) {
     `;
   }).join('');
 
-  const moreBtn = document.getElementById('load-more-btn');
-  moreBtn.style.display = page.length < all.length ? 'block' : 'none';
+  document.getElementById('load-more-btn').style.display = page.length < all.length ? 'block' : 'none';
 }
 
-window.loadMoreFeed = () => {
-  feedPage++;
-  renderFeed();
-};
+window.loadMoreFeed = () => { feedPage++; renderFeed(); };
 
+/* ── DELETE ────────────────────────────────────────────────────── */
 window.deleteLog = (id) => {
   const card = document.querySelector(`[data-id="${id}"]`);
   if (!card) return;
@@ -1050,167 +557,86 @@ window.confirmDelete = async (id) => {
   try {
     await deleteDoc(doc(db, 'users', window._uid, 'entries', id));
     window._allEntries = window._allEntries.filter(e => e.id !== id);
-    window._currentEntries = window._allEntries;
-    if (window._allEntries.length > 0) { applyBehaviorFilter(); }
+    if (window._allEntries.length > 0) { processData(window._allEntries); renderFeed(); }
     else { document.getElementById('dashboard').style.display = 'none'; document.getElementById('empty-state').style.display = 'block'; }
   } catch(e) { showToast('Failed to delete', true); renderFeed(); }
 };
 
-window.toggleDiscussed = async (id, currentlyDiscussed) => {
-  const newVal = !currentlyDiscussed;
-  const idx = window._allEntries.findIndex(e => e.id === id);
-  if (idx > -1) window._allEntries[idx].discussed_in_session = newVal;
-  renderFeed();
-  try {
-    await updateDoc(doc(db, 'users', window._uid, 'entries', id), { discussed_in_session: newVal });
-  } catch(e) { showToast('Could not save', true); if (idx > -1) window._allEntries[idx].discussed_in_session = currentlyDiscussed; renderFeed(); }
-};
-
+/* ── EDIT ──────────────────────────────────────────────────────── */
 window.editLog = (id) => {
   const entry = window._allEntries.find(e => e.id === id);
   if (!entry) return;
   editingId = id;
-  document.getElementById('edit-outcome').value = entry.entry_type || 'did';
-  document.getElementById('edit-urge').value = entry.urge_before || 5;
-  document.getElementById('edit-urge-after').value = entry.urge_after || '';
-  document.getElementById('edit-pre-feeling').value = entry.pre_feeling || '';
-  document.getElementById('edit-notes').value = entry.notes || '';
-  document.getElementById('edit-narrative').value = entry.narrative_notes || '';
+  document.getElementById('edit-outcome').value = entry.entry_type === 'resisted' ? 'resisted' : 'did';
+  document.getElementById('edit-notes').value = entry.narrative_notes || entry.notes || '';
   document.getElementById('edit-modal').classList.add('on');
 };
 window.closeEdit = () => { editingId = null; document.getElementById('edit-modal').classList.remove('on'); };
 window.saveEdit = async () => {
   if (!editingId) return;
   const btn = document.getElementById('edit-save-btn');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  const urgeAfterVal = document.getElementById('edit-urge-after').value;
+  btn.disabled = true; btn.textContent = 'Saving...';
   const updates = {
     entry_type: document.getElementById('edit-outcome').value,
-    urge_before: parseInt(document.getElementById('edit-urge').value),
-    urge_after: urgeAfterVal ? parseInt(urgeAfterVal) : null,
-    pre_feeling: document.getElementById('edit-pre-feeling').value.trim(),
-    notes: document.getElementById('edit-notes').value.trim(),
-    narrative_notes: document.getElementById('edit-narrative').value.trim()
+    narrative_notes: document.getElementById('edit-notes').value.trim()
   };
   try {
     await updateDoc(doc(db, 'users', window._uid, 'entries', editingId), updates);
     const idx = window._allEntries.findIndex(e => e.id === editingId);
     if (idx > -1) window._allEntries[idx] = { ...window._allEntries[idx], ...updates };
-    applyBehaviorFilter(); renderFeed(); closeEdit();
+    processData(window._allEntries); renderFeed(); closeEdit();
   } catch(e) { showToast('Failed to save', true); }
   btn.disabled = false; btn.textContent = 'Save';
 };
 
-// ── IMPORT / EXPORT ──
+/* ── EXPORT ────────────────────────────────────────────────────── */
+window.exportCSV = () => {
+  const entries = window._allEntries;
+  if (!entries.length) { showToast('No data to export'); return; }
+  const headers = ['Date','Time','Outcome','Urge_Before','State','Body_Areas','Target','Duration','Mirror','Environment','Activity','Aftermath','Pattern','Notes'];
+  let csv = headers.join(',') + '\n';
+  entries.forEach(e => {
+    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
+    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.entry_type||'', e.urge_before||'', e.pre_feeling||'', e.body_areas||'', e.target||'', e.duration||'', e.mirror||'', e.environment||'', e.activity||'', e.post_ritual||'', e.escalation||'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
+    csv += row.map(v => `"${v}"`).join(',') + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = `Groundwork_Export_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+};
+
+/* ── IMPORT ────────────────────────────────────────────────────── */
 window.handleImport = async (event) => {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = async (e) => {
-    // Proper CSV parse: handles quoted fields with embedded newlines and commas
-    function parseCSV(text) {
-      const rows = []; let row = []; let field = ''; let inQuote = false;
-      for (let i = 0; i < text.length; i++) {
-        const ch = text[i];
-        if (inQuote) {
-          if (ch === '"') {
-            if (text[i+1] === '"') { field += '"'; i++; } // escaped quote
-            else inQuote = false;
-          } else { field += ch; }
-        } else {
-          if (ch === '"') { inQuote = true; }
-          else if (ch === ',') { row.push(field.trim()); field = ''; }
-          else if (ch === '\n' || (ch === '\r' && text[i+1] === '\n')) {
-            row.push(field.trim()); field = '';
-            if (row.length > 1 || row[0]) rows.push(row);
-            row = [];
-            if (ch === '\r') i++; // skip \n after \r
-          } else { field += ch; }
-        }
-      }
-      if (field || row.length) { row.push(field.trim()); rows.push(row); }
-      return rows;
-    }
-
-    const rows = parseCSV(e.target.result);
-    if (rows.length < 2) { showToast('File empty or invalid', true); return; }
+    const rows = e.target.result.split('\n').map(r => r.split(',').map(c => c.replace(/^"|"$/g,'').trim()));
+    if (rows.length < 2) { showToast('File empty', true); return; }
     let count = 0;
     try {
       let batch = writeBatch(db); let ops = 0;
       for (let i = 1; i < rows.length; i++) {
         const row = rows[i];
-        if (row.length < 4) continue;
+        if (row.length < 3) continue;
         const createdAt = (row[0] && row[1]) ? new Date(`${row[0]} ${row[1]}`) : new Date();
         const ref = doc(collection(db, 'users', window._uid, 'entries'));
-        // Normalize field values to match current form options
-        const normAwareness = {
-          // Legacy labels → current canonical saved values (must match awarenessMap in index.html selectTag)
-          'Focused':           'Urge first',
-          'focused':           'Urge first',
-          'Urge came first':   'Urge first',
-          'conscious':         'Mid-action',
-          'Conscious':         'Mid-action',
-          'Noticed while doing it': 'Mid-action',
-          'Caught mid-act':    'Mid-action',
-          'Automatic':         'Automatic',
-          'automatic':         'Automatic',
-          'Already done':      'Automatic',
-          'Only noticed after':'Automatic',
-        };
-        const normPreFeel = {
-          'Anxious / tense': 'Anxious / stressed',
-          'Restless / flat': 'Restless / bored',
-        };
-        const normTrigger = {
-          'Sensory': 'Sensory (felt something)',
-          'Visual': 'Visual (saw something)',
-        };
-        const normPostFeel = {
-          'Neutral': 'Neutral / flat',
-          'Frustrated': 'Frustrated with myself',
-          'Relief / Zoned Out': 'Relieved / calm',
-          'Relief / Zoned out': 'Relieved / calm',
-        };
-        const normActivity = {
-          'Watching a recorded lecture': 'Studying / Lecture',
-          'In Conversation': 'In conversation',
-          'On Phone': 'On phone',
-        };
-        const rawAwareness = row[9]||'';
-        const rawPreFeel   = row[6]||'';
-        const rawTrigger   = row[15]||'';
-        const rawPostFeel  = row[19]||'';
-        const rawActivity  = row[17]||'';
-
         batch.set(ref, {
           created_at: createdAt,
-          bfrb_type: row[2]||'picking',
-          entry_type: row[3]||'did',
-          urge_before: row[4] ? parseInt(row[4]) : null,
-          urge_after: row[5] ? parseInt(row[5]) : null,
-          pre_feeling: normPreFeel[rawPreFeel] || rawPreFeel,
-          body_areas: row[7]||'',
-          target: row[8]||'',
-          awareness: normAwareness[rawAwareness] || rawAwareness,
-          duration: row[10]||'',
-          post_ritual: row[11]||'',
-          mirror: row[12]||'',
-          skin_impact: row[13]||'',
-          pre_action: row[14]||'',
-          primary_trigger: normTrigger[rawTrigger] || rawTrigger,
-          environment: row[16]||'',
-          activity: normActivity[rawActivity] || rawActivity,
-          escalation: row[18]||'',
-          post_feeling: normPostFeel[rawPostFeel] || rawPostFeel,
-          aftercare: row[20]||'',
-          interventions: (row[21]&&row[21].toLowerCase()!=='nan')?row[21]:'',
-          tried_intervention: !!(row[21]&&row[21].toLowerCase()!=='nan'),
-          specific_cr: row[22]||'',
-          intervention_effectiveness: row[23] ? parseInt(row[23]) : null,
-          surf_peak: row[24] ? parseInt(row[24]) : undefined,
-          surf_end: row[25] ? parseInt(row[25]) : undefined,
-          narrative_notes: row[26]||'',
-          notes: row[27]||''
+          bfrb_type: 'picking',
+          entry_type: row[2] || 'did',
+          urge_before: row[3] ? parseInt(row[3]) : null,
+          pre_feeling: row[4] || '',
+          body_areas: row[5] || '',
+          target: row[6] || '',
+          duration: row[7] || '',
+          mirror: row[8] || '',
+          environment: row[9] || '',
+          activity: row[10] || '',
+          post_ritual: row[11] || '',
+          escalation: row[12] || '',
+          narrative_notes: row[13] || ''
         });
         count++; ops++;
         if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
@@ -1224,296 +650,31 @@ window.handleImport = async (event) => {
   reader.readAsText(file);
 };
 
-window.confirmClearAll = () => {
-  const count = (window._allEntries || []).length;
-  if (count === 0) { showToast('No entries to clear'); return; }
-  document.getElementById('clear-count').textContent = count;
-  document.getElementById('clear-modal').classList.add('on');
+/* ── OVERFLOW MENU ─────────────────────────────────────────────── */
+window.toggleOverflow = function() {
+  const menu = document.getElementById('overflow-menu');
+  const btn = document.getElementById('overflow-btn');
+  if (!menu) return;
+  const isOpen = menu.style.display !== 'none';
+  menu.style.display = isOpen ? 'none' : 'block';
+  if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
 };
-
-window.executeDeleteAll = async () => {
-  const btn = document.getElementById('clear-confirm-btn');
-  btn.disabled = true; btn.textContent = 'Deleting…';
-  const entries = window._allEntries || [];
-  try {
-    // Delete in batches of 450
-    let batch = writeBatch(db); let ops = 0;
-    for (const e of entries) {
-      batch.delete(doc(db, 'users', window._uid, 'entries', e.id));
-      ops++;
-      if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
-    }
-    if (ops > 0) await batch.commit();
-    window._allEntries = []; window._currentEntries = []; window._filteredEntries = [];
-    document.getElementById('clear-modal').classList.remove('on');
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('empty-state').style.display = 'block';
-    showToast(`Cleared ${entries.length} entries`);
-  } catch(err) {
-    console.error(err);
-    showToast('Delete failed — try again', true);
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('overflow-menu');
+  const btn = document.getElementById('overflow-btn');
+  if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+    menu.style.display = 'none';
+    btn.setAttribute('aria-expanded', 'false');
   }
-  btn.disabled = false; btn.textContent = 'Delete all';
-};
+});
 
-window.exportCSV = () => {
-  const entries = window._allEntries;
-  if (!entries.length) { showToast('No data to export'); return; }
-  const headers = ['Date','Time','Behavior','Outcome','Urge_Before','Urge_After','Pre_Feeling','Area','Target','Awareness','Duration','Post_Ritual','Mirror','Skin_Impact','Pre_Action','Trigger','Environment','Activity','Escalation','Post_Feeling','Aftercare','Interventions_Tried','Specific_CR','Effectiveness','Surf_Peak','Surf_End','Narrative','Notes'];
-  let csv = headers.join(',') + '\n';
-  entries.forEach(e => {
-    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.bfrb_type||'', e.entry_type||'', e.urge_before||'', e.urge_after||'', e.pre_feeling||'', e.body_areas||'', e.target||'', e.awareness||'', e.duration||'', e.post_ritual||'', e.mirror||'', e.skin_impact||'', e.pre_action||'', e.primary_trigger||'', e.environment||'', e.activity||'', e.escalation||'', e.post_feeling||'', e.aftercare||'', e.interventions||'', e.specific_cr||'', e.intervention_effectiveness||'', e.surf_peak!==undefined?e.surf_peak:'', e.surf_end!==undefined?e.surf_end:'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' '), (e.notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
-    csv += row.map(v => `"${v}"`).join(',') + '\n';
-  });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-  a.download = `Groundwork_Export_${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-};
-
-// ── DAILY STATE CORRELATION ──────────────────────────────────────
-async function loadDailyStateCorrelation(entries) {
-  const { collection: col2, getDocs: gd2, query: q2, orderBy: ob2 } = await import(
-    'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'
-  );
-  const dsSnap = await gd2(q2(col2(db, 'users', window._uid, 'dailystate'), ob2('date')));
-  if (dsSnap.empty) return;
-
-  const dsMap = {};
-  dsSnap.forEach(d => { dsMap[d.id] = d.data(); });
-
-  // For each entry, find its date
-  const episodeDays = new Set();
-  const nonEpisodeDays = new Set();
-  entries.forEach(e => {
-    const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-    const key = d.toISOString().slice(0,10);
-    if (e.entry_type === 'did') episodeDays.add(key);
-    else nonEpisodeDays.add(key);
-  });
-
-  // Filter: days with daily state data
-  const epDays   = [...episodeDays].filter(k => dsMap[k]);
-  const nonEpDays = [...nonEpisodeDays].filter(k => dsMap[k] && !episodeDays.has(k));
-
-  if (epDays.length === 0 && nonEpDays.length === 0) return;
-
-  const avg = (arr, fn) => arr.length ? (arr.reduce((s,k) => s + (fn(dsMap[k]) || 0), 0) / arr.length).toFixed(1) : '—';
-  const epSleep   = avg(epDays,    d => d.sleep);
-  const epStress  = avg(epDays,    d => d.stress);
-  const neSleep   = avg(nonEpDays, d => d.sleep);
-  const neStress  = avg(nonEpDays, d => d.stress);
-
-  // Inject correlation card — use a stable insertion point
-  const existing = document.getElementById('ds-correlation-card');
-  if (existing) existing.remove();
-
-  const card = document.createElement('div');
-  card.className = 'chart-solo';
-  card.id = 'ds-correlation-card';
-  card.innerHTML = `
-    <div class="chart-card">
-      <div class="chart-label">Baseline correlation — sleep &amp; stress vs. episodes</div>
-      <div class="corr-grid">
-        <div class="corr-col">
-          <div class="corr-label corr-label--ep">Episode days (${epDays.length})</div>
-          <div class="corr-vals">
-            <div class="corr-val-block"><div class="corr-num">${epSleep}</div><div class="corr-num-lbl">Sleep /5</div></div>
-            <div class="corr-divider"></div>
-            <div class="corr-val-block"><div class="corr-num">${epStress}</div><div class="corr-num-lbl">Stress /10</div></div>
-          </div>
-        </div>
-        <div class="corr-col">
-          <div class="corr-label corr-label--mgd">Managed days (${nonEpDays.length})</div>
-          <div class="corr-vals">
-            <div class="corr-val-block"><div class="corr-num">${neSleep}</div><div class="corr-num-lbl">Sleep /5</div></div>
-            <div class="corr-divider"></div>
-            <div class="corr-val-block"><div class="corr-num">${neStress}</div><div class="corr-num-lbl">Stress /10</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="corr-hint">Requires daily baseline logs. Log via the clipboard button on the Log page.</div>
-    </div>
-  `;
-  // Insert before the Context patterns section (after Interventions charts)
-  const contextSection = [...document.querySelectorAll('.section-head')].find(el =>
-    el.querySelector('.section-title')?.textContent.includes('Context'));
-  if (contextSection) contextSection.before(card);
-  else document.getElementById('dashboard')?.appendChild(card);
-}
-
-// Theme observer — re-renders charts and syncs status-bar colour
+/* ── THEME RE-RENDER ───────────────────────────────────────────── */
 new MutationObserver(() => {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const m = document.getElementById('theme-color-meta');
-  if (m) { const v = getComputedStyle(document.documentElement).getPropertyValue('--theme-bg').trim(); if (v) m.setAttribute('content', v); }
-  if (window._allEntries?.length) { applyBehaviorFilter(); }
+  if (window._allEntries?.length) processData(window._allEntries);
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
 </script>
 <script src="nav.js"></script>
-<script>
-(function () {
-
-  /* ── OVERFLOW MENU ───────────────────────────────────────────────────── */
-  window.toggleOverflow = function () {
-    const menu = document.getElementById('overflow-menu');
-    const btn  = document.getElementById('overflow-btn');
-    if (!menu) return;
-    const isOpen = menu.style.display !== 'none';
-    menu.style.display = isOpen ? 'none' : 'block';
-    if (btn) btn.setAttribute('aria-expanded', String(!isOpen));
-  };
-  document.addEventListener('click', (e) => {
-    const menu = document.getElementById('overflow-menu');
-    const btn  = document.getElementById('overflow-btn');
-    if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
-      menu.style.display = 'none';
-      btn.setAttribute('aria-expanded', 'false');
-    }
-  });
-
-  /* ── 1. LOADING SKELETON ─────────────────────────────────────────────── */
-  function injectSkeleton() {
-    const el = document.getElementById('loading');
-    if (!el) return;
-    el.innerHTML = `
-      <div class="skeleton-inner">
-        <div class="skeleton-stat-grid">
-          ${Array(4).fill(`<div class="skeleton-stat"><div class="sk-line" style="height:30px;width:50%;margin-bottom:8px"></div><div class="sk-line sk-short"></div></div>`).join('')}
-        </div>
-        ${Array(2).fill(`<div class="skeleton-card" style="height:200px;margin-bottom:12px"></div>`).join('')}
-        ${Array(3).fill(`<div class="skeleton-card"><div class="sk-line sk-title"></div><div class="sk-line sk-med"></div><div class="sk-line sk-short"></div></div>`).join('')}
-      </div>`;
-    el.style.cssText = 'padding:20px 0;color:inherit;text-align:inherit';
-  }
-
-  /* ── 2. EMPTY STATE ──────────────────────────────────────────────────── */
-  function patchEmptyState() {
-    const el = document.getElementById('empty-state');
-    if (!el) return;
-    el.className = 'empty-state';
-    el.innerHTML = `
-      <div class="empty-icon">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-      </div>
-      <div class="empty-title">Nothing logged in this period</div>
-      <div class="empty-body">Even one resistance or near miss tells you something useful — the picture builds quickly.</div>
-      <div class="empty-btn-row">
-        <a href="index.html" class="btn-primary btn-primary--link">Log an entry</a>
-        <button class="btn-ghost" onclick="document.getElementById('import-file-empty').click()">Import CSV</button>
-      </div>
-      <input type="file" id="import-file-empty" accept=".csv" style="display:none" onchange="handleImport(event)">`;
-  }
-
-  /* ── RESPONSIVE HEATMAP ───────────────────────────────────────────── */
-  const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const HOUR_LABELS = ['12a','1','2','3','4','5','6','7','8','9','10','11','12p','1','2','3','4','5','6','7','8','9','10','11'];
-
-  function cv(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-
-  function renderHeatmapMobile(hourMap) {
-    const container = document.getElementById('heatmap-container');
-    if (!container) return;
-    const entries = window._allEntries || [];
-    const dayMap = {};
-    for (let i = 0; i < 7; i++) dayMap[i] = { did: 0, resisted: 0, near_miss: 0 };
-    entries.forEach(e => {
-      const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-      if (isNaN(d)) return;
-      const type = e.entry_type || 'did';
-      if (dayMap[d.getDay()]) dayMap[d.getDay()][type] = (dayMap[d.getDay()][type] || 0) + 1;
-    });
-    const maxVal = Math.max(...Object.values(dayMap).map(d => d.did + d.resisted + d.near_miss + (d.caught||0)), 1);
-    const rows = [
-      { label: 'Episode',   key: 'did',      color: cv('--o-episode')  },
-      { label: 'Resisted',  key: 'resisted',  color: cv('--o-resisted') },
-      { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
-    ];
-    const mu = cv('--mu');
-    let html = `<div style="overflow-x:auto"><div style="display:grid;grid-template-columns:72px repeat(7,1fr);gap:4px;min-width:280px">
-      <div></div>${DOW.map(d => `<div style="font-size:11px;color:${mu};text-align:center;font-weight:600">${d}</div>`).join('')}`;
-    rows.forEach(row => {
-      html += `<div style="font-size:11px;color:${mu};display:flex;align-items:center;white-space:nowrap">${row.label}</div>`;
-      for (let i = 0; i < 7; i++) {
-        const v = dayMap[i][row.key] || 0;
-        const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
-        html += `<div style="height:24px;border-radius:4px;background:${row.color};opacity:${op.toFixed(2)}" title="${DOW[i]}: ${v} ${row.label.toLowerCase()}"></div>`;
-      }
-    });
-    html += `</div></div>` + heatmapLegend(rows);
-    container.innerHTML = html;
-  }
-
-  function renderHeatmapDesktop(hourMap) {
-    const container = document.getElementById('heatmap-container');
-    if (!container) return;
-    const maxVal = Math.max(...Object.values(hourMap).map(h => h.did + h.resisted + h.near_miss + (h.caught||0)), 1);
-    const rows = [
-      { label: 'Episode',   key: 'did',      color: cv('--o-episode')  },
-      { label: 'Resisted',  key: 'resisted',  color: cv('--o-resisted') },
-      { label: 'Near miss', key: 'near_miss', color: cv('--o-near')    },
-    ];
-    const mu = cv('--mu');
-    let html = `<div style="overflow-x:auto;margin:0 -4px"><div style="min-width:500px;padding:0 4px">
-      <div style="display:grid;grid-template-columns:72px repeat(24,1fr);gap:2px;margin-bottom:3px">
-        <div></div>
-        ${HOUR_LABELS.map((l, i) => `<div style="font-size:10px;color:${mu};text-align:center">${i % 3 === 0 ? l : ''}</div>`).join('')}
-      </div>`;
-    rows.forEach(row => {
-      html += `<div style="display:grid;grid-template-columns:72px repeat(24,1fr);gap:2px;margin-bottom:3px">
-        <div style="font-size:11px;color:${mu};display:flex;align-items:center;justify-content:flex-end;padding-right:6px;white-space:nowrap">${row.label}</div>`;
-      for (let h = 0; h < 24; h++) {
-        const v = (hourMap[h] || {})[row.key] || 0;
-        const op = v === 0 ? 0.1 : 0.2 + (v / maxVal) * 0.8;
-        html += `<div style="height:18px;border-radius:2px;background:${row.color};opacity:${op.toFixed(2)}" title="${v} at ${HOUR_LABELS[h]}"></div>`;
-      }
-      html += '</div>';
-    });
-    html += `</div></div>` + heatmapLegend(rows);
-    container.innerHTML = html;
-  }
-
-  function heatmapLegend(rows) {
-    return `<div style="display:flex;gap:12px;font-size:11px;color:${cv('--mu')};flex-wrap:wrap;margin-top:8px">
-      ${rows.map(r => `<span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:${r.color};display:inline-block"></span>${r.label}</span>`).join('')}
-    </div>`;
-  }
-
-  window.renderHeatmap = function (hourMap) {
-    window.innerWidth < 600 ? renderHeatmapMobile(hourMap) : renderHeatmapDesktop(hourMap);
-  };
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      if (!window._allEntries || !window._allEntries.length) return;
-      const hourMap = {};
-      for (let h = 0; h < 24; h++) hourMap[h] = { did: 0, resisted: 0, near_miss: 0 };
-      window._allEntries.forEach(e => {
-        const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-        if (isNaN(d)) return;
-        const h = d.getHours(), type = e.entry_type || 'did';
-        if (hourMap[h] && hourMap[h][type] !== undefined) hourMap[h][type]++;
-      });
-      window.renderHeatmap(hourMap);
-    }, 250);
-  });
-
-  /* ── INIT ────────────────────────────────────────────────────────────── */
-  function init() {
-    injectSkeleton();
-    patchEmptyState();
-  }
-
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', init)
-    : init();
-
-})();
-</script>
 <script src="daily-state-widget.js"></script>
 </body>
 </html>
