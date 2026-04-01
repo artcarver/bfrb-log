@@ -130,15 +130,21 @@
         <div class="bar-rows" id="bar-state"></div>
       </div>
       <div class="chart-card">
-        <div class="chart-label">Body areas</div>
-        <div class="bar-rows" id="bar-areas"></div>
+        <div class="chart-label">What set it off</div>
+        <div class="bar-rows" id="bar-triggers"></div>
       </div>
     </div>
     <div class="chart-duo">
       <div class="chart-card">
+        <div class="chart-label">Body areas</div>
+        <div class="bar-rows" id="bar-areas"></div>
+      </div>
+      <div class="chart-card">
         <div class="chart-label">Environment</div>
         <div class="bar-rows" id="bar-environment"></div>
       </div>
+    </div>
+    <div class="chart-duo">
       <div class="chart-card">
         <div class="chart-label">Activity at time</div>
         <div class="bar-rows" id="bar-activity"></div>
@@ -293,7 +299,7 @@ function processData(entries) {
   let outcomes = { resisted: 0, did: 0 };
   let times = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
   let dowMap = { 0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0 };
-  let states = {}, areas = {}, environments = {}, activities = {};
+  let states = {}, triggers = {}, areas = {}, environments = {}, activities = {};
   let totalUrge = 0, urgeCount = 0;
 
   entries.forEach(e => {
@@ -315,6 +321,12 @@ function processData(entries) {
     // State/feeling
     if (e.pre_feeling && e.pre_feeling.toLowerCase() !== 'nan') {
       states[e.pre_feeling] = (states[e.pre_feeling] || 0) + 1;
+    }
+
+    // Trigger
+    const trig = e.primary_trigger || e.emotional_triggers;
+    if (trig && trig.toLowerCase() !== 'nan') {
+      triggers[trig] = (triggers[trig] || 0) + 1;
     }
 
     // Body areas
@@ -360,8 +372,9 @@ function processData(entries) {
   renderTimeOfDay(times);
   renderDayOfWeek(dowMap);
   renderBarRows('bar-state', states, cv('--ac'), 6);
-  renderBarRows('bar-areas', areas, cv('--warm'), 6);
-  renderBarRows('bar-environment', environments, cv('--sage'), 5);
+  renderBarRows('bar-triggers', triggers, cv('--ac'), 6);
+  renderBarRows('bar-areas', areas, cv('--ac'), 6);
+  renderBarRows('bar-environment', environments, cv('--ac'), 5);
   renderBarRows('bar-activity', activities, cv('--ac'), 5);
 
   document.getElementById('loading').style.display = 'none';
@@ -524,6 +537,7 @@ function renderFeed() {
     const chips = [];
     const h = escapeHtml;
     if (e.pre_feeling) chips.push(`<span class="chip"><strong>State</strong>${h(e.pre_feeling)}</span>`);
+    if (e.primary_trigger) chips.push(`<span class="chip"><strong>Trigger</strong>${h(e.primary_trigger)}</span>`);
     if (e.body_areas) chips.push(`<span class="chip"><strong>Where</strong>${h(e.body_areas)}</span>`);
     if (e.urge_before != null) chips.push(`<span class="chip"><strong>Urge</strong>${h(String(e.urge_before))}/10</span>`);
     if (e.duration) chips.push(`<span class="chip"><strong>Duration</strong>${h(e.duration)}</span>`);
@@ -609,11 +623,11 @@ window.saveEdit = async () => {
 window.exportCSV = () => {
   const entries = window._allEntries;
   if (!entries.length) { showToast('No data to export'); return; }
-  const headers = ['Date','Time','Outcome','Urge_Before','State','Body_Areas','Target','Duration','Mirror','Environment','Activity','Aftermath','Pattern','Notes'];
+  const headers = ['Date','Time','Outcome','Urge_Before','State','Trigger','Awareness','Body_Areas','Target','Duration','Mirror','Environment','Activity','Aftermath','Pattern','Interventions','Notes'];
   let csv = headers.join(',') + '\n';
   entries.forEach(e => {
     const d = e.created_at?.toDate ? e.created_at.toDate() : new Date(e.created_at);
-    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.entry_type||'', e.urge_before||'', e.pre_feeling||'', e.body_areas||'', e.target||'', e.duration||'', e.mirror||'', e.environment||'', e.activity||'', e.post_ritual||'', e.escalation||'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
+    const row = [d.toLocaleDateString('en-US'), d.toLocaleTimeString('en-US'), e.entry_type||'', e.urge_before||'', e.pre_feeling||'', e.primary_trigger||'', e.awareness||'', e.body_areas||'', e.target||'', e.duration||'', e.mirror||'', e.environment||'', e.activity||'', e.post_ritual||'', e.escalation||'', e.interventions||'', (e.narrative_notes||'').replace(/"/g,'""').replace(/\n/g,' ')];
     csv += row.map(v => `"${v}"`).join(',') + '\n';
   });
   const a = document.createElement('a');
@@ -663,21 +677,27 @@ window.handleImport = async (event) => {
         if (row.length < 3) continue;
         const createdAt = (row[0] && row[1]) ? new Date(`${row[0]} ${row[1]}`) : new Date();
         const ref = doc(collection(db, 'users', window._uid, 'entries'));
+        // Headers: Date,Time,Outcome,Urge_Before,State,Trigger,Awareness,Body_Areas,Target,Duration,Mirror,Environment,Activity,Aftermath,Pattern,Interventions,Notes
+        const interventionsVal = row[15] || '';
         batch.set(ref, {
           created_at: createdAt,
           bfrb_type: 'picking',
           entry_type: row[2] || 'did',
           urge_before: row[3] ? parseInt(row[3]) : null,
           pre_feeling: row[4] || '',
-          body_areas: row[5] || '',
-          target: row[6] || '',
-          duration: row[7] || '',
-          mirror: row[8] || '',
-          environment: row[9] || '',
-          activity: row[10] || '',
-          post_ritual: row[11] || '',
-          escalation: row[12] || '',
-          narrative_notes: row[13] || ''
+          primary_trigger: row[5] || '',
+          awareness: row[6] || '',
+          body_areas: row[7] || '',
+          target: row[8] || '',
+          duration: row[9] || '',
+          mirror: row[10] || '',
+          environment: row[11] || '',
+          activity: row[12] || '',
+          post_ritual: row[13] || '',
+          escalation: row[14] || '',
+          tried_intervention: !!interventionsVal,
+          interventions: interventionsVal,
+          narrative_notes: row[16] || ''
         });
         count++; ops++;
         if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
@@ -748,6 +768,5 @@ new MutationObserver(() => {
 
 </script>
 <script src="nav.js"></script>
-<script src="daily-state-widget.js"></script>
 </body>
 </html>
