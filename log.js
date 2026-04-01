@@ -62,6 +62,7 @@ const state = {
   urge_after: 3,
   target: [],         // multi-select target types
   mirror: null,
+  trigger: null,
   aftermath: null,
   duration: null,
   pattern: null,
@@ -320,7 +321,7 @@ window.saveEntry = async () => {
     narrative_notes:    (document.getElementById('notes')?.value || '').trim(),
     created_at:         document.getElementById('log-time')?.value
                           ? new Date(document.getElementById('log-time').value)
-                          : serverTimestamp(),
+                          : new Date(),
   };
 
   // Full mode fields
@@ -329,6 +330,7 @@ window.saveEntry = async () => {
     docData.urge_after    = state.urge_after;
     docData.target        = state.target.join(', ');
     docData.mirror        = state.mirror || '';
+    docData.primary_trigger = state.trigger || '';
     docData.environment   = state.environment || '';
     docData.activity      = state.activity || '';
     if (state.interventions.length > 0) {
@@ -386,6 +388,7 @@ window.resetForm = () => {
   state.urge_after = 3;
   state.target = [];
   state.mirror = null;
+  state.trigger = null;
   state.aftermath = null;
   state.duration = null;
   state.pattern = null;
