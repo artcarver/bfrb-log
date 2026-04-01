@@ -48,11 +48,12 @@
         <option value="all">All time</option>
       </select>
       <div class="overflow-anchor">
-        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options">Export</button>
+        <button class="action-btn" id="overflow-btn" onclick="toggleOverflow()" aria-label="More options">Import / Export</button>
         <div id="overflow-menu" class="overflow-menu">
           <input type="file" id="import-file" accept=".csv" style="display:none" onchange="handleImport(event)">
           <button class="overflow-menu-btn" onclick="document.getElementById('import-file').click();toggleOverflow()">Import CSV</button>
           <button class="overflow-menu-btn overflow-menu-btn--border" onclick="exportCSV();toggleOverflow()">Export CSV</button>
+          <button class="overflow-menu-btn overflow-menu-btn--border" onclick="confirmClearAll();toggleOverflow()" style="color:var(--error)">Clear all entries</button>
         </div>
       </div>
     </div>
@@ -194,6 +195,20 @@
     <div class="modal-actions">
       <button class="modal-btn" onclick="closeEdit()">Cancel</button>
       <button class="modal-btn primary" id="edit-save-btn" onclick="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLEAR ALL MODAL -->
+<div class="modal-overlay" id="clear-modal">
+  <div class="modal-card">
+    <div class="modal-title">Clear all entries?</div>
+    <div style="font-size:var(--fs-body);color:var(--tx2);line-height:var(--lh-body);margin-bottom:16px">
+      This will permanently delete <strong id="clear-count">0</strong> entries from your account. This cannot be undone. Export your data first if you want a backup.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn" onclick="document.getElementById('clear-modal').classList.remove('on')">Cancel</button>
+      <button class="modal-btn primary" id="clear-confirm-btn" onclick="executeDeleteAll()" style="background:var(--error);border-color:var(--error)">Delete all</button>
     </div>
   </div>
 </div>
@@ -514,6 +529,7 @@ function renderFeed() {
     if (e.duration) chips.push(`<span class="chip"><strong>Duration</strong>${h(e.duration)}</span>`);
     if (e.environment) chips.push(`<span class="chip"><strong>Place</strong>${h(e.environment)}</span>`);
     if (e.activity) chips.push(`<span class="chip"><strong>Activity</strong>${h(e.activity)}</span>`);
+    if (e.interventions) chips.push(`<span class="chip"><strong>Trying</strong>${h(e.interventions)}</span>`);
 
     const narrative = e.narrative_notes || e.notes;
 
@@ -692,6 +708,38 @@ document.addEventListener('click', (e) => {
     btn.setAttribute('aria-expanded', 'false');
   }
 });
+
+/* ── CLEAR ALL ─────────────────────────────────────────────────── */
+window.confirmClearAll = () => {
+  const count = (window._allEntries || []).length;
+  if (count === 0) { showToast('No entries to clear'); return; }
+  document.getElementById('clear-count').textContent = count;
+  document.getElementById('clear-modal').classList.add('on');
+};
+
+window.executeDeleteAll = async () => {
+  const btn = document.getElementById('clear-confirm-btn');
+  btn.disabled = true; btn.textContent = 'Deleting...';
+  const entries = window._allEntries || [];
+  try {
+    let batch = writeBatch(db); let ops = 0;
+    for (const e of entries) {
+      batch.delete(doc(db, 'users', window._uid, 'entries', e.id));
+      ops++;
+      if (ops === 450) { await batch.commit(); batch = writeBatch(db); ops = 0; }
+    }
+    if (ops > 0) await batch.commit();
+    window._allEntries = [];
+    document.getElementById('clear-modal').classList.remove('on');
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('empty-state').style.display = 'block';
+    showToast(`Cleared ${entries.length} entries`);
+  } catch(err) {
+    console.error(err);
+    showToast('Delete failed', true);
+  }
+  btn.disabled = false; btn.textContent = 'Delete all';
+};
 
 /* ── THEME RE-RENDER ───────────────────────────────────────────── */
 new MutationObserver(() => {

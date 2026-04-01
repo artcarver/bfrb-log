@@ -65,7 +65,7 @@ const state = {
   aftermath: null,
   duration: null,
   pattern: null,
-  emotions: [],       // multi-select detailed emotions
+  interventions: [],  // multi-select: what barriers/tools were in place
   environment: null,
   activity: null,
   notes: ''
@@ -117,10 +117,16 @@ window.selectOutcome = (val, el) => {
 /* ── TAG HELPERS ───────────────────────────────────────────────── */
 window.selectTag = (key, el) => {
   const parent = el.closest('[role="group"]') || el.parentElement;
+  const wasOn = el.classList.contains('on');
   parent.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  el.classList.add('on');
-  if (navigator.vibrate) navigator.vibrate(10);
-  state[key] = el.textContent.trim();
+  if (wasOn) {
+    // Deselect
+    state[key] = null;
+  } else {
+    el.classList.add('on');
+    if (navigator.vibrate) navigator.vibrate(10);
+    state[key] = el.textContent.trim();
+  }
 };
 
 window.toggleMulti = (key, el) => {
@@ -229,9 +235,14 @@ window.confirmOtherVal = function(key, isMulti, inputEl) {
       tag.onclick = function() { toggleMulti(key, this); };
     } else {
       tag.onclick = function() {
+        const wasOn = this.classList.contains('on');
         this.closest('[role="group"]')?.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-        this.classList.add('on');
-        state[key] = val;
+        if (wasOn) {
+          state[key] = null;
+        } else {
+          this.classList.add('on');
+          state[key] = val;
+        }
       };
     }
     wrap.parentElement.insertBefore(tag, wrap);
@@ -283,16 +294,16 @@ window.saveEntry = async () => {
     docData.mirror        = state.mirror || '';
     docData.environment   = state.environment || '';
     docData.activity      = state.activity || '';
+    if (state.interventions.length > 0) {
+      docData.tried_intervention = true;
+      docData.interventions = state.interventions.join(', ');
+    }
   }
 
   if (entryType === 'did') {
     docData.post_ritual   = state.aftermath || '';
     docData.duration      = state.duration || '';
     docData.escalation    = state.pattern || '';
-  }
-
-  if (state.emotions.length > 0) {
-    docData.primary_trigger = state.emotions.join(', ');
   }
 
   // Surf data from tools page
@@ -341,7 +352,7 @@ window.resetForm = () => {
   state.aftermath = null;
   state.duration = null;
   state.pattern = null;
-  state.emotions = [];
+  state.interventions = [];
   state.environment = null;
   state.activity = null;
   state.notes = '';

@@ -275,27 +275,6 @@
 
           <div class="log-step-divider">Context</div>
 
-          <!-- EMOTIONS AT TIME -->
-          <div class="field">
-            <label class="field-label">Emotions at the time</label>
-            <div class="grid-auto" role="group" aria-label="Emotions">
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Anxious</button>
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Bored</button>
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Frustrated</button>
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Overwhelmed</button>
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Zoned out</button>
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Tired</button>
-              <button type="button" class="tag" onclick="toggleMulti('emotions',this)">Calm</button>
-              <button type="button" class="tag tag-other" onclick="showOther('emotions',this)">Other...</button>
-            </div>
-            <div class="other-input-wrap" id="other-emotions">
-              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
-                onkeydown="if(event.key==='Enter')confirmOtherVal('emotions',true,this)"
-                onblur="cancelOtherInput('emotions')">
-              <button class="other-confirm" onclick="confirmOtherVal('emotions',true,this.previousElementSibling)">Add</button>
-            </div>
-          </div>
-
           <!-- ENVIRONMENT -->
           <div class="field">
             <label class="field-label">Environment</label>
@@ -333,6 +312,31 @@
                 onkeydown="if(event.key==='Enter')confirmOtherVal('activity',false,this)"
                 onblur="cancelOtherInput('activity')">
               <button class="other-confirm" onclick="confirmOtherVal('activity',false,this.previousElementSibling)">Add</button>
+            </div>
+          </div>
+
+          <!-- INTERVENTIONS (what were you doing to prevent) -->
+          <div class="field">
+            <label class="field-label">What were you trying?</label>
+            <p class="field-hint">Anything you had in place to prevent picking.</p>
+            <div class="grid-auto" role="group" aria-label="Interventions">
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Long sleeves</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Thumb covers</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Pants / leggings</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Bandages</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Gloves</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Mirror removed</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Fidget / sensory toy</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Crochet / craft</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Lotion / skin care</button>
+              <button type="button" class="tag" onclick="toggleMulti('interventions',this)">Nothing</button>
+              <button type="button" class="tag tag-other" onclick="showOther('interventions',this)">Other...</button>
+            </div>
+            <div class="other-input-wrap" id="other-interventions">
+              <input class="other-input" type="text" placeholder="Type and press Enter" maxlength="60"
+                onkeydown="if(event.key==='Enter')confirmOtherVal('interventions',true,this)"
+                onblur="cancelOtherInput('interventions')">
+              <button class="other-confirm" onclick="confirmOtherVal('interventions',true,this.previousElementSibling)">Add</button>
             </div>
           </div>
 
