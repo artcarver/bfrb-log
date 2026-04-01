@@ -73,35 +73,35 @@
 }
 
 [data-theme="dark"] {
-  /* Dark Lavender — dark purple-slate, white text, lighter purple accent */
-  --bg:#1c1928; --sur:#252233; --card:#2e2a42;
-  --bg-rgb:28,25,40;
+  /* Dark neutral — blue-grey, matching default light accent family */
+  --bg:#161618; --sur:#1e1e20; --card:#252527;
+  --bg-rgb:22,22,24;
 
   /* Borders */
-  --bdr:#3c3858; --bdr2:#544e78;
+  --bdr:#2e2e32; --bdr2:#3e3e44;
 
   /* Text */
-  --tx:#f0eeff; --tx2:#c0b8dc; --mu:#8878a8;
+  --tx:#f2f2f7; --tx2:#aeaeb2; --mu:#636366;
 
-  /* Accent — lighter for dark bg */
-  --ac:#9e8ed0; --ac-h:#b4a4e0;
-  --acl:rgba(158,142,208,.14); --acl2:rgba(158,142,208,.24);
+  /* Accent — lighter blue-grey for dark bg */
+  --ac:#7b90b0; --ac-h:#90a8c8;
+  --acl:rgba(123,144,176,.12); --acl2:rgba(123,144,176,.22);
 
   /* Sage */
-  --sage:#5aaa86; --sagel:rgba(90,170,134,.13); --sagem:rgba(90,170,134,.25);
+  --sage:#62a892; --sagel:rgba(98,168,146,.12); --sagem:rgba(98,168,146,.22);
 
   /* Warm */
   --warm:#c49660; --warml:rgba(196,150,96,.14);
 
   /* Outcome */
-  --o-resisted:#5aaa86; --o-near:#c49660; --o-episode:#9e8ed0;
+  --o-resisted:#62a892; --o-near:#c49660; --o-episode:#7b90b0;
 
   /* Error */
   --error:#e06060;
 
   /* Dark palette control */
-  --theme-bg:    #1c1928;
-  --nav-bg-rgb:  28,25,40;
+  --theme-bg:    #161618;
+  --nav-bg-rgb:  22,22,24;
 }
 
 /* ─── RESET ──────────────────────────────────────────────────────────────── */

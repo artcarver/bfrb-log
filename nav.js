@@ -197,7 +197,7 @@
   window.toggleTheme = function () {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-    localStorage.setItem('gw-theme', isDark ? '' : 'dark');
+    localStorage.setItem('gw-theme', isDark ? 'light' : 'dark');
     applyStoredPalette();
     syncThemeColor();
   };
