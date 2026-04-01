@@ -67,8 +67,8 @@
         <div class="field" id="awareness-field" style="display:none">
           <label class="field-label">How did it start?</label>
           <div class="grid-2" role="group" aria-label="Awareness type">
-            <button type="button" class="tag" onclick="selectTag('awareness',this)">Urge first</button>
-            <button type="button" class="tag" onclick="selectTag('awareness',this)">Automatic</button>
+            <button type="button" class="tag" onclick="selectAwareness('Urge first',this)">Urge first</button>
+            <button type="button" class="tag" onclick="selectAwareness('Automatic',this)">Automatic</button>
           </div>
         </div>
 
@@ -191,8 +191,8 @@
         <div class="full-section" id="full-fields">
           <div class="log-step-divider">Detail</div>
 
-          <!-- URGE BEFORE -->
-          <div class="field">
+          <!-- URGE BEFORE (hidden if automatic) -->
+          <div class="field" id="urge-before-field">
             <label class="field-label">Urge before</label>
             <p class="field-hint">How strong was the pull right before.</p>
             <div class="slider-row">
@@ -206,13 +206,16 @@
 
           <!-- TARGET TYPE -->
           <div class="field">
-            <label class="field-label">Target type</label>
+            <label class="field-label">What were you going for?</label>
             <div class="grid-auto" role="group" aria-label="Target type">
-              <button type="button" class="tag" onclick="toggleMulti('target',this)">Texture / Bump</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Bump / texture</button>
               <button type="button" class="tag" onclick="toggleMulti('target',this)">Scab</button>
-              <button type="button" class="tag" onclick="toggleMulti('target',this)">Blemish / Pimple</button>
-              <button type="button" class="tag" onclick="toggleMulti('target',this)">Dry Skin</button>
-              <button type="button" class="tag" onclick="toggleMulti('target',this)">Blackhead</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Pimple / whitehead</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Blackhead / pore</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Dry / flaky skin</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Ingrown hair</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Hangnail / cuticle</button>
+              <button type="button" class="tag" onclick="toggleMulti('target',this)">Nothing specific</button>
               <button type="button" class="tag tag-other" onclick="showOther('target',this)">Other...</button>
             </div>
             <div class="other-input-wrap" id="other-target">

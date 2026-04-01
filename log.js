@@ -106,12 +106,40 @@ window.selectOutcome = (val, el) => {
     state.aftermath = null;
     state.duration = null;
     state.pattern = null;
+    state.urge_before = parseInt(document.getElementById('slider-urge-before')?.value || '5');
+    // Reset awareness tags and show urge-before
+    document.querySelectorAll('#awareness-field .tag').forEach(t => t.classList.remove('on'));
+    const ubf = document.getElementById('urge-before-field');
+    if (ubf) ubf.style.display = '';
   }
 
   const afterLabel = document.getElementById('urge-after-label');
   if (afterLabel) afterLabel.textContent = isPicked ? 'Urge after picking' : 'Urge after resisting';
 
   updateSaveBtn();
+};
+
+/* ── AWARENESS (controls urge slider visibility) ───────────────── */
+window.selectAwareness = (val, el) => {
+  const parent = el.closest('[role="group"]') || el.parentElement;
+  const wasOn = el.classList.contains('on');
+  parent.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  if (wasOn) {
+    state.awareness = null;
+    // Show urge sliders by default when deselected
+    const ubf = document.getElementById('urge-before-field');
+    if (ubf) ubf.style.display = '';
+  } else {
+    el.classList.add('on');
+    if (navigator.vibrate) navigator.vibrate(10);
+    state.awareness = val;
+    const isAutomatic = val === 'Automatic';
+    // Hide urge-before if automatic (there was no urge to rate)
+    const ubf = document.getElementById('urge-before-field');
+    if (ubf) ubf.style.display = isAutomatic ? 'none' : '';
+    if (isAutomatic) state.urge_before = null;
+    else state.urge_before = parseInt(document.getElementById('slider-urge-before')?.value || '5');
+  }
 };
 
 /* ── TAG HELPERS ───────────────────────────────────────────────── */
@@ -376,6 +404,8 @@ window.resetForm = () => {
   document.getElementById('aftermath-field').style.display = 'none';
   document.getElementById('duration-field').style.display = 'none';
   document.getElementById('pattern-field').style.display = 'none';
+  const ubf = document.getElementById('urge-before-field');
+  if (ubf) ubf.style.display = '';
   document.getElementById('notes').value = '';
   document.getElementById('log-time').value = '';
   document.getElementById('time-wrap').classList.add('hidden');
