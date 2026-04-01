@@ -453,6 +453,7 @@ textarea{resize:vertical;min-height:80px}
 .anim{opacity:0;animation:fadeUp .4s ease forwards}
 .d1{animation-delay:.04s}.d2{animation-delay:.10s}.d3{animation-delay:.16s}
 .d4{animation-delay:.22s}.d5{animation-delay:.28s}.d6{animation-delay:.34s}
+.d7{animation-delay:.40s}.d8{animation-delay:.46s}.d9{animation-delay:.52s}
 
 /* Log main layout */
 .log-main{max-width:540px;margin:0 auto;padding:20px 16px 120px}
@@ -628,13 +629,11 @@ textarea{resize:vertical;min-height:80px}
 .hot-btn.sage::after{background:var(--sage)}
 .hot-btn.warm::after{background:var(--warm)}
 .hot-btn.mu::after{background:var(--bdr2)}
-.hot-btn.tx::after{background:var(--tx2)}
 @media(hover:hover){
   .hot-btn:hover{transform:translateY(-2px)}
   .hot-btn.ac:hover{border-color:var(--ac)}
   .hot-btn.sage:hover{border-color:var(--sage)}
   .hot-btn.warm:hover{border-color:var(--warm)}
-  .hot-btn.tx:hover{border-color:var(--tx2)}
   .hot-btn:hover::after{height:3px;opacity:1}
   .hot-btn:hover .hot-icon{transform:scale(1.07)}
 }
@@ -644,7 +643,6 @@ textarea{resize:vertical;min-height:80px}
 .hot-icon.sage{background:var(--sagel);color:var(--sage)}
 .hot-icon.warm{background:var(--warml);color:var(--warm)}
 .hot-icon.mu{background:var(--sur);color:var(--tx2);border:1px solid var(--bdr)}
-.hot-icon.tx{background:var(--sur);color:var(--tx2);border:1px solid var(--bdr)}
 .hot-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 .hot-body{flex:1;min-width:0}
 .hot-title{font-family:'Nunito Sans',sans-serif;font-size:var(--fs-body);font-weight:600;color:var(--tx);margin-bottom:4px}
@@ -724,6 +722,11 @@ textarea{resize:vertical;min-height:80px}
   display: flex; align-items: center; justify-content: center;
   border-radius: 50%; transition: background .2s, color .2s, border-color .2s; z-index: 1010;
 }
+.timer-close svg {
+  width: 18px; height: 18px;
+  stroke: currentColor; fill: none;
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
 .timer-close:hover { background: var(--acl); border-color: var(--ac); color: var(--ac); }
 .timer-inst {
   font-family: 'Nunito Sans',sans-serif;
@@ -738,7 +741,12 @@ textarea{resize:vertical;min-height:80px}
   font-size: clamp(34px, 10vw, 50px); font-weight: 200;
   line-height: 1; font-variant-numeric: tabular-nums;
   letter-spacing: -.02em; transition: color .6s ease; opacity: .65;
+  color: var(--tx);
 }
+.timer-readout.ac { color: var(--ac); }
+.timer-readout.sage { color: var(--sage); }
+.timer-readout.warm { color: var(--warm); }
+.timer-readout.mu { color: var(--mu); }
 .timer-arc-wrap { position: relative; width: 118px; height: 118px; margin: 0 auto 22px; flex-shrink: 0; }
 .timer-arc-svg  { width: 100%; height: 100%; transform: rotate(-90deg); }
 .timer-arc-bg   { fill: none; stroke: var(--bdr); stroke-width: 2; }
