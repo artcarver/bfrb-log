@@ -71,7 +71,7 @@
     <div class="card">
       <div class="card-header">
         <div class="card-title">SCAMP Baseline Profile</div>
-        <div class="card-desc">Your persistent BFRB drivers. Auto-saves on blur.</div>
+        <div class="card-desc">Your persistent skin picking drivers. Auto-saves on blur.</div>
       </div>
       
       <div class="scamp-grid">
@@ -454,8 +454,8 @@
 
 <div class="report-modal" id="report-modal">
   <div class="report-modal-card">
-    <div class="report-modal-title">Session Report</div>
-    <div class="report-modal-hint">Copy the text below and paste it into an email or notes app.</div>
+    <div class="report-modal-title">Therapy Session Report</div>
+    <div class="report-modal-hint">Copy and share with your therapist before your next session.</div>
     <textarea class="report-modal-body" id="report-text" readonly></textarea>
     <div class="report-modal-actions">
       <button class="report-copy-btn" onclick="copyReportText()">Copy text</button>
@@ -893,105 +893,206 @@ window.generateReport = async () => {
   btn.disabled = true;
   
   try {
+    // Fetch last 30 days of entries
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
     const logsQ = query(collection(db, 'users', window._uid, 'entries'), where('created_at', '>=', thirtyDaysAgo));
     const logsSnap = await getDocs(logsQ);
-    let logsTotal = 0, logsDid = 0, logsNear = 0, logsResist = 0, logsCaught = 0;
-    let totalUrge = 0, urgeCount = 0, totalUrgeAfter = 0, urgeAfterCount = 0;
-    const triggerCounts = {};
-    const toolCounts = {};
-    const toolWins = {};
+    
+    let total = 0, picked = 0, resisted = 0;
+    let totalUrge = 0, urgeCount = 0;
+    const bodyCounts = {};
+    const stateCounts = {};
+    const envCounts = {};
+    const actCounts = {};
+    const durationCounts = {};
+    const mirrorCounts = {};
+    const timeBuckets = { 'Morning (6a-12p)': 0, 'Afternoon (12p-5p)': 0, 'Evening (5p-10p)': 0, 'Night (10p-6a)': 0 };
+    const dayBuckets = { Sun:0, Mon:0, Tue:0, Wed:0, Thu:0, Fri:0, Sat:0 };
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const narratives = [];
+    
     logsSnap.forEach(d => {
-      logsTotal++;
+      total++;
       const data = d.data();
-      const t = data.entry_type;
-      if (t === 'did') logsDid++;
-      if (t === 'near_miss') logsNear++;
-      if (t === 'resisted') logsResist++;
-      if (t === 'caught') logsCaught++;
+      const type = data.entry_type;
+      if (type === 'resisted') resisted++;
+      else picked++;
+      
       if (data.urge_before) { totalUrge += Number(data.urge_before); urgeCount++; }
-      if (data.urge_after) { totalUrgeAfter += Number(data.urge_after); urgeAfterCount++; }
-      const trigger = data.primary_trigger || data.emotional_triggers;
-      if (trigger && trigger.toLowerCase() !== 'nan') triggerCounts[trigger] = (triggerCounts[trigger] || 0) + 1;
-      if (data.tried_intervention && data.interventions) {
-        const tools = data.interventions.split(',').map(s => s.trim()).filter(Boolean);
-        const isWin = t === 'resisted' || t === 'near_miss';
-        tools.forEach(tool => {
-          if (tool.toLowerCase() === 'nan') return;
-          toolCounts[tool] = (toolCounts[tool] || 0) + 1;
-          if (isWin) toolWins[tool] = (toolWins[tool] || 0) + 1;
+      
+      // Body areas
+      if (data.body_areas) {
+        data.body_areas.split(',').map(s => s.trim()).filter(Boolean).forEach(a => {
+          bodyCounts[a] = (bodyCounts[a] || 0) + 1;
         });
+      }
+      
+      // State
+      if (data.pre_feeling && data.pre_feeling.toLowerCase() !== 'nan') {
+        stateCounts[data.pre_feeling] = (stateCounts[data.pre_feeling] || 0) + 1;
+      }
+      
+      // Environment
+      if (data.environment && data.environment.toLowerCase() !== 'nan') {
+        envCounts[data.environment] = (envCounts[data.environment] || 0) + 1;
+      }
+      
+      // Activity
+      if (data.activity && data.activity.toLowerCase() !== 'nan') {
+        actCounts[data.activity] = (actCounts[data.activity] || 0) + 1;
+      }
+      
+      // Duration
+      if (data.duration) {
+        durationCounts[data.duration] = (durationCounts[data.duration] || 0) + 1;
+      }
+      
+      // Mirror
+      if (data.mirror && data.mirror !== 'No mirror') {
+        mirrorCounts[data.mirror] = (mirrorCounts[data.mirror] || 0) + 1;
+      }
+      
+      // Time patterns
+      if (data.created_at) {
+        const dt = data.created_at.toDate ? data.created_at.toDate() : new Date(data.created_at);
+        const h = dt.getHours();
+        if (h >= 6 && h < 12) timeBuckets['Morning (6a-12p)']++;
+        else if (h >= 12 && h < 17) timeBuckets['Afternoon (12p-5p)']++;
+        else if (h >= 17 && h < 22) timeBuckets['Evening (5p-10p)']++;
+        else timeBuckets['Night (10p-6a)']++;
+        if (type !== 'resisted') dayBuckets[dayNames[dt.getDay()]]++;
+      }
+      
+      // Collect narratives
+      const note = data.narrative_notes || data.notes;
+      if (note && note.trim()) {
+        const dt = data.created_at?.toDate ? data.created_at.toDate() : new Date(data.created_at);
+        narratives.push({ date: dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), type, note: note.trim() });
       }
     });
 
-    const managed = logsResist + logsNear + logsCaught;
-    const managedPct = logsTotal ? Math.round((managed / logsTotal) * 100) : 0;
+    const resistedPct = total ? Math.round((resisted / total) * 100) : 0;
     const avgUrge = urgeCount ? (totalUrge / urgeCount).toFixed(1) : 'N/A';
-    const avgUrgeAfter = urgeAfterCount ? (totalUrgeAfter / urgeAfterCount).toFixed(1) : 'N/A';
 
-    const topTriggers = Object.entries(triggerCounts).sort((a,b) => b[1]-a[1]).slice(0,5)
-      .map(([k,v]) => `  ${k}: ${v}`).join('\n') || '  No trigger data logged.';
-    const topTools = Object.entries(toolCounts).sort((a,b) => b[1]-a[1]).slice(0,5)
-      .map(([k,v]) => {
-        const wins = toolWins[k] || 0;
-        const rate = Math.round((wins / v) * 100);
-        return `  ${k}: ${v} uses, ${rate}% managed outcome`;
-      }).join('\n') || '  No intervention data logged.';
+    const topN = (obj, n) => Object.entries(obj).sort((a,b) => b[1]-a[1]).slice(0, n);
+    const formatRanked = (items) => items.map(([k,v]) => `  ${k}: ${v}`).join('\n') || '  None logged';
 
-    const s = document.getElementById('scamp-s').value || 'Not defined';
-    const c = document.getElementById('scamp-c').value || 'Not defined';
-    const a = document.getElementById('scamp-a').value || 'Not defined';
-    const m = document.getElementById('scamp-m').value || 'Not defined';
-    const p = document.getElementById('scamp-p').value || 'Not defined';
-
-    const activeRules = currentRules.filter(r => r.active).map(r => `[X] ${r.text}`);
-    const inactiveRules = currentRules.filter(r => !r.active).map(r => `[ ] ${r.text}`);
-    const rulesText = [...activeRules, ...inactiveRules].join('\n') || 'None established.';
-
-    let report = `GROUNDWORK — SESSION REPORT
-Generated: ${new Date().toLocaleDateString('en-US')}
-
---- 30-DAY SUMMARY ---
-Total Entries: ${logsTotal}
-Episodes: ${logsDid}  |  Caught mid-act: ${logsCaught}
-Resisted: ${logsResist}  |  Near Miss: ${logsNear}
-Managed rate: ${managedPct}% (${managed}/${logsTotal})
-Avg urge before: ${avgUrge}/10  |  Avg urge after: ${avgUrgeAfter}/10
-
---- TOP TRIGGERS ---
-${topTriggers}
-
---- INTERVENTION EFFECTIVENESS ---
-${topTools}
-
---- SCAMP BASELINE PROFILE ---
-SENSORY: ${s}
-COGNITIVE: ${c}
-AFFECTIVE: ${a}
-MOTOR: ${m}
-PLACE/ENV: ${p}
-
---- STIMULUS CONTROL BARRIERS ---
-${rulesText}
-
---- RECENT REFLECTIONS ---
-`;
+    // Peak time
+    const peakTime = Object.entries(timeBuckets).sort((a,b) => b[1]-a[1])[0];
+    // Peak day
+    const peakDay = Object.entries(dayBuckets).sort((a,b) => b[1]-a[1])[0];
     
+    // SCAMP
+    const s = document.getElementById('scamp-s')?.value || '';
+    const c = document.getElementById('scamp-c')?.value || '';
+    const a = document.getElementById('scamp-a')?.value || '';
+    const m = document.getElementById('scamp-m')?.value || '';
+    const p = document.getElementById('scamp-p')?.value || '';
+    const hasScamp = s || c || a || m || p;
+
+    // Stimulus control rules
+    const activeRules = currentRules.filter(r => r.active).map(r => r.text);
+    const inactiveRules = currentRules.filter(r => !r.active).map(r => r.text);
+
+    // Build report
+    let report = `GROUNDWORK -- THERAPY SESSION REPORT
+Patient self-monitoring summary for skin picking (excoriation)
+Generated: ${new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+Period: Last 30 days
+
+============================
+FREQUENCY & OUTCOME
+============================
+Total logged events: ${total}
+  Picked: ${picked}
+  Resisted: ${resisted} (${resistedPct}% resistance rate)
+Average urge intensity: ${avgUrge}/10
+
+============================
+PATTERNS
+============================
+Peak time of day: ${peakTime ? `${peakTime[0]} (${peakTime[1]} events)` : 'N/A'}
+Peak day of week: ${peakDay && peakDay[1] > 0 ? `${peakDay[0]} (${peakDay[1]} episodes)` : 'N/A'}
+
+Emotional state before picking:
+${formatRanked(topN(stateCounts, 5))}
+
+Body areas targeted:
+${formatRanked(topN(bodyCounts, 8))}
+
+Environment:
+${formatRanked(topN(envCounts, 4))}
+
+Activity at time:
+${formatRanked(topN(actCounts, 4))}
+`;
+
+    if (Object.keys(durationCounts).length > 0) {
+      report += `\nSession duration:\n${formatRanked(topN(durationCounts, 4))}\n`;
+    }
+    
+    if (Object.keys(mirrorCounts).length > 0) {
+      report += `\nMirror/camera involved:\n${formatRanked(topN(mirrorCounts, 3))}\n`;
+    }
+
+    if (hasScamp) {
+      report += `
+============================
+SELF-IDENTIFIED DRIVERS (SCAMP)
+============================
+${s ? `Sensory: ${s}` : ''}
+${c ? `Cognitive: ${c}` : ''}
+${a ? `Affective: ${a}` : ''}
+${m ? `Motor: ${m}` : ''}
+${p ? `Place/Environment: ${p}` : ''}
+`.replace(/\n{3,}/g, '\n\n');
+    }
+
+    if (activeRules.length || inactiveRules.length) {
+      report += `
+============================
+STIMULUS CONTROL (self-set)
+============================
+${activeRules.length ? 'In place:\n' + activeRules.map(r => `  [x] ${r}`).join('\n') : ''}
+${inactiveRules.length ? 'Not yet done:\n' + inactiveRules.map(r => `  [ ] ${r}`).join('\n') : ''}
+`;
+    }
+
+    if (narratives.length > 0) {
+      const recent = narratives.slice(0, 8);
+      report += `
+============================
+PATIENT NOTES (recent)
+============================
+`;
+      recent.forEach(n => {
+        report += `${n.date} [${n.type === 'resisted' ? 'resisted' : 'picked'}]: ${n.note}\n\n`;
+      });
+    }
+
+    // Reflections
     const refQ = query(collection(db, 'users', window._uid, 'reflections'), orderBy('created_at', 'desc'));
     const refSnap = await getDocs(refQ);
-    let count = 0;
+    let refCount = 0;
+    let refText = '';
     refSnap.forEach(doc => {
-      if (count >= 2) return;
+      if (refCount >= 3) return;
       const d = doc.data();
-      const dt = new Date(d.created_at).toLocaleDateString('en-US');
-      const period = (d.period_from || d.period_to)
-        ? ` | Period: ${d.period_from || '?'} → ${d.period_to || '?'}`
-        : '';
-      report += `\n[${dt}${period}]\nWhat worked: ${d.worked || 'N/A'}\nWhat didn't: ${d.failed || 'N/A'}\n`;
-      count++;
+      const dt = new Date(d.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      refText += `[${dt}]\n`;
+      if (d.worked) refText += `  What worked: ${d.worked}\n`;
+      if (d.failed) refText += `  What didn't: ${d.failed}\n`;
+      refText += '\n';
+      refCount++;
     });
-    if (count === 0) report += "No recent reflections logged.\n";
+    if (refText) {
+      report += `
+============================
+SESSION PREP REFLECTIONS
+============================
+${refText}`;
+    }
 
     // Try clipboard first, fall back to modal
     let clipboardOk = false;

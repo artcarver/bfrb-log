@@ -75,14 +75,74 @@
         <!-- ====== WHERE ON BODY ====== -->
         <div class="field">
           <label class="field-label">Where?</label>
-          <div class="grid-auto" role="group" aria-label="Body area">
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Face</button>
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Scalp</button>
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Arms</button>
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Legs</button>
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Back</button>
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Chest / Shoulders</button>
-            <button type="button" class="tag" onclick="toggleMulti('where',this)">Hands / Fingers</button>
+          <div class="body-area-grid" role="group" aria-label="Body area">
+
+            <div class="body-area-group">
+              <button type="button" class="tag body-area-parent" onclick="toggleAreaGroup('face',this)">
+                Face <span class="area-badge" id="badge-face"></span>
+              </button>
+              <div class="body-area-sub hidden" id="sub-face">
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Forehead</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Cheeks</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Temples</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Jawline</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Chin</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Nose</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Lips</button>
+              </div>
+            </div>
+
+            <div class="body-area-group">
+              <button type="button" class="tag body-area-parent" onclick="toggleAreaGroup('head',this)">
+                Head / Neck <span class="area-badge" id="badge-head"></span>
+              </button>
+              <div class="body-area-sub hidden" id="sub-head">
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Scalp</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Hairline</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Behind Ears</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Ears</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Neck</button>
+              </div>
+            </div>
+
+            <div class="body-area-group">
+              <button type="button" class="tag body-area-parent" onclick="toggleAreaGroup('arms',this)">
+                Arms / Hands <span class="area-badge" id="badge-arms"></span>
+              </button>
+              <div class="body-area-sub hidden" id="sub-arms">
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Upper Arms</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Forearms</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Wrists</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Hands</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Fingers / Cuticles</button>
+              </div>
+            </div>
+
+            <div class="body-area-group">
+              <button type="button" class="tag body-area-parent" onclick="toggleAreaGroup('torso',this)">
+                Torso <span class="area-badge" id="badge-torso"></span>
+              </button>
+              <div class="body-area-sub hidden" id="sub-torso">
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Chest</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Shoulders</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Abdomen</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Upper Back</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Lower Back</button>
+              </div>
+            </div>
+
+            <div class="body-area-group">
+              <button type="button" class="tag body-area-parent" onclick="toggleAreaGroup('legs',this)">
+                Legs <span class="area-badge" id="badge-legs"></span>
+              </button>
+              <div class="body-area-sub hidden" id="sub-legs">
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Thighs</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Knees</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Shins / Calves</button>
+                <button type="button" class="tag" onclick="toggleMulti('where',this)">Feet</button>
+              </div>
+            </div>
+
             <button type="button" class="tag tag-other" onclick="showOther('where',this)">Other...</button>
           </div>
           <div class="other-input-wrap" id="other-where">
@@ -300,20 +360,6 @@
 
     </div><!-- /card -->
 
-    <!-- ====== THIS WEEK'S PLAN (from therapy) ====== -->
-    <div class="card anim d3" id="weekly-plan-card">
-      <div class="field-label" style="margin-bottom:12px">This week's plan</div>
-      <div class="weekly-plan-list" id="weekly-plan">
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>Monitor urges and picking</div>
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>Buy long sleeves</div>
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>Take out yoga mat</div>
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>Remove mirror from desk</div>
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>Leave crochet stuff by the couch</div>
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>Studying: Wear long sleeves + thumb covers</div>
-        <div class="plan-item"><span class="plan-check" aria-hidden="true"></span>On the couch: Wear long sleeves, crochet</div>
-      </div>
-    </div>
-
   </div><!-- /log-form -->
 
   <div class="action-bar" id="bar-save">
@@ -348,56 +394,6 @@
 <script type="module" src="log.js"></script>
 <script src="nav.js"></script>
 <script src="daily-state-widget.js"></script>
-
-<style>
-/* Weekly plan styles */
-.weekly-plan-list { display:flex; flex-direction:column; gap:6px; }
-.plan-item {
-  display:flex; align-items:center; gap:10px;
-  font-size:var(--fs-sm); color:var(--tx2); line-height:1.5;
-  padding:8px 12px;
-  background:var(--card); border:1px solid var(--bdr); border-radius:var(--rsm);
-  cursor:pointer; transition:var(--tr);
-  user-select:none; touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
-}
-.plan-item:hover { border-color:var(--bdr2); }
-.plan-check {
-  width:18px; height:18px; border:2px solid var(--mu); border-radius:4px;
-  flex-shrink:0; display:flex; align-items:center; justify-content:center;
-  transition:var(--tr);
-}
-.plan-item.done { opacity:.55; }
-.plan-item.done .plan-check {
-  background:var(--sage); border-color:var(--sage);
-}
-.plan-item.done .plan-check::after {
-  content:''; display:block; width:6px; height:10px;
-  border:solid #fff; border-width:0 2px 2px 0; transform:rotate(45deg);
-  margin-top:-2px;
-}
-</style>
-
-<script>
-// Weekly plan toggle
-document.getElementById('weekly-plan')?.addEventListener('click', e => {
-  const item = e.target.closest('.plan-item');
-  if (item) {
-    item.classList.toggle('done');
-    // Persist
-    const items = [...document.querySelectorAll('.plan-item')];
-    const states = items.map(i => i.classList.contains('done'));
-    localStorage.setItem('gw-plan-states', JSON.stringify(states));
-  }
-});
-// Restore
-try {
-  const saved = JSON.parse(localStorage.getItem('gw-plan-states') || '[]');
-  document.querySelectorAll('.plan-item').forEach((item, i) => {
-    if (saved[i]) item.classList.add('done');
-  });
-} catch(e) {}
-</script>
 
 </body>
 </html>

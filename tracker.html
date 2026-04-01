@@ -612,7 +612,32 @@ window.handleImport = async (event) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = async (e) => {
-    const rows = e.target.result.split('\n').map(r => r.split(',').map(c => c.replace(/^"|"$/g,'').trim()));
+    // Proper CSV parse: handles quoted fields with embedded commas and newlines
+    function parseCSV(text) {
+      const rows = []; let row = []; let field = ''; let inQuote = false;
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuote) {
+          if (ch === '"') {
+            if (text[i+1] === '"') { field += '"'; i++; }
+            else inQuote = false;
+          } else { field += ch; }
+        } else {
+          if (ch === '"') { inQuote = true; }
+          else if (ch === ',') { row.push(field.trim()); field = ''; }
+          else if (ch === '\n' || (ch === '\r' && text[i+1] === '\n')) {
+            row.push(field.trim()); field = '';
+            if (row.length > 1 || row[0]) rows.push(row);
+            row = [];
+            if (ch === '\r') i++;
+          } else { field += ch; }
+        }
+      }
+      if (field || row.length) { row.push(field.trim()); rows.push(row); }
+      return rows;
+    }
+
+    const rows = parseCSV(e.target.result);
     if (rows.length < 2) { showToast('File empty', true); return; }
     let count = 0;
     try {

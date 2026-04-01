@@ -129,7 +129,28 @@ window.toggleMulti = (key, el) => {
   const idx = arr.indexOf(val);
   if (idx > -1) { arr.splice(idx, 1); el.classList.remove('on'); }
   else          { arr.push(val);      el.classList.add('on');    }
+  if (key === 'where') updateAreaBadges();
 };
+
+/* ── BODY AREA GROUPS ──────────────────────────────────────────── */
+window.toggleAreaGroup = (id, el) => {
+  const sub = document.getElementById('sub-' + id);
+  if (!sub) return;
+  const isOpen = !sub.classList.contains('hidden');
+  sub.classList.toggle('hidden', isOpen);
+  el.classList.toggle('open', !isOpen);
+};
+
+function updateAreaBadges() {
+  const groups = { face: 'sub-face', head: 'sub-head', arms: 'sub-arms', torso: 'sub-torso', legs: 'sub-legs' };
+  for (const [id, subId] of Object.entries(groups)) {
+    const sub = document.getElementById(subId);
+    const badge = document.getElementById('badge-' + id);
+    if (!sub || !badge) continue;
+    const count = sub.querySelectorAll('.tag.on').length;
+    badge.textContent = count > 0 ? count : '';
+  }
+}
 
 /* ── TIMING ────────────────────────────────────────────────────── */
 window.selectTiming = (val, el) => {
@@ -327,6 +348,9 @@ window.resetForm = () => {
   window._currentDocId = null;
 
   document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  document.querySelectorAll('.body-area-sub').forEach(s => s.classList.add('hidden'));
+  document.querySelectorAll('.body-area-parent').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.area-badge').forEach(b => b.textContent = '');
   document.getElementById('outcome-gated').style.display = 'none';
   document.getElementById('awareness-field').style.display = 'none';
   document.getElementById('aftermath-field').style.display = 'none';
