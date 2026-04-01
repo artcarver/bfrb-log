@@ -2,7 +2,7 @@
  * sw.js -- Groundwork service worker (simplified)
  */
 
-const CACHE  = 'gw-shell-v39';
+const CACHE  = 'gw-shell-v42';
 const SHELL  = [
   './',
   './index.html',

@@ -395,8 +395,8 @@ textarea{resize:vertical;min-height:80px}
 .sec-hd--mt{margin-top:36px}
 .fidget-intro{font-size:var(--fs-xs);color:var(--mu);margin-bottom:14px;margin-top:-8px}
 .breath-container{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:12px}
-.breath-ring{color:var(--warm);width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 4s cubic-bezier(.45,0,.15,1)}
-.breath-label{color:var(--warm)}
+.breath-ring{color:var(--ac);width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 4s cubic-bezier(.45,0,.15,1)}
+.breath-label{color:var(--ac)}
 
 /* ─── OUTCOME TAG VARIANTS ───────────────────────────────────────────────── */
 /* Outcome tags: solid fill + white text, same visual weight as regular .tag.on */
@@ -649,7 +649,7 @@ textarea{resize:vertical;min-height:80px}
 .hot-sub{font-size:var(--fs-sm);color:var(--mu);line-height:var(--lh-body)}
 .hot-meta{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
 .hot-dur{font-size:var(--fs-micro);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mu)}
-.hot-pill{font-size:var(--fs-micro);font-weight:600;letter-spacing:.03em;padding:2px 8px;border-radius:var(--pill);background:var(--sagel);color:var(--sage);border:1px solid var(--bdr)}
+.hot-pill{font-size:var(--fs-micro);font-weight:600;letter-spacing:.03em;padding:2px 8px;border-radius:var(--pill);background:var(--acl);color:var(--ac);border:1px solid var(--bdr)}
 
 /* Sensory substitute cards */
 
@@ -717,15 +717,15 @@ textarea{resize:vertical;min-height:80px}
 .timer-close {
   position: absolute;
   top: max(16px, env(safe-area-inset-top, 16px)); right: 16px;
-  background: var(--sur); border: 1px solid var(--bdr); color: var(--tx2); cursor: pointer;
-  min-width: 44px; min-height: 44px;
+  background: var(--card); border: 1.5px solid var(--bdr2); color: var(--tx); cursor: pointer;
+  width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 50%; transition: background .2s, color .2s, border-color .2s; z-index: 1010;
 }
 .timer-close svg {
-  width: 18px; height: 18px;
+  width: 20px; height: 20px;
   stroke: currentColor; fill: none;
-  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
 }
 .timer-close:hover { background: var(--acl); border-color: var(--ac); color: var(--ac); }
 .timer-inst {
@@ -752,12 +752,13 @@ textarea{resize:vertical;min-height:80px}
 .timer-arc-bg   { fill: none; stroke: var(--bdr); stroke-width: 2; }
 .timer-arc-fill { fill: none; stroke-width: 2; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke .6s ease; }
 .timer-arc-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.cr-picker { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; max-width: 290px; margin-bottom: 18px; }
+.cr-picker { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 320px; margin-bottom: 18px; }
 .cr-option {
   background: var(--sur); border: 1.5px solid var(--bdr);
-  border-radius: var(--pill); padding: 7px 14px;
-  font-size: 12px; font-weight: 600; color: var(--tx2);
+  border-radius: var(--pill); padding: 10px 16px;
+  font-size: 13px; font-weight: 600; color: var(--tx2);
   cursor: pointer; transition: var(--tr); touch-action: manipulation;
+  font-family: 'Nunito Sans',sans-serif; min-height: 40px;
 }
 .hold-phase {
   font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
@@ -778,25 +779,26 @@ textarea{resize:vertical;min-height:80px}
 }
 .hold-ring.tensed .hold-ring-inner { transform: scale(1.24); background: rgba(91,107,138,.14); }
 .hold-stage-note { font-size: 13px; color: var(--mu); margin-bottom: 4px; max-width: 270px; }
-.redirect-beat { font-family: 'Nunito Sans',sans-serif; font-size: 28px; color: var(--tx); min-height: 40px; transition: opacity .2s ease, transform .2s ease; }
+.redirect-beat { font-family: 'Nunito Sans',sans-serif; font-size: 32px; font-weight: 700; color: var(--tx); min-height: 44px; transition: opacity .2s ease, transform .2s ease; }
 .redirect-beat.flash { opacity: .15; transform: scale(.88); }
-.redirect-taps { display: flex; gap: 9px; flex-wrap: wrap; justify-content: center; max-width: 260px; margin-bottom: 6px; }
-.redirect-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bdr2); transition: background .25s ease, transform .25s ease; }
+.redirect-taps { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 260px; margin-bottom: 6px; }
+.redirect-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--bdr2); transition: background .25s ease, transform .25s ease; }
 .redirect-tap-btn {
   background: var(--acl); border: 1.5px solid var(--ac); color: var(--ac);
-  border-radius: var(--pill); padding: 15px 36px;
-  font-size: 15px; font-weight: 600; cursor: pointer;
+  border-radius: var(--pill); padding: 16px 40px;
+  font-size: 16px; font-weight: 600; cursor: pointer;
   transition: background .12s, transform .1s;
-  margin-top: 10px; touch-action: manipulation; font-family: 'Nunito Sans',sans-serif;
+  touch-action: manipulation; font-family: 'Nunito Sans',sans-serif;
 }
-.urge-track-wrap { width: 100%; max-width: 290px; margin: 0 auto 20px; }
+.redirect-tap-btn:active { transform: scale(.96); }
+.urge-track-wrap { width: 100%; max-width: 320px; margin: 0 auto 20px; }
 .urge-track-label { font-size: 12px; color: var(--mu); margin-bottom: 10px; font-weight: 600; }
-.urge-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: var(--pill); background: var(--bdr); outline: none; cursor: pointer; border: none; }
-.urge-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; border-radius: 50%; background: var(--sage); cursor: pointer; border: 3px solid var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-.urge-slider::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--sage); cursor: pointer; border: 3px solid var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.15); }
-.urge-slider::-moz-range-track { height: 4px; background: var(--bdr); border-radius: var(--pill); border: none; }
+.urge-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: var(--pill); background: var(--bdr); outline: none; cursor: pointer; border: none; }
+.urge-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 32px; height: 32px; border-radius: 50%; background: var(--ac); cursor: pointer; border: 3px solid var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.urge-slider::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--ac); cursor: pointer; border: 3px solid var(--card); box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+.urge-slider::-moz-range-track { height: 6px; background: var(--bdr); border-radius: var(--pill); border: none; }
 .urge-readout { display: flex; justify-content: space-between; font-size: 11px; color: var(--mu); margin-top: 6px; }
-.urge-wave-canvas { width: 100%; max-width: 290px; height: 52px; margin: 0 auto 4px; display: block; opacity: .55; }
+.urge-wave-canvas { width: 100%; max-width: 320px; height: 64px; margin: 0 auto 8px; display: block; opacity: .7; }
 .defusion-wrap { position: relative; min-height: 100px; width: 100%; max-width: 330px; margin-bottom: 22px; }
 .defusion-step {
   font-family: 'Nunito Sans',sans-serif;
@@ -830,12 +832,13 @@ textarea{resize:vertical;min-height:80px}
 .timer-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 265px; margin-top: 12px; }
 .timer-btn-ghost {
   background: transparent; border: 1.5px solid var(--bdr); border-radius: var(--pill);
-  padding: 12px 20px; font-size: 13px; font-weight: 600; color: var(--mu);
-  cursor: pointer; transition: opacity .5s ease, border-color .2s, color .2s, transform .1s;
+  padding: 12px 20px; font-size: 14px; font-weight: 600; color: var(--tx2);
+  cursor: pointer; transition: opacity .4s ease, border-color .2s, color .2s;
   width: 100%; font-family: 'Nunito Sans',sans-serif; touch-action: manipulation;
   opacity: 0; pointer-events: none;
 }
 .timer-btn-ghost.visible { opacity: 1; pointer-events: auto; }
+.timer-btn-ghost:hover { border-color: var(--ac); color: var(--ac); }
 
 /* Context page additional */
 .card-header{margin-bottom:16px}
