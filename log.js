@@ -245,7 +245,16 @@ window.confirmOtherVal = function(key, isMulti, inputEl) {
         }
       };
     }
-    wrap.parentElement.insertBefore(tag, wrap);
+    // Insert inside the tag group, before the "Other..." button
+    const otherBtn = wrap.parentElement.querySelector('.tag-other');
+    const group = wrap.previousElementSibling || wrap.parentElement.querySelector('[role="group"]');
+    if (otherBtn && otherBtn.parentElement) {
+      otherBtn.parentElement.insertBefore(tag, otherBtn);
+    } else if (group) {
+      group.appendChild(tag);
+    } else {
+      wrap.parentElement.insertBefore(tag, wrap);
+    }
     wrap.classList.remove('on');
     inputEl.value = '';
   }
