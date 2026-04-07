@@ -352,7 +352,9 @@ textarea{resize:vertical;min-height:80px}
 .date-range-col{flex:1;min-width:140px}
 
 /* Context — report modal actions */
-.report-modal-actions{display:flex;gap:10px;margin-top:16px}
+.report-modal-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.report-modal-actions .report-copy-btn{flex:1;min-width:120px}
+.report-modal-actions .report-close-btn{flex:1;min-width:120px}
 
 /* Context — fw-h2 spacing variant */
 .fw-h2--spaced{margin-top:28px}

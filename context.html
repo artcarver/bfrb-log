@@ -455,10 +455,11 @@
 <div class="report-modal" id="report-modal">
   <div class="report-modal-card">
     <div class="report-modal-title">Therapy Session Report</div>
-    <div class="report-modal-hint">Copy and share with your therapist before your next session.</div>
+    <div class="report-modal-hint">Share with your therapist before your next session.</div>
     <textarea class="report-modal-body" id="report-text" readonly></textarea>
     <div class="report-modal-actions">
       <button class="report-copy-btn" onclick="copyReportText()">Copy text</button>
+      <button class="report-copy-btn" onclick="downloadReportPDF()" style="background:var(--ac-h)">Save as PDF</button>
       <button class="report-close-btn" onclick="closeReportModal()">Done</button>
     </div>
   </div>
@@ -881,9 +882,138 @@ window.copyReportText = async () => {
     btn.textContent = 'Copied!';
     setTimeout(() => { btn.textContent = 'Copy text'; }, 2000);
   } catch(e) {
-    // Select all as final fallback
     document.getElementById('report-text').select();
     btn.textContent = 'Select all & copy';
+  }
+};
+
+window.downloadReportPDF = () => {
+  const rawText = document.getElementById('report-text').value;
+  if (!rawText) return;
+
+  // Parse the plain text report into styled HTML sections
+  const lines = rawText.split('\n');
+  let html = '';
+  let inSection = false;
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      if (inSection) html += '<div style="height:8px"></div>';
+      return;
+    }
+    if (trimmed.match(/^=+$/)) return; // skip separator lines
+
+    // Section headers (all caps lines that were between === lines)
+    if (trimmed === trimmed.toUpperCase() && trimmed.length > 3 && !trimmed.startsWith('[') && !trimmed.match(/^\d/) && !trimmed.startsWith('In place') && !trimmed.startsWith('Not yet')) {
+      html += `<h2 style="font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5a7090;margin:20px 0 10px;padding-bottom:6px;border-bottom:1.5px solid #e0e0dc">${trimmed}</h2>`;
+      inSection = true;
+      return;
+    }
+
+    // Title line
+    if (trimmed.startsWith('GROUNDWORK')) {
+      html += `<h1 style="font-size:18px;font-weight:700;color:#1a1a1a;margin:0 0 4px">${trimmed}</h1>`;
+      return;
+    }
+
+    // Subtitle lines (Patient self-monitoring, Generated, Period)
+    if (trimmed.startsWith('Patient') || trimmed.startsWith('Generated') || trimmed.startsWith('Period')) {
+      html += `<div style="font-size:12px;color:#909090;margin-bottom:2px">${trimmed}</div>`;
+      return;
+    }
+
+    // Indented data lines (stats)
+    if (trimmed.startsWith('  ')) {
+      const parts = trimmed.trim().split(': ');
+      if (parts.length === 2) {
+        html += `<div style="display:flex;justify-content:space-between;padding:4px 0 4px 12px;font-size:13px;border-bottom:1px solid #f0f0ee"><span style="color:#4a4a48">${parts[0].trim()}</span><span style="font-weight:600;color:#1a1a1a">${parts[1]}</span></div>`;
+      } else {
+        html += `<div style="padding:3px 0 3px 12px;font-size:13px;color:#4a4a48">${trimmed.trim()}</div>`;
+      }
+      return;
+    }
+
+    // Key: value lines
+    if (trimmed.includes(': ') && !trimmed.startsWith('[')) {
+      const idx = trimmed.indexOf(': ');
+      const key = trimmed.slice(0, idx);
+      const val = trimmed.slice(idx + 2);
+      html += `<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px"><span style="color:#4a4a48">${key}</span><span style="font-weight:600;color:#1a1a1a">${val}</span></div>`;
+      return;
+    }
+
+    // Checklist items
+    if (trimmed.startsWith('[x]') || trimmed.startsWith('[ ]')) {
+      const checked = trimmed.startsWith('[x]');
+      const text = trimmed.slice(4);
+      html += `<div style="padding:3px 0 3px 8px;font-size:13px;color:${checked ? '#3d8a6a' : '#909090'}">${checked ? '&#10003;' : '&#9744;'} ${text}</div>`;
+      return;
+    }
+
+    // Date-tagged notes
+    if (trimmed.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/)) {
+      html += `<div style="padding:6px 0 2px;font-size:12px;font-weight:600;color:#5a7090">${trimmed}</div>`;
+      return;
+    }
+
+    // Bracketed dates [Mar 31]
+    if (trimmed.startsWith('[')) {
+      html += `<div style="padding:6px 0 2px;font-size:12px;font-weight:600;color:#5a7090">${trimmed}</div>`;
+      return;
+    }
+
+    // Default paragraph
+    html += `<div style="padding:3px 0;font-size:13px;color:#4a4a48">${trimmed}</div>`;
+  });
+
+  const fullHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Groundwork -- Therapy Session Report</title>
+<style>
+  @media print {
+    @page { margin: 0.7in; size: letter; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1a1a1a; line-height: 1.5; padding: 40px;
+    max-width: 700px; margin: 0 auto;
+  }
+  .header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #5a7090;
+  }
+  .logo { font-size: 20px; font-weight: 700; color: #1a1a1a; }
+  .logo span { color: #5a7090; }
+  .print-btn {
+    background: #5a7090; color: white; border: none; border-radius: 6px;
+    padding: 8px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+  }
+  @media print { .print-btn { display: none; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">Ground<span>work</span></div>
+  <button class="print-btn" onclick="window.print()">Save as PDF</button>
+</div>
+${html}
+<div style="margin-top:32px;padding-top:12px;border-top:1px solid #e0e0dc;font-size:11px;color:#909090">
+  Generated by Groundwork -- self-monitoring tool for skin picking (excoriation disorder)
+</div>
+</body>
+</html>`;
+
+  const w = window.open('', '_blank');
+  if (w) {
+    w.document.write(fullHTML);
+    w.document.close();
+  } else {
+    showToast('Pop-up blocked -- allow pop-ups for this site', true);
   }
 };
 
@@ -1094,19 +1224,9 @@ SESSION PREP REFLECTIONS
 ${refText}`;
     }
 
-    // Try clipboard first, fall back to modal
-    let clipboardOk = false;
-    if (navigator.clipboard && window.isSecureContext) {
-      try {
-        await navigator.clipboard.writeText(report);
-        clipboardOk = true;
-        showToast('Report copied to clipboard');
-      } catch(e) { /* fall through */ }
-    }
-    if (!clipboardOk) {
-      document.getElementById('report-text').value = report;
-      document.getElementById('report-modal').classList.add('on');
-    }
+    // Always show modal so user can choose copy or PDF
+    document.getElementById('report-text').value = report;
+    document.getElementById('report-modal').classList.add('on');
   } catch (e) {
     console.error(e);
     showToast(e.code === 'resource-exhausted' || (e.message && e.message.toLowerCase().includes('quota'))
